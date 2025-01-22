@@ -1,0 +1,40 @@
+@use "../colours";
+
+nav.char-create-nav ul {
+    margin: 0;
+    padding: 0;
+
+    li {
+        list-style: none;
+
+        a {
+            color: colours.$black;
+            padding: .5rem;
+            text-decoration: none;
+
+            &:hover {
+                background-color: colours.$dark-grey;
+                color: colours.$white;
+            }
+        }
+    }
+}
+
+.suggested-names {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+
+    li {
+        border: 1px solid colours.$medium-grey;
+        border-radius: .5rem;
+        cursor: pointer;
+        padding: .25rem;
+        list-style: none;
+        text-align: center;
+
+        &:hover {
+            background-color: colours.$really-light-grey;
+        }
+    }
+}

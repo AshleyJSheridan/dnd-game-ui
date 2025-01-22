@@ -1,0 +1,47 @@
+<app-header></app-header>
+
+<div class="char-create-content-container char-content-container">
+    <div class="side-nav">
+        <app-create-nav></app-create-nav>
+    </div>
+
+    <main>
+        <h2>Character Creation - Basics</h2>
+
+        <form>
+            <label class="aligned">Character name:
+                <input name="charName" type="text" [(ngModel)]="charName"/>
+            </label>
+            <div class="input-attached-button-aligned">
+                <label class="aligned">Suggest name for:
+                    <select [(ngModel)]="suggestionType" name="suggestionType">
+                        <option value="generic" selected>Generic</option>
+                        <option value="dwarf">Dwarf</option>
+                        <option value="elf">Elf</option>
+                        <option value="halfling">Halfling</option>
+                        <option value="gnome">Gnome</option>
+                        <option value="dragon">Dragon</option>
+                        <option value="demon">Demon</option>
+                        <option value="angel">Angel</option>
+                        <option value="fey">Fey</option>
+                        <option value="goblin">Goblin</option>
+                        <option value="orc">Orc</option>
+                        <option value="ogre">Ogre</option>
+                    </select>
+                </label>
+
+                <button type="button" (click)="suggestNamesHandler()" class="primary-btn">Suggest names</button>
+            </div>
+            @if(suggestions.length > 0) {
+                <div>
+                    Suggestions:
+                    <ul class="suggested-names">
+                        @for (name of suggestions; track name) {
+                            <li (click)="selectSuggestionHandler(name)">{{ name }}</li>
+                        }
+                    </ul>
+                </div>
+            }
+        </form>
+    </main>
+</div>

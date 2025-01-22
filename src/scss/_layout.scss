@@ -1,0 +1,34 @@
+@use "colours";
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Verdana, sans-serif;
+}
+
+.char-create-content-container {
+    display: grid;
+    grid-template-columns: 10rem auto;
+
+    .side-nav {
+        border-right: 2px solid colours.$dark-grey;
+    }
+}
+
+.char-content-container {
+    main {
+        padding: .5rem;
+    }
+}
+
+h2 {
+    background-image: url('/images/beholder.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin-top: .5rem;
+    padding-left: 2rem;
+}

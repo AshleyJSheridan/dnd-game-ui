@@ -1,0 +1,33 @@
+<app-header></app-header>
+
+<div class="char-content-container">
+    <main class="char-list-panel">
+        <h2>Characters</h2>
+
+        <ul>
+            @for (character of characters; track character.guid) {
+                <li class="char-panel">
+                    <span class="char-image">
+                        <img src="images/silhouette.png" alt="" role="presentation"/>
+                    </span>
+                    <span class="char-details">
+                        <div class="char-name"><a [routerLink]="['/characters/', character.guid]">{{ character.name }}</a></div>
+                        <div>Level {{ character.level }} {{ character.charRace }} {{ character.charClass }}</div>
+
+                        <div class="char-actions">
+                            <a [routerLink]="['/characters/', character.guid]">
+                                <app-view-icon></app-view-icon>
+                            </a>
+                            <a [routerLink]="['/characters/', character.guid, 'edit']">
+                                <app-edit-icon></app-edit-icon>
+                            </a>
+                            <button type="button" class="button-link" (click)="deleteCharacterHandler(character.guid)">
+                                <app-delete-icon></app-delete-icon>
+                            </button>
+                        </div>
+                    </span>
+                </li>
+            }
+        </ul>
+    </main>
+</div>
