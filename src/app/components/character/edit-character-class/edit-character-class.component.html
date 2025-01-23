@@ -1,0 +1,16 @@
+<h2>Character Creation - Class</h2>
+
+<div class="char-edit-class-list">
+    <ul>
+        @for (charClass of charClasses; track charClass.id) {
+            <li>
+                <button class="char-class">
+                    <span class="char-class-icon char-class-{{ charClass.name?.toLowerCase() }}">
+                        <app-char-class-icon charClassName="{{ charClass.name }}"></app-char-class-icon>
+                    </span>
+                    <span class="char-class-name">{{ charClass.name }}</span>
+                </button>
+            </li>
+        }
+    </ul>
+</div>

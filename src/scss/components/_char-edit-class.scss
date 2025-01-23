@@ -1,0 +1,85 @@
+@use "../colours";
+
+.char-edit-class-list ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2em;
+    padding: 0;
+
+    li {
+        border: 1px solid colours.$dark-grey;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .char-class {
+        appearance: none;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        display: flex;
+        padding: .5rem;
+        width: 20em;
+    }
+
+    .char-class-icon {
+        display: inline-block;
+        height: 4em;
+        width: 4em;
+
+        &.char-class-barbarian {
+            color: #c66449;
+        }
+
+        &.char-class-bard {
+            color: #a675a7;
+        }
+
+        &.char-class-cleric {
+            color: #848587;
+        }
+
+        &.char-class-druid {
+            color: #78843b;
+        }
+
+        &.char-class-fighter {
+            color: #532f23;
+        }
+
+        &.char-class-monk {
+            color: #1e8fbb;
+        }
+
+        &.char-class-paladin {
+            color: #a3862b;
+        }
+
+        &.char-class-ranger {
+            color: #356b4b;
+        }
+
+        &.char-class-rogue {
+            color: #4e4f49;
+        }
+
+        &.char-class-sorcerer {
+            color: #bb484d;
+        }
+
+        &.char-class-warlock {
+            color: #7646ab;
+        }
+
+        &.char-class-wizard {
+            color: #215bb4;
+        }
+
+    }
+
+    .char-class-name {
+        padding: .5rem;
+        font-size: 1.25rem;
+    }
+}

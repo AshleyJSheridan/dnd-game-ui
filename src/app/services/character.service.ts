@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import {ICharacterList} from '../interfaces/iCharacterList';
 import {Observable} from 'rxjs';
 import {INameSuggestionList} from '../interfaces/iNameSuggestionList';
+import {ICharacterClassList} from '../interfaces/iCharacterClassList';
+import {ICharacterClass} from '../interfaces/iCharacterClass';
 
 @Injectable({providedIn: 'root'})
 
@@ -17,6 +19,15 @@ export class CharacterService {
 
     public getNameSuggestions(suggestionType: string): Observable<INameSuggestionList> {
         return this.http.get<INameSuggestionList>(`${this.apiUrl}/characters/name/${suggestionType}`);
+    }
+
+    // TODO type this
+    public createCharacter(data: any) {
+        return this.http.post(`${this.apiUrl}/characters`, data);
+    }
+
+    public getCharacterClasses(): Observable<Array<ICharacterClass>> {
+        return this.http.get<Array<ICharacterClass>>(`${this.apiUrl}/characters/classes`);
     }
 }
 

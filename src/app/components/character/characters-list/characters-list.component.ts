@@ -24,7 +24,7 @@ export class CharactersListComponent {
     constructor(private characterService: CharacterService) {}
 
     ngOnInit() {
-        let test = this.characterService.getCharacters().subscribe((data) => {
+        this.characterService.getCharacters().subscribe((data) => {
             this.characters = data.data;
         });
     }

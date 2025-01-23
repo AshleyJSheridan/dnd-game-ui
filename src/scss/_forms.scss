@@ -15,9 +15,6 @@ label.aligned {
 }
 
 button {
-    font-size: 100%;
-    padding: .5rem 1rem;
-
     &.primary-btn {
         background-image: linear-gradient(
                 180deg,
@@ -29,6 +26,8 @@ button {
         border: 2px solid colours.$primary-btn-border;
         color: colours.$primary-btn-text;
         cursor: pointer;
+        font-size: 100%;
+        padding: .5rem 1rem;
 
         &:hover {
             background-image: linear-gradient(
@@ -39,6 +38,10 @@ button {
                     lighten(colours.$primary-btn-100, 10%) 100%
             );
         }
+    }
+
+    &[type=submit] {
+        margin-top: 2rem;
     }
 }
 
@@ -60,7 +63,8 @@ button.button-link {
     cursor: pointer;
 }
 
-input[type=text] {
+input[type=text],
+input[type=number] {
     border: solid 1px colours.$grey;
     border-radius: .25rem;
     font-size: 100%;

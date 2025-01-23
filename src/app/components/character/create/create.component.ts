@@ -14,19 +14,31 @@ import { CharacterService } from '../../../services/character.service';
   templateUrl: './create.component.html'
 })
 export class CreateComponent {
+    charLevel: number = 1;
     charName: string = '';
     suggestionType: string = 'generic';
     suggestions: Array<string> = [];
 
     constructor(private characterService: CharacterService) {}
 
-    suggestNamesHandler() {
+    suggestNamesHandler(): void {
         this.characterService.getNameSuggestions(this.suggestionType).subscribe((data) => {
             this.suggestions = data.data.names;
         });
     }
 
-    selectSuggestionHandler(name: string) {
+    selectSuggestionHandler(name: string): void {
         this.charName = name;
+    }
+
+    submitHandler() {
+        if(this.charName === '')
+            return;
+
+        // TODO type this
+        let data = {charName: this.charName, charLevel: this.charLevel};
+        this.characterService.createCharacter(data).subscribe((response) => {
+            console.log(response)
+        });
     }
 }

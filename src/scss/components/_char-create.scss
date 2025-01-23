@@ -24,6 +24,7 @@ nav.char-create-nav ul {
     display: grid;
     gap: 1rem;
     grid-template-columns: repeat(3, 1fr);
+    padding: 0;
 
     li {
         border: 1px solid colours.$medium-grey;

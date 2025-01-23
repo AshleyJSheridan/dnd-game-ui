@@ -8,7 +8,10 @@
     <main>
         <h2>Character Creation - Basics</h2>
 
-        <form>
+        <form (submit)="submitHandler()">
+            <label class="aligned">Character level:
+                <input name="charLevel" type="number" [(ngModel)]="charLevel" min="1" max="20"/>
+            </label>
             <label class="aligned">Character name:
                 <input name="charName" type="text" [(ngModel)]="charName"/>
             </label>
@@ -42,6 +45,8 @@
                     </ul>
                 </div>
             }
+
+            <button type="submit" class="primary-btn">Create Character</button>
         </form>
     </main>
 </div>
