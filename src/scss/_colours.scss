@@ -5,10 +5,21 @@ $really-light-grey: #f3f3f3;
 $grey: #666;
 $medium-grey: #999;
 
+$gold: #b1a27b;
+
 // primary buttons
 $primary-btn-0: #14211a;
 $primary-btn-50: #2696bb;
 $primary-btn-50-2: #0e6789;
 $primary-btn-100: #0b2c35;
-$primary-btn-border: #b1a27b;
+$primary-btn-border: $gold;
 $primary-btn-text: $white;
+
+// secondary buttons
+$secondary-btn-0: #1a1a1a;
+$secondary-btn-50: #707070;
+$secondary-btn-50-2: #4b4b4b;
+$secondary-btn-100: #202020;
+$secondary-btn-border: $gold;
+$secondary-btn-text: $white;
+

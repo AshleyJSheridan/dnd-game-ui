@@ -4,7 +4,7 @@
     <ul>
         @for (charClass of charClasses; track charClass.id) {
             <li>
-                <button class="char-class">
+                <button class="char-class" (click)="selectCharClass(charClass.id)">
                     <span class="char-class-icon char-class-{{ charClass.name?.toLowerCase() }}">
                         <app-char-class-icon charClassName="{{ charClass.name }}"></app-char-class-icon>
                     </span>
@@ -13,4 +13,38 @@
             </li>
         }
     </ul>
+
+    <app-confirm heading="Select This Class">
+        <div class="char-class-details">
+                <h3>{{ getClassBySelectionId()?.name }}</h3>
+                <p>{{ getClassBySelectionId()?.description }}</p>
+
+                <p class="char-class-stats">
+                    <strong>Hit dice:</strong>
+                        <span>d{{ getClassBySelectionId()?.hit_die }}</span>
+                    <br/>
+                    <strong>{{ getPrimaryAbilityStrings()[0] }}:</strong>
+                        <span>{{ getPrimaryAbilityStrings()[1] }}</span>
+                    <br/>
+                    <strong>Saving throws:</strong>
+                        <span>{{ getSavingThrows() }}</span>
+
+                    <!-- TODO add proficiences here? -->
+                </p>
+
+                <ul class="char-class-features">
+                    @for (feature of getClassBySelectionId()?.class_features; track feature.id) {
+                        <li>
+                            <details>
+                                <summary>{{ feature.name }}
+                                    <span class="char-class-feature-level">
+                                        ({{ feature.level }}{{ getLevelSuffix(feature.level)}} level)</span>
+                                </summary>
+                                <div [innerHTML]="feature.description"></div>
+                            </details>
+                        </li>
+                    }
+                </ul>
+        </div>
+    </app-confirm>
 </div>

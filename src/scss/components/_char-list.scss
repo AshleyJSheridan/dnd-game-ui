@@ -37,15 +37,14 @@
         &:after {
             background-image: url('/images/wyvern-corner.svg');
             background-repeat: no-repeat;
+            background-size: 4rem auto;
+            bottom: -0.65rem;
             content: '';
             display: block;
-            position: absolute;
-
-            width: 4rem;
             height: 4.8rem;
-            background-size: 4rem auto;
+            position: absolute;
             right: -1.25rem;
-            bottom: -0.65rem;
+            width: 4rem;
         }
     }
 

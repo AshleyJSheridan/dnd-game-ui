@@ -83,3 +83,33 @@
         font-size: 1.25rem;
     }
 }
+
+.char-class-details {
+    .char-class-stats {
+        strong {
+            display: inline-block;
+            margin-right: .25rem;
+        }
+    }
+
+    .char-class-features {
+        display: block;
+
+        li {
+            display: block;
+        }
+
+        details summary::-webkit-details-marker,
+        details summary::marker {
+            content: "g";
+        }
+
+        summary {
+
+        }
+
+        .char-class-feature-level {
+            font-size: 80%;
+        }
+    }
+}

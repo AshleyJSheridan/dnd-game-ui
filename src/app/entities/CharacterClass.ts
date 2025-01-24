@@ -1,13 +1,13 @@
-export interface ICharacterClass {
-    id: number;
-    name: string;
-    description: string;
-    hit_die: number;
-    hit_points_at_first_level: number;
-    primary_abilities: Array<{name: string, short_name: string}>;
-    saving_throws: Array<{name: string, short_name: string}>;
-    armor_proficiencies: Array<{name: string, type: string}>;
-    weapon_proficiencies: Array<{name: string, type: string}>;
+export class CharacterClass {
+    id: number = 0;
+    name: string = '';
+    description: string = '';
+    hit_die: number = 6;
+    hit_points_at_first_level: number = 6;
+    primary_abilities: Array<{name: string, short_name: string}> = [{name: '', short_name: ''}];
+    saving_throws: Array<{name: string, short_name: string}> = [];
+    armor_proficiencies: Array<{name: string, type: string}> = [];
+    weapon_proficiencies: Array<{name: string, type: string}> = [];
     tool_proficiencies: {
         max: number;
         tools: Array<{
@@ -15,14 +15,14 @@ export interface ICharacterClass {
             name: string;
             type: string;
         }>;
-    }
+    } = {max: 0, tools: []}
     class_features: Array<{
         id: number;
         name: string;
         type: string;
         level: number;
         description: string;
-    }>;
+    }> = [];
     starting_equipment: Array<{
         id: number;
         pack_name: string;
@@ -39,5 +39,5 @@ export interface ICharacterClass {
                 range: Array<number>
             }
         }>;
-    }>;
+    }> = [];
 }

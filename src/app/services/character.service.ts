@@ -5,6 +5,7 @@ import {Observable} from 'rxjs';
 import {INameSuggestionList} from '../interfaces/iNameSuggestionList';
 import {ICharacterClassList} from '../interfaces/iCharacterClassList';
 import {ICharacterClass} from '../interfaces/iCharacterClass';
+import {CharacterClass} from '../entities/CharacterClass';
 
 @Injectable({providedIn: 'root'})
 
@@ -26,8 +27,8 @@ export class CharacterService {
         return this.http.post(`${this.apiUrl}/characters`, data);
     }
 
-    public getCharacterClasses(): Observable<Array<ICharacterClass>> {
-        return this.http.get<Array<ICharacterClass>>(`${this.apiUrl}/characters/classes`);
+    public getCharacterClasses(): Observable<Array<CharacterClass>> {
+        return this.http.get<Array<CharacterClass>>(`${this.apiUrl}/characters/classes`);
     }
 }
 
