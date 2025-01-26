@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
 import { CharacterService } from '../../../services/character.service';
-import {ICharacterClassList} from '../../../interfaces/iCharacterClassList';
-import {ICharacterClass} from '../../../interfaces/iCharacterClass';
-import {CharClassIconComponent} from '../../icons/char-class-icon/char-class-icon.component';
-import {ConfirmComponent} from '../../dialogs/confirm/confirm.component';
-import {CharacterClass} from '../../../entities/CharacterClass';
-import {CommonModule} from '@angular/common';
+import { CharClassIconComponent } from '../../icons/char-class-icon/char-class-icon.component';
+import { ConfirmComponent } from '../../dialogs/confirm/confirm.component';
+import { CharacterClass } from '../../../entities/CharacterClass';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-edit-character-class',
@@ -18,15 +16,13 @@ import {CommonModule} from '@angular/common';
 })
 export class EditCharacterClassComponent {
     charClasses: Array<CharacterClass> = [];
-    selectedCharClass: number = 5;
-    test = '<b>wtf</b>';
+    selectedCharClass: number = 1;
 
     constructor(private characterService: CharacterService) {}
 
     ngOnInit() {
         this.characterService.getCharacterClasses().subscribe((charClasses) => {
            this.charClasses = charClasses;
-           console.log(charClasses)
         });
     }
 
@@ -44,12 +40,14 @@ export class EditCharacterClassComponent {
     }
 
     getPrimaryAbilityStrings(): Array<string> {
-        if(this.getClassBySelectionId().primary_abilities.length === 1) {
-            return ['Primary ability', this.getClassBySelectionId().primary_abilities[0].name];
+        const userClass = this.getClassBySelectionId();
+
+        if(userClass.primary_abilities.length === 1) {
+            return ['Primary ability', userClass.primary_abilities[0].name];
         }
 
         return ['Primary abilities',
-            this.getClassBySelectionId().primary_abilities.map(ability => {
+            userClass.primary_abilities.map(ability => {
                 return ability.name
             }).join(' & ')
         ];
@@ -59,6 +57,18 @@ export class EditCharacterClassComponent {
         return this.getClassBySelectionId().saving_throws.map(ability => {
             return ability.name
         }).join(' & ')
+    }
+
+    getArmorProficiencies(): string {
+        return this.getClassBySelectionId().armour_proficiencies.map(proficiency => {
+            return proficiency.name
+        }).join(', ');
+    }
+
+    getWeaponProficiencies(): string {
+        return this.getClassBySelectionId().weapon_proficiencies.map(proficiency => {
+            return proficiency.name
+        }).join(', ');
     }
 
     getLevelSuffix(level: number): string {
@@ -73,5 +83,19 @@ export class EditCharacterClassComponent {
             return "rd";
 
         return suffix[0];
+    }
+
+    canUserPickFromTools(): boolean {
+        const userClass = this.getClassBySelectionId();
+
+        return userClass.tool_proficiencies?.tools?.length > userClass.tool_proficiencies?.max;
+    }
+
+    getToolSelectionCount(): number {
+        return this.getClassBySelectionId().tool_proficiencies?.max ?? 0;
+    }
+
+    getTools(): Array<{id: number, name: string, type: string}> {
+        return this.getClassBySelectionId().tool_proficiencies?.tools ?? [];
     }
 }

@@ -3,8 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import {ICharacterList} from '../interfaces/iCharacterList';
 import {Observable} from 'rxjs';
 import {INameSuggestionList} from '../interfaces/iNameSuggestionList';
-import {ICharacterClassList} from '../interfaces/iCharacterClassList';
-import {ICharacterClass} from '../interfaces/iCharacterClass';
 import {CharacterClass} from '../entities/CharacterClass';
 
 @Injectable({providedIn: 'root'})

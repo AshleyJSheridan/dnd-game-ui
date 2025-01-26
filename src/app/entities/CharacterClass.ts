@@ -6,7 +6,7 @@ export class CharacterClass {
     hit_points_at_first_level: number = 6;
     primary_abilities: Array<{name: string, short_name: string}> = [{name: '', short_name: ''}];
     saving_throws: Array<{name: string, short_name: string}> = [];
-    armor_proficiencies: Array<{name: string, type: string}> = [];
+    armour_proficiencies: Array<{name: string, type: string}> = [];
     weapon_proficiencies: Array<{name: string, type: string}> = [];
     tool_proficiencies: {
         max: number;

@@ -97,15 +97,36 @@
 
         li {
             display: block;
+            margin-bottom: 1rem;
+        }
+
+        .tools-list {
+            display: block;
+
+            li {
+                border: none;
+                list-style: disc;
+                margin-bottom: 0;
+            }
+        }
+
+        details {
+            min-width: 35rem;
+            padding: 0;
         }
 
         details summary::-webkit-details-marker,
         details summary::marker {
-            content: "g";
         }
 
         summary {
+            background-color: colours.$dark-grey;
+            color: colours.$white;
+            padding: .5rem;
+        }
 
+        .char-details-content {
+            padding: 0 .5rem;
         }
 
         .char-class-feature-level {

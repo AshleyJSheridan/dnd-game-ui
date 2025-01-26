@@ -32,6 +32,51 @@
                     <!-- TODO add proficiences here? -->
                 </p>
 
+                <strong>Class proficiencies:</strong>
+                <ul class="char-class-features">
+                    <li>
+                        <details>
+                            <summary>Armor</summary>
+                            <div class="char-details-content">
+                                <p>{{ getArmorProficiencies() }}</p>
+                            </div>
+                        </details>
+                    </li>
+                    <li>
+                        <details>
+                            <summary>Weapons</summary>
+                            <div class="char-details-content">
+                                <p>{{ getWeaponProficiencies() }}</p>
+                            </div>
+                        </details>
+                    </li>
+                    @if (getTools().length > 0) {
+                        <li>
+                            <details>
+                                <summary>Tools</summary>
+                                <div class="char-details-content">
+                                    @if (canUserPickFromTools()) {
+                                        <p>Pick {{ getToolSelectionCount() }} tools:</p>
+                                        <ul class="tools-list">
+                                            @for (tool of getTools(); track tool.id) {
+                                                <li>{{ tool.name }}</li>
+                                            }
+                                        </ul>
+                                    } @else {
+                                        <p>You gain proficiency with the following tools:</p>
+                                        <ul class="tools-list">
+                                            @for (tool of getTools(); track tool.id) {
+                                                <li>{{ tool.name }} ({{ tool.type }})</li>
+                                            }
+                                        </ul>
+                                    }
+                                </div>
+                            </details>
+                        </li>
+                    }
+                </ul>
+
+                <strong>Class features by level:</strong>
                 <ul class="char-class-features">
                     @for (feature of getClassBySelectionId()?.class_features; track feature.id) {
                         <li>
@@ -40,7 +85,7 @@
                                     <span class="char-class-feature-level">
                                         ({{ feature.level }}{{ getLevelSuffix(feature.level)}} level)</span>
                                 </summary>
-                                <div [innerHTML]="feature.description"></div>
+                                <div class="char-details-content" [innerHTML]="feature.description"></div>
                             </details>
                         </li>
                     }
