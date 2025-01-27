@@ -1,6 +1,6 @@
-<div class="modal-container">
+<div class="modal-container" [hidden]="!canShowModal">
     <div class="modal modal-confirm" role="dialog" aria-labelledby="share_heading" aria-describedby="share_description">
-        <button class="cancel">
+        <button class="cancel" (click)="cancelModal()" #firstFocus>
             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 20.4 20.4">
                 <path fill="currentColor" d="M1.4,0L0,1.4l8.8,8.8L0,19l1.4,1.4l8.8-8.8l8.8,8.8l1.4-1.4l-8.8-8.8l8.8-8.8L19,0l-8.8,8.8L1.4,0z"/>
             </svg>
@@ -13,7 +13,7 @@
 
         <div class="modal-actions">
             <button type="button" class="secondary-btn">{{ cancelLabel() }}</button>
-            <button type="button" class="primary-btn">{{ confirmLabel() }}</button>
+            <button type="button" class="primary-btn" #lastFocus>{{ confirmLabel() }}</button>
         </div>
     </div>
 </div>

@@ -4,7 +4,7 @@
     <ul>
         @for (charClass of charClasses; track charClass.id) {
             <li>
-                <button class="char-class" (click)="selectCharClass(charClass.id)">
+                <button class="char-class" (click)="selectCharClass(charClass.id, $event)">
                     <span class="char-class-icon char-class-{{ charClass.name?.toLowerCase() }}">
                         <app-char-class-icon charClassName="{{ charClass.name }}"></app-char-class-icon>
                     </span>
@@ -14,7 +14,7 @@
         }
     </ul>
 
-    <app-confirm heading="Select This Class">
+    <app-confirm heading="Select This Class" #confirmComponent>
         <div class="char-class-details">
                 <h3>{{ getClassBySelectionId()?.name }}</h3>
                 <p>{{ getClassBySelectionId()?.description }}</p>

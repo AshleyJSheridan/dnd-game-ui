@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CharacterService } from '../../../services/character.service';
 import { CharClassIconComponent } from '../../icons/char-class-icon/char-class-icon.component';
 import { ConfirmComponent } from '../../dialogs/confirm/confirm.component';
@@ -16,7 +16,8 @@ import { CommonModule } from '@angular/common';
 })
 export class EditCharacterClassComponent {
     charClasses: Array<CharacterClass> = [];
-    selectedCharClass: number = 1;
+    selectedCharClass: number = 0;
+    @ViewChild('confirmComponent') confirm: ConfirmComponent | undefined;
 
     constructor(private characterService: CharacterService) {}
 
@@ -26,8 +27,12 @@ export class EditCharacterClassComponent {
         });
     }
 
-    selectCharClass(charClassId: number) {
+    selectCharClass(charClassId: number, event: MouseEvent) {
         this.selectedCharClass = charClassId;
+
+        if(event.currentTarget !== null) {
+            this.confirm?.showModal(event.currentTarget);
+        }
     }
 
     getClassBySelectionId(): CharacterClass {

@@ -11,6 +11,10 @@
         list-style: none;
         padding: 0;
         margin: 0;
+
+        &:hover {
+            background-color: colours.$really-light-grey;
+        }
     }
 
     .char-class {
@@ -21,6 +25,10 @@
         display: flex;
         padding: .5rem;
         width: 20em;
+
+        &:focus {
+            outline: 2px solid colours.$focus;
+        }
     }
 
     .char-class-icon {
