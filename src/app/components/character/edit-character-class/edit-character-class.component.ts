@@ -21,17 +21,9 @@ export class EditCharacterClassComponent {
 
     @ViewChild('confirmComponent') confirm: ConfirmComponent | undefined;
 
-    private readonly route = inject(ActivatedRoute);
-
     constructor(private characterService: CharacterService, private router: Router) {}
 
     ngOnInit(): void {
-        this.characterService.getCharacter().subscribe((character) => {
-            if (character.charClass !== '' && character.guid !== '') {
-                this.router.navigate([`/characters/${character.guid}/edit/background`]);
-            }
-        });
-
         this.characterService.getCharacterClasses().subscribe((charClasses) => {
            this.charClasses = charClasses;
         });
@@ -115,8 +107,8 @@ export class EditCharacterClassComponent {
     }
 
     confirmSelectedClass(): void {
-        this.characterService.setCharacterClass({charClassId: this.selectedCharClass}).subscribe((response) => {
-            console.log(response)
+        this.characterService.setCharacterClass({charClassId: this.selectedCharClass}).subscribe((character) => {
+            this.router.navigate([`/characters/${character.guid}/edit/background`]);
         });
     }
 }

@@ -4,6 +4,7 @@ import { HeaderComponent } from '../../header/header.component';
 import { CreateNavComponent } from '../create-nav/create-nav.component';
 import { ActivatedRoute } from '@angular/router';
 import { CharacterService } from '../../../services/character.service';
+import {CharacterEditRedirectService} from '../../../services/character-edit-redirect.service';
 
 @Component({
     selector: 'app-edit-character',
@@ -17,11 +18,13 @@ import { CharacterService } from '../../../services/character.service';
 export class EditCharacterComponent {
     private readonly route = inject(ActivatedRoute);
 
-    constructor(private characterService: CharacterService) {}
-
+    constructor(private characterService: CharacterService,
+        private characterEditRedirectService: CharacterEditRedirectService) {}
 
     ngOnInit(): void {
         const charGuid = this.route.snapshot.paramMap.get('guid') ?? '';
         this.characterService.setCharGuid(charGuid);
+
+        this.characterEditRedirectService.redirectToCorrectEditLocation();
     }
 }
