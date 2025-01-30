@@ -1,4 +1,4 @@
-import {Component, HostListener, input, InputSignal, ViewChild} from '@angular/core';
+import {Component, EventEmitter, HostListener, input, InputSignal, Output, ViewChild} from '@angular/core';
 
 @Component({
     selector: 'app-confirm',
@@ -15,6 +15,8 @@ export class ConfirmComponent {
 
     @ViewChild('firstFocus') firstFocus: any;
     @ViewChild('lastFocus') lastFocus: any;
+
+    @Output() confirmClass = new EventEmitter();
 
     @HostListener('document:keydown', ['$event'])
     handleEscapeEvent(event: KeyboardEvent): void {
@@ -53,8 +55,13 @@ export class ConfirmComponent {
         this.canShowModal = false;
 
         window.setTimeout(() => {
-            console.log(<HTMLElement>this.focusReturnElement);
             (<HTMLElement>this.focusReturnElement).focus();
         }, 10);
+    }
+
+    confirmModal(): void {
+        this.confirmClass.emit();
+
+        this.cancelModal();
     }
 }

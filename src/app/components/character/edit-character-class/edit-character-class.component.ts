@@ -1,9 +1,11 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { CharacterService } from '../../../services/character.service';
 import { CharClassIconComponent } from '../../icons/char-class-icon/char-class-icon.component';
 import { ConfirmComponent } from '../../dialogs/confirm/confirm.component';
 import { CharacterClass } from '../../../entities/CharacterClass';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { Observable, switchMap } from 'rxjs';
 
 @Component({
     selector: 'app-edit-character-class',
@@ -17,11 +19,14 @@ import { CommonModule } from '@angular/common';
 export class EditCharacterClassComponent {
     charClasses: Array<CharacterClass> = [];
     selectedCharClass: number = 0;
+
     @ViewChild('confirmComponent') confirm: ConfirmComponent | undefined;
+
+    private readonly route = inject(ActivatedRoute);
 
     constructor(private characterService: CharacterService) {}
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.characterService.getCharacterClasses().subscribe((charClasses) => {
            this.charClasses = charClasses;
         });
@@ -102,5 +107,11 @@ export class EditCharacterClassComponent {
 
     getTools(): Array<{id: number, name: string, type: string}> {
         return this.getClassBySelectionId().tool_proficiencies?.tools ?? [];
+    }
+
+    confirmSelectedClass(): void {
+        this.characterService.setCharacterClass({charClassId: this.selectedCharClass}).subscribe((response) => {
+            console.log(response)
+        });
     }
 }

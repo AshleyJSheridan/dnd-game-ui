@@ -14,9 +14,8 @@
         }
     </ul>
 
-    <app-confirm heading="Select This Class" #confirmComponent>
+    <app-confirm heading="{{ getClassBySelectionId()?.name }}" (confirmClass)="confirmSelectedClass()" #confirmComponent>
         <div class="char-class-details">
-                <h3>{{ getClassBySelectionId()?.name }}</h3>
                 <p>{{ getClassBySelectionId()?.description }}</p>
 
                 <p class="char-class-stats">
