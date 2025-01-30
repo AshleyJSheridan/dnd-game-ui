@@ -1,6 +1,4 @@
 export interface INameSuggestionList {
-    data: {
-        style: string,
-        names: Array<string>
-    }
+    style: string,
+    names: Array<string>
 }

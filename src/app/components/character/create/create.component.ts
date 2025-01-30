@@ -22,8 +22,8 @@ export class CreateComponent {
     constructor(private characterService: CharacterService) {}
 
     suggestNamesHandler(): void {
-        this.characterService.getNameSuggestions(this.suggestionType).subscribe((data) => {
-            this.suggestions = data.data.names;
+        this.characterService.getNameSuggestions(this.suggestionType).subscribe((names) => {
+            this.suggestions = names.names;
         });
     }
 
