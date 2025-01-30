@@ -4,8 +4,7 @@ import { CharClassIconComponent } from '../../icons/char-class-icon/char-class-i
 import { ConfirmComponent } from '../../dialogs/confirm/confirm.component';
 import { CharacterClass } from '../../../entities/CharacterClass';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
-import { Observable, switchMap } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-edit-character-class',
@@ -24,9 +23,15 @@ export class EditCharacterClassComponent {
 
     private readonly route = inject(ActivatedRoute);
 
-    constructor(private characterService: CharacterService) {}
+    constructor(private characterService: CharacterService, private router: Router) {}
 
     ngOnInit(): void {
+        this.characterService.getCharacter().subscribe((character) => {
+            if (character.charClass !== '' && character.guid !== '') {
+                this.router.navigate([`/characters/${character.guid}/edit/background`]);
+            }
+        });
+
         this.characterService.getCharacterClasses().subscribe((charClasses) => {
            this.charClasses = charClasses;
         });

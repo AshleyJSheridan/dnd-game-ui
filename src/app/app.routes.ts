@@ -4,6 +4,7 @@ import { CharactersListComponent } from './components/character/characters-list/
 import { ViewCharacterComponent } from './components/character/view-character/view-character.component';
 import { EditCharacterClassComponent } from './components/character/edit-character-class/edit-character-class.component';
 import { EditCharacterComponent } from './components/character/edit-character/edit-character.component';
+import { EditCharacterBackgroundComponent } from './components/character/edit-character-background/edit-character-background.component';
 import { ApplicationConfig } from "@angular/core";
 
 export const routes: Routes = [
@@ -14,7 +15,8 @@ export const routes: Routes = [
         path: 'characters/:guid/edit',
         component: EditCharacterComponent,
         children: [
-            { path: 'class', component: EditCharacterClassComponent }
+            { path: 'class', component: EditCharacterClassComponent },
+            { path: 'background', component: EditCharacterBackgroundComponent }
         ]
     }
 ];

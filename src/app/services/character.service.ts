@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {ICharacterList} from '../interfaces/iCharacterList';
-import {Observable} from 'rxjs';
-import {INameSuggestionList} from '../interfaces/iNameSuggestionList';
-import {CharacterClass} from '../entities/CharacterClass';
-import {ICharacter} from '../interfaces/iCharacter';
+import { Observable } from 'rxjs';
+import { INameSuggestionList } from '../interfaces/iNameSuggestionList';
+import { CharacterClass } from '../entities/CharacterClass';
+import { ICharacter } from '../interfaces/iCharacter';
 
 @Injectable({providedIn: 'root'})
 export class CharacterService {
@@ -17,12 +16,12 @@ export class CharacterService {
         this.charGuid = charGuid;
     }
 
-    public getCharacter(): Observable<ICharacter> {
-        return this.http.get<ICharacter>(`${this.apiUrl}/characters/${this.charGuid}`);
+    public getCharacter(): Observable<any> {
+        return this.http.get(`${this.apiUrl}/characters/${this.charGuid}`);
     }
 
-    public getCharacters(): Observable<ICharacterList> {
-        return this.http.get<ICharacterList>(`${this.apiUrl}/characters`);
+    public getCharacters(): Observable<Array<ICharacter>> {
+        return this.http.get<Array<ICharacter>>(`${this.apiUrl}/characters`);
     }
 
     public getNameSuggestions(suggestionType: string): Observable<INameSuggestionList> {
