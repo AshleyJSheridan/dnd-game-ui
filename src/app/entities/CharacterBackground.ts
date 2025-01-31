@@ -13,8 +13,8 @@ export class CharacterBackground {
             description: string;
         }
     }> = [];
-    characteristics: Record<string, {
+    characteristics: Record<string, Array<{
         id: string;
         characteristic: string;
-    }> = {};
+    }>> = {};
 }

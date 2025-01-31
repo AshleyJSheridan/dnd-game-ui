@@ -1,1 +1,46 @@
-<p>edit-character-background works!</p>
+<h2>Character Creation - Background</h2>
+
+<div class="char-edit-background-list">
+    <ul>
+        @for (charBackground of charBackgrounds; track charBackground.id) {
+            <li>
+                <button class="char-background" (click)="selectCharBackground(charBackground, $event)">
+                    <span class="char-background-name">{{ charBackground.name }}</span>
+                </button>
+            </li>
+        }
+    </ul>
+
+    @if (selectedCharBackground) {
+        <section>
+            <h3>{{ selectedCharBackground.name }}</h3>
+            <p>{{ selectedCharBackground.description }}</p>
+            @if (selectedCharBackground.extra_languages) {
+                <p><strong>Extra languages:</strong> {{ selectedCharBackground.extra_languages }}</p>
+            }
+            <p><strong>Starting gold:</strong> {{ selectedCharBackground.gold }}</p>
+
+            <h4>Proficiencies</h4>
+            <dl>
+                <dt>{{ selectedCharBackground.proficiencies[0].name }}</dt>
+                <dd>{{ selectedCharBackground.proficiencies[0].description }}</dd>
+                <dt>{{ selectedCharBackground.proficiencies[1].name }}</dt>
+                <dd>{{ selectedCharBackground.proficiencies[1].description }}</dd>
+            </dl>
+
+            <h4>Characteristics</h4>
+            @for (characteristic of getCharacteristicsKeys(); track characteristic) {
+                <div class="char-edit-background-characteristic">
+                    <label>{{ characteristic }}
+                        <select>
+                            <option value=""></option>
+                            @for (option of selectedCharBackground.characteristics[characteristic]; track option.id) {
+                                <option value="{{ option.id }}">{{ option.characteristic }}</option>
+                            }
+                        </select>
+                    </label>
+                </div>
+            }
+        </section>
+    }
+</div>
