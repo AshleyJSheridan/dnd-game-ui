@@ -2,10 +2,15 @@ import { Component } from '@angular/core';
 import { CharacterService } from '../../../services/character.service';
 import { Router } from '@angular/router';
 import {CharacterBackground} from '../../../entities/CharacterBackground';
+import {CharClassIconComponent} from '../../icons/char-class-icon/char-class-icon.component';
+import {CharBackgroundIconComponent} from '../../icons/char-background-icon/char-background-icon.component';
 
 @Component({
     selector: 'app-edit-character-background',
-    imports: [],
+    imports: [
+        CharClassIconComponent,
+        CharBackgroundIconComponent
+    ],
     templateUrl: './edit-character-background.component.html'
 })
 export class EditCharacterBackgroundComponent {

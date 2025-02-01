@@ -5,6 +5,14 @@
         @for (charBackground of charBackgrounds; track charBackground.id) {
             <li>
                 <button class="char-background" (click)="selectCharBackground(charBackground, $event)">
+                    <span
+                        class="char-background-icon
+                            char-background-{{ charBackground.name?.toLowerCase()?.replace(' ', '-') }}"
+                    >
+                        <app-char-background-icon
+                            charBackgroundName="{{ charBackground.name?.toLowerCase() }}"
+                        ></app-char-background-icon>
+                    </span>
                     <span class="char-background-name">{{ charBackground.name }}</span>
                 </button>
             </li>

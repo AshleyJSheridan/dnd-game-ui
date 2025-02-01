@@ -1,0 +1,53 @@
+@use "../colours";
+
+.char-edit-background-list ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2em;
+    padding: 0;
+
+    li {
+        border: 1px solid colours.$dark-grey;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        &:hover {
+            background-color: colours.$really-light-grey;
+        }
+    }
+
+    .char-background {
+        appearance: none;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        display: flex;
+        padding: .5rem;
+        width: 10rem;
+
+        &:focus {
+            outline: 2px solid colours.$focus;
+        }
+    }
+
+    .char-background-icon {
+        display: inline-block;
+        height: 4em;
+        width: 4em;
+
+        svg {
+            height: 100%;
+            width: 100%;
+        }
+
+        &.char-background-acolyte {
+
+        }
+    }
+
+    .char-background-name {
+        padding: .5rem;
+        font-size: 1rem;
+    }
+}

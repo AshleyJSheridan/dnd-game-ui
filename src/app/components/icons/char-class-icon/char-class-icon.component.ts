@@ -7,6 +7,4 @@ import {Component, input, InputSignal} from '@angular/core';
 })
 export class CharClassIconComponent {
     readonly charClassName: InputSignal<string|undefined> = input<string>();
-
-
 }
