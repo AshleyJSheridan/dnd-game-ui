@@ -40,13 +40,17 @@
             @for (characteristic of getCharacteristicsKeys(); track characteristic) {
                 <div class="char-edit-background-characteristic">
                     <label>{{ characteristic }}
-                        <select>
-                            <option value=""></option>
+                        <select id="characteristic-{{ getCharacteristicIdString(characteristic) }}">
+                            <option value="">-</option>
                             @for (option of selectedCharBackground.characteristics[characteristic]; track option.id) {
                                 <option value="{{ option.id }}">{{ option.characteristic }}</option>
                             }
                         </select>
                     </label>
+                    <app-dice
+                        sides="{{ selectedCharBackground.characteristics[characteristic].length }}"
+                        (rollEvent)="handleRollEvent($event, 'characteristic-' + getCharacteristicIdString(characteristic))"
+                    ></app-dice>
                 </div>
             }
         </section>

@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { CharacterService } from '../../../services/character.service';
 import { Router } from '@angular/router';
-import {CharacterBackground} from '../../../entities/CharacterBackground';
-import {CharClassIconComponent} from '../../icons/char-class-icon/char-class-icon.component';
-import {CharBackgroundIconComponent} from '../../icons/char-background-icon/char-background-icon.component';
+import { CharacterBackground } from '../../../entities/CharacterBackground';
+import { CharBackgroundIconComponent } from '../../icons/char-background-icon/char-background-icon.component';
+import { DiceComponent } from '../../dice/dice.component';
 
 @Component({
     selector: 'app-edit-character-background',
     imports: [
-        CharClassIconComponent,
-        CharBackgroundIconComponent
+        CharBackgroundIconComponent,
+        DiceComponent
     ],
     templateUrl: './edit-character-background.component.html'
 })
@@ -34,5 +34,14 @@ export class EditCharacterBackgroundComponent {
             return Object.keys(this.selectedCharBackground?.characteristics);
 
         return [];
+    }
+
+    getCharacteristicIdString(characteristic: string): string {
+        return characteristic.toLowerCase().replace(' ', '-');
+    }
+
+    handleRollEvent(rollData: {value: number}, idString: string) {
+        const selectList = <HTMLSelectElement>document.getElementById(idString);
+        selectList.selectedIndex = rollData.value;
     }
 }

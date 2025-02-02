@@ -32,3 +32,11 @@ h2 {
     margin-top: .5rem;
     padding-left: 2rem;
 }
+
+.accessible-hidden {
+    clip: rect(1px 1px 1px 1px);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+}

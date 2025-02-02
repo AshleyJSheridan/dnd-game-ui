@@ -101,3 +101,39 @@ select {
     font-size: 100%;
     padding: .5rem;
 }
+
+button.dice-icon {
+    appearance: none;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: pointer;
+    border: none;
+    height: 2rem;
+    margin: .25rem;
+    width: 2rem;
+
+    &.dice-icon-4 {
+        background-image: url("/images/dice/d4.png");
+    }
+
+    &.dice-icon-6 {
+        background-image: url("/images/dice/d6.png");
+    }
+
+    &.dice-icon-8 {
+        background-image: url("/images/dice/d8.png");
+    }
+
+    &.dice-icon-10 {
+        background-image: url("/images/dice/d10.png");
+    }
+
+    &.dice-icon-12 {
+        background-image: url("/images/dice/d12.png");
+    }
+
+    &.dice-icon-20 {
+        background-image: url("/images/dice/d20.png");
+    }
+}
