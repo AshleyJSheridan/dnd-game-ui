@@ -1,0 +1,69 @@
+@use "../colours";
+
+.char-edit-race-list ul {
+    padding: 0;
+
+    li {
+        display: block;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    details.char-race {
+        appearance: none;
+        background-color: transparent;
+        border: 1px solid colours.$dark-grey;
+        border-radius: 1rem;
+        cursor: pointer;
+        margin-bottom: 1rem;
+        padding: .5rem;
+
+        &[open] summary:after {
+            content: "-";
+        }
+
+        summary {
+            align-items: center;
+            display: flex;
+            gap: 1rem;
+            position: relative;
+
+            &:after {
+                content: "+";
+                font-size: 2rem;
+                font-weight: bold;
+                position: absolute;
+                right: 1rem;
+                top: 0;
+            }
+
+            &::-webkit-details-marker,
+            &::marker {
+                content: "";
+                display: none;
+            }
+        }
+    }
+
+    .char-race-portrait {
+        height: 50px;
+        width: 50px;
+    }
+
+    .char-race-name {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    .char-race-details {
+        dt {
+            font-weight: bold;
+        }
+
+        dd {
+            margin-left: 1rem;
+            margin-bottom: .75rem;
+        }
+    }
+}

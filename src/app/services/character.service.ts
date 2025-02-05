@@ -5,6 +5,7 @@ import { INameSuggestionList } from '../interfaces/iNameSuggestionList';
 import { CharacterClass } from '../entities/CharacterClass';
 import { ICharacter } from '../interfaces/iCharacter';
 import { CharacterBackground } from '../entities/CharacterBackground';
+import {CharacterRace} from '../entities/CharacterRace';
 
 @Injectable({providedIn: 'root'})
 export class CharacterService {
@@ -55,6 +56,10 @@ export class CharacterService {
                 characteristics: characteristics
             }
         );
+    }
+
+    public getCharacterRaces(): Observable<Array<CharacterRace>> {
+        return this.http.get<Array<CharacterRace>>(`${this.apiUrl}/characters/races`);
     }
 }
 

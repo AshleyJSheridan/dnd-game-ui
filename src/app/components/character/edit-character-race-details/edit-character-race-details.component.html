@@ -1,0 +1,12 @@
+<dl class="char-race-details">
+    <dt>Max Age (years)</dt>
+        <dd>{{ race()?.max_age }}</dd>
+    <dt>Max Height (feet)</dt>
+        <dd>{{ race()?.max_height }}</dd>
+    <dt>Max Speed (feet)</dt>
+        <dd>{{ race()?.speed }}</dd>
+    @for (ability of race()?.race_traits; track ability.name) {
+        <dt>{{ ability.name }}</dt>
+            <dd>{{ ability.description }}</dd>
+    }
+</dl>

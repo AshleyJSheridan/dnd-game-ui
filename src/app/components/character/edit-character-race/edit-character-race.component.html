@@ -1,1 +1,48 @@
-<p>edit-character-race works!</p>
+<h2>Character Creation - Race</h2>
+
+<div class="char-edit-race-list">
+    <ul>
+        @for (charRace of charRaces; track charRace.id) {
+            <li>
+                <details class="char-race">
+                    <summary>
+                        <img
+                            class="char-race-portrait"
+                            src="/images/default-race-portraits/thumbs-200/{{ getPortraitImage(charRace.name) }}-portrait.jpg"/>
+                        <span class="char-race-name">{{ charRace.name }}</span>
+                        @if (hasSubRaces(charRace)) {
+                            <span class="char-race-has-subs">({{ getSubRaceCount(charRace) }} variations)</span>
+                        }
+                    </summary>
+                    <div class="char-race-details">
+                        <div [innerHTML]="charRace.description"></div>
+
+                        @if (hasSubRaces(charRace)) {
+                            @for (subRace of charRace.sub_races; track subRace.id) {
+                                <details class="char-race">
+                                    <summary>
+                                        <img
+                                            class="char-race-portrait"
+                                            src="/images/default-race-portraits/thumbs-200/{{ getPortraitImage(subRace.name) }}-portrait.jpg"/>
+                                        <span class="char-race-name">{{ subRace.name }}</span>
+                                    </summary>
+                                    <div class="char-race-details">
+                                        <div [innerHTML]="subRace.description"></div>
+
+                                        <app-edit-character-race-details [race]="subRace"></app-edit-character-race-details>
+
+                                        <button>Pick me</button>
+                                    </div>
+                                </details>
+                            }
+                        } @else {
+                            <app-edit-character-race-details [race]="charRace"></app-edit-character-race-details>
+
+                            <button>Pick me</button>
+                        }
+                    </div>
+                </details>
+            </li>
+        }
+    </ul>
+</div>
