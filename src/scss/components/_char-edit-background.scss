@@ -18,6 +18,7 @@
     }
 
     .char-background {
+        align-items: center;
         appearance: none;
         border: none;
         background-color: transparent;
@@ -52,12 +53,53 @@
     }
 }
 
+.char-background-details {
+    border: 1px solid colours.$black;
+    border-radius: 1rem;
+
+    h3 {
+        background-color: colours.$heading-green;
+        border-radius: 1rem 1rem 0 0;
+        margin: 0;
+        padding: .5rem 1rem;
+    }
+
+    .char-background-details-content {
+        padding: 1rem;
+
+        p {
+            margin-top: 0;
+        }
+
+        h4 {
+            margin-bottom: .5rem;
+        }
+    }
+}
+
+.char-background-proficiencies-list {
+    display: grid;
+    grid-template-columns: 7rem auto;
+    margin-top: 0;
+    margin-left: 1rem;
+    row-gap: 1rem;
+
+    dt {
+        font-weight: bold;
+    }
+
+    dd {
+        margin: 0;
+    }
+}
+
 .char-edit-background-characteristic {
     align-items: end;
     display: flex;
+    margin-bottom: 1rem;
 
     select {
         display: block;
-        width: 20rem;
+        width: 25rem;
     }
 }

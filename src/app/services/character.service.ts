@@ -45,6 +45,17 @@ export class CharacterService {
     public getCharacterBackgrounds(): Observable<Array<CharacterBackground>> {
         return this.http.get<Array<CharacterBackground>>(`${this.apiUrl}/characters/backgrounds`);
     }
+
+    public setCharacterBackground(backgroundId: number, characteristics: Array<number>): Observable<ICharacter> {
+        return this.http.patch<ICharacter>(
+            `${this.apiUrl}/characters/${this.charGuid}`,
+            {
+                updateType: 'background',
+                charBackgroundId: backgroundId,
+                characteristics: characteristics
+            }
+        );
+    }
 }
 
 

@@ -5,7 +5,7 @@
         @for (charClass of charClasses; track charClass.id) {
             <li>
                 <button class="char-class" (click)="selectCharClass(charClass.id, $event)">
-                    <span class="char-class-icon char-class-{{ charClass.name?.toLowerCase() }}">
+                    <span class="char-class-icon char-class-{{ charClass.name.toLowerCase() }}">
                         <app-char-class-icon charClassName="{{ charClass.name }}"></app-char-class-icon>
                     </span>
                     <span class="char-class-name">{{ charClass.name }}</span>
@@ -14,13 +14,13 @@
         }
     </ul>
 
-    <app-confirm heading="{{ getClassBySelectionId()?.name }}" (confirmClass)="confirmSelectedClass()" #confirmComponent>
+    <app-confirm heading="{{ getClassBySelectionId().name }}" (confirmClass)="confirmSelectedClass()" #confirmComponent>
         <div class="char-class-details">
-                <p>{{ getClassBySelectionId()?.description }}</p>
+                <p>{{ getClassBySelectionId().description }}</p>
 
                 <p class="char-class-stats">
                     <strong>Hit dice:</strong>
-                        <span>d{{ getClassBySelectionId()?.hit_die }}</span>
+                        <span>d{{ getClassBySelectionId().hit_die }}</span>
                     <br/>
                     <strong>{{ getPrimaryAbilityStrings()[0] }}:</strong>
                         <span>{{ getPrimaryAbilityStrings()[1] }}</span>
@@ -77,7 +77,7 @@
 
                 <strong>Class features by level:</strong>
                 <ul class="char-class-features">
-                    @for (feature of getClassBySelectionId()?.class_features; track feature.id) {
+                    @for (feature of getClassBySelectionId().class_features; track feature.id) {
                         <li>
                             <details>
                                 <summary>{{ feature.name }}

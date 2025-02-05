@@ -137,3 +137,10 @@ button.dice-icon {
         background-image: url("/images/dice/d20.png");
     }
 }
+
+.error {
+    background-color: colours.$error-background;
+    border: 1px solid colours.$error-border;
+    color: colours.$error-text;
+    padding: .5rem;
+}

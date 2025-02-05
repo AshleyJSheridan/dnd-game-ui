@@ -16,6 +16,7 @@ import { DiceComponent } from '../../dice/dice.component';
 export class EditCharacterBackgroundComponent {
     charBackgrounds: Array<CharacterBackground> = [];
     selectedCharBackground: CharacterBackground|null = null;
+    characteristicsError: boolean = false;
 
     constructor(private characterService: CharacterService, private router: Router) {}
 
@@ -40,8 +41,32 @@ export class EditCharacterBackgroundComponent {
         return characteristic.toLowerCase().replace(' ', '-');
     }
 
-    handleRollEvent(rollData: {value: number}, idString: string) {
+    handleCharacteristicRollEvent(rollData: {value: number}, idString: string) {
+        // selecting the element like this because the number of select lists is dynamic
         const selectList = <HTMLSelectElement>document.getElementById(idString);
         selectList.selectedIndex = rollData.value;
+    }
+
+    setCharBackground(): void {
+        this.characteristicsError = false;
+        const selectLists = <NodeListOf<HTMLSelectElement>>document.querySelectorAll('select.characteristic');
+        let characteristics: Array<number> = [];
+
+        selectLists.forEach(list => {
+            if (list.value !== '') {
+                characteristics.push(parseInt(list.value));
+            }
+        });
+
+        if(selectLists.length === characteristics.length) {
+            let data = {charBackgroundId: this.selectedCharBackground?.id, characteristics: characteristics};
+
+            // this won't ever be called without a selected background, but coalesce to 0 to keep IDE happy
+            this.characterService.setCharacterBackground(this.selectedCharBackground?.id ?? 0, characteristics).subscribe((character) => {
+                this.router.navigate([`/characters/${character.guid}/edit/race`]);
+            });
+        } else {
+            this.characteristicsError = true;
+        }
     }
 }
