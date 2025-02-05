@@ -31,14 +31,14 @@
 
                                         <app-edit-character-race-details [race]="subRace"></app-edit-character-race-details>
 
-                                        <button>Pick me</button>
+                                        <button class="primary-btn" (click)="handleSelectCharRace(subRace)">Pick {{ subRace.name }}</button>
                                     </div>
                                 </details>
                             }
                         } @else {
                             <app-edit-character-race-details [race]="charRace"></app-edit-character-race-details>
 
-                            <button>Pick me</button>
+                            <button class="primary-btn" (click)="handleSelectCharRace(charRace)">Pick {{ charRace.name }}</button>
                         }
                     </div>
                 </details>

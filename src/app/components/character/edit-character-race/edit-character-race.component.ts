@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import {CharacterService} from '../../../services/character.service';
-import {CharacterRace} from '../../../entities/CharacterRace';
-import {EditCharacterRaceDetailsComponent} from '../edit-character-race-details/edit-character-race-details.component';
+import { CharacterService } from '../../../services/character.service';
+import { CharacterRace } from '../../../entities/CharacterRace';
+import { EditCharacterRaceDetailsComponent } from '../edit-character-race-details/edit-character-race-details.component';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-edit-character-race',
@@ -15,7 +16,7 @@ export class EditCharacterRaceComponent {
     selectedCharRace: CharacterRace|null = null;
     identifyAs: string = 'female';
 
-    constructor(private characterService: CharacterService) {}
+    constructor(private characterService: CharacterService, private router: Router) {}
 
     ngOnInit(): void {
         this.characterService.getCharacterRaces().subscribe((charRaces) => {
@@ -43,5 +44,11 @@ export class EditCharacterRaceComponent {
 
     getSubRaceCount(race: CharacterRace): number {
         return race.sub_races?.length;
+    }
+
+    handleSelectCharRace(charRace: CharacterRace): void {
+        this.characterService.setCharacterRace(charRace.id).subscribe((character) => {
+            this.router.navigate([`/characters/${character.guid}/edit/abilities`]);
+        });
     }
 }
