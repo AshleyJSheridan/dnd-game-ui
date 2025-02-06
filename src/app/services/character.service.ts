@@ -6,6 +6,7 @@ import { CharacterClass } from '../entities/CharacterClass';
 import { ICharacter } from '../interfaces/iCharacter';
 import { CharacterBackground } from '../entities/CharacterBackground';
 import {CharacterRace} from '../entities/CharacterRace';
+import { Character } from '../entities/Character';
 
 @Injectable({providedIn: 'root'})
 export class CharacterService {
@@ -18,8 +19,8 @@ export class CharacterService {
         this.charGuid = charGuid;
     }
 
-    public getCharacter(): Observable<any> {
-        return this.http.get(`${this.apiUrl}/characters/${this.charGuid}`);
+    public getCharacter(): Observable<Character> {
+        return this.http.get<Character>(`${this.apiUrl}/characters/${this.charGuid}`);
     }
 
     public getCharacters(): Observable<Array<ICharacter>> {

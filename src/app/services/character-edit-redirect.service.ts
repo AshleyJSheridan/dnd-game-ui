@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {CharacterService} from './character.service';
-import {Router} from '@angular/router';
+import { Injectable } from '@angular/core';
+import { CharacterService } from './character.service';
+import { Router } from '@angular/router';
 
 @Injectable({providedIn: 'root'})
 export class CharacterEditRedirectService {
@@ -12,10 +12,12 @@ export class CharacterEditRedirectService {
                 // redirect based on first instance of missing character information
                 if (character.charClass === '') {
                     this.router.navigate([`/characters/${character.guid}/edit/class`]);
-                } else if (character.charBackground === '') {
+                } else if (character.charBackground.name === '') {
                     this.router.navigate([`/characters/${character.guid}/edit/background`]);
                 } else if (character.charRace === '') {
                     this.router.navigate([`/characters/${character.guid}/edit/race`]);
+                } else if (character.abilities[0].value === 0) {
+                    this.router.navigate([`/characters/${character.guid}/edit/abilities`]);
                 }
             }
         });
