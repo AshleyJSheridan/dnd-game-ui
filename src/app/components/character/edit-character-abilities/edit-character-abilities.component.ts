@@ -65,6 +65,10 @@ export class EditCharacterAbilitiesComponent {
 
 
     canShowAbilityInSelectList(rollIndex: number, abilityId: number): boolean {
-        return true;
+        const abilityExists = this.assignedDiceTotals.filter(totals => {
+            return totals.abilityId === abilityId
+        });
+
+        return !(abilityExists.length > 0 && abilityExists[0].rollIndex !== rollIndex);
     }
 }
