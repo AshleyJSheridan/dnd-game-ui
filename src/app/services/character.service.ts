@@ -7,6 +7,7 @@ import { ICharacter } from '../interfaces/iCharacter';
 import { CharacterBackground } from '../entities/CharacterBackground';
 import {CharacterRace} from '../entities/CharacterRace';
 import { Character } from '../entities/Character';
+import {DiceRolls} from '../entities/DiceRolls';
 
 @Injectable({providedIn: 'root'})
 export class CharacterService {
@@ -68,6 +69,10 @@ export class CharacterService {
             `${this.apiUrl}/characters/${this.charGuid}`,
             {updateType: 'race', charRaceId: charRaceId}
         );
+    }
+
+    public getAbilityRoll(): Observable<DiceRolls> {
+        return this.http.post<DiceRolls>(`${this.apiUrl}/game/dice`, {dice: {d6: 4}});
     }
 }
 

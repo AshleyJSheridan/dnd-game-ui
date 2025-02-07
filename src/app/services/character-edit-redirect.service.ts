@@ -16,7 +16,7 @@ export class CharacterEditRedirectService {
                     this.router.navigate([`/characters/${character.guid}/edit/background`]);
                 } else if (character.charRace === '') {
                     this.router.navigate([`/characters/${character.guid}/edit/race`]);
-                } else if (character.abilities[0].value === 0) {
+                } else if (character.abilities[0].base === 0) {
                     this.router.navigate([`/characters/${character.guid}/edit/abilities`]);
                 }
             }

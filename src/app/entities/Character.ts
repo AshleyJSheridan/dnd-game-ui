@@ -16,12 +16,13 @@ export class Character {
     };
     charRace: string = '';
     abilities: Array<{
-        id: string;
+        id: number;
         name: string;
         short_name: string;
         description: number;
-        value: number;
+        base: number;
         modifier: number;
+        racialModifier: number;
     }> = [];
     created_at: Date = new Date();
 }

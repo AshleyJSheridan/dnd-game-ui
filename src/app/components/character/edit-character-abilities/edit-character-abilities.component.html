@@ -1,1 +1,45 @@
-<p>edit-character-abilities works!</p>
+<h2>Character Creation - Abilities</h2>
+
+<button type="button" class="secondary-btn" (click)="getDiceRollForStat()">Roll for all abilities
+    <span class="dice-d6"></span></button>
+
+<div class="dice-roll-block-all">
+    @if (abilityDiceRolls[0].rolls.length) {
+        @for (i of [0,1,2,3,4,5]; track $index){
+            <div class="dice-roll-block">
+                <div class="dice-roll-block-rolls">
+                    @for (roll of abilityDiceRolls[i]?.rolls; track $index) {
+                        <span class="dice-roll-d6" [class.discarded]="$index == 3">
+                            <span>{{ roll }}</span>
+                        </span>
+                    }
+                </div>
+                <select>
+                    <option>-</option>
+                    @for (ability of character?.abilities; track ability.id) {
+                        <option value="{{ ability.id }}">{{ ability.short_name }}</option>
+                    }
+                </select>
+            </div>
+        }
+    }
+</div>
+
+<div class="char-edit-abilities">
+    @for (ability of character?.abilities; track ability.id) {
+        <div class="char-edit-ability">
+            <div class="ability-name">{{ ability.name }}</div>
+            <table class="ability-table">
+                <tr>
+                    <th>Base value</th><td>{{ ability.base }}</td>
+                </tr>
+                <tr>
+                    <th>Racial bonus</th><td>{{ ability.racialModifier }}</td>
+                </tr>
+                <tr>
+                    <th>Modifier</th><td>{{ getAbilityModifier(ability) }}</td>
+                </tr>
+            </table>
+        </div>
+    }
+</div>

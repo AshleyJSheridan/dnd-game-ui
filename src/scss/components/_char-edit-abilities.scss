@@ -1,0 +1,78 @@
+@use "../colours";
+
+.char-edit-abilities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+
+    .char-edit-ability {
+        border: 1px solid colours.$dark-grey;
+
+        .ability-name {
+            background-color: colours.$dark-grey;
+            color: colours.$white;
+            font-weight: bold;
+            padding: .5rem;
+            text-align: center;
+        }
+
+        .ability-table {
+            border-collapse: collapse;
+
+            th,
+            td {
+                border: 1px solid colours.$dark-grey;
+                padding: 1rem;
+            }
+        }
+    }
+
+    .dice-roll-block {
+        padding: .5rem 0;
+        text-align: center;
+
+        .dice {
+            display: flex;
+            justify-content: space-around;
+        }
+    }
+}
+
+.dice-roll-block-all {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+
+    .dice-roll-block {
+        background-color: colours.$really-light-grey;
+        border-radius: .5rem;
+        padding: 1rem;
+
+        select {
+            margin-top: .5rem;
+            width: 100%;
+        }
+    }
+
+    .dice-roll-block-rolls {
+        display: flex;
+        gap: .5rem;
+    }
+
+    .dice-roll-d6 {
+        align-items: center;
+        border: 2px solid colours.$black;
+        border-radius: .25rem;
+        display: flex;
+        font-weight: bold;
+        height: 1.5rem;
+        justify-content: center;
+        width: 1.5rem;
+
+        &.discarded {
+
+        }
+    }
+}
