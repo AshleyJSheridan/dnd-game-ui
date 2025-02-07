@@ -11,7 +11,7 @@ import {Character} from '../../../entities/Character';
 export class EditCharacterAbilitiesComponent {
     character: Character | undefined;
     abilityDiceRolls: Array<{guid:string;rolls:Array<number>;}> = Array(6).fill({guid:'',rolls:[0,0,0,0]});
-    assignedDiceTotals: Array<number> = Array(6).fill(0);
+    assignedDiceTotals: Array<{abilityId: number; rollIndex: number}> = [];
 
     constructor(private characterService: CharacterService, private router: Router) {}
 
@@ -21,8 +21,8 @@ export class EditCharacterAbilitiesComponent {
         });
     }
 
-    getAbilityModifier(ability: {base: number; racialModifier: number;}): string {
-        const modifierValue = Math.floor((ability.base + ability.racialModifier - 10) / 2);
+    getAbilityModifier(ability: {id: number; base: number; racialModifier: number;}): string {
+        const modifierValue = Math.floor((this.getAbilityBaseValue(ability.id) + ability.racialModifier - 10) / 2);
 
         return new Intl.NumberFormat('en-GB', {
             signDisplay: "always"
@@ -30,11 +30,17 @@ export class EditCharacterAbilitiesComponent {
     }
 
     getAbilityBaseValue(abilityId: number): number {
-        if (this.assignedDiceTotals[abilityId - 1] === 0)
+        const matchedAbilities = this.assignedDiceTotals.filter(totals => {
+            return totals.abilityId === abilityId
+        });
+
+        if(matchedAbilities.length === 0)
             return 0;
 
-        return this.abilityDiceRolls[this.assignedDiceTotals[abilityId - 1] - 1]?.rolls
-            .reduce((acc: number = 0, val: number, index: number) => {return acc += index < 3 ? val : 0}) ?? 0;
+        const matchedAbility = matchedAbilities[0];
+
+        return this.abilityDiceRolls[matchedAbility.rollIndex].rolls
+            .reduce((acc: number = 0, val: number, index: number) => {return acc += index < 3 ? val : 0});
     }
 
     getDiceRollForStat(): void {
@@ -45,7 +51,20 @@ export class EditCharacterAbilitiesComponent {
         }
     }
 
-    setRollsForAbility(abilityId: number, event: Event): void {
-        this.assignedDiceTotals[abilityId] = Number((<HTMLSelectElement>event.target).value);
+    setRollsForAbility(event: Event, rollIndex: number): void {
+        const abilityId = Number((<HTMLSelectElement>event.target).value)
+
+        const abilityExists = this.assignedDiceTotals.filter(totals => {
+            return totals.abilityId === abilityId
+        });
+
+        if (abilityExists.length === 0) {
+            this.assignedDiceTotals.push({abilityId: abilityId, rollIndex: rollIndex});
+        }
+    }
+
+
+    canShowAbilityInSelectList(rollIndex: number, abilityId: number): boolean {
+        return true;
     }
 }
