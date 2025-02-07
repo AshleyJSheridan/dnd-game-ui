@@ -38,7 +38,7 @@
             <div class="ability-name">{{ ability.name }}</div>
             <table class="ability-table">
                 <tr>
-                    <th>Base value</th><td>{{ ability.base }}</td>
+                    <th>Base value</th><td>{{ getAbilityBaseValue(ability.id) }}</td>
                 </tr>
                 <tr>
                     <th>Racial bonus</th><td>{{ ability.racialModifier }}</td>

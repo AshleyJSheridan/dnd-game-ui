@@ -29,6 +29,14 @@ export class EditCharacterAbilitiesComponent {
         }).format(modifierValue);
     }
 
+    getAbilityBaseValue(abilityId: number): number {
+        if (this.assignedDiceTotals[abilityId - 1] === 0)
+            return 0;
+
+        return this.abilityDiceRolls[this.assignedDiceTotals[abilityId - 1] - 1]?.rolls
+            .reduce((acc: number = 0, val: number, index: number) => {return acc += index < 3 ? val : 0}) ?? 0;
+    }
+
     getDiceRollForStat(): void {
         for (let i = 0; i < 6; i ++) {
             this.characterService.getAbilityRoll().subscribe(rolls => {
@@ -37,13 +45,7 @@ export class EditCharacterAbilitiesComponent {
         }
     }
 
-    setRollsForAbility(i: number, event: Event): void {
-        this.assignedDiceTotals[i] = Number((<HTMLSelectElement>event.target).value);
-
-        console.log(
-            this.assignedDiceTotals.includes(Number((<HTMLSelectElement>event.target).value)),
-            this.assignedDiceTotals[i] === Number((<HTMLSelectElement>event.target).value)
-        );
-
+    setRollsForAbility(abilityId: number, event: Event): void {
+        this.assignedDiceTotals[abilityId] = Number((<HTMLSelectElement>event.target).value);
     }
 }
