@@ -4,20 +4,27 @@
     <span class="dice-d6"></span></button>
 
 <div class="dice-roll-block-all">
-    @if (abilityDiceRolls[0].rolls.length) {
+    @if (abilityDiceRolls[0].rolls[0] > 0) {
         @for (i of [0,1,2,3,4,5]; track $index){
             <div class="dice-roll-block">
+                <strong>{{ abilityDiceRolls[i].rolls[0] + abilityDiceRolls[i].rolls[1] + abilityDiceRolls[i].rolls[2] }}</strong>
                 <div class="dice-roll-block-rolls">
-                    @for (roll of abilityDiceRolls[i]?.rolls; track $index) {
+                    @for (roll of abilityDiceRolls[i].rolls; track $index) {
                         <span class="dice-roll-d6" [class.discarded]="$index == 3">
                             <span>{{ roll }}</span>
                         </span>
                     }
                 </div>
-                <select>
+                <select (change)="setRollsForAbility(i, $event)">
                     <option>-</option>
                     @for (ability of character?.abilities; track ability.id) {
-                        <option value="{{ ability.id }}">{{ ability.short_name }}</option>
+                        <!-- hide selected ability from all other select lists -->
+                        @if(!(
+                            assignedDiceTotals.includes(ability.id) &&
+                            assignedDiceTotals[i] !== ability.id
+                        )) {
+                            <option value="{{ ability.id }}">{{ ability.name }}</option>
+                        }
                     }
                 </select>
             </div>

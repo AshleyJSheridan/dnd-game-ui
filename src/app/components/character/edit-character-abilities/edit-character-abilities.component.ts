@@ -10,8 +10,8 @@ import {Character} from '../../../entities/Character';
 })
 export class EditCharacterAbilitiesComponent {
     character: Character | undefined;
-    abilityDiceRolls: Array<{guid:string;rolls:Array<number>;}> = Array(6).fill({guid:'',rolls:[]});
-    assignedDiceTotals: Array<{guid:string;total:number}> = [];
+    abilityDiceRolls: Array<{guid:string;rolls:Array<number>;}> = Array(6).fill({guid:'',rolls:[0,0,0,0]});
+    assignedDiceTotals: Array<number> = Array(6).fill(0);
 
     constructor(private characterService: CharacterService, private router: Router) {}
 
@@ -35,5 +35,15 @@ export class EditCharacterAbilitiesComponent {
                 this.abilityDiceRolls[i] = {guid: rolls.guid, rolls: rolls.rolls.d6?.sort().reverse() ?? []};
             })
         }
+    }
+
+    setRollsForAbility(i: number, event: Event): void {
+        this.assignedDiceTotals[i] = Number((<HTMLSelectElement>event.target).value);
+
+        console.log(
+            this.assignedDiceTotals.includes(Number((<HTMLSelectElement>event.target).value)),
+            this.assignedDiceTotals[i] === Number((<HTMLSelectElement>event.target).value)
+        );
+
     }
 }

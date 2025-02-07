@@ -50,6 +50,13 @@
         border-radius: .5rem;
         padding: 1rem;
 
+        strong {
+            display: block;
+            font-size: 1.2rem;
+            padding: 0 0 .5rem 0;
+            text-align: center;
+        }
+
         select {
             margin-top: .5rem;
             width: 100%;
