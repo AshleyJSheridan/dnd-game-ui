@@ -5,16 +5,14 @@
     color: colours.$white;
 
     h1 {
-        font-size: 2.5rem;
+        background-color: colours.$white;
+        color: colours.$black;
         margin: 0;
-        padding: .5rem;
+        padding: .5rem 0 0 0;
         text-align: center;
 
-        .gold {
-            background: linear-gradient(to right, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        svg {
+            height: 7rem;
         }
     }
 }
