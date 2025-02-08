@@ -79,7 +79,20 @@
         width: 1.5rem;
 
         &.discarded {
+            border-color: colours.$error-border;
+            color: colours.$error-border;
+            position: relative;
 
+            &:after {
+                background-image: linear-gradient(127deg, transparent 0%, transparent 50%, black 50%, black 53%, transparent 53%);
+                content: "";
+                display: block;
+                height: 2rem;
+                left: -.25rem;
+                position: absolute;
+                top: -.25rem;
+                width: 2rem;
+            }
         }
     }
 }

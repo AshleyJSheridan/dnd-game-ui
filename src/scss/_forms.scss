@@ -17,8 +17,11 @@ label.aligned {
 button {
     &.primary-btn,
     &.secondary-btn {
+        align-items: center;
         cursor: pointer;
+        display: flex;
         font-size: 100%;
+        gap: 0.5rem;
         padding: .5rem 1rem;
     }
 
@@ -136,6 +139,15 @@ button.dice-icon {
     &.dice-icon-20 {
         background-image: url("/images/dice/d20.png");
     }
+}
+
+button .dice-d6-icon {
+    background-image: url("/images/dice/d6.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: inline-block;
+    height: 1rem;
+    width: 1rem;
 }
 
 .error {
