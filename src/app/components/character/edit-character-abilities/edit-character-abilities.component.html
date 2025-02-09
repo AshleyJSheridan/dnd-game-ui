@@ -3,7 +3,7 @@
 <button type="button" class="secondary-btn" (click)="getDiceRollForStat()">Roll for all abilities
     <span class="dice-d6-icon"></span></button>
 
-<p><em>Per standard rules, 4 d6 are rolled for each ability, lowest one is discarded.</em></p>
+<p><em>Per standard rules, 4 d6 are rolled for each ability, lowest die of each group of 4 is discarded.</em></p>
 
 <div class="dice-roll-block-all">
     @if (abilityDiceRolls[0].rolls[0] > 0) {
@@ -49,3 +49,5 @@
         </div>
     }
 </div>
+
+<button type="button" class="primary-btn" (click)="confirmAbilities()">Confirm Abilities</button>

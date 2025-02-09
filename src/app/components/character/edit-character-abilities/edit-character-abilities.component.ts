@@ -11,7 +11,7 @@ import {Character} from '../../../entities/Character';
 export class EditCharacterAbilitiesComponent {
     character: Character | undefined;
     abilityDiceRolls: Array<{guid:string;rolls:Array<number>;}> = Array(6).fill({guid:'',rolls:[0,0,0,0]});
-    assignedDiceTotals: Array<{abilityId: number; rollIndex: number}> = [];
+    assignedDiceTotals: Array<{abilityId: number; rollIndex: number; guid: string;}> = [];
 
     constructor(private characterService: CharacterService, private router: Router) {}
 
@@ -54,12 +54,17 @@ export class EditCharacterAbilitiesComponent {
     setRollsForAbility(event: Event, rollIndex: number): void {
         const abilityId = Number((<HTMLSelectElement>event.target).value)
 
+        // ensure we're not setting the same rolls to more than one ability
         const abilityExists = this.assignedDiceTotals.filter(totals => {
             return totals.abilityId === abilityId
         });
 
         if (abilityExists.length === 0) {
-            this.assignedDiceTotals.push({abilityId: abilityId, rollIndex: rollIndex});
+            this.assignedDiceTotals.push({
+                abilityId: abilityId,
+                rollIndex: rollIndex,
+                guid: this.abilityDiceRolls[rollIndex].guid
+            });
         }
     }
 
@@ -70,5 +75,11 @@ export class EditCharacterAbilitiesComponent {
         });
 
         return !(abilityExists.length > 0 && abilityExists[0].rollIndex !== rollIndex);
+    }
+
+    confirmAbilities(): void {
+        this.characterService.setAbilityRolls(this.assignedDiceTotals).subscribe(character => {
+            console.log(character);
+        })
     }
 }
