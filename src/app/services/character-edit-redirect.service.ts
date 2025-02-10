@@ -18,6 +18,8 @@ export class CharacterEditRedirectService {
                     this.router.navigate([`/characters/${character.guid}/edit/race`]);
                 } else if (character.abilities[0].base === 0) {
                     this.router.navigate([`/characters/${character.guid}/edit/abilities`]);
+                } else if (character.languages.known.length < character.languages.available) {
+                    this.router.navigate([`/characters/${character.guid}/edit/languages`]);
                 }
             }
         });

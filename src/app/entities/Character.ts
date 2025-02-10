@@ -24,5 +24,16 @@ export class Character {
         modifier: number;
         racialModifier: number;
     }> = [];
+    languages : {
+        available: number;
+        known: Array<{
+            id: number;
+            name: string;
+            script: string;
+        }>
+    } = {
+        available: 0,
+        known: []
+    }
     created_at: Date = new Date();
 }
