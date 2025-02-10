@@ -20,6 +20,10 @@ export class CharacterService {
         this.charGuid = charGuid;
     }
 
+    public getCharGuid(): string {
+        return this.charGuid;
+    }
+
     public getCharacter(): Observable<Character> {
         return this.http.get<Character>(`${this.apiUrl}/characters/${this.charGuid}`);
     }

@@ -1,13 +1,21 @@
 import { Component } from '@angular/core';
-import {RouterLink} from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { CharacterService } from '../../../services/character.service';
 
 @Component({
-  selector: 'app-create-nav',
+    selector: 'app-create-nav',
     imports: [
-        RouterLink
+        RouterLink,
+        RouterLinkActive
     ],
-  templateUrl: './create-nav.component.html'
+    templateUrl: './create-nav.component.html'
 })
 export class CreateNavComponent {
+    charGuid: string = '';
 
+    constructor(private characterService: CharacterService) {}
+
+    ngOnInit() {
+        this.charGuid = this.characterService.getCharGuid();
+    }
 }
