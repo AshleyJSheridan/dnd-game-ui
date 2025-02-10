@@ -28,8 +28,8 @@ export class CharacterService {
         return this.http.get<Character>(`${this.apiUrl}/characters/${this.charGuid}`);
     }
 
-    public getCharacters(): Observable<Array<ICharacter>> {
-        return this.http.get<Array<ICharacter>>(`${this.apiUrl}/characters`);
+    public getCharacters(): Observable<Array<Character>> {
+        return this.http.get<Array<Character>>(`${this.apiUrl}/characters`);
     }
 
     public getNameSuggestions(suggestionType: string): Observable<INameSuggestionList> {
