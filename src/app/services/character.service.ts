@@ -8,6 +8,7 @@ import { CharacterBackground } from '../entities/CharacterBackground';
 import {CharacterRace} from '../entities/CharacterRace';
 import { Character } from '../entities/Character';
 import {DiceRolls} from '../entities/DiceRolls';
+import {Language} from '../entities/Language';
 
 @Injectable({providedIn: 'root'})
 export class CharacterService {
@@ -84,6 +85,10 @@ export class CharacterService {
             `${this.apiUrl}/characters/${this.charGuid}`,
             {updateType: 'abilities', abilityRolls: abilityRolls}
         );
+    }
+
+    public getLanguages(): Observable<Array<Language>> {
+        return this.http.get<Array<Language>>(`${this.apiUrl}/game/languages`);
     }
 }
 

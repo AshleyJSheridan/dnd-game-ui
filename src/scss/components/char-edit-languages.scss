@@ -1,0 +1,23 @@
+@use "../colours";
+
+.char-language-list-block {
+    .char-language-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+
+        .language {
+            border: 1px solid colours.$dark-grey;
+            border-radius: 1rem;
+            display: block;
+            font-weight: bold;
+            padding: 1rem;
+            width: 15rem;
+
+            .language-sample {
+                margin-top: 1rem;
+                height: 3rem;
+            }
+        }
+    }
+}
