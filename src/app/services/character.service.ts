@@ -90,6 +90,13 @@ export class CharacterService {
     public getLanguages(): Observable<Array<Language>> {
         return this.http.get<Array<Language>>(`${this.apiUrl}/game/languages`);
     }
+
+    public setLanguages(languages: Array<number>): Observable<Character> {
+        return this.http.patch<Character>(
+            `${this.apiUrl}/characters/${this.charGuid}`,
+            {updateType: 'languages', languages: languages}
+        );
+    }
 }
 
 

@@ -16,6 +16,7 @@ export class EditCharacterLanguagesComponent {
     allLanguages: Array<Language> = [];
     character: Character | undefined;
     selectedLanguages: Array<Language> = [];
+    selectError: boolean = false;
 
     constructor(private characterService: CharacterService, private router: Router) {}
 
@@ -41,5 +42,33 @@ export class EditCharacterLanguagesComponent {
         }
 
         return false;
+    }
+
+    selectLanguage(language: Language): void {
+        // deselect if selected
+        if (this.isSelected(language)) {
+            const index = this.selectedLanguages.indexOf(language);
+            this.selectedLanguages.splice(index, 1);
+        } else {
+            if (this.selectedLanguages.length < this.getAvailableLangCount()) {
+                this.selectedLanguages.push(language);
+            }
+        }
+    }
+
+    isSelected(language: Language): boolean {
+        return this.selectedLanguages.includes(language);
+    }
+
+    confirmLanguageSelection(): void {
+        if (this.selectedLanguages.length === this.getAvailableLangCount()) {
+            let languages = this.selectedLanguages.map(lang => {return lang.id});
+
+            this.characterService.setLanguages(languages).subscribe(character => {
+                console.log(character);
+            })
+        } else {
+            this.selectError = true;
+        }
     }
 }

@@ -1,11 +1,11 @@
 <h2>Character Creation - Languages</h2>
 
 <div class="char-language-list-block">
-    <h3>Known Languages</h3>
+    <h3>Already Known Languages</h3>
 
     <ul class="char-language-list">
         @for (language of character?.languages?.known; track language.id) {
-            <li class="language">{{ language.name }}
+            <li class="language already-known">{{ language.name }}
                 <div class="language-sample">
                     <app-language-script scriptName="{{ language.script.toLowerCase() }}"/>
                 </div>
@@ -13,17 +13,26 @@
         }
     </ul>
 
-    <h3>Available ({{ getAvailableLangCount() }})</h3>
+    <h3>Available Languages ({{ getAvailableLangCount() - selectedLanguages.length }})</h3>
 
     <ul class="char-language-list">
         @for (language of allLanguages; track language.id) {
             @if (!languageAlreadyKnown(language.id)) {
-                <li class="language">{{ language.name }}
-                    <div class="language-sample">
-                        <app-language-script scriptName="{{ language.script.toLowerCase() }}"/>
-                    </div>
+                <li class="language" [class.selected]="isSelected(language)">
+                    <button type="button" (click)="selectLanguage(language)">
+                        {{ language.name }}
+                        <div class="language-sample">
+                            <app-language-script scriptName="{{ language.script.toLowerCase() }}"/>
+                        </div>
+                    </button>
                 </li>
             }
         }
     </ul>
+
+    @if (selectError) {
+        <p class="error">You must select your characters languages.</p>
+    }
+
+    <button type="button" (click)="confirmLanguageSelection()" class="primary-btn">Confirm languages</button>
 </div>
