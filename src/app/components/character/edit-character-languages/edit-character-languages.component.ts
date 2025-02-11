@@ -65,7 +65,7 @@ export class EditCharacterLanguagesComponent {
             let languages = this.selectedLanguages.map(lang => {return lang.id});
 
             this.characterService.setLanguages(languages).subscribe(character => {
-                console.log(character);
+                this.router.navigate([`/characters/${character.guid}/edit/spells`]);
             })
         } else {
             this.selectError = true;
