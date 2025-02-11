@@ -79,7 +79,7 @@ export class EditCharacterAbilitiesComponent {
 
     confirmAbilities(): void {
         this.characterService.setAbilityRolls(this.assignedDiceTotals).subscribe(character => {
-            console.log(character);
+            this.router.navigate([`/characters/${character.guid}/edit/languages`]);
         })
     }
 }
