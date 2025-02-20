@@ -35,10 +35,12 @@ export class EditCharacterLanguagesComponent {
     }
 
     languageAlreadyKnown(languageId: number): boolean {
+
         if (this.character?.languages?.known) {
-            return this.character?.languages?.known.map(lang => {
+            if (this.character?.languages?.known.filter(lang => {
                 return lang.id === languageId
-            })[0];
+            }).length > 0)
+                return true;
         }
 
         return false;
