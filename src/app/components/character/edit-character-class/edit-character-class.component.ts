@@ -5,13 +5,15 @@ import { ConfirmComponent } from '../../dialogs/confirm/confirm.component';
 import { CharacterClass } from '../../../entities/CharacterClass';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import {CharClassFeatureIconComponent} from '../../icons/char-class-feature-icon/char-class-feature-icon.component';
 
 @Component({
     selector: 'app-edit-character-class',
     imports: [
         CharClassIconComponent,
         ConfirmComponent,
-        CommonModule
+        CommonModule,
+        CharClassFeatureIconComponent
     ],
     templateUrl: './edit-character-class.component.html'
 })

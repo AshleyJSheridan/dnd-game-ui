@@ -156,3 +156,367 @@ button .dice-d6-icon {
     color: colours.$error-text;
     padding: .5rem;
 }
+
+
+@layer fantasy-btn, fantasy-presets;
+
+@layer fantasy-presets {
+    .fantasy-brown {
+        --text-color: #aa9b79;
+        --text-shadow: calc(1.5px * var(--scale) / 4.5)
+            calc(-1.5px * var(--scale) / 4.5)
+            calc(1.5px * var(--scale) / 4.5)
+            #fffcf2,
+            calc(-1.5px * var(--scale) / 4.5)
+            calc(1.5px * var(--scale) / 4.5)
+            calc(1.5px * var(--scale) / 4.5)
+            #160500;
+
+        --border-bg: linear-gradient(
+            to bottom,
+            #666,
+            #333 49%,
+            #000 51%,
+            #333
+        );
+
+        --inlay-hover-opacity: 0.75;
+        --border-hover-opacity: 0.75;
+        --border-focus-bg: repeating-conic-gradient(
+            #bdab8c 0deg 30deg,
+            #766652 30deg 60deg
+        );
+
+        --inlay-bg: radial-gradient(
+                at center 150%,
+                #fffcf2, transparent 35%
+            ) 50% 0% / 150% 25% no-repeat,
+            radial-gradient(
+                at center -25%,
+                #501608, transparent 35%
+            ) 50% 100% / 150% 25% no-repeat,
+            linear-gradient(
+                to bottom,
+                #2c201b,
+                #895648 24%,
+                #422419 26% 49%,
+                #291208 49% 74%,
+                #160500 76%,
+                #1a0801
+            );
+    }
+
+    .fantasy-blue {
+        --text-color: #ddd;
+        --text-shadow: calc(1.5px * var(--scale) / 4.5)
+        calc(-1.5px * var(--scale) / 4.5)
+        calc(1.5px * var(--scale) / 4.5)
+        #fffcf2,
+        calc(-1.5px * var(--scale) / 4.5)
+        calc(1.5px * var(--scale) / 4.5)
+        calc(1.5px * var(--scale) / 4.5)
+        #160500;
+
+        --border-bg: linear-gradient(
+            to bottom,
+            #666,
+            #333 49%,
+            #000 51%,
+            #333
+        );
+
+        --inlay-hover-opacity: 0.75;
+        --border-hover-opacity: 0.75;
+
+        --inlay-bg: radial-gradient(
+            at center 150%,
+            #fffcf2, transparent 35%
+        ) 50% 0% / 150% 25% no-repeat,
+        radial-gradient(
+            at center -25%,
+            #0070b0, transparent 35%
+        ) 50% 100% / 150% 25% no-repeat,
+        linear-gradient(
+            to bottom,
+            #44b4f4,
+            #2292d2 24%,
+            #0070b0 26% 49%,
+            #005090 49% 74%,
+            #003070 76%,
+            #003070
+        );
+    }
+}
+
+@layer fantasy-btn {
+    .fantasy-btn {
+        --s: (var(--scale) / 4.5);
+        --scale: 1;
+
+        --_text-base-color: var(--text-color);
+        --_text-hover-color: var(--text-hover-color, var(--_text-base-color));
+        --_text-focus-color: var(--text-focus-color, var(--_text-hover-color));
+        --_text-active-color: var(--text-active-color, var(--_text-focus-color));
+        --_text-state-color: var(--_text-base-color);
+
+        --_text-base-shadow: var(--text-shadow);
+        --_text-hover-shadow: var(--text-hover-shadow, var(--_text-base-shadow));
+        --_text-focus-shadow: var(--text-focus-shadow, var(--_text-hover-shadow));
+        --_text-active-shadow: var(--text-active-shadow, var(--_text-focus-shadow));
+        --_text-state-shadow: var(--_text-base-shadow);
+
+        background: transparent;
+        box-sizing: border-box;
+        border: none;
+        color: var(--_text-state-color);
+        cursor: pointer;
+        font-size: 1rem;
+        isolation: isolate;
+        min-height: calc(200px * var(--s));
+        min-width: calc(280px * var(--s));
+        padding-block: calc(51px * var(--s));
+        padding-inline: calc(95px * var(--s));
+        position: relative;
+        text-shadow: var(--_text-state-shadow);
+
+        &:hover {
+            --_text-state-color: var(--_text-hover-color);
+            --_text-state-shadow: var(--_text-hover-shadow);
+
+            &:after {
+                --_border-state-opacity: var(--_border-hover-opacity);
+                --_border-state-bg: var(--_border-hover-bg);
+            }
+
+            &:before {
+                --_inlay-state-opacity: var(--_inlay-hover-opacity);
+                --_inlay-state-bg: var(--_inlay-hover-bg);
+            }
+        }
+
+        &:active {
+            --_text-state-color: var(--_text-active-color);
+            --_text-state-shadow: var(--_text-active-shadow);
+
+            &:after {
+                --_border-state-opacity: var(--_border-active-opacity);
+                --_border-state-bg: var(--_border-active-bg);
+            }
+
+            :before {
+                --_inlay-state-opacity: var(--_inlay-active-opacity);
+                --_inlay-state-bg: var(--_inlay-active-bg);
+            }
+        }
+
+        &:before,
+        &:after {
+            content: "";
+            position: absolute;
+            inset: 0px;
+            box-sizing: border-box;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        &:focus {
+            outline: 2px solid colours.$dark-grey;
+
+            &:before {
+                --_inlay-state-opacity: var(--_inlay-focus-opacity);
+                --_inlay-state-bg: var(--_inlay-focus-bg);
+            }
+        }
+
+        &:after {
+            --_border-base-opacity: var(--border-opacity, 1);
+            --_border-hover-opacity: var(--border-hover-opacity,
+                var(--_border-base-opacity)
+            );
+            --_border-focus-opacity: var(--border-focus-opacity,
+                var(--_border-hover-opacity)
+            );
+            --_border-active-opacity: var(--border-active-opacity,
+                var(--_border-focus-opacity)
+            );
+            --_border-state-opacity: var(--_border-base-opacity);
+
+            --_border-base-bg: var(--border-bg, currentColor);
+            --_border-hover-bg: var(--border-hover-bg, var(--_border-base-bg));
+            --_border-focus-bg: var(--border-focus-bg, var(--_border-hover-bg));
+            --_border-active-bg: var(--border-active-bg, var(--_border-focus-bg));
+
+            --_border-state-bg: var(--_border-base-bg);
+
+            background: var(--_border-state-bg);
+            opacity: var(--_border-state-opacity);
+            clip-path: polygon(
+                /* home */
+                calc(37px * var(--s)) calc(44px * var(--s)),
+                /* jump union point */
+                calc(52px * var(--s)) calc(29px * var(--s)),
+                calc(61px * var(--s)) calc(18px * var(--s)),
+                calc(82.5px * var(--s)) calc(39.5px * var(--s)),
+                calc(61px * var(--s)) calc(61px * var(--s)),
+                0px 0px,
+                calc(77px * var(--s)) 0px,
+                calc(90px * var(--s)) calc(13px * var(--s)),
+                calc(103px * var(--s)) 0px,
+
+                calc(100% - 103px * var(--s)) 0px,
+                calc(100% - 90px * var(--s)) calc(13px * var(--s)),
+                calc(100% - 77px * var(--s)) 0px,
+                100% 0px,
+                calc(100% - 61px * var(--s)) calc(61px * var(--s)),
+                calc(100% - 82.5px * var(--s)) calc(39.5px * var(--s)),
+                calc(100% - 61px * var(--s)) calc(18px * var(--s)),
+
+                /*... -x union point, jump ...*/
+                calc(100% - 52px * var(--s)) calc(29px * var(--s)),
+                calc(100% - 37px * var(--s)) calc(44px * var(--s)),
+
+                calc(100% - 24.5px * var(--s)) calc(56.5px * var(--s)),
+                calc(100% - 32.5px * var(--s)) calc(64.5px * var(--s)),
+
+                calc(100% - 32.5px * var(--s)) calc(100% - 64.5px * var(--s)),
+                calc(100% - 24.5px * var(--s)) calc(100% - 56.5px * var(--s)),
+
+                calc(100% - 37px * var(--s)) calc(100% - 44px * var(--s)),
+                calc(100% - 52px * var(--s)) calc(100% - 29px * var(--s)),
+
+                calc(100% - 61px * var(--s)) calc(100% - 18px * var(--s)),
+                calc(100% - 82.5px * var(--s)) calc(100% - 39.5px * var(--s)),
+                calc(100% - 61px * var(--s)) calc(100% - 61px * var(--s)),
+                100% 100%,
+
+                calc(100% - 77px * var(--s)) 100%,
+                calc(100% - 90px * var(--s)) calc(100% - 13px * var(--s)),
+                calc(100% - 103px * var(--s)) 100%,
+
+                calc(103px * var(--s)) 100%,
+                calc(90px * var(--s)) calc(100% - 13px * var(--s)),
+                calc(77px * var(--s)) 100%,
+
+                0px 100%,
+                calc(61px * var(--s)) calc(100% - 61px * var(--s)),
+                calc(82.5px * var(--s)) calc(100% - 39.5px * var(--s)),
+                calc(61px * var(--s)) calc(100% - 18px * var(--s)),
+
+                calc(52px * var(--s)) calc(100% - 29px * var(--s)),
+                calc(37px * var(--s)) calc(100% - 44px * var(--s)),
+
+                calc(24.5px * var(--s)) calc(100% - 56.5px * var(--s)),
+                calc(32.5px * var(--s)) calc(100% - 64.5px * var(--s)),
+
+                calc(32.5px * var(--s)) calc(64.5px * var(--s)),
+                calc(24.5px * var(--s)) calc(56.5px * var(--s)),
+
+                /* first point in the path, time to CCW inner path */
+                calc(37px * var(--s)) calc(44px * var(--s)),
+                /* w = ~8 */
+                calc(45px * var(--s)) calc(52px * var(--s)),
+                calc(41px * var(--s)) calc(56px * var(--s)),
+                calc(50px * var(--s)) calc(66px * var(--s)),
+                calc(40.5px * var(--s)) calc(75.5px * var(--s)),
+
+                calc(40.5px * var(--s)) calc(100% - 75.5px * var(--s)),
+                calc(50px * var(--s)) calc(100% - 66px * var(--s)),
+                calc(41px * var(--s)) calc(100% - 56px * var(--s)),
+                calc(45px * var(--s)) calc(100% - 52px * var(--s)),
+
+                calc(37px * var(--s)) calc(100% - 44px * var(--s)),
+
+                calc(52px * var(--s)) calc(100% - 29px * var(--s)),
+                calc(59.5px * var(--s)) calc(100% - 36.5px * var(--s)),
+                calc(61px * var(--s)) calc(100% - 35px * var(--s)),
+                calc(65.5px * var(--s)) calc(100% - 39.5px * var(--s)),
+                calc(61px * var(--s)) calc(100% - 44px * var(--s)),
+                calc(25px * var(--s)) calc(100% - 8px * var(--s)),
+                calc(72.5px * var(--s)) calc(100% - 8px * var(--s)),
+                calc(90px * var(--s)) calc(100% - 25.5px * var(--s)),
+                calc(107.5px * var(--s)) calc(100% - 8px * var(--s)),
+
+                calc(100% - 107.5px * var(--s)) calc(100% - 8px * var(--s)),
+                calc(100% - 90px * var(--s)) calc(100% - 25.5px * var(--s)),
+                calc(100% - 72.5px * var(--s)) calc(100% - 8px * var(--s)),
+                calc(100% - 25px * var(--s)) calc(100% - 8px * var(--s)),
+                calc(100% - 61px * var(--s)) calc(100% - 44px * var(--s)),
+                calc(100% - 65.5px * var(--s)) calc(100% - 39.5px * var(--s)),
+                calc(100% - 61px * var(--s)) calc(100% - 35px * var(--s)),
+                calc(100% - 59.5px * var(--s)) calc(100% - 36.5px * var(--s)),
+                calc(100% - 52px * var(--s)) calc(100% - 29px * var(--s)),
+
+                calc(100% - 37px * var(--s)) calc(100% - 44px * var(--s)),
+
+                calc(100% - 45px * var(--s)) calc(100% - 52px * var(--s)),
+                calc(100% - 41px * var(--s)) calc(100% - 56px * var(--s)),
+                calc(100% - 50px * var(--s)) calc(100% - 66px * var(--s)),
+                calc(100% - 40.5px * var(--s)) calc(100% - 75.5px * var(--s)),
+
+                calc(100% - 40.5px * var(--s)) calc(75.5px * var(--s)),
+                calc(100% - 50px * var(--s)) calc(66px * var(--s)),
+                calc(100% - 41px * var(--s)) calc(56px * var(--s)),
+                calc(100% - 45px * var(--s)) calc(52px * var(--s)),
+
+                calc(100% - 37px * var(--s)) calc(44px * var(--s)),
+
+                calc(100% - 52px * var(--s)) calc(29px * var(--s)),
+                calc(100% - 59.5px * var(--s)) calc(36.5px * var(--s)),
+                calc(100% - 61px * var(--s)) calc(35px * var(--s)),
+                calc(100% - 65.5px * var(--s)) calc(39.5px * var(--s)),
+                calc(100% - 61px * var(--s)) calc(44px * var(--s)),
+                calc(100% - 25px * var(--s)) calc(8px * var(--s)),
+                calc(100% - 72.5px * var(--s)) calc(8px * var(--s)),
+                calc(100% - 90px * var(--s)) calc(25.5px * var(--s)),
+                calc(100% - 107.5px * var(--s)) calc(8px * var(--s)),
+
+                calc(107.5px * var(--s)) calc(8px * var(--s)),
+                calc(90px * var(--s)) calc(25.5px * var(--s)),
+                calc(72.5px * var(--s)) calc(8px * var(--s)),
+                calc(25px * var(--s)) calc(8px * var(--s)),
+                calc(61px * var(--s)) calc(44px * var(--s)),
+                calc(65.5px * var(--s)) calc(39.5px * var(--s)),
+                calc(61px * var(--s)) calc(35px * var(--s)),
+                calc(59.5px * var(--s)) calc(36.5px * var(--s)),
+                /* union point */
+                calc(52px * var(--s)) calc(29px * var(--s)),
+                /* jump home */
+                calc(37px * var(--s)) calc(44px * var(--s))
+            );
+        }
+
+        &:before {
+            --_inlay-base-opacity: var(--inlay-opacity, 1);
+            --_inlay-hover-opacity: var(--inlay-hover-opacity,
+                var(--_inlay-base-opacity)
+            );
+            --_inlay-focus-opacity: var(--inlay-focus-opacity,
+                var(--_inlay-hover-opacity)
+            );
+            --_inlay-active-opacity: var(--inlay-active-opacity,
+                var(--_inlay-focus-opacity)
+            );
+            --_inlay-state-opacity: var(--_inlay-base-opacity);
+
+            --_inlay-base-bg: var(--inlay-bg, #8888);
+            --_inlay-hover-bg: var(--inlay-hover-bg, var(--_inlay-base-bg));
+            --_inlay-focus-bg: var(--inlay-focus-bg, var(--_inlay-hover-bg));
+            --_inlay-active-bg: var(--inlay-active-bg, var(--_inlay-focus-bg));
+
+            --_inlay-state-bg: var(--_inlay-base-bg);
+
+            background: var(--_inlay-state-bg);
+            opacity: var(--_inlay-state-opacity);
+            clip-path: polygon(
+                calc(50px * var(--s)) calc(82px * var(--s)),
+                calc(114px * var(--s)) calc(18px * var(--s)),
+                calc(100% - 114px * var(--s)) calc(18px * var(--s)),
+                calc(100% - 50px * var(--s)) calc(82px * var(--s)),
+                calc(100% - 50px * var(--s)) calc(100% - 82px * var(--s)),
+                calc(100% - 114px * var(--s)) calc(100% - 18px * var(--s)),
+                calc(114px * var(--s)) calc(100% - 18px * var(--s)),
+                calc(50px * var(--s)) calc(100% - 82px * var(--s))
+            );
+        }
+    }
+}

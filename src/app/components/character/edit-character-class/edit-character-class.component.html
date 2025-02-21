@@ -35,7 +35,7 @@
                 <ul class="char-class-features">
                     <li>
                         <details>
-                            <summary>Armor</summary>
+                            <summary>Armor <app-char-class-feature-icon charClassFeatureName="armor"/></summary>
                             <div class="char-details-content">
                                 <p>{{ getArmorProficiencies() }}</p>
                             </div>
@@ -43,7 +43,7 @@
                     </li>
                     <li>
                         <details>
-                            <summary>Weapons</summary>
+                            <summary>Weapons <app-char-class-feature-icon charClassFeatureName="weapons"/></summary>
                             <div class="char-details-content">
                                 <p>{{ getWeaponProficiencies() }}</p>
                             </div>
@@ -52,7 +52,7 @@
                     @if (getTools().length > 0) {
                         <li>
                             <details>
-                                <summary>Tools</summary>
+                                <summary>Tools <app-char-class-feature-icon charClassFeatureName="tools"/></summary>
                                 <div class="char-details-content">
                                     @if (canUserPickFromTools()) {
                                         <p>Pick {{ getToolSelectionCount() }} tools:</p>
@@ -83,6 +83,7 @@
                                 <summary>{{ feature.name }}
                                     <span class="char-class-feature-level">
                                         ({{ feature.level }}{{ getLevelSuffix(feature.level)}} level)</span>
+                                    <app-char-class-feature-icon charClassFeatureName="{{ feature.type }}"/>
                                 </summary>
                                 <div class="char-details-content" [innerHTML]="feature.description"></div>
                             </details>

@@ -130,7 +130,17 @@
         summary {
             background-color: colours.$dark-grey;
             color: colours.$white;
+            cursor: pointer;
             padding: .5rem;
+            position: relative;
+
+            svg {
+                height: 2rem;
+                position: absolute;
+                margin-top: -1rem;
+                right: .5rem;
+                top: 50%;
+            }
         }
 
         .char-details-content {
