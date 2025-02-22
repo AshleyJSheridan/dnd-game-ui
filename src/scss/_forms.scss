@@ -270,12 +270,14 @@ button .dice-d6-icon {
         border: none;
         color: var(--_text-state-color);
         cursor: pointer;
+        font-family: "Lugrasimo", serif;
         font-size: 1rem;
         isolation: isolate;
         min-height: calc(200px * var(--s));
         min-width: calc(280px * var(--s));
-        padding-block: calc(51px * var(--s));
-        padding-inline: calc(95px * var(--s));
+        //padding-block: calc(51px * var(--s));
+        //padding-inline: calc(125px * var(--s));
+        padding: .5rem 1.75rem;
         position: relative;
         text-shadow: var(--_text-state-shadow);
 
