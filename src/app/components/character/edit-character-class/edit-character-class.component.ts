@@ -6,6 +6,7 @@ import { CharacterClass } from '../../../entities/CharacterClass';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import {CharClassFeatureIconComponent} from '../../icons/char-class-feature-icon/char-class-feature-icon.component';
+import {Character} from '../../../entities/Character';
 
 @Component({
     selector: 'app-edit-character-class',
@@ -19,6 +20,7 @@ import {CharClassFeatureIconComponent} from '../../icons/char-class-feature-icon
 })
 export class EditCharacterClassComponent {
     charClasses: Array<CharacterClass> = [];
+    character: Character | undefined;
     selectedCharClass: number = 0;
 
     @ViewChild('confirmComponent') confirm: ConfirmComponent | undefined;
@@ -26,6 +28,10 @@ export class EditCharacterClassComponent {
     constructor(private characterService: CharacterService, private router: Router) {}
 
     ngOnInit(): void {
+        this.characterService.getCharacter().subscribe((character) => {
+            this.character = character;
+        });
+
         this.characterService.getCharacterClasses().subscribe((charClasses) => {
            this.charClasses = charClasses;
         });
@@ -112,5 +118,19 @@ export class EditCharacterClassComponent {
         this.characterService.setCharacterClass({charClassId: this.selectedCharClass}).subscribe((character) => {
             this.router.navigate([`/characters/${character.guid}/edit/background`]);
         });
+    }
+
+    hasPathSelection(): boolean {
+        const level = this.character?.level ?? 0;
+
+        for (let i = 0; i < this.getClassBySelectionId()?.class_features.length; i ++) {
+            if (( + 1) > level)
+                break;
+
+            if (this.getClassBySelectionId()?.class_features[i].type === 'path')
+                return true;
+        }
+
+        return false;
     }
 }

@@ -19,6 +19,9 @@
                 <p>{{ getClassBySelectionId().description }}</p>
 
                 <p class="char-class-stats">
+                    <strong>Hit points at first level:</strong>
+                        <span>{{ getClassBySelectionId().hit_points_at_first_level }}</span>
+                    <br/>
                     <strong>Hit dice:</strong>
                         <span>d{{ getClassBySelectionId().hit_die }}</span>
                     <br/>
@@ -27,9 +30,51 @@
                     <br/>
                     <strong>Saving throws:</strong>
                         <span>{{ getSavingThrows() }}</span>
-
-                    <!-- TODO add proficiences here? -->
                 </p>
+
+                @if (hasPathSelection()) {
+                    <div class="path-selection">
+                        <p><strong>Class Path:</strong> {{ getClassBySelectionId().path.name }},
+                            <em>selected at level {{ getClassBySelectionId().path.level }}.</em></p>
+                        <p [innerHTML]="getClassBySelectionId().path.description"></p>
+                        <p><em>Please select a path:</em></p>
+
+                        <ul class="char-class-features">
+                            @for (path of getClassBySelectionId().path.paths; track path.id) {
+                                <li class="path-selection-option">
+                                    <input
+                                        type="radio"
+                                        name="path-{{ getClassBySelectionId().id }}"
+                                        value="{{ path.id }}"
+                                        id="path-{{ getClassBySelectionId().id }}-{{ path.id }}"
+                                    />
+                                    <label for="path-{{ getClassBySelectionId().id }}-{{ path.id }}">
+                                        <span class="accessible-hidden">{{ path.name }}</span>
+                                    </label>
+                                    <details class="char-class-path-features">
+                                        <summary>{{ path.name }}
+                                            <app-char-class-feature-icon charClassFeatureName="path"/>
+                                        </summary>
+
+                                        <div class="char-class-path-features-content">
+                                            <p>{{ path.name }} features:</p>
+                                            @for (feature of path.features; track feature.id) {
+                                                <details>
+                                                    <summary>{{ feature.name }}
+                                                        <span class="char-class-feature-level">
+                                                            ({{ feature.level }}{{ getLevelSuffix(feature.level)}} level)</span>
+                                                        <app-char-class-feature-icon charClassFeatureName="{{ feature.type }}"/>
+                                                    </summary>
+                                                    <div class="char-details-content" [innerHTML]="feature.description"></div>
+                                                </details>
+                                            }
+                                        </div>
+                                    </details>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
 
                 <strong>Class proficiencies:</strong>
                 <ul class="char-class-features">

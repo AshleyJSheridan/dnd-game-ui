@@ -23,6 +23,27 @@ export class CharacterClass {
         level: number;
         description: string;
     }> = [];
+    path: {
+        name: string;
+        description: string;
+        level: number;
+        paths: Array<{
+            id: number,
+            name: string;
+            features: Array<{
+                id: number;
+                name: string;
+                type: string;
+                level: number;
+                description: string;
+            }>;
+        }>
+    } = {
+        name: '',
+        description: '',
+        level: 0,
+        paths: [],
+    };
     starting_equipment: Array<{
         id: number;
         pack_name: string;

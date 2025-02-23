@@ -150,5 +150,46 @@
         .char-class-feature-level {
             font-size: 80%;
         }
+
+        .char-class-path-features-content {
+            padding: 0 .5rem;
+
+            details {
+                border: 1px solid colours.$dark-grey;
+                margin-bottom: .5rem;
+            }
+        }
+    }
+
+    .path-selection {
+        border: 3px double colours.$gold;
+        border-radius: .5rem;
+        padding: 0 .5rem;
+        margin-bottom: 1rem;
+    }
+
+    .char-class-features .path-selection-option {
+        display: flex;
+
+        input[type=radio] {
+            display: none;
+
+            & + label {
+                cursor: pointer;
+                background-image: radial-gradient(circle, transparent 0%, transparent 45%, #000 46%, #000 52%, transparent 53%);
+            }
+
+            &:checked + label {
+                background-image: radial-gradient(circle, darken(colours.$gold, 20%) 0%, colours.$gold 35%, transparent 37%, transparent 45%, #000 46%, #000 52%, transparent 53%);
+            }
+        }
+
+        label {
+            width: 2rem;
+        }
+
+        .char-class-path-features {
+            flex-grow: 1;
+        }
     }
 }
