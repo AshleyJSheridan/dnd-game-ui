@@ -14,7 +14,11 @@
         }
     </ul>
 
-    <app-confirm heading="{{ getClassBySelectionId().name }}" (confirmClass)="confirmSelectedClass()" #confirmComponent>
+    <app-confirm
+        heading="{{ getClassBySelectionId().name }}"
+        (confirmClass)="confirmSelectedClass()"
+        #confirmComponent
+    >
         <div class="char-class-details">
                 <p>{{ getClassBySelectionId().description }}</p>
 
@@ -33,6 +37,10 @@
                 </p>
 
                 @if (hasPathSelection()) {
+                    @if (selectPathError) {
+                        <p class="error">You must select a path for your chosen class at the current character level.</p>
+                    }
+
                     <div class="path-selection">
                         <p><strong>Class Path:</strong> {{ getClassBySelectionId().path.name }},
                             <em>selected at level {{ getClassBySelectionId().path.level }}.</em></p>

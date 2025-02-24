@@ -46,7 +46,7 @@ export class CharacterService {
         return this.http.get<Array<CharacterClass>>(`${this.apiUrl}/characters/classes`);
     }
 
-    public setCharacterClass(data: {charClassId: number}): Observable<ICharacter> {
+    public setCharacterClass(data: {charClassId: number, classPathId: number}): Observable<ICharacter> {
         return this.http.patch<ICharacter>(`${this.apiUrl}/characters/${this.charGuid}`, {...data, updateType: 'class'});
     }
 

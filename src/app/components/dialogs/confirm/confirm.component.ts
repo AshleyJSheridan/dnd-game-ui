@@ -1,4 +1,13 @@
-import {Component, EventEmitter, HostListener, input, InputSignal, Output, ViewChild} from '@angular/core';
+import {
+    booleanAttribute,
+    Component,
+    EventEmitter,
+    HostListener,
+    input,
+    InputSignal, InputSignalWithTransform,
+    Output,
+    ViewChild
+} from '@angular/core';
 
 @Component({
     selector: 'app-confirm',
@@ -62,6 +71,6 @@ export class ConfirmComponent {
     confirmModal(): void {
         this.confirmClass.emit();
 
-        this.cancelModal();
+        //this.cancelModal();
     }
 }

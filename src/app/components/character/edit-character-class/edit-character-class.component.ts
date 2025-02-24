@@ -22,6 +22,7 @@ export class EditCharacterClassComponent {
     charClasses: Array<CharacterClass> = [];
     character: Character | undefined;
     selectedCharClass: number = 0;
+    selectPathError: boolean = false;
 
     @ViewChild('confirmComponent') confirm: ConfirmComponent | undefined;
 
@@ -115,7 +116,24 @@ export class EditCharacterClassComponent {
     }
 
     confirmSelectedClass(): void {
-        this.characterService.setCharacterClass({charClassId: this.selectedCharClass}).subscribe((character) => {
+        this.selectPathError = false;
+        let selectedPath = 0;
+
+        // check if this has path selection, and if so, check that a path has been selected
+        // then pass that data (or none if it doesn't exist) to the backend
+        if (this.hasPathSelection()) {
+            const path = <HTMLInputElement>document.querySelector(`input[name=path-${this.selectedCharClass}]:checked`);
+
+            if (!path) {
+                this.selectPathError = true;
+                return;
+            }
+
+            selectedPath = parseInt(path.value);
+            this.confirm?.cancelModal();
+        }
+
+        this.characterService.setCharacterClass({charClassId: this.selectedCharClass, classPathId: selectedPath}).subscribe((character) => {
             this.router.navigate([`/characters/${character.guid}/edit/background`]);
         });
     }
