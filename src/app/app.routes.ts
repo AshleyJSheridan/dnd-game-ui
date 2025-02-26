@@ -9,6 +9,7 @@ import { EditCharacterRaceComponent } from './components/character/edit-characte
 import { ApplicationConfig } from "@angular/core";
 import { EditCharacterAbilitiesComponent } from './components/character/edit-character-abilities/edit-character-abilities.component';
 import { EditCharacterLanguagesComponent } from './components/character/edit-character-languages/edit-character-languages.component';
+import { EditCharacterSpellsComponent } from './components/character/edit-character-spells/edit-character-spells.component';
 
 export const routes: Routes = [
     { path: 'char-create', component: CreateComponent },
@@ -22,7 +23,8 @@ export const routes: Routes = [
             { path: 'background', component: EditCharacterBackgroundComponent },
             { path: 'race', component: EditCharacterRaceComponent },
             { path: 'abilities', component: EditCharacterAbilitiesComponent },
-            { path: 'languages', component: EditCharacterLanguagesComponent }
+            { path: 'languages', component: EditCharacterLanguagesComponent },
+            { path: 'spells', component: EditCharacterSpellsComponent }
         ]
     }
 ];

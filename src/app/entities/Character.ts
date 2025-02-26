@@ -34,6 +34,34 @@ export class Character {
     } = {
         available: 0,
         known: []
-    }
+    };
+    magic: {
+        hasMagic: boolean;
+        spells: Array<{
+            id: number;
+            name: string;
+            description: string;
+            level: number;
+            school: {
+                name: string;
+                description: string;
+            };
+            cast_time: {
+                value: number;
+                unit: string;
+            };
+            duration: {
+                value: number;
+                unit: string;
+            };
+            range: string;
+            components: Array<string>;
+            concentration: number;
+            ritual: number;
+        }>
+    } = {
+        hasMagic: false,
+        spells: []
+    };
     created_at: Date = new Date();
 }

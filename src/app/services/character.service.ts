@@ -5,10 +5,11 @@ import { INameSuggestionList } from '../interfaces/iNameSuggestionList';
 import { CharacterClass } from '../entities/CharacterClass';
 import { ICharacter } from '../interfaces/iCharacter';
 import { CharacterBackground } from '../entities/CharacterBackground';
-import {CharacterRace} from '../entities/CharacterRace';
+import { CharacterRace } from '../entities/CharacterRace';
 import { Character } from '../entities/Character';
-import {DiceRolls} from '../entities/DiceRolls';
-import {Language} from '../entities/Language';
+import { DiceRolls } from '../entities/DiceRolls';
+import { Language } from '../entities/Language';
+import { AvailableSpells } from '../entities/AvailableSpells';
 
 @Injectable({providedIn: 'root'})
 export class CharacterService {
@@ -96,6 +97,10 @@ export class CharacterService {
             `${this.apiUrl}/characters/${this.charGuid}`,
             {updateType: 'languages', languages: languages}
         );
+    }
+
+    public getAvailableSpells(): Observable<AvailableSpells> {
+        return this.http.get<AvailableSpells>(`${this.apiUrl}/characters/${this.charGuid}/spells/available`);
     }
 }
 
