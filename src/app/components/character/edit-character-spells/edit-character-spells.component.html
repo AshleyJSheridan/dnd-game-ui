@@ -34,17 +34,17 @@
                                                 <th>Components</th>
                                             </tr>
                                             <tr>
-                                                <td>{{ spell.school.name }}</td>
-                                                <td>{{ spell.range }} ft</td>
-                                                <td>{{ spell.cast_time.value }} {{ spell.cast_time.unit }}</td>
-                                                <td>{{ (spell.duration.value === 0) ? '' : spell.duration.value }}
+                                                <td class="name">{{ spell.school.name }}</td>
+                                                <td class="range">{{ getFormattedRange(spell.range) }}</td>
+                                                <td class="cast-time">{{ spell.cast_time.value }} {{ spell.cast_time.unit }}</td>
+                                                <td class="duration">{{ (spell.duration.value === 0) ? '' : spell.duration.value }}
                                                     {{ spell.duration.unit }}</td>
-                                                <td>
+                                                <td class="components">
                                                     @for (component of spell.components; track $index) {
-                                                        <div class="spell-component {{ component.toLowerCase() }}">
+                                                        <span class="spell-component {{ component.toLowerCase() }}">
                                                             <app-spell-component-icon spellComponentName="{{ component }}"/>
                                                             {{ component }}
-                                                        </div>
+                                                        </span>
                                                     }
                                                 </td>
                                             </tr>

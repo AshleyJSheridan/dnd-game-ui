@@ -27,5 +27,5 @@ export class Spell {
     components: Array<string> = [];
     concentration: number = 0;
     ritual: number = 0;
-    range: number = 0;
+    range: string = '';
 }

@@ -22,12 +22,25 @@
         border: 1px solid colours.$dark-grey;
         list-style: none;
         margin: 0 0 .5rem 0;
-        padding: .25rem;
+        padding: 0;
 
         label {
             cursor: pointer;
             display: flex;
             gap: .5rem;
+            padding: .5rem;
+        }
+
+        input[type=checkbox]:checked + label {
+            background-color: colours.$dark-grey;
+            color: colours.$white;
+
+            table {
+                td,
+                th {
+                    border-color: colours.$white;
+                }
+            }
         }
 
         .spell-school-icon {
@@ -93,13 +106,24 @@
             th {
                 border: 1px solid colours.$dark-grey;
                 padding: .25rem;
-                width: 25%;
+            }
+
+            .name,
+            .range,
+            .cast-time,
+            .duration {
+                width: 20%;
+            }
+
+            .components {
+                width: 20%;
             }
         }
 
         .spell-component {
             align-items: start;
-            display: flex;
+            display: inline-flex;
+            margin-right: .5rem;
 
             svg {
                 height: 1.25rem;

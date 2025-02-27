@@ -3,9 +3,9 @@ import { CharacterService } from '../../../services/character.service';
 import { Router } from '@angular/router';
 import { Character } from '../../../entities/Character';
 import { AvailableSpells } from '../../../entities/AvailableSpells';
-import {Spell} from '../../../entities/Spell';
-import {SpellSchoolIconComponent} from '../../icons/spell-school-icon/spell-school-icon.component';
-import {SpellComponentIconComponent} from '../../icons/spell-component-icon/spell-component-icon.component';
+import { Spell } from '../../../entities/Spell';
+import { SpellSchoolIconComponent } from '../../icons/spell-school-icon/spell-school-icon.component';
+import { SpellComponentIconComponent } from '../../icons/spell-component-icon/spell-component-icon.component';
 
 @Component({
     selector: 'app-edit-character-spells',
@@ -19,6 +19,7 @@ export class EditCharacterSpellsComponent {
     availableSpells: AvailableSpells | undefined;
     character: Character | undefined;
     spellLevels = Array(10).fill(0).map((x,i) => i);
+    selectedSpells = [];
 
     constructor(private characterService: CharacterService, private router: Router) {}
 
@@ -45,4 +46,13 @@ export class EditCharacterSpellsComponent {
             return spell.level === level;
         }) ?? [];
     }
+
+    public getFormattedRange(range: string): string {
+        if (parseInt(range).toString() === range)
+            return `${range} ft`;
+
+        return range;
+    }
+
+    
 }
