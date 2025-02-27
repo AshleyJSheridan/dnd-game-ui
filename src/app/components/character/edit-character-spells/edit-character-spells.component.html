@@ -11,6 +11,7 @@
                         } @else {
                             Spell Level {{ level }}
                         }
+                        <em>(pick {{ getSpellCountAvailableForLevel(level) }})</em>
                     </summary>
 
                     <ul>
@@ -26,13 +27,26 @@
                                         <div class="spell-description">{{ spell.description }}</div>
                                         <table class="spell-details">
                                             <tr>
-                                                <th>School</th><th>Range</th><th>Casting time</th><th>Duration</th>
+                                                <th>School</th>
+                                                <th>Range</th>
+                                                <th>Casting time</th>
+                                                <th>Duration</th>
+                                                <th>Components</th>
                                             </tr>
                                             <tr>
                                                 <td>{{ spell.school.name }}</td>
                                                 <td>{{ spell.range }} ft</td>
                                                 <td>{{ spell.cast_time.value }} {{ spell.cast_time.unit }}</td>
-                                                <td>{{ (spell.duration.value === 0) ? '' : spell.duration.value }} {{ spell.duration.unit }}</td>
+                                                <td>{{ (spell.duration.value === 0) ? '' : spell.duration.value }}
+                                                    {{ spell.duration.unit }}</td>
+                                                <td>
+                                                    @for (component of spell.components; track $index) {
+                                                        <div class="spell-component {{ component.toLowerCase() }}">
+                                                            <app-spell-component-icon spellComponentName="{{ component }}"/>
+                                                            {{ component }}
+                                                        </div>
+                                                    }
+                                                </td>
                                             </tr>
                                         </table>
                                     </div>

@@ -5,11 +5,13 @@ import { Character } from '../../../entities/Character';
 import { AvailableSpells } from '../../../entities/AvailableSpells';
 import {Spell} from '../../../entities/Spell';
 import {SpellSchoolIconComponent} from '../../icons/spell-school-icon/spell-school-icon.component';
+import {SpellComponentIconComponent} from '../../icons/spell-component-icon/spell-component-icon.component';
 
 @Component({
     selector: 'app-edit-character-spells',
     imports: [
-        SpellSchoolIconComponent
+        SpellSchoolIconComponent,
+        SpellComponentIconComponent
     ],
     templateUrl: './edit-character-spells.component.html'
 })
