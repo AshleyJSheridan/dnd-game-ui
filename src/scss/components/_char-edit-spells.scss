@@ -1,6 +1,11 @@
 @use "../colours";
 
 .char-edit-spells {
+    .spell-actions-container {
+        display: flex;
+        justify-content: right;
+    }
+
     .spell-level summary
     {
         font-size: 1.25rem;

@@ -102,6 +102,13 @@ export class CharacterService {
     public getAvailableSpells(): Observable<AvailableSpells> {
         return this.http.get<AvailableSpells>(`${this.apiUrl}/characters/${this.charGuid}/spells/available`);
     }
+
+    public setSpells(spells: Array<number>): Observable<Character> {
+        return this.http.patch<Character>(
+            `${this.apiUrl}/characters/${this.charGuid}`,
+            {updateType: 'spells', spells: spells}
+        );
+    }
 }
 
 

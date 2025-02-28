@@ -2,6 +2,29 @@
 
 <div class="char-edit-spells">
     @if (availableSpells) {
+        <div class="spell-actions-container">
+            <button type="button" class="fantasy-btn fantasy-blue" (click)="setSpells()">Set Spells</button>
+        </div>
+
+        @if (selectedSpellCountError) {
+            <p class="error">You must select all spells available for each level.</p>
+        }
+    }
+
+    @if (getKnownSpells().length > 0) {
+        <details class="spell-level">
+            <summary>Known Spells <em>({{ getKnownSpells().length }} known)</em></summary>
+            <ul>
+                @for (spell of getKnownSpells(); track $index) {
+                    <li class="spell">
+                        <app-edit-character-spell [spell]="spell"/>
+                    </li>
+                }
+            </ul>
+        </details>
+    }
+
+    @if (availableSpells) {
         @for (level of spellLevels; track $index) {
             @if (getSpellCountAvailableForLevel(level) > 0) {
                 <details open class="spell-level">
@@ -11,14 +34,14 @@
                         } @else {
                             Spell Level {{ level }}
                         }
-                        <em>(pick {{ getSpellCountAvailableForLevel(level) }})</em>
+                        <em>({{ getSelectedAtLevelCount(level) }} of {{ getSpellCountAvailableForLevel(level) }} selected)</em>
                     </summary>
 
                     <ul>
                         @for (spell of getAvailableSpellsByLevel(level); track spell.id) {
                             <li class="spell">
                                 @if (!otherKnownSpellIds.includes(spell.id)) {
-                                    <button (click)="selectSpell(spell)" [class.selected]="isSpellSelected(spell)">
+                                    <button type="button" (click)="selectSpell(spell)" [class.selected]="isSpellSelected(spell)">
                                         <app-edit-character-spell [spell]="spell"/>
                                     </button>
                                 }
@@ -28,5 +51,13 @@
                 </details>
             }
         }
+
+        @if (selectedSpellCountError) {
+            <p class="error">You must select all spells available for each level.</p>
+        }
+
+        <div class="spell-actions-container">
+            <button type="button" class="fantasy-btn fantasy-blue" (click)="setSpells()" #lastFocus>Set Spells</button>
+        </div>
     }
 </div>
