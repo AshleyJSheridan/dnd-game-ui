@@ -24,23 +24,35 @@
         margin: 0 0 .5rem 0;
         padding: 0;
 
-        label {
+        button {
+            appearance: none;
+            background-color: transparent;
+            border: none;
             cursor: pointer;
+            text-align: left;
+            width: 100%;
+
+            &.selected {
+                background-color: colours.$dark-grey;
+                color: colours.$white;
+
+                .spell-school-icon {
+                    outline: 1px solid colours.$white;
+                }
+
+                table {
+                    td,
+                    th {
+                        border-color: colours.$white;
+                    }
+                }
+            }
+        }
+
+        .spell-container {
             display: flex;
             gap: .5rem;
             padding: .5rem;
-        }
-
-        input[type=checkbox]:checked + label {
-            background-color: colours.$dark-grey;
-            color: colours.$white;
-
-            table {
-                td,
-                th {
-                    border-color: colours.$white;
-                }
-            }
         }
 
         .spell-school-icon {
