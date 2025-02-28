@@ -37,7 +37,7 @@ export class Character {
     };
     magic: {
         hasMagic: boolean;
-        spells: Array<{
+        learned_spells: Array<{
             id: number;
             name: string;
             description: string;
@@ -58,10 +58,33 @@ export class Character {
             components: Array<string>;
             concentration: number;
             ritual: number;
-        }>
+        }>;
+        other_known_spells: Array<{
+            id: number;
+            name: string;
+            description: string;
+            level: number;
+            school: {
+                name: string;
+                description: string;
+            };
+            cast_time: {
+                value: number;
+                unit: string;
+            };
+            duration: {
+                value: number;
+                unit: string;
+            };
+            range: string;
+            components: Array<string>;
+            concentration: number;
+            ritual: number;
+        }>;
     } = {
         hasMagic: false,
-        spells: []
+        learned_spells: [],
+        other_known_spells: [],
     };
     created_at: Date = new Date();
 }

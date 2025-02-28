@@ -19,7 +19,9 @@ export class EditCharacterSpellsComponent {
     availableSpells: AvailableSpells | undefined;
     character: Character | undefined;
     spellLevels = Array(10).fill(0).map((x,i) => i);
-    selectedSpells = [];
+    selectedSpells: Array<number> = [];
+    learnedSpellIds: Array<number> = [];
+    otherKnownSpellIds: Array<number> = [];
 
     constructor(private characterService: CharacterService, private router: Router) {}
 
@@ -30,6 +32,14 @@ export class EditCharacterSpellsComponent {
 
         this.characterService.getCharacter().subscribe((character) => {
             this.character = character;
+
+
+            character.magic.learned_spells.forEach(spell => {
+                this.learnedSpellIds.push(spell.id);
+            })
+            character.magic.other_known_spells.forEach(spell => {
+                this.otherKnownSpellIds.push(spell.id);
+            })
         });
     }
 
@@ -54,5 +64,5 @@ export class EditCharacterSpellsComponent {
         return range;
     }
 
-    
+
 }

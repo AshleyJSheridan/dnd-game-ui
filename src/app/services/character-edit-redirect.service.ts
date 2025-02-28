@@ -20,7 +20,7 @@ export class CharacterEditRedirectService {
                     this.router.navigate([`/characters/${character.guid}/edit/abilities`]);
                 } else if (character.languages.known.length < character.languages.available) {
                     this.router.navigate([`/characters/${character.guid}/edit/languages`]);
-                } else if (character.magic.hasMagic && character.magic.spells.length === 0) {
+                } else if (character.magic.hasMagic) {
                     this.router.navigate([`/characters/${character.guid}/edit/spells`]);
                 }
             }
