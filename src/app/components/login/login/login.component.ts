@@ -28,11 +28,11 @@ export class LoginComponent {
             return;
         }
 
-        this.authService.login(this.email, this.password).subscribe(
-            (tokenResponse) => {
+        this.authService.login(this.email, this.password).subscribe({
+            next: (tokenResponse) => {
                 this.storageService.setItem('token', tokenResponse.token);
             },
-            (error) => {
+            error: (error) => {
                 switch (error.status) {
                     case 401:
                         this.error = 'Email or password was incorrect.';
@@ -41,6 +41,6 @@ export class LoginComponent {
                         this.error = 'There was an unexpected error. Please try again later.';
                 }
             }
-        );
+        });
     }
 }
