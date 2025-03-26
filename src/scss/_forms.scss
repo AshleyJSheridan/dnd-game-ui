@@ -93,7 +93,9 @@ button.button-link {
 }
 
 input[type=text],
-input[type=number] {
+input[type=number],
+input[type=password],
+input[type=email] {
     border: solid 1px colours.$grey;
     border-radius: .25rem;
     font-size: 100%;

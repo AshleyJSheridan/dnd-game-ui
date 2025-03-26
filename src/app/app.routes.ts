@@ -10,8 +10,12 @@ import { ApplicationConfig } from "@angular/core";
 import { EditCharacterAbilitiesComponent } from './components/character/edit-character-abilities/edit-character-abilities.component';
 import { EditCharacterLanguagesComponent } from './components/character/edit-character-languages/edit-character-languages.component';
 import { EditCharacterSpellsComponent } from './components/character/edit-character-spells/edit-character-spells.component';
+import {LoginComponent} from './components/login/login/login.component';
 
 export const routes: Routes = [
+    { path: '', component: LoginComponent },
+    { path: 'login', component: LoginComponent },
+
     { path: 'char-create', component: CreateComponent },
     { path: 'characters', component: CharactersListComponent },
     { path: 'characters/:guid', component: ViewCharacterComponent },

@@ -1,0 +1,25 @@
+<main class="login-block">
+        <form name="login" aria-labelledby="login-heading">
+            <h1>
+                <app-logo-full/>
+            </h1>
+
+            <h2 id="login-heading">Login</h2>
+
+            @if (error.length > 0) {
+                <div class="error">{{ error }}</div>
+            }
+
+            <label>Email:
+                <input type="email" name="email" [(ngModel)]="email"/>
+            </label>
+
+            <label>Password:
+                <input type="password" name="password" [(ngModel)]="password"/>
+            </label>
+
+            <div class="actions">
+                <button type="button" class="fantasy-btn fantasy-blue" (click)="submitHandler()">Log In</button>
+            </div>
+        </form>
+</main>
