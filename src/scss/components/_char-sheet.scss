@@ -1,0 +1,117 @@
+@use "../colours";
+
+.char-sheet {
+    background-image: url("/images/login-background.jpeg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    padding-top: 2rem;
+
+    .char-sheet-content {
+        background-color: rgba(colours.$white, 85%);
+        margin: 0 auto;
+        max-width: 50rem;
+        padding: 1rem;
+    }
+
+    .sheet-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+
+        .name,
+        .main-details {
+            background-color: colours.$white;
+            border: 3px double colours.$black;
+            box-sizing: border-box;
+        }
+
+        .name {
+            padding: 1rem;
+            width: 35%;
+        }
+
+        .main-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            padding: .5rem;
+            width: 60%;
+        }
+    }
+
+    .columns {
+        display: flex;
+        gap: 1rem;
+
+        .cols-3 {
+            width: 33%;
+        }
+    }
+
+    .simple-score {
+        align-items: center;
+        background-color: colours.$white;
+        border: 3px double colours.$black;
+        box-sizing: border-box;
+        display: flex;
+        margin-bottom: .5rem;
+        position: relative;
+
+        .simple-score-value {
+            align-items: center;
+            background-color: colours.$white;
+            border: 3px double colours.$black;
+            border-radius: 50%;
+            box-sizing: border-box;
+            display: flex;
+            font-size: 1.2rem;
+            font-weight: bold;
+            height: 2rem;
+            justify-content: center;
+            left: -1rem;
+            padding: .25rem;
+            position: absolute;
+            width: 2rem;
+        }
+
+        .simple-score-name {
+            font-size: .8rem;
+            padding: .5rem .5rem .5rem 1.25rem;
+        }
+    }
+
+    .ability-scores {
+        width: 33%;
+
+        .ability {
+            background-color: colours.$white;
+            border: 3px double colours.$black;
+            box-sizing: border-box;
+            margin-bottom: 2rem;
+            padding: .25rem;
+            position: relative;
+            text-align: center;
+
+            .ability-name {
+                font-size: .8rem;
+            }
+
+            .ability-score {
+                font-size: 1.5rem;
+                font-weight: bold;
+                padding-bottom: .5rem;
+            }
+
+            .ability-modifier {
+                background-color: colours.$white;
+                border: 3px double colours.$black;
+                border-radius: 1rem;
+                box-sizing: border-box;
+                left: 50%;
+                margin-left: -1.25rem;
+                position: absolute;
+                bottom: -1rem;
+                width: 2.5rem;
+            }
+        }
+    }
+}

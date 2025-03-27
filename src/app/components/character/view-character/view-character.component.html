@@ -1,1 +1,213 @@
-<p>view-character works!</p>
+<!-- TODO add a navbar here -->
+<div class="char-sheet">
+    <div class="char-sheet-content">
+        <div class="sheet-header">
+            <div class="name">{{ character?.name }}</div>
+            <div class="main-details">
+                <div class="class-level">{{ character?.charClass }} {{ character?.level }}</div>
+                <div class="background">{{ character?.charBackground?.name }}</div>
+                <div class="race">{{ character?.charRace }}</div>
+            </div>
+        </div>
+
+        <div class="columns">
+            <div class="col cols-3">
+                <div class="columns">
+                    <div class="col ability-scores">
+                        @for (ability of abilityNames; track ability) {
+                            <app-ability-score
+                                [abilityName]="getAbilityDetails(ability).name"
+                                [abilityBase]="getAbilityDetails(ability).base"
+                                [abilityModifier]="getAbilityDetails(ability).modifier"
+                            />
+                        }
+                    </div>
+
+                    <div class="col">
+                        <div class="simple-score">
+                            <!-- TODO add inspiration to character response -->
+                            <div class="simple-score-value">0</div>
+                            <div class="simple-score-name">Inspiration</div>
+                        </div>
+                        <div class="simple-score">
+                            <!-- TODO add proficiency bonus to character response -->
+                            <div class="simple-score-value">2</div>
+                            <div class="simple-score-name">Proficiency Bonus</div>
+                        </div>
+
+                        <div class="saving-throws">
+                            Saving Throws
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Strength</div>
+                            </div>
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Dexterity</div>
+                            </div>
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Constitution</div>
+                            </div>
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Intelligence</div>
+                            </div>
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Wisdom</div>
+                            </div>
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Charisma</div>
+                            </div>
+                        </div>
+
+                        <div class="skills">
+                            Skills
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Acrobatics</div>
+                            </div>
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Animal Handing</div>
+                            </div>
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Arcana</div>
+                            </div>
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Athletics</div>
+                            </div>
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Deception</div>
+                            </div>
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">History</div>
+                            </div>
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Insight</div>
+                            </div>
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Intimidation</div>
+                            </div>
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Investigation</div>
+                            </div>
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Medicine</div>
+                            </div>
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Nature</div>
+                            </div>
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Perception</div>
+                            </div>
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Persuasion</div>
+                            </div>
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Religion</div>
+                            </div>
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Sleight of Hand</div>
+                            </div>
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Stealth</div>
+                            </div>
+                            <div class="simple-score">
+                                <div class="simple-score-value"></div>
+                                <div class="simple-score-name">Survival</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="senses">
+                    <div class="simple-score">
+                        <div class="simple-score-value"></div>
+                        <div class="simple-score-name">Passive Perception</div>
+                    </div>
+                    <div class="simple-score">
+                        <div class="simple-score-value"></div>
+                        <div class="simple-score-name">Passive Investigation</div>
+                    </div>
+                    <div class="simple-score">
+                        <div class="simple-score-value"></div>
+                        <div class="simple-score-name">Passive Insight</div>
+                    </div>
+                </div>
+
+                <div class="languages">
+
+                </div>
+            </div>
+
+            <div class="col cols-3">
+                <div class="simple-score boxed">
+                    <div class="simple-score-value"></div>
+                    <div class="simple-score-name">Armor Class</div>
+                </div>
+                <div class="simple-score boxed">
+                    <div class="simple-score-value"></div>
+                    <div class="simple-score-name">Initiative</div>
+                </div>
+                <div class="simple-score boxed">
+                    <div class="simple-score-value"></div>
+                    <div class="simple-score-name">Speed</div>
+                </div>
+
+                <div class="hit-points">
+                    Hit Points
+                    <div class="current">x/y</div>
+                    <div class="temporary">-</div>
+                    <div class="hit-dice"></div>
+                </div>
+
+                <div class="attacks">
+                    Attacks &amp; Spellcasting
+                </div>
+
+                <div class="equipment">
+                    Equipment
+                </div>
+            </div>
+
+            <div class="col cols-3">
+                <div class="traits">
+                    <div class="trait">
+                        <div class="trait-name">Personality</div>
+                    </div>
+                    <div class="trait">
+                        <div class="trait-name">Ideals</div>
+                    </div>
+                    <div class="trait">
+                        <div class="trait-name">Bonds</div>
+                    </div>
+                    <div class="trait">
+                        <div class="trait-name">Flaws</div>
+                    </div>
+                    <!-- other trait here if set -->
+                </div>
+
+                <div class="features">
+                    Features
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
