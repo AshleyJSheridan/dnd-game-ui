@@ -3,6 +3,7 @@ import { LogoFullComponent } from '../../logo-full/logo-full.component';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { LocalStorageService } from '../../../services/local-storage.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-login',
@@ -17,7 +18,7 @@ export class LoginComponent {
     password: string = '';
     error: string = '';
 
-    constructor(private authService: AuthService, private storageService: LocalStorageService) {}
+    constructor(private authService: AuthService, private storageService: LocalStorageService, private router: Router) {}
 
     submitHandler() {
         this.error = '';
@@ -31,6 +32,8 @@ export class LoginComponent {
         this.authService.login(this.email, this.password).subscribe({
             next: (tokenResponse) => {
                 this.storageService.setItem('token', tokenResponse.token);
+
+                this.router.navigate(['/characters']);
             },
             error: (error) => {
                 switch (error.status) {
