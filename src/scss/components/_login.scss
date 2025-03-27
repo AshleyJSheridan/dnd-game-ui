@@ -19,11 +19,17 @@
         width: 50%;
 
         h1 {
+            margin-bottom: 0;
             max-width: 90%;
         }
 
         svg {
+            height: auto;
             max-width: 100%;
+        }
+
+        h2 {
+            font-size: 2rem;
         }
 
         .error {
