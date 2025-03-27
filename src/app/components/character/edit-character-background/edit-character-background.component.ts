@@ -21,9 +21,16 @@ export class EditCharacterBackgroundComponent {
     constructor(private characterService: CharacterService, private router: Router) {}
 
     ngOnInit(): void {
-        this.characterService.getCharacterBackgrounds().subscribe((charBackgrounds) => {
-            this.charBackgrounds = charBackgrounds;
-        });
+        this.characterService.getCharacterBackgrounds().subscribe(
+            {
+                next: (charBackgrounds) => {
+                    this.charBackgrounds = charBackgrounds;
+                },
+                error: (error => {
+                    this.router.navigate(['/']);
+                })
+            }
+        );
     }
 
     selectCharBackground(charBackground: CharacterBackground, event: MouseEvent): void {

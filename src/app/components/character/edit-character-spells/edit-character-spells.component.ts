@@ -25,22 +25,36 @@ export class EditCharacterSpellsComponent {
     constructor(private characterService: CharacterService, private router: Router) {}
 
     ngOnInit(): void {
-        this.characterService.getAvailableSpells().subscribe((spells) => {
-            this.availableSpells = spells;
-        });
+        this.characterService.getAvailableSpells().subscribe(
+            {
+                next: (spells) => {
+                    this.availableSpells = spells;
+                },
+                error: (error => {
+                    this.router.navigate(['/']);
+                })
+            }
+        );
 
-        this.characterService.getCharacter().subscribe((character) => {
-            this.character = character;
+        this.characterService.getCharacter().subscribe(
+            {
+                next: (character) => {
+                    this.character = character;
 
-            character.magic.learned_spells.forEach(spell => {
-                this.learnedSpellIds.push(spell.id);
-                // @ts-ignore
-                this.selectedSpells[spell.level].push(spell.id);
-            })
-            character.magic.other_known_spells.forEach(spell => {
-                this.otherKnownSpellIds.push(spell.id);
-            })
-        });
+                    character.magic.learned_spells.forEach(spell => {
+                        this.learnedSpellIds.push(spell.id);
+                        // @ts-ignore
+                        this.selectedSpells[spell.level].push(spell.id);
+                    })
+                    character.magic.other_known_spells.forEach(spell => {
+                        this.otherKnownSpellIds.push(spell.id);
+                    })
+                },
+                error: (error => {
+                    this.router.navigate(['/']);
+                })
+            }
+        );
     }
 
     public getSpellCountAvailableForLevel(level: number): number {

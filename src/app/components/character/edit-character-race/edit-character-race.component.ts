@@ -14,30 +14,30 @@ import { Router } from '@angular/router';
 export class EditCharacterRaceComponent {
     charRaces: Array<CharacterRace> = [];
     selectedCharRace: CharacterRace|null = null;
-    identifyAs: string = 'female';
 
     constructor(private characterService: CharacterService, private router: Router) {}
 
     ngOnInit(): void {
-        this.characterService.getCharacterRaces().subscribe((charRaces) => {
-            this.charRaces = charRaces;
+        this.characterService.getCharacterRaces().subscribe(
+            {
+                next: (charRaces) => {
+                    this.charRaces = charRaces;
 
-            this.charRaces.forEach((race) => {
-                race.randomDisplayGender = this.getRandomGender();
+                    this.charRaces.forEach((race) => {
+                        race.randomDisplayGender = this.getRandomGender();
 
-                if (race.sub_races.length > 0) {
-                    race.sub_races.forEach((sub_race) => {
-                        sub_race.randomDisplayGender = this.getRandomGender();
-                    })
-                }
-            });
-        });
-
-        this.identifyAs = this.getRandomGender();
-    }
-
-    selectCharRace(charRace: CharacterRace) {
-        this.selectedCharRace = charRace;
+                        if (race.sub_races.length > 0) {
+                            race.sub_races.forEach((sub_race) => {
+                                sub_race.randomDisplayGender = this.getRandomGender();
+                            })
+                        }
+                    });
+                },
+                error: (error => {
+                    this.router.navigate(['/']);
+                })
+            }
+        );
     }
 
     getRandomGender(): string {

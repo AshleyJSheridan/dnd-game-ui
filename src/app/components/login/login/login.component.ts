@@ -17,8 +17,13 @@ export class LoginComponent {
     email: string = '';
     password: string = '';
     error: string = '';
+    tokenKey: string = 'token';
 
     constructor(private authService: AuthService, private storageService: LocalStorageService, private router: Router) {}
+
+    ngOnInit() {
+        this.storageService.removeItem(this.tokenKey);
+    }
 
     submitHandler() {
         this.error = '';
@@ -31,7 +36,7 @@ export class LoginComponent {
 
         this.authService.login(this.email, this.password).subscribe({
             next: (tokenResponse) => {
-                this.storageService.setItem('token', tokenResponse.token);
+                this.storageService.setItem(this.tokenKey, tokenResponse.token);
 
                 this.router.navigate(['/characters']);
             },

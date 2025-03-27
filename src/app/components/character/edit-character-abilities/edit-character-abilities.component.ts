@@ -16,9 +16,16 @@ export class EditCharacterAbilitiesComponent {
     constructor(private characterService: CharacterService, private router: Router) {}
 
     ngOnInit(): void {
-        this.characterService.getCharacter().subscribe((character) => {
-            this.character = character;
-        });
+        this.characterService.getCharacter().subscribe(
+            {
+                next: (character) => {
+                    this.character = character;
+                },
+                error: (error => {
+                    this.router.navigate(['/']);
+                })
+            }
+        );
     }
 
     getAbilityModifier(ability: {id: number; base: number; racialModifier: number;}): string {

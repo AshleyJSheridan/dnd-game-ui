@@ -1,12 +1,12 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CharacterService } from '../../../services/character.service';
 import { CharClassIconComponent } from '../../icons/char-class-icon/char-class-icon.component';
 import { ConfirmComponent } from '../../dialogs/confirm/confirm.component';
 import { CharacterClass } from '../../../entities/CharacterClass';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import {CharClassFeatureIconComponent} from '../../icons/char-class-feature-icon/char-class-feature-icon.component';
-import {Character} from '../../../entities/Character';
+import { Router } from '@angular/router';
+import { CharClassFeatureIconComponent } from '../../icons/char-class-feature-icon/char-class-feature-icon.component';
+import { Character } from '../../../entities/Character';
 
 @Component({
     selector: 'app-edit-character-class',
@@ -29,13 +29,27 @@ export class EditCharacterClassComponent {
     constructor(private characterService: CharacterService, private router: Router) {}
 
     ngOnInit(): void {
-        this.characterService.getCharacter().subscribe((character) => {
-            this.character = character;
-        });
+        this.characterService.getCharacter().subscribe(
+            {
+                next: (character) => {
+                    this.character = character;
+                },
+                error: (error => {
+                    this.router.navigate(['/']);
+                })
+            }
+        );
 
-        this.characterService.getCharacterClasses().subscribe((charClasses) => {
-           this.charClasses = charClasses;
-        });
+        this.characterService.getCharacterClasses().subscribe(
+            {
+                next: (charClasses) => {
+                   this.charClasses = charClasses;
+                },
+                error: (error => {
+                    this.router.navigate(['/']);
+                })
+            }
+        );
     }
 
     selectCharClass(charClassId: number, event: MouseEvent) {

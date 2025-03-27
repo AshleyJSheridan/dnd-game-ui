@@ -39,4 +39,8 @@ export class LocalStorageService implements IStorageService {
             return false;
         }
     }
+
+    public removeItem(key: string): void {
+        this._window.localStorage.removeItem(key);
+    }
 }

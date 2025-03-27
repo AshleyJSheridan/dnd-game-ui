@@ -3,7 +3,7 @@ import { CharacterService } from '../../../services/character.service';
 import { Router } from '@angular/router';
 import { Language } from '../../../entities/Language';
 import { Character } from '../../../entities/Character';
-import {LanguageScriptComponent} from '../../icons/language-script/language-script.component';
+import { LanguageScriptComponent } from '../../icons/language-script/language-script.component';
 
 @Component({
     selector: 'app-edit-character-languages',
@@ -21,13 +21,27 @@ export class EditCharacterLanguagesComponent {
     constructor(private characterService: CharacterService, private router: Router) {}
 
     ngOnInit(): void {
-        this.characterService.getLanguages().subscribe((languages) => {
-            this.allLanguages = languages;
-        });
+        this.characterService.getLanguages().subscribe(
+            {
+                next: (languages) => {
+                    this.allLanguages = languages;
+                },
+                error: (error => {
+                    this.router.navigate(['/']);
+                })
+            }
+        );
 
-        this.characterService.getCharacter().subscribe((character) => {
-            this.character = character;
-        });
+        this.characterService.getCharacter().subscribe(
+            {
+                next: (character) => {
+                    this.character = character;
+                },
+                error: (error => {
+                    this.router.navigate(['/']);
+                })
+            }
+        );
     }
 
     getAvailableLangCount(): number {

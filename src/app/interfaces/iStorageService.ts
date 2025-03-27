@@ -4,4 +4,6 @@ export interface IStorageService {
     getItem(key: string): string;
 
     hasItem(key: string): boolean;
+
+    removeItem(key: string): void;
 }
