@@ -47,7 +47,7 @@
         }
     }
 
-    .simple-score {
+    .simple-score-standalone {
         align-items: center;
         background-color: colours.$white;
         border: 3px double colours.$black;
@@ -111,6 +111,35 @@
                 position: absolute;
                 bottom: -1rem;
                 width: 2.5rem;
+            }
+        }
+    }
+
+    .saving-throws {
+        background-color: colours.$white;
+        border: 3px double colours.$black;
+        box-sizing: border-box;
+        padding: .5rem;
+
+        .simple-score {
+            align-items: center;
+            display: flex;
+            font-size: .8rem;
+            padding: .125rem;
+
+            &.proficient {
+                background-color: colours.$gold;
+            }
+
+            .simple-score-value {
+                align-items: center;
+
+                font-weight: bold;
+                width: 2rem;
+            }
+
+            .simple-score-name {
+
             }
         }
     }

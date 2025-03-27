@@ -24,20 +24,27 @@
                     </div>
 
                     <div class="col">
-                        <div class="simple-score">
+                        <div class="simple-score-standalone">
                             <!-- TODO add inspiration to character response -->
                             <div class="simple-score-value">0</div>
                             <div class="simple-score-name">Inspiration</div>
                         </div>
-                        <div class="simple-score">
-                            <!-- TODO add proficiency bonus to character response -->
-                            <div class="simple-score-value">2</div>
+                        <div class="simple-score-standalone">
+                            <div class="simple-score-value">{{ character?.proficiency_bonus }}</div>
                             <div class="simple-score-name">Proficiency Bonus</div>
                         </div>
 
                         <div class="saving-throws">
                             Saving Throws
-                            <div class="simple-score">
+
+                            @for (ability of abilityNames; track ability) {
+                                <div class="simple-score" [class.proficient]="hasAbilityProficiency(ability)">
+                                    <div class="simple-score-value">{{ getAbilitySavingThrow(ability) }}</div>
+                                    <div class="simple-score-name">{{ getAbilityDetails(ability).name }}</div>
+                                </div>
+                            }
+
+                            <!--<div class="simple-score">
                                 <div class="simple-score-value"></div>
                                 <div class="simple-score-name">Strength</div>
                             </div>
@@ -60,7 +67,7 @@
                             <div class="simple-score">
                                 <div class="simple-score-value"></div>
                                 <div class="simple-score-name">Charisma</div>
-                            </div>
+                            </div>-->
                         </div>
 
                         <div class="skills">

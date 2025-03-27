@@ -41,4 +41,23 @@ export class ViewCharacterComponent {
 
         return abilities ? abilities[0] : {name: '', base: 0, modifier: 0};
     }
+
+    hasAbilityProficiency(abilityShortName: string): boolean
+    {
+        const matchedAbility = this.character?.saving_throws.filter(ability => {
+            return ability.short_name === abilityShortName;
+        });
+
+        return !!(matchedAbility && matchedAbility.length > 0);
+    }
+
+    getAbilitySavingThrow(abilityShortName: string): number
+    {
+        const abilityDetails = this.getAbilityDetails(abilityShortName);
+
+        if (this.hasAbilityProficiency(abilityShortName))
+            return abilityDetails.modifier + (this.character?.proficiency_bonus ?? 0);
+
+        return abilityDetails.modifier;
+    }
 }

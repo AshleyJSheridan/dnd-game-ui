@@ -2,7 +2,12 @@ export class Character {
     name: string = '';
     guid: string = '';
     level: number = 1;
+    proficiency_bonus: number = 2;
     charClass: string = '';
+    saving_throws: Array<{
+        name: string;
+        short_name: string;
+    }> = [];
     charBackground: {
         name: string;
         characteristics: Array<{

@@ -41,7 +41,6 @@ export class LocalStorageService implements IStorageService {
     }
 
     public removeItem(key: string): void {
-        console.log(key)
         this._window.localStorage.removeItem(key);
     }
 }
