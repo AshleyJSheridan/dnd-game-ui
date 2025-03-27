@@ -8,7 +8,7 @@
                     <summary>
                         <img
                             class="char-race-portrait"
-                            src="/images/default-race-portraits/thumbs-200/{{ getPortraitImage(charRace.name) }}-portrait.jpg"/>
+                            src="/images/default-race-portraits/thumbs-200/{{ getPortraitImage(charRace) }}-portrait.jpg"/>
                         <span class="char-race-name">{{ charRace.name }}</span>
                         @if (hasSubRaces(charRace)) {
                             <span class="char-race-has-subs">({{ getSubRaceCount(charRace) }} variations)</span>
@@ -23,7 +23,7 @@
                                     <summary>
                                         <img
                                             class="char-race-portrait"
-                                            src="/images/default-race-portraits/thumbs-200/{{ getPortraitImage(subRace.name) }}-portrait.jpg"/>
+                                            src="/images/default-race-portraits/thumbs-200/{{ getPortraitImage(subRace) }}-portrait.jpg"/>
                                         <span class="char-race-name">{{ subRace.name }}</span>
                                     </summary>
                                     <div class="char-race-details">

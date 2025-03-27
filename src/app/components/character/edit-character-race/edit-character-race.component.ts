@@ -21,6 +21,16 @@ export class EditCharacterRaceComponent {
     ngOnInit(): void {
         this.characterService.getCharacterRaces().subscribe((charRaces) => {
             this.charRaces = charRaces;
+
+            this.charRaces.forEach((race) => {
+                race.randomDisplayGender = this.getRandomGender();
+
+                if (race.sub_races.length > 0) {
+                    race.sub_races.forEach((sub_race) => {
+                        sub_race.randomDisplayGender = this.getRandomGender();
+                    })
+                }
+            });
         });
 
         this.identifyAs = this.getRandomGender();
@@ -34,8 +44,9 @@ export class EditCharacterRaceComponent {
         return (Math.random() < .5) ? 'male' : 'female';
     }
 
-    getPortraitImage(race: string): string {
-        return `${this.identifyAs}-${race.replace(/ /g, '-').replace(/[\(\)]/g, '').toLowerCase()}`;
+    getPortraitImage(race: CharacterRace): string {
+        const raceName = race.name;
+        return `${race.randomDisplayGender}-${raceName.replace(/ /g, '-').replace(/[\(\)]/g, '').toLowerCase()}`;
     }
 
     hasSubRaces(race: CharacterRace): boolean {

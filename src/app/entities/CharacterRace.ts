@@ -12,4 +12,5 @@ export class CharacterRace {
         ability_details: {}; // todo shape this out, as it's a JSON field in the API
     }> = [];
     sub_races: Array<CharacterRace> = [];
+    randomDisplayGender: string = 'female';
 }
