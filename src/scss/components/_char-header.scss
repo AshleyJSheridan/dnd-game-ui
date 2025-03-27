@@ -17,24 +17,50 @@
     }
 }
 
-nav.characters-nav ul {
-    margin: 0;
-    padding: 0;
+nav.characters-nav {
+    display: flex;
+    justify-content: space-between;
 
-    li {
-        display: inline-block;
-        list-style: none;
-        padding: .5rem;
-        text-align: center;
+    ul {
+        margin: 0;
+        padding: 0;
 
-        a {
-            color: colours.$white;
+        li {
+            display: inline-block;
+            list-style: none;
             padding: .5rem;
-            text-decoration: none;
+            text-align: center;
 
-            &:hover {
-                text-decoration: underline;
+            a {
+                color: colours.$white;
+                padding: .5rem;
+                text-decoration: none;
+
+                &:hover {
+                    text-decoration: underline;
+                }
             }
+        }
+    }
+
+    .logout {
+        appearance: none;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+
+        &:hover {
+            .sticks {
+                fill: colours.$logout-sticks;
+            }
+
+            .fire {
+                fill: colours.$logout-fire;
+            }
+        }
+
+        svg {
+            fill: colours.$white;
         }
     }
 }
