@@ -1,0 +1,16 @@
+<h2>Character Creation - Skills</h2>
+
+<p>Select {{ character?.skills?.available_count }} skills.</p>
+
+<div class="char-skill-list-block">
+    <ul class="char-skill-list">
+        @for (skill of character?.skills?.available; track skill.name) {
+            <li [class.known]="isSkillKnown(skill.name)" class="skill">
+                <button type="button" (click)="toggleSelectSkill(skill)">
+                    <app-skill-icon [skillName]="skill.name"/>
+                    {{ skill.name }}
+                </button>
+            </li>
+        }
+    </ul>
+</div>

@@ -1,0 +1,115 @@
+@use "../colours";
+
+.char-skill-list-block {
+    .char-skill-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin: 0;
+        padding: 0;
+
+        .skill {
+            border: 1px solid colours.$black;
+            border-radius: .5rem;
+            box-shadow: 2px 2px 7px colours.$medium-grey;
+            list-style: none;
+            margin: 0;
+            padding: .5rem;
+            width: 15rem;
+        }
+
+        button {
+            align-items: center;
+            appearance: none;
+            background-color: transparent;
+            border: none;
+            display: flex;
+            font-size: 1rem;
+            gap: 1rem;
+        }
+
+        .skill-icon {
+            background-color: colours.$black;
+            border-radius: .5rem;
+            padding: .5rem;
+
+            &.skill-acrobatics svg {
+                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(255, 0, 0) 0 0 4px) drop-shadow(rgb(255, 0, 0) 0 0 5px);
+            }
+
+            &.skill-animal-handling svg {
+                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(0, 126, 38) 0 0 4px) drop-shadow(rgb(0, 126, 38) 0 0 5px);
+            }
+
+            &.skill-arcana svg {
+                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(0, 0, 255) 0 0 4px) drop-shadow(rgb(0, 0, 255) 0 0 5px);
+            }
+
+            &.skill-athletics svg {
+                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(255, 0, 0) 0 0 4px) drop-shadow(rgb(255, 0, 0) 0 0 5px);
+            }
+
+            &.skill-deception svg {
+                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(221, 206, 0) 0 0 4px) drop-shadow(rgb(221, 206, 0) 0 0 5px);
+            }
+
+            &.skill-history svg {
+                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(0, 0, 255) 0 0 4px) drop-shadow(rgb(0, 0, 255) 0 0 5px);
+            }
+
+            &.skill-insight svg {
+                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(221, 206, 0) 0 0 4px) drop-shadow(rgb(221, 206, 0) 0 0 5px);
+            }
+
+            &.skill-intimidation svg {
+                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(255, 0, 0) 0 0 4px) drop-shadow(rgb(255, 0, 0) 0 0 5px);
+            }
+
+            &.skill-investigation svg {
+                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(119, 0, 255) 0 0 4px) drop-shadow(rgb(119, 0, 255) 0 0 5px);
+            }
+
+            &.skill-medicine svg {
+                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(0, 126, 38) 0 0 4px) drop-shadow(rgb(0, 126, 38) 0 0 5px);
+            }
+
+            &.skill-nature svg {
+                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(0, 126, 38) 0 0 4px) drop-shadow(rgb(0, 126, 38) 0 0 5px);
+            }
+
+            &.skill-perception svg {
+                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(0, 0, 255) 0 0 4px) drop-shadow(rgb(0, 0, 255) 0 0 5px);
+            }
+
+            &.skill-performance svg {
+                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(119, 0, 255) 0 0 4px) drop-shadow(rgb(119, 0, 255) 0 0 5px);
+            }
+
+            &.skill-persuasion svg {
+                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(0, 0, 255) 0 0 4px) drop-shadow(rgb(0, 0, 255) 0 0 5px);
+            }
+
+            &.skill-religion svg {
+                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(119, 0, 255) 0 0 4px) drop-shadow(rgb(119, 0, 255) 0 0 5px);
+            }
+
+            &.skill-sleight-of-hand svg {
+                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(241, 129, 0) 0 0 4px) drop-shadow(rgb(241, 129, 0) 0 0 5px);
+            }
+
+            &.skill-stealth svg {
+                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(241, 129, 0) 0 0 4px) drop-shadow(rgb(241, 129, 0) 0 0 5px);
+            }
+
+            &.skill-survival svg {
+                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(0, 126, 38) 0 0 4px) drop-shadow(rgb(0, 126, 38) 0 0 5px);
+            }
+
+            svg {
+                fill: colours.$white;
+                height: 2.5rem;
+                width: 2.5rem;
+            }
+        }
+    }
+}

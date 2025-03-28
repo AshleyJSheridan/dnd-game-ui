@@ -11,6 +11,9 @@ import { EditCharacterAbilitiesComponent } from './components/character/edit-cha
 import { EditCharacterLanguagesComponent } from './components/character/edit-character-languages/edit-character-languages.component';
 import { EditCharacterSpellsComponent } from './components/character/edit-character-spells/edit-character-spells.component';
 import { LoginComponent } from './components/login/login/login.component';
+import {
+    EditCharacterSkillsComponent
+} from './components/character/edit-character-skills/edit-character-skills.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -26,6 +29,7 @@ export const routes: Routes = [
             { path: 'class', component: EditCharacterClassComponent },
             { path: 'background', component: EditCharacterBackgroundComponent },
             { path: 'race', component: EditCharacterRaceComponent },
+            { path: 'skills', component: EditCharacterSkillsComponent },
             { path: 'abilities', component: EditCharacterAbilitiesComponent },
             { path: 'languages', component: EditCharacterLanguagesComponent },
             { path: 'spells', component: EditCharacterSpellsComponent }

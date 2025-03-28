@@ -1,3 +1,6 @@
+import { Skill } from './Skill';
+import { Spell } from './Spell';
+
 export class Character {
     name: string = '';
     guid: string = '';
@@ -29,6 +32,17 @@ export class Character {
         modifier: number;
         racialModifier: number;
     }> = [];
+    skills: {
+        known: Array<Skill>;
+        racially_known: Array<Skill>;
+        available: Array<Skill>;
+        available_count: number;
+    } = {
+        known: [],
+        racially_known: [],
+        available: [],
+        available_count: 0,
+    };
     languages : {
         available: number;
         known: Array<{
@@ -42,50 +56,8 @@ export class Character {
     };
     magic: {
         hasMagic: boolean;
-        learned_spells: Array<{
-            id: number;
-            name: string;
-            description: string;
-            level: number;
-            school: {
-                name: string;
-                description: string;
-            };
-            cast_time: {
-                value: number;
-                unit: string;
-            };
-            duration: {
-                value: number;
-                unit: string;
-            };
-            range: string;
-            components: Array<string>;
-            concentration: number;
-            ritual: number;
-        }>;
-        other_known_spells: Array<{
-            id: number;
-            name: string;
-            description: string;
-            level: number;
-            school: {
-                name: string;
-                description: string;
-            };
-            cast_time: {
-                value: number;
-                unit: string;
-            };
-            duration: {
-                value: number;
-                unit: string;
-            };
-            range: string;
-            components: Array<string>;
-            concentration: number;
-            ritual: number;
-        }>;
+        learned_spells: Array<Spell>;
+        other_known_spells: Array<Spell>;
     } = {
         hasMagic: false,
         learned_spells: [],
