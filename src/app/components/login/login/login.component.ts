@@ -21,9 +21,7 @@ export class LoginComponent {
 
     constructor(private authService: AuthService, private storageService: LocalStorageService, private router: Router) {}
 
-    ngOnInit() {
-        this.storageService.removeItem(this.tokenKey);
-    }
+    ngOnInit() {}
 
     submitHandler() {
         this.error = '';
@@ -41,6 +39,8 @@ export class LoginComponent {
                 this.router.navigate(['/characters']);
             },
             error: (error) => {
+                this.storageService.removeItem(this.tokenKey);
+
                 switch (error.status) {
                     case 401:
                         this.error = 'Email or password was incorrect.';
