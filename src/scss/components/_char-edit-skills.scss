@@ -5,7 +5,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: 1rem;
-        margin: 0;
+        margin: 2rem 0;
         padding: 0;
 
         .skill {
@@ -14,8 +14,13 @@
             box-shadow: 2px 2px 7px colours.$medium-grey;
             list-style: none;
             margin: 0;
-            padding: .5rem;
+            padding: 0;
             width: 15rem;
+
+            &.selected,
+            &.known {
+                background-color: colours.$gold;
+            }
         }
 
         button {
@@ -23,9 +28,12 @@
             appearance: none;
             background-color: transparent;
             border: none;
+            cursor: pointer;
             display: flex;
             font-size: 1rem;
             gap: 1rem;
+            padding: .5rem;
+            width: 100%;
         }
 
         .skill-icon {

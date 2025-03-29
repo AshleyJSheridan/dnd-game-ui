@@ -127,6 +127,14 @@ export class CharacterService {
             {headers: this.headers}
         );
     }
+
+    public setSkills(skills: Array<number>): Observable<Character> {
+        return this.http.patch<Character>(
+            `${this.apiUrl}/characters/${this.charGuid}`,
+            {updateType: 'skills', skills: skills},
+            {headers: this.headers}
+        );
+    }
 }
 
 

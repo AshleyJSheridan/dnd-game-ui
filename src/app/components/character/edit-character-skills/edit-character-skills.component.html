@@ -3,9 +3,13 @@
 <p>Select {{ character?.skills?.available_count }} skills.</p>
 
 <div class="char-skill-list-block">
+    @if (errorMessage.length) {
+        <div class="error">{{ errorMessage }}</div>
+    }
+
     <ul class="char-skill-list">
-        @for (skill of character?.skills?.available; track skill.name) {
-            <li [class.known]="isSkillKnown(skill.name)" class="skill">
+        @for (skill of skills; track skill.name) {
+            <li [class.known]="isSkillKnown(skill.id)" class="skill" [class.selected]="isSelected(skill.id)">
                 <button type="button" (click)="toggleSelectSkill(skill)">
                     <app-skill-icon [skillName]="skill.name"/>
                     {{ skill.name }}
@@ -13,4 +17,6 @@
             </li>
         }
     </ul>
+
+    <button type="button" class="fantasy-btn fantasy-blue" (click)="setSkillsHandler()">Select Skills</button>
 </div>

@@ -34,12 +34,12 @@ export class Character {
     }> = [];
     skills: {
         known: Array<Skill>;
-        racially_known: Array<Skill>;
+        racial_known: Array<Skill>;
         available: Array<Skill>;
         available_count: number;
     } = {
         known: [],
-        racially_known: [],
+        racial_known: [],
         available: [],
         available_count: 0,
     };
