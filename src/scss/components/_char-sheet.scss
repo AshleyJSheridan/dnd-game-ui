@@ -1,9 +1,10 @@
 @use "../colours";
 
 .char-sheet {
+    background-attachment: fixed;
     background-image: url("/images/login-background.jpeg");
+    background-position-x: center;
     background-repeat: no-repeat;
-    background-size: 100% 100%;
     padding-top: 2rem;
 
     .char-sheet-content {
@@ -146,6 +147,91 @@
 
             .simple-score-name {
 
+            }
+        }
+    }
+
+    .ac-init-speed {
+        display: flex;
+        font-size: .8rem;
+        gap: .5rem;
+
+        .ac {
+            align-items: center;
+            background-color: colours.$white;
+            border: 3px double colours.$black;
+            border-radius: 50% 50% 50% 50% / 12% 12% 88% 88%;
+            display: flex;
+            flex-direction: column;
+            height: 4.5rem;
+            justify-content: center;
+            text-align: center;
+            width: 4rem;
+
+            .simple-score-value {
+                font-size: 1.5rem;
+                font-weight: bold;
+            }
+        }
+
+        .initative,
+        .speed {
+            background-color: colours.$white;
+            border: 3px double colours.$black;
+            box-sizing: border-box;
+            display: flex;
+            height: 4rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            padding: .25rem;
+            position: relative;
+            text-align: center;
+            width: 4rem;
+
+            .simple-score-name {
+                display: flex;
+                justify-content: center;
+                margin-top: .5rem;
+            }
+
+            .simple-score-value {
+                background-color: colours.$white;
+                border: 3px double colours.$black;
+                border-radius: 1rem;
+                box-sizing: border-box;
+                font-weight: bold;
+                font-size: 1.5rem;
+                left: 50%;
+                margin-left: -1.25rem;
+                position: absolute;
+                bottom: -1rem;
+                width: 2.5rem;
+            }
+        }
+    }
+
+    .hit-points {
+        background-color: colours.$white;
+        border: 3px double colours.$black;
+        box-sizing: border-box;
+        margin-bottom: .5rem;
+        padding: .5rem;
+        position: relative;
+        text-align: center;
+    }
+
+    .traits {
+        .trait {
+            background-color: colours.$white;
+            border: 3px double colours.$black;
+            box-sizing: border-box;
+            font-size: .8rem;
+            margin-bottom: .5rem;
+            padding: .5rem;
+
+            .trait-name {
+                font-weight: bold;
+                margin-bottom: .5rem;
             }
         }
     }

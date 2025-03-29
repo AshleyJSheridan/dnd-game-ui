@@ -80,24 +80,25 @@
             </div>
 
             <div class="col cols-3">
-                <div class="simple-score boxed">
-                    <div class="simple-score-value"></div>
-                    <div class="simple-score-name">Armor Class</div>
-                </div>
-                <div class="simple-score boxed">
-                    <div class="simple-score-value"></div>
-                    <div class="simple-score-name">Initiative</div>
-                </div>
-                <div class="simple-score boxed">
-                    <div class="simple-score-value"></div>
-                    <div class="simple-score-name">Speed</div>
+                <div class="ac-init-speed">
+                    <div class="simple-score ac">
+                        <!-- todo once equipment is added -->
+                        <div class="simple-score-name">Armor Class</div>
+                        <div class="simple-score-value">0</div>
+                    </div>
+                    <div class="simple-score initative">
+                        <div class="simple-score-name">Initiative</div>
+                        <div class="simple-score-value">{{ 10 + getAbilityDetails('dex').modifier }}</div>
+                    </div>
+                    <div class="simple-score speed">
+                        <div class="simple-score-name">Speed</div>
+                        <div class="simple-score-value">{{ character?.speed }}</div>
+                    </div>
                 </div>
 
                 <div class="hit-points">
                     Hit Points
-                    <div class="current">x/y</div>
-                    <div class="temporary">-</div>
-                    <div class="hit-dice"></div>
+                    <div class="current">{{ character?.hit_points?.current }} / {{ character?.hit_points?.max }}</div>
                 </div>
 
                 <div class="attacks">
@@ -111,23 +112,12 @@
 
             <div class="col cols-3">
                 <div class="traits">
-                    <div class="trait">
-                        <div class="trait-name">Personality</div>
-                    </div>
-                    <div class="trait">
-                        <div class="trait-name">Ideals</div>
-                    </div>
-                    <div class="trait">
-                        <div class="trait-name">Bonds</div>
-                    </div>
-                    <div class="trait">
-                        <div class="trait-name">Flaws</div>
-                    </div>
-                    <!-- other trait here if set -->
-                </div>
-
-                <div class="features">
-                    Features
+                    @for (trait of character?.charBackground?.characteristics; track trait.id) {
+                        <div class="trait">
+                            <div class="trait-name">{{ trait.characteristic_type }}</div>
+                            <div class="trait-details">{{ trait.details }}</div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

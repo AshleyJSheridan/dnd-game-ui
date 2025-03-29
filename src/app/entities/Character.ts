@@ -5,6 +5,14 @@ export class Character {
     name: string = '';
     guid: string = '';
     level: number = 1;
+    speed: number = 25;
+    hit_points: {
+        max: number;
+        current: number;
+    } = {
+        max: 0,
+        current: 0,
+    }
     proficiency_bonus: number = 2;
     charClass: string = '';
     saving_throws: Array<{
