@@ -115,10 +115,12 @@
         }
     }
 
-    .saving-throws {
+    .saving-throws,
+    .skills {
         background-color: colours.$white;
         border: 3px double colours.$black;
         box-sizing: border-box;
+        margin-bottom: .5rem;
         padding: .5rem;
 
         .simple-score {
@@ -133,9 +135,13 @@
 
             .simple-score-value {
                 align-items: center;
-
                 font-weight: bold;
-                width: 2rem;
+                width: 1.25rem;
+            }
+
+            .simple-score-ability {
+                align-items: center;
+                width: 2.5rem;
             }
 
             .simple-score-name {

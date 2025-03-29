@@ -43,118 +43,33 @@
                                     <div class="simple-score-name">{{ getAbilityDetails(ability).name }}</div>
                                 </div>
                             }
-
-                            <!--<div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Strength</div>
-                            </div>
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Dexterity</div>
-                            </div>
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Constitution</div>
-                            </div>
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Intelligence</div>
-                            </div>
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Wisdom</div>
-                            </div>
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Charisma</div>
-                            </div>-->
                         </div>
 
                         <div class="skills">
                             Skills
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Acrobatics</div>
-                            </div>
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Animal Handing</div>
-                            </div>
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Arcana</div>
-                            </div>
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Athletics</div>
-                            </div>
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Deception</div>
-                            </div>
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">History</div>
-                            </div>
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Insight</div>
-                            </div>
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Intimidation</div>
-                            </div>
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Investigation</div>
-                            </div>
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Medicine</div>
-                            </div>
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Nature</div>
-                            </div>
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Perception</div>
-                            </div>
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Persuasion</div>
-                            </div>
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Religion</div>
-                            </div>
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Sleight of Hand</div>
-                            </div>
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Stealth</div>
-                            </div>
-                            <div class="simple-score">
-                                <div class="simple-score-value"></div>
-                                <div class="simple-score-name">Survival</div>
-                            </div>
+
+                            @for (skill of skillNames; track skill) {
+                                <div class="simple-score" [class.proficient]="hasSkillProficiency(skill.name)">
+                                    <div class="simple-score-value">{{ getSkillProficiencyBonus(skill) }}</div>
+                                    <div class="simple-score-ability">({{ skill.ability }})</div>
+                                    <div class="simple-score-name">{{ skill.name }}</div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
 
                 <div class="senses">
-                    <div class="simple-score">
-                        <div class="simple-score-value"></div>
+                    <div class="simple-score-standalone">
+                        <div class="simple-score-value">{{ 10 + getSkillProficiencyBonus({name: "perception", ability: "wis"}) }}</div>
                         <div class="simple-score-name">Passive Perception</div>
                     </div>
-                    <div class="simple-score">
-                        <div class="simple-score-value"></div>
+                    <div class="simple-score-standalone">
+                        <div class="simple-score-value">{{ 10 + getSkillProficiencyBonus({name: "investigation", ability: "int"}) }}</div>
                         <div class="simple-score-name">Passive Investigation</div>
                     </div>
-                    <div class="simple-score">
-                        <div class="simple-score-value"></div>
+                    <div class="simple-score-standalone">
+                        <div class="simple-score-value">{{ 10 + getSkillProficiencyBonus({name: "insight", ability: "wis"}) }}</div>
                         <div class="simple-score-name">Passive Insight</div>
                     </div>
                 </div>

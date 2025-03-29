@@ -3,6 +3,7 @@ import {CharacterService} from '../../../services/character.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Character} from '../../../entities/Character';
 import {AbilityScoreComponent} from './ability-score/ability-score.component';
+import {Skill} from '../../../entities/Skill';
 
 @Component({
     selector: 'app-view-character',
@@ -15,6 +16,14 @@ export class ViewCharacterComponent {
     private readonly route = inject(ActivatedRoute);
     character: Character | undefined;
     readonly abilityNames: Array<string> = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
+    readonly skillNames: Array<{name: string, ability: string}> = [
+        {name: "Acrobatics", ability: "dex"}, {name: "Animal Handing", ability: "wis"}, {name: "Arcana", ability: "int"},
+        {name: "Athletics", ability: "str"}, {name: "Deception", ability: "cha"}, {name: "History", ability: "int"},
+        {name: "Insight", ability: "wis"}, {name: "Intimidation", ability: "cha"}, {name: "Investigation", ability: "int"},
+        {name: "Medicine", ability: "wis"}, {name: "Nature", ability: "int"}, {name: "Perception", ability: "wis"},
+        {name: "Persuasion", ability: "cha"}, {name: "Religion", ability: "int"}, {name: "Sleight of Hand", ability: "dex"},
+        {name: "Stealth", ability: "dex"}, {name: "Survival", ability: "wis"}
+    ];
 
     constructor(private characterService: CharacterService, private router: Router) {}
 
@@ -59,5 +68,24 @@ export class ViewCharacterComponent {
             return abilityDetails.modifier + (this.character?.proficiency_bonus ?? 0);
 
         return abilityDetails.modifier;
+    }
+
+    hasSkillProficiency(skillName: string): boolean
+    {
+        const matchedSkill = this.character?.skills.known.filter(skill => {
+            return skill.name === skillName;
+        });
+
+        return !!(matchedSkill && matchedSkill.length > 0);
+    }
+
+    getSkillProficiencyBonus(skill: {name: string, ability: string}): number {
+        let proficiencyBonus = 0;
+
+        if (this.hasSkillProficiency(skill.name)) {
+            proficiencyBonus = this.character?.proficiency_bonus ?? 0;
+        }
+
+        return this.getAbilitySavingThrow(skill.ability) + proficiencyBonus;
     }
 }
