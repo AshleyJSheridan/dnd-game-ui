@@ -17,6 +17,34 @@
     }
 }
 
+.header-small {
+    background-color: colours.$white;
+    color: colours.$black;
+    margin: 0;
+    padding: .5rem 0 0 0;
+
+    svg {
+        height: 3rem;
+        width: auto;
+    }
+
+    nav {
+        background-color: colours.$dark-grey;
+        color: colours.$white;
+
+        a {
+            color: colours.$white;
+            display: inline-block;
+            margin: .25rem .5rem;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
 nav.characters-nav {
     display: flex;
     justify-content: space-between;

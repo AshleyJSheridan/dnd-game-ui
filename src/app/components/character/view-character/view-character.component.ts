@@ -1,14 +1,17 @@
 import {Component, inject} from '@angular/core';
 import {CharacterService} from '../../../services/character.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {Character} from '../../../entities/Character';
 import {AbilityScoreComponent} from './ability-score/ability-score.component';
 import {Skill} from '../../../entities/Skill';
+import {LogoFullComponent} from '../../logo-full/logo-full.component';
 
 @Component({
     selector: 'app-view-character',
     imports: [
-        AbilityScoreComponent
+        AbilityScoreComponent,
+        LogoFullComponent,
+        RouterLink
     ],
     templateUrl: './view-character.component.html'
 })
