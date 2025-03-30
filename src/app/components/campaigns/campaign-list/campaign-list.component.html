@@ -1,0 +1,53 @@
+<app-header></app-header>
+
+<div class="campaign-content-container">
+    <main>
+        <h2>Campaigns</h2>
+
+        <div class="campaign-list-panel">
+            <ul>
+                @for (campaign of campaigns; track campaign.guid) {
+                    <li class="campaign">
+                        <details>
+                            <summary>
+                                <app-campaign-state-icon [campaignState]="campaign.state"/>
+                                {{ campaign.name }}
+                            </summary>
+                            <div class="campaign-details">
+                                <div class="date">{{ campaign.created_at | date: 'yyyy/MM/dd' }}</div>
+                                <div class="campaign-description">{{ campaign.description }}</div>
+                                <div class="actions">
+                                    @if (campaign.state === 'active') {
+                                        <button type="button" (click)="setCampaignState(campaign, 'paused')">
+                                            <app-campaign-state-icon [campaignState]="'paused'"/>
+                                            <span class="accessible-hidden">Pause</span>
+                                        </button>
+                                    }
+                                    @if (campaign.state === 'paused') {
+                                        <button type="button" (click)="setCampaignState(campaign, 'active')">
+                                            <app-campaign-state-icon [campaignState]="'active'"/>
+                                            <span class="accessible-hidden">Unpause</span>
+                                        </button>
+                                    }
+
+                                    @if (campaign.state === 'ended') {
+                                        <button type="button" (click)="setCampaignState(campaign, 'paused')">
+                                            <app-campaign-state-icon [campaignState]="'paused'"/>
+                                            <span class="accessible-hidden">Reactivate Paused</span>
+                                        </button>
+                                    } @else {
+                                        <button type="button" (click)="setCampaignState(campaign, 'ended')">
+                                            <app-campaign-state-icon [campaignState]="'ended'"/>
+                                            <span class="accessible-hidden">End Campaign</span>
+                                        </button>
+                                    }
+                                    <a [routerLink]="['/campaigns/', campaign.guid]">View</a>
+                                </div>
+                            </div>
+                        </details>
+                    </li>
+                }
+            </ul>
+        </div>
+    </main>
+</div>

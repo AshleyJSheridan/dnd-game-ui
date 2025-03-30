@@ -1,0 +1,55 @@
+<app-header></app-header>
+
+<div class="campaign-content-container">
+    <main>
+        <h2>Campaign - Manage</h2>
+
+        @if (campaign) {
+            <div class="manage-campaign">
+                <h3>{{ campaign.name }}</h3>
+
+                <p>{{ campaign.description }}</p>
+
+                <div class="maps">
+                    <h4>Campaign Maps</h4>
+                    <button type="button" class="fantasy-btn" (click)="showAddMapForm = !showAddMapForm">New Map</button>
+
+                    @if (showAddMapForm) {
+                        <form name="addMapForm" (submit)="addMapHandler()">
+                            <label>Map Name:
+                                <input type="text" name="name" required #name>
+                            </label>
+                            <label>Description:
+                                <input type="text" name="description" required #description>
+                            </label>
+
+                            <label>Image:
+                                <input type="file" name="image" #image (change)="onFileSelected($event)" accept=".jpg,.jpeg,.png"/>
+                                @if (fileError) {
+                                    <div class="error">{{ fileError }}</div>
+                                }
+                                <div class="filename">{{ fileName || "No file uploaded yet." }}</div>
+                                <button
+                                    type="button"
+                                    class="file-upload fantasy-btn"
+                                    (click)="image.click()"
+                                >Upload Image</button>
+                            </label>
+
+                            <button type="submit" class="fantasy-btn fantasy-blue">Add Map</button>
+
+                        </form>
+                    }
+
+                    <ul>
+                        @for (map of campaign.maps; track map.guid) {
+                            <li class="map">
+                                {{ map.name }}
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+    </main>
+</div>

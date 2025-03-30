@@ -14,6 +14,8 @@ import { LoginComponent } from './components/login/login/login.component';
 import {
     EditCharacterSkillsComponent
 } from './components/character/edit-character-skills/edit-character-skills.component';
+import {CampaignListComponent} from './components/campaigns/campaign-list/campaign-list.component';
+import {CampaignComponent} from './components/campaigns/campaign/campaign.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -34,7 +36,9 @@ export const routes: Routes = [
             { path: 'languages', component: EditCharacterLanguagesComponent },
             { path: 'spells', component: EditCharacterSpellsComponent }
         ]
-    }
+    },
+    { path: 'campaigns', component: CampaignListComponent },
+    { path: 'campaigns/:guid', component: CampaignComponent },
 ];
 
 export const appConfig: ApplicationConfig = {

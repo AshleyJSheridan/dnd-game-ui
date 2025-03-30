@@ -1,0 +1,94 @@
+@use "../colours";
+
+.campaign-content-container {
+    padding: 0 1rem;
+
+    .campaign-list-panel ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        max-width: 50rem;
+
+        .campaign {
+            border: 1px solid colours.$black;
+            border-radius: .5rem;
+            box-shadow: 2px 2px 7px colours.$medium-grey;
+            display: block;
+            margin-bottom: 1rem;
+
+            details {
+                padding: .5rem;
+
+                summary:after {
+                    content: "+";
+                    font-size: 1.5rem;
+                    font-weight: bold;
+                    position: absolute;
+                    right: .25rem;
+                    top: -.25rem;
+                }
+
+                &[open] summary:after {
+                    content: "-";
+                }
+            }
+
+            summary {
+                align-items: center;
+                cursor: pointer;
+                display: flex;
+                gap: 1rem;
+                position: relative;
+            }
+
+            .campaign-details {
+                border-top: 1px solid colours.$grey;
+                margin-top: .5rem;
+                padding-top: .5rem;
+            }
+
+            .campaign-description {
+                font-style: italic;
+                margin: .5rem 0;
+            }
+
+            button {
+                margin-right: .5rem;
+            }
+        }
+    }
+
+    .manage-campaign {
+        border: 1px solid colours.$dark-grey;
+        border-radius: 1rem;
+        box-shadow: 2px 2px 7px colours.$medium-grey;
+        padding: 1rem;
+
+        .maps {
+            background-color: colours.$light-grey;
+            border-radius: .5rem;
+            padding: .5rem;
+
+            h4 {
+                margin: 0 0 1rem;
+            }
+
+            form {
+                margin-top: 1rem;
+            }
+
+            label {
+                display: block;
+                margin-bottom: .5rem;
+            }
+
+            input[type=file] {
+                display: none;
+            }
+
+            .filename {
+                margin: .25rem 0;
+            }
+        }
+    }
+}
