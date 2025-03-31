@@ -7,6 +7,7 @@ import { Component, EventEmitter, input, InputSignal, Output } from '@angular/co
 })
 export class MapActionIconComponent {
     readonly mapAction: InputSignal<string> = input<string>('');
+    readonly currentMapMode: InputSignal<string> = input<string>('');
     @Output() mapMode = new EventEmitter();
 
     setMapMode(mode: string): void {

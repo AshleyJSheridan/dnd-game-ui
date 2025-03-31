@@ -1,4 +1,4 @@
-<button type="button" (click)="setMapMode(mapAction())">
+<button type="button" (click)="setMapMode(mapAction())" [class.active]="mapAction() === currentMapMode()">
     <div class="map-action-name">{{ mapAction() }}</div>
     @switch (mapAction()) {
         @case ('Pointer') {

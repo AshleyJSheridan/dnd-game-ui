@@ -5,12 +5,12 @@
 }
 <div class="campaign-map-container">
     <nav class="map-actions">
-        <app-map-action-icon [mapAction]="'Pointer'" (mapMode)="setMapMode($event)"/>
-        <app-map-action-icon [mapAction]="'Draw'" (mapMode)="setMapMode($event)"/>
-        <app-map-action-icon [mapAction]="'Ruler'" (mapMode)="setMapMode($event)"/>
-        <app-map-action-icon [mapAction]="'Creature'" (mapMode)="setMapMode($event)"/>
-        <app-map-action-icon [mapAction]="'Object'" (mapMode)="setMapMode($event)"/>
-        <app-map-action-icon [mapAction]="'Grid'" (mapMode)="setMapMode($event)"/>
+        <app-map-action-icon [mapAction]="'Pointer'" (mapMode)="setMapMode($event)" [currentMapMode]="mapMode"/>
+        <app-map-action-icon [mapAction]="'Draw'" (mapMode)="setMapMode($event)" [currentMapMode]="mapMode"/>
+        <app-map-action-icon [mapAction]="'Ruler'" (mapMode)="setMapMode($event)" [currentMapMode]="mapMode"/>
+        <app-map-action-icon [mapAction]="'Creature'" (mapMode)="setMapMode($event)" [currentMapMode]="mapMode"/>
+        <app-map-action-icon [mapAction]="'Object'" (mapMode)="setMapMode($event)" [currentMapMode]="mapMode"/>
+        <app-map-action-icon [mapAction]="'Grid'" (mapMode)="setMapMode($event)" [currentMapMode]="mapMode"/>
     </nav>
     <div class="map" [style]="'width: ' + campaignMap?.width + '; height: ' + campaignMap?.height + ';'">
         <img
@@ -76,11 +76,11 @@
                         </label>
                         <fieldset>
                             <legend>Grid Size</legend>
-                            <button type="button" (click)="changeGridSize(-50)">
+                            <button type="button" (click)="changeGridSize(-50)" class="large">
                                 <span class="accessible-hidden">Reduce grid size</span>
                                 <span aria-hidden="true">-</span>
                             </button>
-                            <button type="button" (click)="changeGridSize(50)">
+                            <button type="button" (click)="changeGridSize(50)" class="large">
                                 <span class="accessible-hidden">Increase grid size</span>
                                 <span aria-hidden="true">+</span>
                             </button>
