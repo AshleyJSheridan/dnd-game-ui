@@ -1,17 +1,15 @@
-import {Component, inject, signal, WritableSignal} from '@angular/core';
-import {HeaderComponent} from '../../header/header.component';
-import {HeaderSlimComponent} from '../../header/header-slim/header-slim.component';
-import {CampaignService} from '../../../services/campaign-service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Campaign} from '../../../entities/Campaign';
-import {CampaignMap} from '../../../entities/CampaignMap';
-import {MapActionIconComponent} from '../../icons/map-action-icon/map-action-icon.component';
-import {FormsModule} from '@angular/forms';
+import { Component, inject, signal, WritableSignal } from '@angular/core';
+import { HeaderComponent } from '../../header/header.component';
+import { HeaderSlimComponent } from '../../header/header-slim/header-slim.component';
+import { CampaignService } from '../../../services/campaign-service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CampaignMap } from '../../../entities/CampaignMap';
+import { MapActionIconComponent } from '../../icons/map-action-icon/map-action-icon.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-maps-view',
     imports: [
-        HeaderComponent,
         HeaderSlimComponent,
         MapActionIconComponent,
         FormsModule
@@ -20,12 +18,12 @@ import {FormsModule} from '@angular/forms';
 })
 export class MapsViewComponent {
     private readonly route = inject(ActivatedRoute);
-    campaignMap: CampaignMap | undefined = undefined;
+    campaignMap: CampaignMap = new CampaignMap();
     mapMode: string = 'Pointer';
-    gridSize: number = 100;
-    showGrid: boolean = false;
+    // this is needed, because a colour input apparently cannot be bound in the same way a checkbox can in angular
     gridColour: WritableSignal<string> = signal('#ffffff');
     showSettings: boolean = false;
+    error: string = '';
 
     constructor(private campaignService: CampaignService, private router: Router) {}
 
@@ -58,23 +56,40 @@ export class MapsViewComponent {
     }
 
     getViewBoxWidth(): number {
-        return Math.ceil((this.campaignMap?.width ?? 1) / this.gridSize) * this.gridSize;
+        return Math.ceil((this.campaignMap?.width ?? 1) / this.campaignMap.grid_size) * this.campaignMap.grid_size;
     }
 
     getViewBoxHeight(): number {
-        return Math.ceil((this.campaignMap?.height ?? 1) / this.gridSize) * this.gridSize;
+        return Math.ceil((this.campaignMap?.height ?? 1) / this.campaignMap.grid_size) * this.campaignMap.grid_size;
     }
 
     changeGridSize(size: number): void {
-        if (this.gridSize + size === 0)
+        if (this.campaignMap.grid_size + size === 0 || !this.campaignMap)
             return;
 
-        // TODO make API call to set grid size for this map
-        this.gridSize += size;
+        this.updateMap({grid_size: this.campaignMap.grid_size + size});
+
+        this.campaignMap.grid_size += size;
     }
 
     saveGridColour(): void {
-        // TODO make API call to set grid size for this map
+        this.updateMap({grid_colour: this.gridColour()});
+    }
+
+    toggleGrid(): void {
+        this.updateMap({show_grid: this.campaignMap.show_grid});
+    }
+
+    private updateMap(data: object): void {
+        console.log(data);
+        this.campaignService.updateMap(this.campaignMap?.guid, data).subscribe({
+            next: (map) => {
+                this.campaignMap = map;
+            },
+            error: (error) => {
+                this.error = 'There was an error updating the map';
+            }
+        });
     }
 
     hideSettings(): void {
