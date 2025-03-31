@@ -21,21 +21,28 @@
     background-color: colours.$white;
     color: colours.$black;
     margin: 0;
-    padding: .5rem 0 0 0;
+    padding: 0;
 
-    svg {
-        height: 3rem;
-        width: auto;
+    h1 {
+        margin: .5rem 0 0 0;
+
+        svg {
+            height: 3rem;
+            width: auto;
+        }
     }
 
-    nav {
+    nav.characters-nav {
         background-color: colours.$dark-grey;
         color: colours.$white;
+
+        ul li {
+            padding: 0;
+        }
 
         a {
             color: colours.$white;
             display: inline-block;
-            margin: .25rem .5rem;
             text-decoration: none;
 
             &:hover {

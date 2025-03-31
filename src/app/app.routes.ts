@@ -1,4 +1,4 @@
-import { provideRouter, Routes} from '@angular/router';
+import { provideRouter, Routes } from '@angular/router';
 import { CreateComponent } from './components/character/create/create.component';
 import { CharactersListComponent } from './components/character/characters-list/characters-list.component';
 import { ViewCharacterComponent } from './components/character/view-character/view-character.component';
@@ -11,11 +11,10 @@ import { EditCharacterAbilitiesComponent } from './components/character/edit-cha
 import { EditCharacterLanguagesComponent } from './components/character/edit-character-languages/edit-character-languages.component';
 import { EditCharacterSpellsComponent } from './components/character/edit-character-spells/edit-character-spells.component';
 import { LoginComponent } from './components/login/login/login.component';
-import {
-    EditCharacterSkillsComponent
-} from './components/character/edit-character-skills/edit-character-skills.component';
-import {CampaignListComponent} from './components/campaigns/campaign-list/campaign-list.component';
-import {CampaignComponent} from './components/campaigns/campaign/campaign.component';
+import { EditCharacterSkillsComponent } from './components/character/edit-character-skills/edit-character-skills.component';
+import { CampaignListComponent } from './components/campaigns/campaign-list/campaign-list.component';
+import { CampaignComponent } from './components/campaigns/campaign/campaign.component';
+import { MapsViewComponent } from './components/campaigns/maps-view/maps-view.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -39,6 +38,7 @@ export const routes: Routes = [
     },
     { path: 'campaigns', component: CampaignListComponent },
     { path: 'campaigns/:guid', component: CampaignComponent },
+    { path: 'campaigns/:guid/maps/:mapGuid', component: MapsViewComponent },
 ];
 
 export const appConfig: ApplicationConfig = {

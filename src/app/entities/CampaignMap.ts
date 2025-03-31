@@ -4,4 +4,6 @@ export class CampaignMap {
     description: string = '';
     image: string = '';
     created_at: Date = new Date();
+    width: number = 0;
+    height: number = 0;
 }

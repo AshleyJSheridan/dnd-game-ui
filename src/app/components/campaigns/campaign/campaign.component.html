@@ -41,10 +41,10 @@
                         </form>
                     }
 
-                    <ul>
+                    <ul class="map-preview-list">
                         @for (map of campaign.maps; track map.guid) {
                             <li class="map">
-                                {{ map.name }}
+                                <app-map-preview [campaignMap]="map" [campaignGuid]="campaign.guid"/>
                             </li>
                         }
                     </ul>

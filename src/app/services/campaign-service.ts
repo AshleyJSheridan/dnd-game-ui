@@ -7,7 +7,7 @@ import { CampaignMap } from '../entities/CampaignMap';
 
 @Injectable({providedIn: 'root'})
 export class CampaignService {
-    private apiUrl = 'http://127.0.0.1:8000/api';
+    readonly apiUrl = 'http://127.0.0.1:8000/api';
     private headers: HttpHeaders = new HttpHeaders();
     private campaignGuid: string = '';
 
@@ -38,5 +38,9 @@ export class CampaignService {
         formData.append('image', image);
 
         return this.http.post<CampaignMap>(`${this.apiUrl}/campaigns/${this.campaignGuid}/maps`, formData, {headers: this.headers});
+    }
+
+    public getMap(guid: string): Observable<CampaignMap> {
+        return this.http.get<CampaignMap>(`${this.apiUrl}/campaigns/maps/${guid}`, {headers: this.headers});
     }
 }

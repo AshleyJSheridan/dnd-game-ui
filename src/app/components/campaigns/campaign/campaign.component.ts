@@ -3,11 +3,13 @@ import { HeaderComponent } from '../../header/header.component';
 import { Campaign } from '../../../entities/Campaign';
 import { CampaignService } from '../../../services/campaign-service';
 import { ActivatedRoute, Router } from '@angular/router';
+import {MapPreviewComponent} from '../map-preview/map-preview.component';
 
 @Component({
     selector: 'app-campaign',
     imports: [
-        HeaderComponent
+        HeaderComponent,
+        MapPreviewComponent
     ],
     templateUrl: './campaign.component.html'
 })

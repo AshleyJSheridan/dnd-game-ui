@@ -1,0 +1,7 @@
+<div class="campaign-map-preview">
+    <a routerLink="/campaigns/{{ campaignGuid() }}/maps/{{ campaignMap()?.guid }}" target="_blank">
+        <div class="map-name">{{ campaignMap()?.name }}</div>
+        <img src="{{ getThumbUrl() }}" alt="" />
+        <p>{{ campaignMap()?.description }}</p>
+    </a>
+</div>

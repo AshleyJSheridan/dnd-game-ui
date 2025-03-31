@@ -75,19 +75,64 @@
 
             form {
                 margin-top: 1rem;
+
+                label {
+                    display: block;
+                    margin-bottom: .5rem;
+                }
+
+                input[type=file] {
+                    display: none;
+                }
+
+                .filename {
+                    margin: .25rem 0;
+                }
             }
 
-            label {
-                display: block;
-                margin-bottom: .5rem;
-            }
+            .map-preview-list {
+                margin: 1rem 0 0 0;
+                padding: 0;
+                display: flex;
+                gap: 1rem;
 
-            input[type=file] {
-                display: none;
-            }
+                li {
+                    list-style: none;
+                    width: 200px;
+                }
 
-            .filename {
-                margin: .25rem 0;
+                .map-name {
+                    font-weight: bold;
+                    height: 2.5rem;
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+.campaign-map-container {
+    display: flex;
+    gap: 1rem;
+
+    .map-actions {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        width: 4rem;
+
+        button {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: .5rem;
+            width: 100%;
+
+            svg {
+                height: 2rem;
+                margin-top: .25rem;
+                width: 2rem;
             }
         }
     }
