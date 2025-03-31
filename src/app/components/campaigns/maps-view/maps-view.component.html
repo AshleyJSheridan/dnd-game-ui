@@ -9,12 +9,81 @@
         <app-map-action-icon [mapAction]="'Object'" (mapMode)="setMapMode($event)"/>
         <app-map-action-icon [mapAction]="'Toggle Grid'" (mapMode)="setMapMode($event)"/>
     </nav>
-    <svg
-        [attr.width]="campaignMap?.width"
-        [attr.height]="campaignMap?.height"
-        [attr.viewBox]="'0 0 ' + campaignMap?.width + ' ' + campaignMap?.height"
-        xmlns="http://www.w3.org/2000/svg"
-    >
-        <image [attr.href]="getImageUrl()" [attr.width]="campaignMap?.width" [attr.height]="campaignMap?.height" />
-    </svg>
+    <div class="map" [style]="'width: ' + campaignMap?.width + '; height: ' + campaignMap?.height + ';'">
+        <img
+            class="map-image"
+            src="{{ getImageUrl() }}"
+            [attr.width]="campaignMap?.width"
+            [attr.height]="campaignMap?.height"
+        />
+        <svg
+            class="map-interactive"
+            [attr.width]="campaignMap?.width"
+            [attr.height]="campaignMap?.height"
+            [attr.viewBox]="'0 0 ' + getViewBoxWidth() + ' ' + getViewBoxHeight()"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <defs>
+                <pattern id="grid" [attr.width]="gridSize" [attr.height]="gridSize" patternUnits="userSpaceOnUse">
+                    <path
+                        [attr.d]="'M ' + gridSize + ' 0 L 0 0 0 ' + gridSize + ''"
+                        fill="none"
+                        [attr.stroke]="gridColour()"
+                        stroke-width="1"
+                    />
+                </pattern>
+            </defs>
+            <g id="scale">
+                <rect width="100%" height="100%" fill="url(#grid)" />
+            </g>
+        </svg>
+    </div>
+
+    @if (showSettings) {
+        <div class="map-action-settings">
+            <form>
+                <button type="button" class="close-map-settings" (click)="hideSettings()">
+                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 20.4 20.4">
+                        <path fill="currentColor" d="M1.4,0L0,1.4l8.8,8.8L0,19l1.4,1.4l8.8-8.8l8.8,8.8l1.4-1.4l-8.8-8.8l8.8-8.8L19,0l-8.8,8.8L1.4,0z"/>
+                    </svg>
+                </button>
+                @switch (mapMode)
+                {
+                    @case ("Pointer") {
+
+                    }
+                    @case ("Draw") {
+
+                    }
+                    @case ("Ruler") {
+
+                    }
+                    @case ("Creature") {
+
+                    }
+                    @case ("Object") {
+
+                    }
+                    @case ('Toggle Grid') {
+                        <fieldset>
+                            <legend>Grid Size</legend>
+                            <button type="button" (click)="changeGridSize(-50)">
+                                <span class="accessible-hidden">Reduce grid size</span>
+                                <span aria-hidden="true">-</span>
+                            </button>
+                            <button type="button" (click)="changeGridSize(50)">
+                                <span class="accessible-hidden">Increase grid size</span>
+                                <span aria-hidden="true">+</span>
+                            </button>
+                        </fieldset>
+                        <fieldset>
+                            <legend>Grid Colour</legend>
+                            <input type="color" name="gridColour" [(ngModel)]="gridColour" (change)="saveGridColour()"/>
+                        </fieldset>
+                    }
+                }
+            </form>
+        </div>
+    }
 </div>
+
