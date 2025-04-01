@@ -73,3 +73,12 @@
         margin-top: 1rem;
     }
 }
+
+.toast-content {
+    background-color: colours.$gold;
+    border-radius: .5rem;
+    color: colours.$black;
+    padding: .25rem;
+    position: absolute;
+    white-space: pre;
+}

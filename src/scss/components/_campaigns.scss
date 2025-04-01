@@ -64,6 +64,19 @@
         box-shadow: 2px 2px 7px colours.$medium-grey;
         padding: 1rem;
 
+        h3 {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .copy-campaign-link {
+            position: relative;
+
+            .toast-content {
+                right: 0;
+            }
+        }
+
         .maps {
             background-color: colours.$light-grey;
             border-radius: .5rem;

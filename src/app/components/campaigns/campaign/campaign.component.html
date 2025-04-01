@@ -6,7 +6,13 @@
 
         @if (campaign) {
             <div class="manage-campaign">
-                <h3>{{ campaign.name }}</h3>
+                <h3>
+                    <span>{{ campaign.name }}</span>
+                    <button class="copy-campaign-link" (click)="copyCampaignLink($event)">
+                        <app-copy-icon/>
+                        <app-toast #toastComponent>Campaign link copied.</app-toast>
+                    </button>
+                </h3>
 
                 <p>{{ campaign.description }}</p>
 

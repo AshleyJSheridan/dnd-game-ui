@@ -4,12 +4,18 @@ import { Campaign } from '../../../entities/Campaign';
 import { CampaignService } from '../../../services/campaign-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {MapPreviewComponent} from '../map-preview/map-preview.component';
+import {CopyIconComponent} from '../../icons/copy-icon/copy-icon.component';
+import {ClipboardService} from '../../../services/clipboard-service';
+import {ConfirmComponent} from '../../dialogs/confirm/confirm.component';
+import {ToastComponent} from '../../dialogs/toast/toast.component';
 
 @Component({
     selector: 'app-campaign',
     imports: [
         HeaderComponent,
-        MapPreviewComponent
+        MapPreviewComponent,
+        CopyIconComponent,
+        ToastComponent
     ],
     templateUrl: './campaign.component.html'
 })
@@ -23,8 +29,9 @@ export class CampaignComponent {
 
     @ViewChild('name') mapName: any;
     @ViewChild('description') mapDescription: any;
+    @ViewChild('toastComponent') toast: ToastComponent | undefined;
 
-    constructor(private campaignService: CampaignService, private router: Router) {}
+    constructor(private campaignService: CampaignService, private router: Router, private clipboardService: ClipboardService) {}
 
     ngOnInit(): void {
         const campaignGuid = this.route.snapshot.paramMap.get('guid') ?? '';
@@ -72,5 +79,10 @@ export class CampaignComponent {
         // @ts-ignore
         this.file = event.target?.files[0] as File;
         this.fileName = this.file.name;
+    }
+
+    copyCampaignLink(event: MouseEvent): void {
+        this.clipboardService.copyTextToClipboard(location.href, <HTMLElement>event.currentTarget);
+        this.toast?.showToast();
     }
 }
