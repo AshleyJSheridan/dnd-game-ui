@@ -16,45 +16,76 @@
 
                 <p>{{ campaign.description }}</p>
 
-                <div class="maps">
-                    <h4>Campaign Maps</h4>
-                    <button type="button" class="fantasy-btn" (click)="showAddMapForm = !showAddMapForm">New Map</button>
+                @if (campaign.owner) {
+                    <div class="maps">
+                        <h4>Campaign Maps</h4>
+                        <button type="button" class="fantasy-btn" (click)="showAddMapForm = !showAddMapForm">New Map</button>
 
-                    @if (showAddMapForm) {
-                        <form name="addMapForm" (submit)="addMapHandler()">
-                            <label>Map Name:
-                                <input type="text" name="name" required #name>
-                            </label>
-                            <label>Description:
-                                <input type="text" name="description" required #description>
-                            </label>
+                        @if (showAddMapForm) {
+                            <form name="addMapForm" (submit)="addMapHandler()">
+                                <label>Map Name:
+                                    <input type="text" name="name" required #name>
+                                </label>
+                                <label>Description:
+                                    <input type="text" name="description" required #description>
+                                </label>
 
-                            <label>Image:
-                                <input type="file" name="image" #image (change)="onFileSelected($event)" accept=".jpg,.jpeg,.png"/>
-                                @if (fileError) {
-                                    <div class="error">{{ fileError }}</div>
-                                }
-                                <div class="filename">{{ fileName || "No file uploaded yet." }}</div>
-                                <button
-                                    type="button"
-                                    class="file-upload fantasy-btn"
-                                    (click)="image.click()"
-                                >Upload Image</button>
-                            </label>
+                                <label>Image:
+                                    <input type="file" name="image" #image (change)="onFileSelected($event)" accept=".jpg,.jpeg,.png"/>
+                                    @if (fileError) {
+                                        <div class="error">{{ fileError }}</div>
+                                    }
+                                    <div class="filename">{{ fileName || "No file uploaded yet." }}</div>
+                                    <button
+                                        type="button"
+                                        class="file-upload fantasy-btn"
+                                        (click)="image.click()"
+                                    >Upload Image</button>
+                                </label>
 
-                            <button type="submit" class="fantasy-btn fantasy-blue">Add Map</button>
+                                <button type="submit" class="fantasy-btn fantasy-blue">Add Map</button>
 
-                        </form>
-                    }
-
-                    <ul class="map-preview-list">
-                        @for (map of campaign.maps; track map.guid) {
-                            <li class="map">
-                                <app-map-preview [campaignMap]="map" [campaignGuid]="campaign.guid"/>
-                            </li>
+                            </form>
                         }
-                    </ul>
-                </div>
+
+                        <ul class="map-preview-list">
+                            @for (map of campaign.maps; track map.guid) {
+                                <li class="map">
+                                    <app-map-preview [campaignMap]="map" [campaignGuid]="campaign.guid"/>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                } @else {
+                    <div class="char-list-panel">
+                        <h4>Add Character to Campaign</h4>
+
+                        <ul>
+                            @for (character of characters; track character.guid) {
+                                <li class="char-panel">
+                                    <span class="char-image">
+                                        <img src="images/silhouette.png" alt="" role="presentation"/>
+                                    </span>
+
+                                    <span class="char-details">
+                                        <div class="char-name">{{ character.name }}</div>
+                                        <div>Level {{ character.level }} {{ character.charRace }} {{ character.charClass }}</div>
+
+                                        <div class="char-actions">
+                                            <button
+                                                type="button"
+                                                class="fantasy-btn fantasy-blue"
+                                                (click)="addCharacterToCampaign(character)"
+                                            >
+                                                Add to campaign
+                                            </button>
+                                        </div>
+                                    </span>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
             </div>
         }
     </main>

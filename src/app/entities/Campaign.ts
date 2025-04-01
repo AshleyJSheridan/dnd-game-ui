@@ -7,4 +7,5 @@ export class Campaign {
     state: 'active' | 'ended' | 'paused' = 'paused';
     created_at: Date = new Date();
     maps: Array<CampaignMap> = [];
+    owner: boolean = false;
 }

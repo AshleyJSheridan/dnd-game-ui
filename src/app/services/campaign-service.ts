@@ -47,4 +47,12 @@ export class CampaignService {
     public updateMap(guid: string, data: object ): Observable<CampaignMap> {
         return this.http.patch<CampaignMap>(`${this.apiUrl}/campaigns/maps/${guid}`, data, {headers: this.headers});
     }
+
+    public addCharacterToCampaign(characterGuid: string): Observable<Campaign> {
+        return this.http.post<Campaign>(
+            `${this.apiUrl}/campaigns/${this.campaignGuid}/characters`,
+            {character_guid: characterGuid},
+            {headers: this.headers}
+        );
+    }
 }

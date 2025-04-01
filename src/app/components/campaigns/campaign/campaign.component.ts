@@ -1,13 +1,15 @@
-import {Component, inject, ViewChild} from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { HeaderComponent } from '../../header/header.component';
 import { Campaign } from '../../../entities/Campaign';
 import { CampaignService } from '../../../services/campaign-service';
 import { ActivatedRoute, Router } from '@angular/router';
-import {MapPreviewComponent} from '../map-preview/map-preview.component';
-import {CopyIconComponent} from '../../icons/copy-icon/copy-icon.component';
-import {ClipboardService} from '../../../services/clipboard-service';
-import {ConfirmComponent} from '../../dialogs/confirm/confirm.component';
-import {ToastComponent} from '../../dialogs/toast/toast.component';
+import { MapPreviewComponent } from '../map-preview/map-preview.component';
+import { CopyIconComponent } from '../../icons/copy-icon/copy-icon.component';
+import { ClipboardService } from '../../../services/clipboard-service';
+import { ToastComponent } from '../../dialogs/toast/toast.component';
+import { CharacterService } from '../../../services/character.service';
+import { Character } from '../../../entities/Character';
+import {DeleteIconComponent} from '../../icons/delete-icon/delete-icon.component';
 
 @Component({
     selector: 'app-campaign',
@@ -15,13 +17,15 @@ import {ToastComponent} from '../../dialogs/toast/toast.component';
         HeaderComponent,
         MapPreviewComponent,
         CopyIconComponent,
-        ToastComponent
+        ToastComponent,
+        DeleteIconComponent
     ],
     templateUrl: './campaign.component.html'
 })
 export class CampaignComponent {
     private readonly route = inject(ActivatedRoute);
     campaign: Campaign | undefined = undefined;
+    public characters: Array<Character> = [];
     showAddMapForm: boolean = false;
     fileName: string = '';
     file: File | undefined;
@@ -31,7 +35,10 @@ export class CampaignComponent {
     @ViewChild('description') mapDescription: any;
     @ViewChild('toastComponent') toast: ToastComponent | undefined;
 
-    constructor(private campaignService: CampaignService, private router: Router, private clipboardService: ClipboardService) {}
+    constructor(
+        private campaignService: CampaignService, private router: Router, private clipboardService: ClipboardService,
+        private characterService: CharacterService
+    ) {}
 
     ngOnInit(): void {
         const campaignGuid = this.route.snapshot.paramMap.get('guid') ?? '';
@@ -41,6 +48,19 @@ export class CampaignComponent {
             {
                 next: (campaign) => {
                     this.campaign = campaign;
+
+                    if (!this.campaign.owner) {
+                        this.characterService.getCharacters().subscribe(
+                            {
+                                next: (characters: Character[]) => {
+                                    this.characters = characters;
+                                },
+                                error: (error => {
+
+                                })
+                            }
+                        );
+                    }
                 },
                 error: (error => {
                     this.router.navigate(['/']);
@@ -84,5 +104,16 @@ export class CampaignComponent {
     copyCampaignLink(event: MouseEvent): void {
         this.clipboardService.copyTextToClipboard(location.href, <HTMLElement>event.currentTarget);
         this.toast?.showToast();
+    }
+
+    addCharacterToCampaign(character: Character): void {
+        this.campaignService.addCharacterToCampaign(character.guid).subscribe({
+            next: () => {
+                // TODO show character added to campaign
+            },
+            error: (error) => {
+
+            }
+        });
     }
 }
