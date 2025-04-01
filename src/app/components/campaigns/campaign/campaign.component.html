@@ -56,12 +56,11 @@
                             }
                         </ul>
                     </div>
-                } @else {
                     <div class="char-list-panel">
-                        <h4>Add Character to Campaign</h4>
+                        <h4>Campaign Characters</h4>
 
                         <ul>
-                            @for (character of characters; track character.guid) {
+                            @for (character of campaign.players; track character.guid) {
                                 <li class="char-panel">
                                     <span class="char-image">
                                         <img src="images/silhouette.png" alt="" role="presentation"/>
@@ -70,22 +69,41 @@
                                     <span class="char-details">
                                         <div class="char-name">{{ character.name }}</div>
                                         <div>Level {{ character.level }} {{ character.charRace }} {{ character.charClass }}</div>
-
-                                        <div class="char-actions">
-                                            <button
-                                                type="button"
-                                                class="fantasy-btn fantasy-blue"
-                                                (click)="addCharacterToCampaign(character)"
-                                            >
-                                                Add to campaign
-                                            </button>
-                                        </div>
                                     </span>
                                 </li>
                             }
                         </ul>
                     </div>
                 }
+
+                <div class="char-list-panel">
+                    <h4>Add Character to Campaign</h4>
+
+                    <ul>
+                        @for (character of characters; track character.guid) {
+                            <li class="char-panel">
+                                <span class="char-image">
+                                    <img src="images/silhouette.png" alt="" role="presentation"/>
+                                </span>
+
+                                <span class="char-details">
+                                    <div class="char-name">{{ character.name }}</div>
+                                    <div>Level {{ character.level }} {{ character.charRace }} {{ character.charClass }}</div>
+
+                                    <div class="char-actions">
+                                        <button
+                                            type="button"
+                                            class="fantasy-btn fantasy-blue"
+                                            (click)="addCharacterToCampaign(character)"
+                                        >
+                                            Add to campaign
+                                        </button>
+                                    </div>
+                                </span>
+                            </li>
+                        }
+                    </ul>
+                </div>
             </div>
         }
     </main>

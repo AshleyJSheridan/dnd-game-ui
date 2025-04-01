@@ -48,22 +48,20 @@ export class CampaignComponent {
             {
                 next: (campaign) => {
                     this.campaign = campaign;
-
-                    if (!this.campaign.owner) {
-                        this.characterService.getCharacters().subscribe(
-                            {
-                                next: (characters: Character[]) => {
-                                    this.characters = characters;
-                                },
-                                error: (error => {
-
-                                })
-                            }
-                        );
-                    }
                 },
                 error: (error => {
                     this.router.navigate(['/']);
+                })
+            }
+        );
+
+        this.characterService.getCharacters().subscribe(
+            {
+                next: (characters: Character[]) => {
+                    this.characters = characters;
+                },
+                error: (error => {
+
                 })
             }
         );
