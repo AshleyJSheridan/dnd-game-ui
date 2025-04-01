@@ -281,6 +281,7 @@ button .dice-d6-icon {
         //padding-inline: calc(125px * var(--s));
         padding: .5rem 1.75rem;
         position: relative;
+        text-decoration: none;
         text-shadow: var(--_text-state-shadow);
 
         &:hover {
