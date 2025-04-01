@@ -39,3 +39,22 @@ nav.char-create-nav ul {
         }
     }
 }
+
+.char-edit-portrait-panel {
+    form {
+        margin-top: 1rem;
+
+        label {
+            display: block;
+            margin-bottom: .5rem;
+        }
+
+        input[type=file] {
+            display: none;
+        }
+
+        .filename {
+            margin: .25rem 0;
+        }
+    }
+}

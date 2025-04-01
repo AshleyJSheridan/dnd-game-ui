@@ -15,6 +15,7 @@ import { EditCharacterSkillsComponent } from './components/character/edit-charac
 import { CampaignListComponent } from './components/campaigns/campaign-list/campaign-list.component';
 import { CampaignComponent } from './components/campaigns/campaign/campaign.component';
 import { MapsViewComponent } from './components/campaigns/maps-view/maps-view.component';
+import {EditPortraitComponent} from './components/character/edit-portrait/edit-portrait.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -33,7 +34,9 @@ export const routes: Routes = [
             { path: 'skills', component: EditCharacterSkillsComponent },
             { path: 'abilities', component: EditCharacterAbilitiesComponent },
             { path: 'languages', component: EditCharacterLanguagesComponent },
-            { path: 'spells', component: EditCharacterSpellsComponent }
+            { path: 'spells', component: EditCharacterSpellsComponent },
+
+            { path: 'portrait', component: EditPortraitComponent },
         ]
     },
     { path: 'campaigns', component: CampaignListComponent },

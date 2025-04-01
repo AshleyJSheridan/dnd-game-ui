@@ -1,0 +1,20 @@
+<h2>Character Creation - Portrait</h2>
+
+<div class="char-edit-portrait-panel">
+    <form name="portraitForm" (submit)="updatePortraitHandler()">
+        <label>Portrait Image:
+            <input type="file" name="image" #image (change)="onFileSelected($event)" accept=".jpg,.jpeg,.png"/>
+            @if (fileError) {
+                <div class="error">{{ fileError }}</div>
+            }
+            <div class="filename">{{ fileName || "No file uploaded yet." }}</div>
+            <button
+                type="button"
+                class="file-upload fantasy-btn"
+                (click)="image.click()"
+            >Upload Image</button>
+        </label>
+
+        <button type="submit" class="fantasy-btn fantasy-blue">Update Portrait</button>
+    </form>
+</div>
