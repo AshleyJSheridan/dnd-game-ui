@@ -40,7 +40,7 @@ export class CharacterService {
 
     public getNameSuggestions(suggestionType: string): Observable<INameSuggestionList> {
         return this.http.get<INameSuggestionList>(
-            `${this.apiUrl}/characters/name/${suggestionType}`,
+            `${this.apiUrl}/names/${suggestionType}`,
             {headers: this.headers}
         );
     }
