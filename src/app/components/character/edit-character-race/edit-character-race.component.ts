@@ -59,7 +59,7 @@ export class EditCharacterRaceComponent {
 
     handleSelectCharRace(charRace: CharacterRace): void {
         this.characterService.setCharacterRace(charRace.id).subscribe((character) => {
-            this.router.navigate([`/characters/${character.guid}/edit/abilities`]);
+            this.router.navigate([`/characters/${character.guid}/edit/skills`]);
         });
     }
 }
