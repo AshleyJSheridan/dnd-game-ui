@@ -22,4 +22,8 @@ export class AuthService {
     public logout() {
         return this.http.post(`${this.apiUrl}/user/logout`, {}, {headers: this.headers});
     }
+
+    public heartbeat() {
+        return this.http.get(`${this.apiUrl}/heartbeat`, {headers: this.headers});
+    }
 }
