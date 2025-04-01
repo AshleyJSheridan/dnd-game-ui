@@ -85,7 +85,8 @@ export class CharacterService {
     public setCharacterRace(charRaceId: number): Observable<ICharacter> {
         return this.http.patch<ICharacter>(
             `${this.apiUrl}/characters/${this.charGuid}`,
-            {updateType: 'race', charRaceId: charRaceId}
+            {updateType: 'race', charRaceId: charRaceId},
+            {headers: this.headers}
         );
     }
 
