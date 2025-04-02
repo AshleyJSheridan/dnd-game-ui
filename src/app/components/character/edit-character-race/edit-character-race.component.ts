@@ -15,7 +15,7 @@ export class EditCharacterRaceComponent {
     charRaces: Array<CharacterRace> = [];
     selectedCharRace: CharacterRace|null = null;
 
-    constructor(private characterService: CharacterService, private router: Router) {}
+    constructor(public characterService: CharacterService, private router: Router) {}
 
     ngOnInit(): void {
         this.characterService.getCharacterRaces().subscribe(
@@ -61,5 +61,17 @@ export class EditCharacterRaceComponent {
         this.characterService.setCharacterRace(charRace.id).subscribe((character) => {
             this.router.navigate([`/characters/${character.guid}/edit/skills`]);
         });
+    }
+
+    isRaceSelected(charRace: CharacterRace): boolean {
+        return this.characterService.character?.charRace === charRace.name;
+    }
+
+    isChildRaceSelected(charRace: CharacterRace): boolean {
+        const match = charRace.sub_races.filter(subRace => {
+            return subRace.name === this.characterService.character?.charRace;
+        });
+
+        return match !== undefined && match.length > 0;
     }
 }

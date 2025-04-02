@@ -19,6 +19,15 @@
         margin-bottom: 1rem;
         padding: .5rem;
 
+        &.selected {
+            background-color: colours.$gold;
+
+            .char-race-details {
+                background-color: colours.$white;
+                padding: 0 .5rem .5rem .5rem;
+            }
+        }
+
         &[open] summary:after {
             content: "-";
         }

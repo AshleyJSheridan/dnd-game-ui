@@ -4,7 +4,7 @@
     <ul>
         @for (charRace of charRaces; track charRace.id) {
             <li>
-                <details class="char-race">
+                <details class="char-race" [class.selected]="isRaceSelected(charRace)" [open]="isChildRaceSelected(charRace)">
                     <summary>
                         <img
                             class="char-race-portrait"
@@ -19,7 +19,7 @@
 
                         @if (hasSubRaces(charRace)) {
                             @for (subRace of charRace.sub_races; track subRace.id) {
-                                <details class="char-race">
+                                <details class="char-race" [class.selected]="isRaceSelected(subRace)">
                                     <summary>
                                         <img
                                             class="char-race-portrait"
