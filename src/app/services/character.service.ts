@@ -14,7 +14,7 @@ import { LocalStorageService } from './local-storage.service';
 
 @Injectable({providedIn: 'root'})
 export class CharacterService {
-    private apiUrl = 'http://127.0.0.1:8000/api';
+    public apiUrl = 'http://127.0.0.1:8000/api';
     private charGuid: string = '';
     private headers: HttpHeaders = new HttpHeaders();
 

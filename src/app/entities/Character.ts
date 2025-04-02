@@ -71,5 +71,6 @@ export class Character {
         learned_spells: [],
         other_known_spells: [],
     };
+    custom_portrait: string = '';
     created_at: Date = new Date();
 }

@@ -45,8 +45,6 @@ export class MapsViewComponent {
     }
 
     getImageUrl(): string {
-        console.log(`${this.campaignService.apiUrl}/campaigns/maps/${this.campaignMap?.guid}/image`)
-
         return `${this.campaignService.apiUrl}/campaigns/maps/${this.campaignMap?.guid}/image`;
     }
 
