@@ -136,6 +136,15 @@ export class CharacterService {
             {headers: this.headers}
         );
     }
+
+    public setCharacterPortrait(portrait: File): Observable<Character> {
+        const formData = new FormData();
+        formData.append('image', portrait);
+
+        return this.http.post<Character>(
+            `${this.apiUrl}/characters/${this.charGuid}/portrait`, formData, {headers: this.headers}
+        );
+    }
 }
 
 

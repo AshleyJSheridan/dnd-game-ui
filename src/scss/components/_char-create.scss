@@ -56,5 +56,15 @@ nav.char-create-nav ul {
         .filename {
             margin: .25rem 0;
         }
+
+        .preview {
+            height: 200px;
+            width: 200px;
+
+            img {
+                max-height: 100%;
+                max-width: 100%;
+            }
+        }
     }
 }

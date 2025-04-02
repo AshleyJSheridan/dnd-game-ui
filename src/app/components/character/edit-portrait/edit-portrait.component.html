@@ -7,6 +7,11 @@
             @if (fileError) {
                 <div class="error">{{ fileError }}</div>
             }
+            @if (file) {
+                <div class="preview">
+                    <img [src]="getPreview(file)" alt="" />
+                </div>
+            }
             <div class="filename">{{ fileName || "No file uploaded yet." }}</div>
             <button
                 type="button"
