@@ -73,35 +73,51 @@
             }
 
             &.spell-school-abjuration svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(0, 0, 255) 0 0 4px) drop-shadow(rgb(0, 0, 255) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$spell-school-abjuration 0 0 4px)
+                    drop-shadow(colours.$spell-school-abjuration 0 0 5px);
             }
 
             &.spell-school-conjuration svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(241, 129, 0) 0 0 4px) drop-shadow(rgb(241, 129, 0) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$spell-school-conjuration 0 0 4px)
+                    drop-shadow(colours.$spell-school-conjuration 0 0 5px);
             }
 
             &.spell-school-divination svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(121, 121, 179) 0 0 4px) drop-shadow(rgb(121, 121, 179) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$spell-school-divination 0 0 4px)
+                    drop-shadow(colours.$spell-school-divination 0 0 5px);
             }
 
             &.spell-school-enchantment svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(185, 70, 185) 0 0 4px) drop-shadow(rgb(185, 70, 185) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$spell-school-enchantment 0 0 4px)
+                    drop-shadow(colours.$spell-school-enchantment 0 0 5px);
             }
 
             &.spell-school-evocation svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(255, 0, 0) 0 0 4px) drop-shadow(rgb(255, 0, 0) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$spell-school-evocation 0 0 4px)
+                    drop-shadow(colours.$spell-school-evocation 0 0 5px);
             }
 
             &.spell-school-illusion svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(119, 0, 255) 0 0 4px) drop-shadow(rgb(119, 0, 255) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$spell-school-illusion 0 0 4px)
+                    drop-shadow(colours.$spell-school-illusion 0 0 5px);
             }
 
             &.spell-school-necromancy svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(0, 126, 38) 0 0 4px) drop-shadow(rgb(0, 126, 38) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$spell-school-necromancy 0 0 4px)
+                    drop-shadow(colours.$spell-school-necromancy 0 0 5px);
             }
 
             &.spell-school-transmutation svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(221, 206, 0) 0 0 4px) drop-shadow(rgb(221, 206, 0) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$spell-school-transmutation 0 0 4px)
+                    drop-shadow(colours.$spell-school-transmutation 0 0 5px);
             }
         }
 

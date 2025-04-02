@@ -42,75 +42,111 @@
             padding: .5rem;
 
             &.skill-acrobatics svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(255, 0, 0) 0 0 4px) drop-shadow(rgb(255, 0, 0) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$char-skill-red 0 0 4px)
+                    drop-shadow(colours.$char-skill-red 0 0 5px);
             }
 
             &.skill-animal-handling svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(0, 126, 38) 0 0 4px) drop-shadow(rgb(0, 126, 38) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$char-skill-green 0 0 4px)
+                    drop-shadow(colours.$char-skill-green 0 0 5px);
             }
 
             &.skill-arcana svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(0, 0, 255) 0 0 4px) drop-shadow(rgb(0, 0, 255) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$char-skill-blue 0 0 4px)
+                    drop-shadow(colours.$char-skill-blue 0 0 5px);
             }
 
             &.skill-athletics svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(255, 0, 0) 0 0 4px) drop-shadow(rgb(255, 0, 0) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$char-skill-red 0 0 4px)
+                    drop-shadow(colours.$char-skill-red 0 0 5px);
             }
 
             &.skill-deception svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(221, 206, 0) 0 0 4px) drop-shadow(rgb(221, 206, 0) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$char-skill-yellow 0 0 4px)
+                    drop-shadow(colours.$char-skill-yellow 0 0 5px);
             }
 
             &.skill-history svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(0, 0, 255) 0 0 4px) drop-shadow(rgb(0, 0, 255) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$char-skill-blue 0 0 4px)
+                    drop-shadow(colours.$char-skill-blue 0 0 5px);
             }
 
             &.skill-insight svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(221, 206, 0) 0 0 4px) drop-shadow(rgb(221, 206, 0) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$char-skill-yellow 0 0 4px)
+                    drop-shadow(colours.$char-skill-yellow 0 0 5px);
             }
 
             &.skill-intimidation svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(255, 0, 0) 0 0 4px) drop-shadow(rgb(255, 0, 0) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$char-skill-red 0 0 4px)
+                    drop-shadow(colours.$char-skill-red 0 0 5px);
             }
 
             &.skill-investigation svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(119, 0, 255) 0 0 4px) drop-shadow(rgb(119, 0, 255) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$char-skill-purple 0 0 4px)
+                    drop-shadow(colours.$char-skill-purple 0 0 5px);
             }
 
             &.skill-medicine svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(0, 126, 38) 0 0 4px) drop-shadow(rgb(0, 126, 38) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$char-skill-green 0 0 4px)
+                    drop-shadow(colours.$char-skill-green 0 0 5px);
             }
 
             &.skill-nature svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(0, 126, 38) 0 0 4px) drop-shadow(rgb(0, 126, 38) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$char-skill-green 0 0 4px)
+                    drop-shadow(colours.$char-skill-green 0 0 5px);
             }
 
             &.skill-perception svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(0, 0, 255) 0 0 4px) drop-shadow(rgb(0, 0, 255) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$char-skill-blue 0 0 4px)
+                    drop-shadow(colours.$char-skill-blue 0 0 5px);
             }
 
             &.skill-performance svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(119, 0, 255) 0 0 4px) drop-shadow(rgb(119, 0, 255) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$char-skill-purple 0 0 4px)
+                    drop-shadow(colours.$char-skill-purple 0 0 5px);
             }
 
             &.skill-persuasion svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(0, 0, 255) 0 0 4px) drop-shadow(rgb(0, 0, 255) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$char-skill-blue 0 0 4px)
+                    drop-shadow(colours.$char-skill-blue 0 0 5px);
             }
 
             &.skill-religion svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(119, 0, 255) 0 0 4px) drop-shadow(rgb(119, 0, 255) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$char-skill-purple 0 0 4px)
+                    drop-shadow(colours.$char-skill-purple 0 0 5px);
             }
 
             &.skill-sleight-of-hand svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(241, 129, 0) 0 0 4px) drop-shadow(rgb(241, 129, 0) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$char-skill-orange 0 0 4px)
+                    drop-shadow(colours.$char-skill-orange 0 0 5px);
             }
 
             &.skill-stealth svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(241, 129, 0) 0 0 4px) drop-shadow(rgb(241, 129, 0) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$char-skill-orange 0 0 4px)
+                    drop-shadow(colours.$char-skill-orange 0 0 5px);
             }
 
             &.skill-survival svg {
-                filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(rgb(0, 126, 38) 0 0 4px) drop-shadow(rgb(0, 126, 38) 0 0 5px);
+                filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$char-skill-green 0 0 4px)
+                    drop-shadow(colours.$char-skill-green 0 0 5px);
             }
 
             svg {

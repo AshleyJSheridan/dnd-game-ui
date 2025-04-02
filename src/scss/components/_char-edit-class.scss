@@ -23,51 +23,75 @@
                 color: colours.$white;
 
                 &.char-class-barbarian {
-                    filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(#c66449 0 0 4px) drop-shadow(#c66449 0 0 5px);
+                    filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$char-class-barbarian 0 0 4px)
+                    drop-shadow(colours.$char-class-barbarian 0 0 5px);
                 }
 
                 &.char-class-bard {
-                    filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(#a675a7 0 0 4px) drop-shadow(#a675a7 0 0 5px);
+                    filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$char-class-bard 0 0 4px)
+                    drop-shadow(colours.$char-class-bard 0 0 5px);
                 }
 
                 &.char-class-cleric {
-                    filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(#848587 0 0 4px) drop-shadow(#848587 0 0 5px);
+                    filter: drop-shadow(colours.$white 0 0 2px)
+                        drop-shadow(colours.$char-class-cleric 0 0 4px)
+                        drop-shadow(colours.$char-class-cleric 0 0 5px);
                 }
 
                 &.char-class-druid {
-                    filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(#78843b 0 0 4px) drop-shadow(#78843b 0 0 5px);
+                    filter: drop-shadow(colours.$white 0 0 2px)
+                        drop-shadow(colours.$char-class-druid 0 0 4px)
+                        drop-shadow(colours.$char-class-druid 0 0 5px);
                 }
 
                 &.char-class-fighter {
-                    filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(#532f23 0 0 4px) drop-shadow(#532f23 0 0 5px);
+                    filter: drop-shadow(colours.$white 0 0 2px)
+                        drop-shadow(colours.$char-class-fighter 0 0 4px)
+                        drop-shadow(colours.$char-class-fighter 0 0 5px);
                 }
 
                 &.char-class-monk {
-                    filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(#1e8fbb 0 0 4px) drop-shadow(#1e8fbb 0 0 5px);
+                    filter: drop-shadow(colours.$white 0 0 2px)
+                        drop-shadow(colours.$char-class-monk 0 0 4px)
+                        drop-shadow(colours.$char-class-monk 0 0 5px);
                 }
 
                 &.char-class-paladin {
-                    filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(#a3862b 0 0 4px) drop-shadow(#a3862b 0 0 5px);
+                    filter: drop-shadow(colours.$white 0 0 2px)
+                        drop-shadow(colours.$char-class-paladin 0 0 4px)
+                        drop-shadow(colours.$char-class-paladin 0 0 5px);
                 }
 
                 &.char-class-ranger {
-                    filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(#356b4b 0 0 4px) drop-shadow(#356b4b 0 0 5px);
+                    filter: drop-shadow(colours.$white 0 0 2px)
+                        drop-shadow(colours.$char-class-ranger 0 0 4px)
+                        drop-shadow(colours.$char-class-ranger 0 0 5px);
                 }
 
                 &.char-class-rogue {
-                    filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(#4e4f49 0 0 4px) drop-shadow(#4e4f49 0 0 5px);
+                    filter: drop-shadow(colours.$white 0 0 2px)
+                        drop-shadow(colours.$char-class-rogue 0 0 4px)
+                        drop-shadow(colours.$char-class-rogue 0 0 5px);
                 }
 
                 &.char-class-sorcerer {
-                    filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(#bb484d 0 0 4px) drop-shadow(#bb484d 0 0 5px);
+                    filter: drop-shadow(colours.$white 0 0 2px)
+                        drop-shadow(colours.$char-class-sorcerer 0 0 4px)
+                        drop-shadow(colours.$char-class-sorcerer 0 0 5px);
                 }
 
                 &.char-class-warlock {
-                    filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(#7646ab 0 0 4px) drop-shadow(#7646ab 0 0 5px);
+                    filter: drop-shadow(colours.$white 0 0 2px)
+                        drop-shadow(colours.$char-class-warlock 0 0 4px)
+                        drop-shadow(colours.$char-class-warlock 0 0 5px);
                 }
 
                 &.char-class-wizard {
-                    filter: drop-shadow(rgb(255, 255, 255) 0 0 2px) drop-shadow(#215bb4 0 0 4px) drop-shadow(#215bb4 0 0 5px);
+                    filter: drop-shadow(colours.$white 0 0 2px)
+                        drop-shadow(colours.$char-class-wizard 0 0 4px)
+                        drop-shadow(colours.$char-class-wizard 0 0 5px);
                 }
             }
         }
@@ -97,51 +121,51 @@
         width: 4em;
 
         &.char-class-barbarian {
-            color: #c66449;
+            color: colours.$char-class-barbarian;
         }
 
         &.char-class-bard {
-            color: #a675a7;
+            color: colours.$char-class-bard;
         }
 
         &.char-class-cleric {
-            color: #848587;
+            color: colours.$char-class-cleric;
         }
 
         &.char-class-druid {
-            color: #78843b;
+            color: colours.$char-class-druid;
         }
 
         &.char-class-fighter {
-            color: #532f23;
+            color: colours.$char-class-fighter;
         }
 
         &.char-class-monk {
-            color: #1e8fbb;
+            color: colours.$char-class-monk;
         }
 
         &.char-class-paladin {
-            color: #a3862b;
+            color: colours.$char-class-paladin;
         }
 
         &.char-class-ranger {
-            color: #356b4b;
+            color: colours.$char-class-ranger;
         }
 
         &.char-class-rogue {
-            color: #4e4f49;
+            color: colours.$char-class-rogue;
         }
 
         &.char-class-sorcerer {
-            color: #bb484d;
+            color: colours.$char-class-sorcerer;
         }
 
         &.char-class-warlock {
-            color: #7646ab;
+            color: colours.$char-class-warlock;
         }
 
         &.char-class-wizard {
-            color: #215bb4;
+            color: colours.$char-class-wizard;
         }
 
     }
@@ -236,11 +260,11 @@
 
             // TODO replace this with SVG as CSS gradients for this looks rubbish
             & + label {
-                background-image: radial-gradient(circle, transparent 0%, transparent 45%, #000 46%, #000 52%, transparent 53%);
+                background-image: radial-gradient(circle, transparent 0%, transparent 45%, colours.$black 46%, colours.$black 52%, transparent 53%);
             }
 
             &:checked + label {
-                background-image: radial-gradient(circle, darken(colours.$gold, 20%) 0%, colours.$gold 35%, transparent 37%, transparent 45%, #000 46%, #000 52%, transparent 53%);
+                background-image: radial-gradient(circle, darken(colours.$gold, 20%) 0%, colours.$gold 35%, transparent 37%, transparent 45%, colours.$black 46%, colours.$black 52%, transparent 53%);
             }
         }
 

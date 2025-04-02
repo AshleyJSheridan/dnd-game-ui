@@ -35,3 +35,35 @@ $error-text: $black;
 // logout button
 $logout-fire: #ec4a24;
 $logout-sticks: #985600;
+
+// character class colours
+$char-class-barbarian: #c66449;
+$char-class-bard: #a675a7;
+$char-class-cleric: #848587;
+$char-class-druid: #78843b;
+$char-class-fighter: #532f23;
+$char-class-monk: #1e8fbb;
+$char-class-paladin: #a3862b;
+$char-class-ranger: #356b4b;
+$char-class-rogue: #4e4f49;
+$char-class-sorcerer: #bb484d;
+$char-class-warlock: #7646ab;
+$char-class-wizard: #215bb4;
+
+// character skill colours
+$char-skill-red: rgb(255, 0, 0);
+$char-skill-green: rgb(0, 126, 38);
+$char-skill-blue: rgb(0, 0, 255);
+$char-skill-yellow: rgb(221, 206, 0);
+$char-skill-purple: rgb(119, 0, 255);
+$char-skill-orange: rgb(241, 129, 0);
+
+// spell school colours
+$spell-school-evocation: rgb(255, 0, 0);
+$spell-school-abjuration: rgb(0, 0, 255);
+$spell-school-conjuration: rgb(241, 129, 0);
+$spell-school-divination: rgb(121, 121, 179);
+$spell-school-enchantment: rgb(185, 70, 185);
+$spell-school-illusion: rgb(119, 0, 255);
+$spell-school-necromancy: rgb(0, 126, 38);
+$spell-school-transmutation: rgb(221, 206, 0);
