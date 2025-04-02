@@ -16,6 +16,7 @@ import { LocalStorageService } from './local-storage.service';
 export class CharacterService {
     public apiUrl = 'http://127.0.0.1:8000/api';
     private charGuid: string = '';
+    public character: Character | undefined;
     private headers: HttpHeaders = new HttpHeaders();
 
     constructor(private http: HttpClient, private storageService: LocalStorageService) {
@@ -24,6 +25,10 @@ export class CharacterService {
 
     public setCharGuid(charGuid: string): void {
         this.charGuid = charGuid;
+    }
+
+    public setCharacter(character: Character): void {
+        this.character = character;
     }
 
     public getCharGuid(): string {

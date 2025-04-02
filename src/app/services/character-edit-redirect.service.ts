@@ -9,6 +9,8 @@ export class CharacterEditRedirectService {
     redirectToCorrectEditLocation(): void {
         this.characterService.getCharacter().subscribe((character) => {
             if (character.guid) {
+                this.characterService.setCharacter(character);
+
                 // redirect based on first instance of missing character information
                 if (character.charClass === '') {
                     this.router.navigate([`/characters/${character.guid}/edit/class`]);

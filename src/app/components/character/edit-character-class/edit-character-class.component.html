@@ -3,7 +3,7 @@
 <div class="char-edit-class-list">
     <ul>
         @for (charClass of charClasses; track charClass.id) {
-            <li [class.selected]="charClass.name === character?.charClass">
+            <li [class.selected]="charClass.name === characterService.character?.charClass">
                 <button class="char-class" (click)="selectCharClass(charClass.id, $event)">
                     <span class="char-class-icon char-class-{{ charClass.name.toLowerCase() }}">
                         <app-char-class-icon charClassName="{{ charClass.name }}"></app-char-class-icon>

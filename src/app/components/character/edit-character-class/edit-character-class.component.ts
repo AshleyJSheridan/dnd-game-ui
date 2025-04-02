@@ -20,26 +20,14 @@ import { Character } from '../../../entities/Character';
 })
 export class EditCharacterClassComponent {
     charClasses: Array<CharacterClass> = [];
-    character: Character | undefined;
     selectedCharClass: number = 0;
     selectPathError: boolean = false;
 
     @ViewChild('confirmComponent') confirm: ConfirmComponent | undefined;
 
-    constructor(private characterService: CharacterService, private router: Router) {}
+    constructor(public characterService: CharacterService, private router: Router) {}
 
     ngOnInit(): void {
-        this.characterService.getCharacter().subscribe(
-            {
-                next: (character) => {
-                    this.character = character;
-                },
-                error: (error => {
-                    this.router.navigate(['/']);
-                })
-            }
-        );
-
         this.characterService.getCharacterClasses().subscribe(
             {
                 next: (charClasses) => {
@@ -153,7 +141,7 @@ export class EditCharacterClassComponent {
     }
 
     hasPathSelection(): boolean {
-        const level = this.character?.level ?? 0;
+        const level = this.characterService.character?.level ?? 0;
 
         for (let i = 0; i < this.getClassBySelectionId()?.class_features.length; i ++) {
             if (( + 1) > level)
