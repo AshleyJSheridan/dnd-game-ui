@@ -19,7 +19,7 @@
                 </div>
                 <select (change)="setRollsForAbility($event, i)">
                     <option>-</option>
-                    @for (ability of character?.abilities; track ability.id) {
+                    @for (ability of characterService.character?.abilities; track ability.id) {
                         <!-- hide selected ability from all other select lists -->
                         @if(canShowAbilityInSelectList(i, ability.id)) {
                             <option value="{{ ability.id }}">{{ ability.name }}</option>
@@ -32,7 +32,7 @@
 </div>
 
 <div class="char-edit-abilities">
-    @for (ability of character?.abilities; track $index) {
+    @for (ability of characterService.character?.abilities; track $index) {
         <div class="char-edit-ability">
             <div class="ability-name">{{ ability.name }}</div>
             <table class="ability-table">

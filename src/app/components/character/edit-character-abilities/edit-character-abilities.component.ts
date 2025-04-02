@@ -9,24 +9,12 @@ import {Character} from '../../../entities/Character';
     templateUrl: './edit-character-abilities.component.html'
 })
 export class EditCharacterAbilitiesComponent {
-    character: Character | undefined;
     abilityDiceRolls: Array<{guid:string;rolls:Array<number>;}> = Array(6).fill({guid:'',rolls:[0,0,0,0]});
     assignedDiceTotals: Array<{abilityId: number; rollIndex: number; guid: string;}> = [];
 
-    constructor(private characterService: CharacterService, private router: Router) {}
+    constructor(public characterService: CharacterService, private router: Router) {}
 
-    ngOnInit(): void {
-        this.characterService.getCharacter().subscribe(
-            {
-                next: (character) => {
-                    this.character = character;
-                },
-                error: (error => {
-                    this.router.navigate(['/']);
-                })
-            }
-        );
-    }
+    ngOnInit(): void {}
 
     getAbilityModifier(ability: {id: number; base: number; racialModifier: number;}): string {
         const modifierValue = Math.floor((this.getAbilityBaseValue(ability.id) + ability.racialModifier - 10) / 2);
@@ -37,6 +25,9 @@ export class EditCharacterAbilitiesComponent {
     }
 
     getAbilityBaseValue(abilityId: number): number {
+        if (this.characterService.character?.abilities[abilityId - 1].base)
+            return this.characterService.character?.abilities[abilityId - 1].base;
+
         const matchedAbilities = this.assignedDiceTotals.filter(totals => {
             return totals.abilityId === abilityId
         });
