@@ -3,7 +3,7 @@
 <div class="char-edit-background-list">
     <ul>
         @for (charBackground of charBackgrounds; track charBackground.id) {
-            <li>
+            <li [class.selected]="charBackground.name === (characterService.character?.charBackground?.name ?? '')">
                 <button class="char-background" (click)="selectCharBackground(charBackground, $event)">
                     <span
                         class="char-background-icon
@@ -44,7 +44,10 @@
                             <select id="characteristic-{{ getCharacteristicIdString(characteristic) }}" class="characteristic">
                                 <option value="">-</option>
                                 @for (option of selectedCharBackground.characteristics[characteristic]; track option.id) {
-                                    <option value="{{ option.id }}">{{ option.characteristic }}</option>
+                                    <option
+                                        value="{{ option.id }}"
+                                        [selected]="isCharacteristicSelected(parseInt(option.id))"
+                                    >{{ option.characteristic }}</option>
                                 }
                             </select>
                         </label>

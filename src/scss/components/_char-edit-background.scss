@@ -12,6 +12,19 @@
         padding: 0;
         margin: 0;
 
+        &.selected {
+            background-color: colours.$dark-grey;
+            color: colours.$white;
+
+            .char-background-name {
+                color: colours.$white;
+            }
+
+            svg {
+                fill: colours.$white;
+            }
+        }
+
         &:hover {
             background-color: colours.$really-light-grey;
         }

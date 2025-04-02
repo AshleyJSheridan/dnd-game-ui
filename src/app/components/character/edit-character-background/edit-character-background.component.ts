@@ -18,7 +18,7 @@ export class EditCharacterBackgroundComponent {
     selectedCharBackground: CharacterBackground|null = null;
     characteristicsError: boolean = false;
 
-    constructor(private characterService: CharacterService, private router: Router) {}
+    constructor(public characterService: CharacterService, private router: Router) {}
 
     ngOnInit(): void {
         this.characterService.getCharacterBackgrounds().subscribe(
@@ -76,4 +76,14 @@ export class EditCharacterBackgroundComponent {
             this.characteristicsError = true;
         }
     }
+
+    isCharacteristicSelected(characteristic: number): boolean {
+        const match = this.characterService?.character?.charBackground.characteristics.filter((c) => {
+            return c.id === characteristic;
+        });
+
+        return match !== undefined && match.length > 0;
+    }
+
+    protected readonly parseInt = parseInt;
 }
