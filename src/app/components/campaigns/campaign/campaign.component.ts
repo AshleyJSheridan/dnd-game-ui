@@ -115,9 +115,8 @@ export class CampaignComponent {
 
     removeCharacterFromCampaign(character: Character): void {
         this.campaignService.removeCharacterFromCampaign(character.guid).subscribe({
-            next: () => {
-                // have to manually alter the local campaign object, as delete requests can't contain a response body
-
+            next: (campaign) => {
+                this.campaign = campaign;
             },
             error: (error) => {
 
