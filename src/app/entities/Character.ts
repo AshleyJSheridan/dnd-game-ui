@@ -1,5 +1,6 @@
 import { Skill } from './Skill';
 import { Spell } from './Spell';
+import {Language} from './Language';
 
 export class Character {
     name: string = '';
@@ -53,14 +54,14 @@ export class Character {
     };
     languages : {
         available: number;
-        known: Array<{
-            id: number;
-            name: string;
-            script: string;
-        }>
+        known: Array<Language>,
+        racial: Array<Language>,
+        class: Array<Language>,
     } = {
         available: 0,
-        known: []
+        known: [],
+        racial: [],
+        class: [],
     };
     magic: {
         hasMagic: boolean;

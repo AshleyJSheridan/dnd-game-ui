@@ -14,11 +14,10 @@ import { LanguageScriptComponent } from '../../icons/language-script/language-sc
 })
 export class EditCharacterLanguagesComponent {
     allLanguages: Array<Language> = [];
-    character: Character | undefined;
     selectedLanguages: Array<Language> = [];
     selectError: boolean = false;
 
-    constructor(private characterService: CharacterService, private router: Router) {}
+    constructor(public characterService: CharacterService, private router: Router) {}
 
     ngOnInit(): void {
         this.characterService.getLanguages().subscribe(
@@ -31,33 +30,37 @@ export class EditCharacterLanguagesComponent {
                 })
             }
         );
-
-        this.characterService.getCharacter().subscribe(
-            {
-                next: (character) => {
-                    this.character = character;
-                },
-                error: (error => {
-                    this.router.navigate(['/']);
-                })
-            }
-        );
     }
 
     getAvailableLangCount(): number {
-        return (this.character?.languages.available ?? 0) - (this.character?.languages?.known?.length ?? 0);
+        return (this.characterService.character?.languages.available ?? 0) - (this.characterService.character?.languages?.known?.length ?? 0);
     }
 
     languageAlreadyKnown(languageId: number): boolean {
+        let known = false;
 
-        if (this.character?.languages?.known) {
-            if (this.character?.languages?.known.filter(lang => {
-                return lang.id === languageId
+        if (this.characterService.character?.languages?.known) {
+            if (this.characterService.character?.languages?.known.filter(lang => {
+                known = lang.id === languageId
             }).length > 0)
-                return true;
+                known = true;
         }
 
-        return false;
+        if (!known && this.characterService.character?.languages?.racial) {
+            if (this.characterService.character?.languages?.racial.filter(lang => {
+                return lang.id === languageId
+            }).length > 0)
+                known = true;
+        }
+
+        if (!known && this.characterService.character?.languages?.class) {
+            if (this.characterService.character?.languages?.class.filter(lang => {
+                return lang.id === languageId
+            }).length > 0)
+                known = true;
+        }
+
+        return known;
     }
 
     selectLanguage(language: Language): void {

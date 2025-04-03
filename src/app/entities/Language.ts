@@ -3,4 +3,5 @@ export class Language {
     name: string = '';
     script: string = '';
     typical_speakers: string = '';
+    level: number = 1;
 }
