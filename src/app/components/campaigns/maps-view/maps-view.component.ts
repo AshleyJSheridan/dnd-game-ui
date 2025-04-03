@@ -36,6 +36,8 @@ export class MapsViewComponent {
             {
                 next: (map) => {
                     this.campaignMap = map;
+
+                    this.gridColour.set(map.grid_colour);
                 },
                 error: (error => {
                     this.router.navigate(['/']);

@@ -13,12 +13,14 @@
         <app-map-action-icon [mapAction]="'Grid'" (mapMode)="setMapMode($event)" [currentMapMode]="mapMode"/>
     </nav>
     <div class="map" [style]="'width: ' + campaignMap?.width + '; height: ' + campaignMap?.height + ';'">
-        <img
-            class="map-image"
-            src="{{ getImageUrl() }}"
-            [attr.width]="campaignMap?.width"
-            [attr.height]="campaignMap?.height"
-        />
+        @if (campaignMap?.guid) {
+            <img
+                class="map-image"
+                src="{{ getImageUrl() }}"
+                [attr.width]="campaignMap?.width"
+                [attr.height]="campaignMap?.height"
+            />
+        }
         <svg
             class="map-interactive"
             [attr.width]="campaignMap?.width"
