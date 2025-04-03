@@ -106,12 +106,16 @@ export class CampaignComponent {
 
     addCharacterToCampaign(character: Character): void {
         this.campaignService.addCharacterToCampaign(character.guid).subscribe({
-            next: () => {
-                // TODO show character added to campaign
+            next: (campaign) => {
+                this.campaign = campaign;
             },
             error: (error) => {
 
             }
         });
+    }
+
+    isCharacterPartOfCampaign(characterGuid: string): boolean {
+        return !!this.campaign?.players.find(p => p.guid === characterGuid);
     }
 }
