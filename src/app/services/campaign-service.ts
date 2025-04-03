@@ -55,4 +55,11 @@ export class CampaignService {
             {headers: this.headers}
         );
     }
+
+    public removeCharacterFromCampaign(characterGuid: string): Observable<Campaign> {
+        return this.http.delete<Campaign>(
+            `${this.apiUrl}/campaigns/${this.campaignGuid}/characters/${characterGuid}`,
+            {headers: this.headers}
+        );
+    }
 }

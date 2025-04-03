@@ -9,7 +9,6 @@ import { ClipboardService } from '../../../services/clipboard-service';
 import { ToastComponent } from '../../dialogs/toast/toast.component';
 import { CharacterService } from '../../../services/character.service';
 import { Character } from '../../../entities/Character';
-import {DeleteIconComponent} from '../../icons/delete-icon/delete-icon.component';
 
 @Component({
     selector: 'app-campaign',
@@ -18,7 +17,6 @@ import {DeleteIconComponent} from '../../icons/delete-icon/delete-icon.component
         MapPreviewComponent,
         CopyIconComponent,
         ToastComponent,
-        DeleteIconComponent
     ],
     templateUrl: './campaign.component.html'
 })
@@ -115,7 +113,23 @@ export class CampaignComponent {
         });
     }
 
+    removeCharacterFromCampaign(character: Character): void {
+        this.campaignService.removeCharacterFromCampaign(character.guid).subscribe({
+            next: () => {
+                // have to manually alter the local campaign object, as delete requests can't contain a response body
+
+            },
+            error: (error) => {
+
+            }
+        });
+    }
+
     isCharacterPartOfCampaign(characterGuid: string): boolean {
         return !!this.campaign?.players.find(p => p.guid === characterGuid);
+    }
+
+    doesCharacterBelongToMe(characterGuid: string): boolean {
+        return !!this.characters.find(p => p.guid === characterGuid);
     }
 }
