@@ -4,16 +4,6 @@
     <h3>Already Known Languages</h3>
 
     <ul class="char-language-list">
-        @for (language of characterService.character?.languages?.known; track language.id) {
-            <li class="language already-known">{{ language.name }}
-                <div class="language-sample">
-                    <app-language-script scriptName="{{ language.script.toLowerCase() }}"/>
-                </div>
-            </li>
-        }
-    </ul>
-
-    <ul class="char-language-list">
         @for (language of allLanguages; track language.id) {
             @if (languageAlreadyKnown(language.id)) {
                 <li class="language already-known">{{ language.name }}

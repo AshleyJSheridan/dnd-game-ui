@@ -41,7 +41,7 @@ export class EditCharacterLanguagesComponent {
 
         if (this.characterService.character?.languages?.known) {
             if (this.characterService.character?.languages?.known.filter(lang => {
-                known = lang.id === languageId
+                return lang.id === languageId
             }).length > 0)
                 known = true;
         }
