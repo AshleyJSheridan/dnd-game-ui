@@ -65,7 +65,7 @@
                         @for (character of campaign.players; track character.guid) {
                             <li class="char-panel">
                                 <span class="char-image">
-                                    <img src="images/silhouette.png" alt="" role="presentation"/>
+                                    <app-portrait [character]="character"/>
                                 </span>
 
                                 <span class="char-details">
@@ -98,7 +98,7 @@
                             @if (!isCharacterPartOfCampaign(character.guid)) {
                                 <li class="char-panel">
                                     <span class="char-image">
-                                        <img src="images/silhouette.png" alt="" role="presentation"/>
+                                        <app-portrait [character]="character"/>
                                     </span>
 
                                     <span class="char-details">

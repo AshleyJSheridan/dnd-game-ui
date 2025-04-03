@@ -9,6 +9,7 @@ import { ClipboardService } from '../../../services/clipboard-service';
 import { ToastComponent } from '../../dialogs/toast/toast.component';
 import { CharacterService } from '../../../services/character.service';
 import { Character } from '../../../entities/Character';
+import {PortraitComponent} from '../../character/portrait/portrait.component';
 
 @Component({
     selector: 'app-campaign',
@@ -17,6 +18,7 @@ import { Character } from '../../../entities/Character';
         MapPreviewComponent,
         CopyIconComponent,
         ToastComponent,
+        PortraitComponent,
     ],
     templateUrl: './campaign.component.html'
 })

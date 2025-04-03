@@ -6,6 +6,7 @@ import { ViewIconComponent } from '../../icons/view-icon/view-icon.component';
 import { DeleteIconComponent } from '../../icons/delete-icon/delete-icon.component';
 import { HeaderComponent } from '../../header/header.component';
 import { Character } from '../../../entities/Character';
+import {PortraitComponent} from '../portrait/portrait.component';
 
 @Component({
     selector: 'app-characters-list',
@@ -14,7 +15,8 @@ import { Character } from '../../../entities/Character';
         EditIconComponent,
         ViewIconComponent,
         DeleteIconComponent,
-        HeaderComponent
+        HeaderComponent,
+        PortraitComponent
     ],
     templateUrl: './characters-list.component.html'
 })

@@ -11,11 +11,7 @@
                 @for (character of characters; track character.guid) {
                     <li class="char-panel">
                         <span class="char-image">
-                            @if (character.custom_portrait) {
-                                <img [src]="getImageUrl(character.guid)" alt="" role="presentation"/>
-                            } @else {
-                                <img src="images/silhouette.png" alt="" role="presentation"/>
-                            }
+                            <app-portrait [character]="character"/>
                         </span>
                         <span class="char-details">
                             <div class="char-name"><a [routerLink]="['/characters/', character.guid]">{{ character.name }}</a></div>
