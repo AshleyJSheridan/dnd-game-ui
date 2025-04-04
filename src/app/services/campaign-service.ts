@@ -40,12 +40,12 @@ export class CampaignService {
         return this.http.post<CampaignMap>(`${this.apiUrl}/campaigns/${this.campaignGuid}/maps`, formData, {headers: this.headers});
     }
 
-    public getMap(guid: string): Observable<CampaignMap> {
-        return this.http.get<CampaignMap>(`${this.apiUrl}/campaigns/maps/${guid}`, {headers: this.headers});
+    public getMap(mapGuid: string): Observable<CampaignMap> {
+        return this.http.get<CampaignMap>(`${this.apiUrl}/campaigns/${this.campaignGuid}/maps/${mapGuid}`, {headers: this.headers});
     }
 
-    public updateMap(guid: string, data: object ): Observable<CampaignMap> {
-        return this.http.patch<CampaignMap>(`${this.apiUrl}/campaigns/maps/${guid}`, data, {headers: this.headers});
+    public updateMap(mapGuid: string, data: object ): Observable<CampaignMap> {
+        return this.http.patch<CampaignMap>(`${this.apiUrl}/campaigns/${this.campaignGuid}/maps/${mapGuid}`, data, {headers: this.headers});
     }
 
     public addCharacterToCampaign(characterGuid: string): Observable<Campaign> {
@@ -59,6 +59,19 @@ export class CampaignService {
     public removeCharacterFromCampaign(characterGuid: string): Observable<Campaign> {
         return this.http.delete<Campaign>(
             `${this.apiUrl}/campaigns/${this.campaignGuid}/characters/${characterGuid}`,
+            {headers: this.headers}
+        );
+    }
+
+    public addCreatureToMap(type: string, mapGuid: string, x: number, y: number, creatureGuid: string): Observable<CampaignMap> {
+        return this.http.post<CampaignMap>(
+            `${this.apiUrl}/campaigns/${this.campaignGuid}/maps/${mapGuid}/entities`,
+            {
+                type: type,
+                linked_id: creatureGuid,
+                x: x,
+                y: y,
+            },
             {headers: this.headers}
         );
     }

@@ -159,6 +159,40 @@ button .dice-d6-icon {
     padding: .5rem;
 }
 
+[role="tablist"] {
+    margin-bottom: -1px;
+}
+
+[role="tab"] {
+    background-color: colours.$white;
+    border: 1px solid colours.$medium-grey;
+    border-bottom: 0;
+    border-radius: 5px 5px 0 0;
+    cursor: pointer;
+    padding: .5em;
+    position: relative;
+    z-index: 1;
+
+    &:hover {
+        background-color: colours.$light-grey;
+    }
+
+    &[aria-selected="true"] {
+        background-color: colours.$white;
+        cursor: auto;
+        z-index: 3;
+    }
+}
+
+[role="tabpanel"] {
+    background-color: white;
+    border: 1px solid grey;
+    border-radius: 0 0 5px 5px;
+    padding: 0 .5em .5em .7em;
+    position: relative;
+    z-index: 2;
+}
+
 
 @layer fantasy-btn, fantasy-presets;
 

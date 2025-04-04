@@ -225,5 +225,29 @@
                 width: 2rem;
             }
         }
+
+        .tabs {
+            .character {
+                align-items: center;
+                appearance: none;
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+                display: flex;
+                justify-items: center;
+                gap: .5rem;
+                width: 100%;
+
+                &:hover {
+                    background-color: colours.$light-grey;
+                }
+
+                img {
+                    border-radius: 50%;
+                    height: 50px;
+                    width: 50px;
+                }
+            }
+        }
     }
 }

@@ -27,6 +27,9 @@
             [attr.height]="campaignMap?.height"
             [attr.viewBox]="'0 0 ' + getViewBoxWidth() + ' ' + getViewBoxHeight()"
             xmlns="http://www.w3.org/2000/svg"
+            (mousedown)="mapMouseDownHandler($event)"
+            (mouseup)="mapMouseUpHandler($event)"
+            (mousemove)="mapMouseMoveHandler($event)"
         >
             <defs>
                 <pattern id="grid" [attr.width]="campaignMap.grid_size" [attr.height]="campaignMap.grid_size" patternUnits="userSpaceOnUse">
@@ -37,12 +40,40 @@
                         stroke-width="1"
                     />
                 </pattern>
+                @for (player of campaignMap.players; track player.guid) {
+                    <pattern
+                        [attr.id]="'portrait-' + player.guid"
+                        x="0"
+                        y="0"
+                        [attr.height]="campaignMap.grid_size"
+                        [attr.width]="campaignMap.grid_size"
+                        viewBox="0 0 200 200"
+                        patternUnits="userSpaceOnUse"
+                    >
+                        <image x="0" y="0" width="200" height="200"
+                               [attr.xlink:href]="getCharacterImageUrl(player.player.custom_portrait, player.player.guid)"></image>
+                    </pattern>
+                }
             </defs>
             @if (campaignMap.show_grid) {
                 <g id="scale">
                     <rect width="100%" height="100%" fill="url(#grid)" />
                 </g>
             }
+            <g id="mapCreatures">
+                @for (player of campaignMap.players; track player.guid) {
+                    <circle
+                        class="player"
+                        [attr.id]="player.guid"
+                        [attr.cx]="player.x"
+                        [attr.cy]="player.y"
+                        [attr.r]="campaignMap.grid_size / 2"
+                        [attr.stroke]="player.highlight_colour"
+                        stroke-width="4"
+                        [attr.fill]="'url(#portrait-' + player.guid + ')'"
+                    />
+                }
+            </g>
         </svg>
     </div>
 
@@ -66,7 +97,38 @@
 
                     }
                     @case ("Creature") {
-
+                        <div class="tabs" id="creatureTabs">
+                            <div role="tablist" aria-label="Creature selection tabs">
+                                <button
+                                    type="button"
+                                    role="tab"
+                                    aria-selected="true"
+                                    aria-controls="playerPanel"
+                                    id="creature-tab-1"
+                                    tabindex="-1"
+                                    (click)="selectTab($event)"
+                                >Players</button>
+                                <button
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="creaturePanel"
+                                    id="creature-tab-2"
+                                    tabindex="-1"
+                                    (click)="selectTab($event)"
+                                >Creatures</button>
+                            </div>
+                            <div id="playerPanel" role="tabpanel" tabindex="0" aria-labelledby="creature-tab-1">
+                                @for (character of campaign?.players; track character.guid) {
+                                    <button class="character" (click)="addCharacterToMap(character)">
+                                        <app-portrait [character]="character"/>
+                                        <div class="character-name">{{ character.name }}</div>
+                                    </button>
+                                }
+                            </div>
+                            <div id="creaturePanel" role="tabpanel" tabindex="0" aria-labelledby="creature-tab-2" hidden>
+                                creatures
+                            </div>
+                        </div>
                     }
                     @case ("Object") {
 
