@@ -75,4 +75,12 @@ export class CampaignService {
             {headers: this.headers}
         );
     }
+
+    public updateMapEntity(mapGuid: string, entityGuid: string, data: object): Observable<CampaignMap> {
+        return this.http.patch<CampaignMap>(
+            `${this.apiUrl}/campaigns/${this.campaignGuid}/maps/${mapGuid}/entities/${entityGuid}`,
+            data,
+            {headers: this.headers}
+        );
+    }
 }

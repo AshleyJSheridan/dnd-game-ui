@@ -98,7 +98,6 @@ export class MapsViewComponent {
     }
 
     private updateMap(data: object): void {
-        console.log(data);
         this.campaignService.updateMap(this.campaignMap?.guid, data).subscribe({
             next: (map) => {
                 this.campaignMap = map;
@@ -155,16 +154,33 @@ export class MapsViewComponent {
             return 'images/silhouette.png';
     }
 
+    // recursively get the player element from the target, as event target might be nested element
+    getMapElement(target: SVGElement): SVGElement | undefined {
+        if ((target).tagName === 'svg')
+            return undefined;
+
+        if (
+            (target).getAttribute('class') === 'character' ||
+            (target).getAttribute('class') === 'creature' ||
+            (target).getAttribute('class') === 'object'
+        )
+            return target;
+
+        return this.getMapElement(target.parentNode as SVGElement);
+    }
+
     mapMouseDownHandler(event: MouseEvent): void {
         if (this.mapMode === 'Pointer') {
-            if ((event.target as SVGElement).getAttribute('class') === 'player') {
-                this.moveObject.target = event.target as SVGElement;
+            const mapElement = this.getMapElement(event.target as SVGElement);
+
+            if (mapElement !== undefined) {
+                this.moveObject.target = mapElement;
+                this.moveObject.entityGuid = mapElement.getAttribute('data-guid') ?? '';
+                this.moveObject.entityType = mapElement.getAttribute('class') ?? '';
+                this.moveObject.elementStartX = parseInt(mapElement.getAttribute('data-x') ?? '0');
+                this.moveObject.elementStartY = parseInt(mapElement.getAttribute('data-y') ?? '0');
                 this.moveObject.startX = event.offsetX;
                 this.moveObject.startY = event.offsetY;
-                // @ts-ignore
-                this.moveObject.startCx = parseInt((event.target as SVGElement).getAttribute('cx'));
-                // @ts-ignore
-                this.moveObject.startCy = parseInt((event.target as SVGElement).getAttribute('cy'));
             }
         }
     }
@@ -176,10 +192,28 @@ export class MapsViewComponent {
 
             const dx = event.offsetX - this.moveObject.startX;
             const dy = event.offsetY - this.moveObject.startY;
-            this.moveObject.target.setAttribute('cx', String(this.moveObject.startCx + dx));
-            this.moveObject.target.setAttribute('cy', String(this.moveObject.startCy + dy));
 
-            this.moveObject.target = null;
+            const updateData = {
+                guid: this.moveObject.entityGuid,
+                type: this.moveObject.entityType,
+                x: this.moveObject.elementStartX + dx,
+                y: this.moveObject.elementStartY + dy,
+
+            };
+            const target = this.moveObject.target;
+            const elementStartX = this.moveObject.elementStartX;
+            const elementStartY = this.moveObject.elementStartY;
+            this.campaignService.updateMapEntity(this.campaignMap.guid, this.moveObject.entityGuid, updateData).subscribe({
+                next: (map) => {
+                    this.campaignMap = map;
+                },
+                error: (error) => {
+                    // @ts-ignore
+                    this.moveSvgElement(target, elementStartX, elementStartY);
+                }
+            })
+
+            this.moveObject = new MoveObject();
         }
     }
 
@@ -188,8 +222,12 @@ export class MapsViewComponent {
             const dx = event.offsetX - this.moveObject.startX;
             const dy = event.offsetY - this.moveObject.startY;
 
-            this.moveObject.target.setAttribute('cx', String(this.moveObject.startCx + dx));
-            this.moveObject.target.setAttribute('cy', String(this.moveObject.startCy + dy));
+            this.moveSvgElement(this.moveObject.target, dx, dy);
         }
+    }
+
+    moveSvgElement(element: SVGElement, dx: number, dy: number): void {
+        // @ts-ignore
+        element.transform.baseVal.getItem(0).setTranslate(this.moveObject.elementStartX + dx, this.moveObject.elementStartY + dy);
     }
 }

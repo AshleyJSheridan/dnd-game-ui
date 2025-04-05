@@ -20,61 +20,62 @@
                 [attr.width]="campaignMap?.width"
                 [attr.height]="campaignMap?.height"
             />
-        }
-        <svg
-            class="map-interactive"
-            [attr.width]="campaignMap?.width"
-            [attr.height]="campaignMap?.height"
-            [attr.viewBox]="'0 0 ' + getViewBoxWidth() + ' ' + getViewBoxHeight()"
-            xmlns="http://www.w3.org/2000/svg"
-            (mousedown)="mapMouseDownHandler($event)"
-            (mouseup)="mapMouseUpHandler($event)"
-            (mousemove)="mapMouseMoveHandler($event)"
-        >
-            <defs>
-                <pattern id="grid" [attr.width]="campaignMap.grid_size" [attr.height]="campaignMap.grid_size" patternUnits="userSpaceOnUse">
-                    <path
-                        [attr.d]="'M ' + campaignMap.grid_size + ' 0 L 0 0 0 ' + campaignMap.grid_size + ''"
-                        fill="none"
-                        [attr.stroke]="gridColour()"
-                        stroke-width="1"
-                    />
-                </pattern>
-                @for (player of campaignMap.players; track player.guid) {
-                    <pattern
-                        [attr.id]="'portrait-' + player.guid"
-                        x="0"
-                        y="0"
-                        [attr.height]="campaignMap.grid_size"
-                        [attr.width]="campaignMap.grid_size"
-                        viewBox="0 0 200 200"
-                        patternUnits="userSpaceOnUse"
-                    >
-                        <image x="0" y="0" width="200" height="200"
-                               [attr.xlink:href]="getCharacterImageUrl(player.player.custom_portrait, player.player.guid)"></image>
+
+            <svg
+                class="map-interactive"
+                [attr.width]="campaignMap?.width"
+                [attr.height]="campaignMap?.height"
+                [attr.viewBox]="'0 0 ' + getViewBoxWidth() + ' ' + getViewBoxHeight()"
+                xmlns="http://www.w3.org/2000/svg"
+                (mousedown)="mapMouseDownHandler($event)"
+                (mouseup)="mapMouseUpHandler($event)"
+                (mousemove)="mapMouseMoveHandler($event)"
+            >
+                <defs>
+                    <pattern id="grid" [attr.width]="campaignMap.grid_size" [attr.height]="campaignMap.grid_size" patternUnits="userSpaceOnUse">
+                        <path
+                            [attr.d]="'M ' + campaignMap.grid_size + ' 0 L 0 0 0 ' + campaignMap.grid_size + ''"
+                            fill="none"
+                            [attr.stroke]="gridColour()"
+                            stroke-width="1"
+                        />
                     </pattern>
+
+                </defs>
+                @if (campaignMap.show_grid) {
+                    <g id="scale">
+                        <rect width="100%" height="100%" fill="url(#grid)" />
+                    </g>
                 }
-            </defs>
-            @if (campaignMap.show_grid) {
-                <g id="scale">
-                    <rect width="100%" height="100%" fill="url(#grid)" />
+                <g id="mapCreatures">
+                    @for (player of campaignMap.players; track player.guid) {
+                        <g
+                            class="character"
+                            [attr.data-x]="player.x"
+                            [attr.data-y]="player.y"
+                            [attr.data-guid]="player.guid"
+                            [attr.transform]="'translate(' + player.x + ', ' + player.y + ')'"
+                        >
+                            <circle
+                                [attr.cx]="campaignMap.grid_size / 2"
+                                [attr.cy]="campaignMap.grid_size / 2"
+                                [attr.r]="campaignMap.grid_size / 2"
+                                [attr.stroke]="player.highlight_colour"
+                                stroke-width="4"
+                            />
+                            <image
+                               [attr.x]="0"
+                               [attr.y]="0"
+                               [attr.width]="campaignMap.grid_size"
+                               [attr.height]="campaignMap.grid_size"
+                               [attr.xlink:href]="getCharacterImageUrl(player.player.custom_portrait, player.player.guid)"
+                               style="clip-path: inset(0 0 0 0 round 50%);"
+                            ></image>
+                        </g>
+                    }
                 </g>
-            }
-            <g id="mapCreatures">
-                @for (player of campaignMap.players; track player.guid) {
-                    <circle
-                        class="player"
-                        [attr.id]="player.guid"
-                        [attr.cx]="player.x"
-                        [attr.cy]="player.y"
-                        [attr.r]="campaignMap.grid_size / 2"
-                        [attr.stroke]="player.highlight_colour"
-                        stroke-width="4"
-                        [attr.fill]="'url(#portrait-' + player.guid + ')'"
-                    />
-                }
-            </g>
-        </svg>
+            </svg>
+        }
     </div>
 
     @if (showSettings) {
