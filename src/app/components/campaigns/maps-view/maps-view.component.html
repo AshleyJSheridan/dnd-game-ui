@@ -64,12 +64,37 @@
                                 stroke-width="4"
                             />
                             <image
-                               [attr.x]="0"
-                               [attr.y]="0"
+                               x="0"
+                               y="0"
                                [attr.width]="campaignMap.grid_size"
                                [attr.height]="campaignMap.grid_size"
                                [attr.xlink:href]="getCharacterImageUrl(player.player.custom_portrait, player.player.guid)"
                                style="clip-path: inset(0 0 0 0 round 50%);"
+                            ></image>
+                        </g>
+                    }
+                    @for (creature of campaignMap.creatures; track creature.guid) {
+                        <g
+                            class="character"
+                            [attr.data-x]="creature.x"
+                            [attr.data-y]="creature.y"
+                            [attr.data-guid]="creature.guid"
+                            [attr.transform]="'translate(' + creature.x + ', ' + creature.y + ')'"
+                        >
+                            <circle
+                                [attr.cx]="campaignMap.grid_size / 2"
+                                [attr.cy]="campaignMap.grid_size / 2"
+                                [attr.r]="campaignMap.grid_size / 2"
+                                [attr.stroke]="creature.highlight_colour"
+                                stroke-width="4"
+                            />
+                            <image
+                                x="0"
+                                y="0"
+                                [attr.width]="campaignMap.grid_size"
+                                [attr.height]="campaignMap.grid_size"
+                                [attr.xlink:href]="'/images/creature-icons/' + (creature.creature?.name ?? '').toLowerCase() + '.png'"
+                                style="clip-path: inset(0 0 0 0 round 50%);"
                             ></image>
                         </g>
                     }
