@@ -155,6 +155,7 @@
                                 @if (creatures) {
                                     <label>Type:
                                         <select [(ngModel)]="creatureType" name="creatureType">
+                                            <option value="-">Select Creature Type</option>
                                             <option value="aberration">Aberration</option>
                                             <option value="beast">Beast</option>
                                             <option value="celestial">Celestial</option>
@@ -171,7 +172,10 @@
                                             <option value="undead">Undead</option>
                                         </select>
                                     </label>
-                                    {{ creatureType }}
+                                    <label>Search:
+                                        <input type="text" name="creatureSearch" [(ngModel)]="creatureSearch" (keyup)="clearCreatureType($event)"/>
+                                    </label>
+                                    <em>Search begins after second letter</em>
                                     <ul class="creature-list">
                                         @for (creature of getFilteredCreatures(); track $index) {
                                             <li>

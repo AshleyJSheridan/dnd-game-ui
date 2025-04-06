@@ -34,7 +34,8 @@ export class MapsViewComponent {
     error: string = '';
     moveObject: MoveObject = new MoveObject();
     creatures: Array<Creature> = [];
-    creatureType: string = 'aberration';
+    creatureType: string = '-';
+    creatureSearch: string = '';
 
     constructor(private campaignService: CampaignService, private router: Router) {}
 
@@ -262,8 +263,25 @@ export class MapsViewComponent {
     }
 
     getFilteredCreatures(): Array<Creature> {
+        if (this.creatureSearch !== '' && this.creatureSearch.length > 1) {
+            return this.creatures.filter((creature) => {
+                // force a case-insensitive search
+                return creature.name.toLowerCase().includes(this.creatureSearch.toLowerCase());
+            });
+        }
+
+        if (this.creatureType === '-')
+            return [];
+
         return this.creatures.filter((creature) => {
             return creature.type === this.creatureType;
         });
+    }
+
+    clearCreatureType(event: KeyboardEvent): void {
+        // only clear the select list if we're typing into the text box
+        if ((event.currentTarget as HTMLInputElement).value !== '') {
+            this.creatureType = '-';
+        }
     }
 }
