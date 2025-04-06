@@ -284,4 +284,10 @@ export class MapsViewComponent {
             this.creatureType = '-';
         }
     }
+
+    clearCreatureSearch(event: Event): void {
+        if ((event.currentTarget as HTMLInputElement).value !== '-') {
+            this.creatureSearch = '';
+        }
+    }
 }

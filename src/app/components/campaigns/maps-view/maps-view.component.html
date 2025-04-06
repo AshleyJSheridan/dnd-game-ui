@@ -154,7 +154,7 @@
                             <div id="creaturePanel" role="tabpanel" tabindex="0" aria-labelledby="creature-tab-2" hidden>
                                 @if (creatures) {
                                     <label>Type:
-                                        <select [(ngModel)]="creatureType" name="creatureType">
+                                        <select [(ngModel)]="creatureType" name="creatureType" (change)="clearCreatureSearch($event)">
                                             <option value="-">Select Creature Type</option>
                                             <option value="aberration">Aberration</option>
                                             <option value="beast">Beast</option>
