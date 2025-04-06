@@ -4,6 +4,7 @@ import { LocalStorageService } from './local-storage.service';
 import { Campaign } from '../entities/Campaign';
 import { Observable } from 'rxjs';
 import { CampaignMap } from '../entities/CampaignMap';
+import { Creature } from '../entities/Creature';
 
 @Injectable({providedIn: 'root'})
 export class CampaignService {
@@ -63,12 +64,12 @@ export class CampaignService {
         );
     }
 
-    public addCreatureToMap(type: string, mapGuid: string, x: number, y: number, creatureGuid: string): Observable<CampaignMap> {
+    public addCreatureToMap(type: string, mapGuid: string, x: number, y: number, creatureId: string|number): Observable<CampaignMap> {
         return this.http.post<CampaignMap>(
             `${this.apiUrl}/campaigns/${this.campaignGuid}/maps/${mapGuid}/entities`,
             {
                 type: type,
-                linked_id: creatureGuid,
+                linked_id: creatureId,
                 x: x,
                 y: y,
             },
@@ -82,5 +83,9 @@ export class CampaignService {
             data,
             {headers: this.headers}
         );
+    }
+
+    public getCreatures(): Observable<Array<Creature>> {
+        return this.http.get<Array<Creature>>(`${this.apiUrl}/creatures`, {headers: this.headers});
     }
 }

@@ -9,6 +9,8 @@ import { Campaign } from '../../../entities/Campaign';
 import { PortraitComponent } from '../../character/portrait/portrait.component';
 import { Character } from '../../../entities/Character';
 import { MoveObject } from '../../../entities/MoveObject';
+import { Creature } from '../../../entities/Creature';
+import {CreatureComponent} from '../../creatures/creature/creature.component';
 
 @Component({
     selector: 'app-maps-view',
@@ -16,7 +18,8 @@ import { MoveObject } from '../../../entities/MoveObject';
         HeaderSlimComponent,
         MapActionIconComponent,
         FormsModule,
-        PortraitComponent
+        PortraitComponent,
+        CreatureComponent
     ],
     templateUrl: './maps-view.component.html'
 })
@@ -30,6 +33,8 @@ export class MapsViewComponent {
     showSettings: boolean = false;
     error: string = '';
     moveObject: MoveObject = new MoveObject();
+    creatures: Array<Creature> = [];
+    creatureType: string = 'aberration';
 
     constructor(private campaignService: CampaignService, private router: Router) {}
 
@@ -70,6 +75,17 @@ export class MapsViewComponent {
     setMapMode(mode: string): void {
         this.showSettings = true;
         this.mapMode = mode;
+
+        if (mode === 'Creature') {
+            this.campaignService.getCreatures().subscribe({
+                next: (creatures) => {
+                    this.creatures = creatures;
+                },
+                error: (error) => {
+                    // TODO handle error
+                }
+            })
+        }
     }
 
     getViewBoxWidth(): number {
@@ -117,6 +133,20 @@ export class MapsViewComponent {
         const y = this.getViewBoxHeight() / 2;
 
         this.campaignService.addCreatureToMap('character', this.campaignMap.guid, x, y, character.guid).subscribe({
+            next: (map: CampaignMap) => {
+                this.campaignMap = map;
+            },
+            error: (e) => {
+                // TODO handle error adding entity to map
+            }
+        })
+    }
+
+    addCreatureToMap(creature: Creature): void {
+        const x = this.getViewBoxWidth() / 2;
+        const y = this.getViewBoxHeight() / 2;
+
+        this.campaignService.addCreatureToMap('creature', this.campaignMap.guid, x, y, creature.id).subscribe({
             next: (map: CampaignMap) => {
                 this.campaignMap = map;
             },
@@ -229,5 +259,11 @@ export class MapsViewComponent {
     moveSvgElement(element: SVGElement, dx: number, dy: number): void {
         // @ts-ignore
         element.transform.baseVal.getItem(0).setTranslate(this.moveObject.elementStartX + dx, this.moveObject.elementStartY + dy);
+    }
+
+    getFilteredCreatures(): Array<Creature> {
+        return this.creatures.filter((creature) => {
+            return creature.type === this.creatureType;
+        });
     }
 }
