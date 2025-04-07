@@ -201,6 +201,10 @@ export class MapsViewComponent {
     }
 
     mapMouseDownHandler(event: MouseEvent): void {
+        // ignore anything except left mouse button
+        if(event.button > 0)
+            return;
+
         if (this.mapMode === 'Pointer') {
             const mapEntity = this.getMapEntity(event.target as SVGElement);
 
