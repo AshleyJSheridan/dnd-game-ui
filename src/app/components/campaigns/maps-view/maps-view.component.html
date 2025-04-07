@@ -54,6 +54,7 @@
                             [attr.data-x]="player.x"
                             [attr.data-y]="player.y"
                             [attr.data-guid]="player.guid"
+                            [attr.data-name]="player.player.name"
                             [attr.transform]="'translate(' + player.x + ', ' + player.y + ')'"
                         >
                             <circle
@@ -75,10 +76,11 @@
                     }
                     @for (creature of campaignMap.creatures; track creature.guid) {
                         <g
-                            class="character"
+                            class="creature"
                             [attr.data-x]="creature.x"
                             [attr.data-y]="creature.y"
                             [attr.data-guid]="creature.guid"
+                            [attr.data-name]="creature.entity_name"
                             [attr.transform]="'translate(' + creature.x + ', ' + creature.y + ')'"
                         >
                             <circle

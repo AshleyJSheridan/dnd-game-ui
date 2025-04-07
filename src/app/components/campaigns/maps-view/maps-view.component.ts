@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { Campaign } from '../../../entities/Campaign';
 import { PortraitComponent } from '../../character/portrait/portrait.component';
 import { Character } from '../../../entities/Character';
-import { MoveObject } from '../../../entities/MoveObject';
+import { MovementObject } from '../../../entities/MovementObject';
 import { Creature } from '../../../entities/Creature';
 import {CreatureComponent} from '../../creatures/creature/creature.component';
 
@@ -27,12 +27,12 @@ export class MapsViewComponent {
     private readonly route = inject(ActivatedRoute);
     campaignMap: CampaignMap = new CampaignMap();
     campaign: Campaign | undefined = undefined;
-    mapMode: string = 'Pointer';
+    mapMode: string = '';
     // this is needed, because a colour input apparently cannot be bound in the same way a checkbox can in angular
     gridColour: WritableSignal<string> = signal('#ffffff');
     showSettings: boolean = false;
     error: string = '';
-    moveObject: MoveObject = new MoveObject();
+    movementObject: MovementObject = new MovementObject();
     creatures: Array<Creature> = [];
     creatureType: string = '-';
     creatureSearch: string = '';
@@ -186,7 +186,7 @@ export class MapsViewComponent {
     }
 
     // recursively get the player element from the target, as event target might be nested element
-    getMapElement(target: SVGElement): SVGElement | undefined {
+    getMapEntity(target: SVGElement): SVGElement | undefined {
         if ((target).tagName === 'svg')
             return undefined;
 
@@ -197,44 +197,45 @@ export class MapsViewComponent {
         )
             return target;
 
-        return this.getMapElement(target.parentNode as SVGElement);
+        return this.getMapEntity(target.parentNode as SVGElement);
     }
 
     mapMouseDownHandler(event: MouseEvent): void {
         if (this.mapMode === 'Pointer') {
-            const mapElement = this.getMapElement(event.target as SVGElement);
+            const mapEntity = this.getMapEntity(event.target as SVGElement);
 
-            if (mapElement !== undefined) {
-                this.moveObject.target = mapElement;
-                this.moveObject.entityGuid = mapElement.getAttribute('data-guid') ?? '';
-                this.moveObject.entityType = mapElement.getAttribute('class') ?? '';
-                this.moveObject.elementStartX = parseInt(mapElement.getAttribute('data-x') ?? '0');
-                this.moveObject.elementStartY = parseInt(mapElement.getAttribute('data-y') ?? '0');
-                this.moveObject.startX = event.offsetX;
-                this.moveObject.startY = event.offsetY;
+            if (mapEntity !== undefined) {
+                this.movementObject.inMotion = true;
+                this.movementObject.target = mapEntity;
+                this.movementObject.entityGuid = mapEntity.getAttribute('data-guid') ?? '';
+                this.movementObject.entityType = mapEntity.getAttribute('class') ?? '';
+                this.movementObject.elementStartX = parseInt(mapEntity.getAttribute('data-x') ?? '0');
+                this.movementObject.elementStartY = parseInt(mapEntity.getAttribute('data-y') ?? '0');
+                this.movementObject.startX = event.offsetX;
+                this.movementObject.startY = event.offsetY;
             }
         }
     }
 
     mapMouseUpHandler(event: MouseEvent): void {
-        if (this.mapMode === 'Pointer' && this.moveObject.target) {
-            this.moveObject.endX = event.offsetX;
-            this.moveObject.endY = event.offsetY;
+        if (this.mapMode === 'Pointer' && this.movementObject.inMotion) {
+            this.movementObject.endX = event.offsetX;
+            this.movementObject.endY = event.offsetY;
 
-            const dx = event.offsetX - this.moveObject.startX;
-            const dy = event.offsetY - this.moveObject.startY;
+            const dx = event.offsetX - this.movementObject.startX;
+            const dy = event.offsetY - this.movementObject.startY;
 
             const updateData = {
-                guid: this.moveObject.entityGuid,
-                type: this.moveObject.entityType,
-                x: this.moveObject.elementStartX + dx,
-                y: this.moveObject.elementStartY + dy,
+                guid: this.movementObject.entityGuid,
+                type: this.movementObject.entityType,
+                x: this.movementObject.elementStartX + dx,
+                y: this.movementObject.elementStartY + dy,
 
             };
-            const target = this.moveObject.target;
-            const elementStartX = this.moveObject.elementStartX;
-            const elementStartY = this.moveObject.elementStartY;
-            this.campaignService.updateMapEntity(this.campaignMap.guid, this.moveObject.entityGuid, updateData).subscribe({
+            const target = this.movementObject.target;
+            const elementStartX = this.movementObject.elementStartX;
+            const elementStartY = this.movementObject.elementStartY;
+            this.campaignService.updateMapEntity(this.campaignMap.guid, this.movementObject.entityGuid, updateData).subscribe({
                 next: (map) => {
                     this.campaignMap = map;
                 },
@@ -244,22 +245,24 @@ export class MapsViewComponent {
                 }
             })
 
-            this.moveObject = new MoveObject();
+            //this.movementObject = new MovementObject();
+            this.movementObject.inMotion = false;
         }
     }
 
     mapMouseMoveHandler(event: MouseEvent): void {
-        if (this.mapMode === 'Pointer' && this.moveObject.target) {
-            const dx = event.offsetX - this.moveObject.startX;
-            const dy = event.offsetY - this.moveObject.startY;
+        if (this.mapMode === 'Pointer' && this.movementObject.inMotion) {
+            const dx = event.offsetX - this.movementObject.startX;
+            const dy = event.offsetY - this.movementObject.startY;
 
-            this.moveSvgElement(this.moveObject.target, dx, dy);
+            // @ts-ignore
+            this.moveSvgElement(this.movementObject.target, dx, dy);
         }
     }
 
     moveSvgElement(element: SVGElement, dx: number, dy: number): void {
         // @ts-ignore
-        element.transform.baseVal.getItem(0).setTranslate(this.moveObject.elementStartX + dx, this.moveObject.elementStartY + dy);
+        element.transform.baseVal.getItem(0).setTranslate(this.movementObject.elementStartX + dx, this.movementObject.elementStartY + dy);
     }
 
     getFilteredCreatures(): Array<Creature> {

@@ -1,6 +1,6 @@
 import { Character } from './Character';
 
-export class MoveObject {
+export class MovementObject {
     target: SVGElement | null = null;
     entityGuid: string = '';
     entityType: string  = '';
@@ -10,4 +10,5 @@ export class MoveObject {
     startY: number = 0;
     endX: number = 0;
     endY: number = 0;
+    inMotion: boolean = false;
 }
