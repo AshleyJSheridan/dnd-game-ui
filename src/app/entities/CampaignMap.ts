@@ -1,5 +1,6 @@
 import {CampaignMapPlayer} from './CampaignMapPlayer';
 import {CampaignMapCreature} from './CampaignMapCreature';
+import {CampaignMapDrawing} from './CampaignMapDrawing';
 
 export class CampaignMap {
     guid: string = '';
@@ -14,4 +15,5 @@ export class CampaignMap {
     grid_colour: string = '#ffffff';
     players: Array<CampaignMapPlayer> = [];
     creatures: Array<CampaignMapCreature> = [];
+    drawings: Array<CampaignMapDrawing> = [];
 }

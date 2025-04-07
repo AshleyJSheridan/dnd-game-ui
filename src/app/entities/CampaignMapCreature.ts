@@ -1,4 +1,4 @@
-import {Creature} from './Creature';
+import { Creature } from './Creature';
 
 export class CampaignMapCreature {
     guid: string = '';

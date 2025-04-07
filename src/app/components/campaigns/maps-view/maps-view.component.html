@@ -41,12 +41,59 @@
                         />
                     </pattern>
 
+                    <!-- drawing patterns, as needed by particular map -->
+                    @for (drawing of campaignMap.drawings; track drawing.guid) {
+                        <app-map-pattern
+                            [patternId]="'pattern-' + drawing.guid"
+                            [patternColour]="drawing.highlight_colour"
+                            [patternSymbol]="drawing.stats?.pattern ?? ''"
+                        />
+                    }
                 </defs>
                 @if (campaignMap.show_grid) {
                     <g id="scale">
                         <rect width="100%" height="100%" fill="url(#grid)" />
                     </g>
                 }
+                <g id="mapDrawings">
+                    @for (drawing of campaignMap.drawings; track drawing.guid) {
+                        <g class="drawing" [attr.transform]="'translate(' + drawing.x + ', ' + drawing.y + ')'">
+                            @switch (drawing.stats.type ?? '') {
+                                @case ('circle') {
+                                    <circle
+                                        cx="0"
+                                        cy="0"
+                                        [attr.r]="drawing.stats?.r"
+                                        [attr.stroke]="drawing.highlight_colour"
+                                        stroke-width="4"
+                                        [attr.fill]="'url(#pattern-' + drawing.guid + ')'"
+                                    />
+                                }
+                                @case ('rectangle') {
+                                    <rect
+                                        x="0"
+                                        y="0"
+                                        [attr.width]="drawing.stats?.width"
+                                        [attr.height]="drawing.stats?.height"
+                                        [attr.stroke]="drawing.highlight_colour"
+                                        stroke-width="4"
+                                        [attr.fill]="'url(#pattern-' + drawing.guid + ')'"
+                                    />
+                                }
+                                @case ('cone') {
+                                    <g [attr.transform]="'rotate(' + (drawing.stats.angle ?? 0) + ')'">
+                                        <path
+                                            stroke-width="4"
+                                            [attr.stroke]="drawing.highlight_colour"
+                                            [attr.d]="'M 0 0 L ' + (drawing.stats.length ?? 0) + ' -' + ((drawing.stats.width ?? 0) / 2) + ' L ' + (drawing.stats.length ?? 0) + ' ' + ((drawing.stats.width ?? 0) / 2) + ' Z'"
+                                            [attr.fill]="'url(#pattern-' + drawing.guid + ')'"
+                                        />
+                                    </g>
+                                }
+                            }
+                        </g>
+                    }
+                </g>
                 <g id="mapCreatures">
                     @for (player of campaignMap.players; track player.guid) {
                         <g

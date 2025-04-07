@@ -13,6 +13,7 @@ import { Creature } from '../../../entities/Creature';
 import { CreatureComponent } from '../../creatures/creature/creature.component';
 import {CampaignMapPlayer} from '../../../entities/CampaignMapPlayer';
 import {CampaignMapCreature} from '../../../entities/CampaignMapCreature';
+import {MapPatternComponent} from '../../map-pattern/map-pattern.component';
 
 @Component({
     selector: 'app-maps-view',
@@ -21,7 +22,8 @@ import {CampaignMapCreature} from '../../../entities/CampaignMapCreature';
         MapActionIconComponent,
         FormsModule,
         PortraitComponent,
-        CreatureComponent
+        CreatureComponent,
+        MapPatternComponent
     ],
     templateUrl: './maps-view.component.html'
 })
