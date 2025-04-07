@@ -116,7 +116,20 @@
                 @switch (mapMode)
                 {
                     @case ("Pointer") {
-                        {{ getCurrentSelectedObject()?.entity_name }}
+                        @if (movementObject.entityType === 'character') {
+                            Name: {{ getCurrentSelectedObject()?.entity_name }}
+                        } @else {
+                            <label>
+                                Name:
+                                <input
+                                    type="text"
+                                    name="entityName"
+                                    [value]="getCurrentSelectedObject()?.entity_name"
+                                    (change)="saveEntityName($event)"
+                                />
+                            </label>
+                        }
+
                         <label>
                             Ring colour:
                             <input

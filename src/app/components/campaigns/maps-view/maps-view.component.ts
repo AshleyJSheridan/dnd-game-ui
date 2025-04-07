@@ -314,13 +314,31 @@ export class MapsViewComponent {
     }
 
     saveRingColour(event: Event): void {
-        //const entity = this.getCurrentSelectedObject();
         const newRingColor = (event.currentTarget as HTMLInputElement).value;
 
         const updateData = {
             guid: this.movementObject.entityGuid,
             type: this.movementObject.entityType,
             highlight_colour: newRingColor,
+        };
+
+        this.campaignService.updateMapEntity(this.campaignMap.guid, this.movementObject.entityGuid, updateData).subscribe({
+            next: (map) => {
+                this.campaignMap = map;
+            },
+            error: (error) => {
+
+            }
+        })
+    }
+
+    saveEntityName(event: Event): void {
+        const entityName = (event.currentTarget as HTMLInputElement).value;
+
+        const updateData = {
+            guid: this.movementObject.entityGuid,
+            type: this.movementObject.entityType,
+            entity_name: entityName,
         };
 
         this.campaignService.updateMapEntity(this.campaignMap.guid, this.movementObject.entityGuid, updateData).subscribe({
