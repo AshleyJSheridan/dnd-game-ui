@@ -229,6 +229,10 @@ export class MapsViewComponent {
             const dx = event.offsetX - this.movementObject.startX;
             const dy = event.offsetY - this.movementObject.startY;
 
+            // no point making a request to backend for what is effectively no movement
+            if (dx < 5 || dy < 5)
+                return;
+
             const updateData = {
                 guid: this.movementObject.entityGuid,
                 type: this.movementObject.entityType,
