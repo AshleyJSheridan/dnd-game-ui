@@ -14,6 +14,7 @@ import { CreatureComponent } from '../../creatures/creature/creature.component';
 import {CampaignMapPlayer} from '../../../entities/CampaignMapPlayer';
 import {CampaignMapCreature} from '../../../entities/CampaignMapCreature';
 import {MapPatternComponent} from '../../map-pattern/map-pattern.component';
+import {CampaignMapDrawing} from '../../../entities/CampaignMapDrawing';
 
 @Component({
     selector: 'app-maps-view',
@@ -197,18 +198,21 @@ export class MapsViewComponent {
         if (
             (target).getAttribute('class') === 'character' ||
             (target).getAttribute('class') === 'creature' ||
-            (target).getAttribute('class') === 'object'
+            (target).getAttribute('class') === 'object' ||
+            (target).getAttribute('class') === 'drawing'
         )
             return target;
 
         return this.getMapSVGEntity(target.parentNode as SVGElement);
     }
 
-    getCurrentSelectedObject(): CampaignMapPlayer | CampaignMapCreature | undefined {
+    getCurrentSelectedObject(): CampaignMapPlayer | CampaignMapCreature | CampaignMapDrawing | undefined {
         if (this.movementObject.entityType === 'character') {
             return this.campaignMap.players.find(c => c.guid === this.movementObject.entityGuid);
         } else if (this.movementObject.entityType === 'creature') {
             return this.campaignMap.creatures.find(c => c.guid === this.movementObject.entityGuid);
+        } else if (this.movementObject.entityType === 'drawing') {
+            return this.campaignMap.drawings.find(c => c.guid === this.movementObject.entityGuid);
         }
 
         return undefined;

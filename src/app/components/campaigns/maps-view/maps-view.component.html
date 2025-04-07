@@ -57,7 +57,14 @@
                 }
                 <g id="mapDrawings">
                     @for (drawing of campaignMap.drawings; track drawing.guid) {
-                        <g class="drawing" [attr.transform]="'translate(' + drawing.x + ', ' + drawing.y + ')'">
+                        <g
+                            class="drawing"
+                            [attr.transform]="'translate(' + drawing.x + ', ' + drawing.y + ')'"
+                            [attr.data-x]="drawing.x"
+                            [attr.data-y]="drawing.y"
+                            [attr.data-guid]="drawing.guid"
+                            data-name=""
+                        >
                             @switch (drawing.stats.type ?? '') {
                                 @case ('circle') {
                                     <circle
