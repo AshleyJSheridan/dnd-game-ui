@@ -116,7 +116,16 @@
                 @switch (mapMode)
                 {
                     @case ("Pointer") {
-
+                        {{ getCurrentSelectedObject()?.entity_name }}
+                        <label>
+                            Ring colour:
+                            <input
+                                type="color"
+                                name="ringColour"
+                                [value]="getCurrentSelectedObject()?.highlight_colour"
+                                (change)="saveRingColour($event)"
+                            />
+                        </label>
                     }
                     @case ("Draw") {
 

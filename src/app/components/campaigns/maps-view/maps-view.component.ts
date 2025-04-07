@@ -1,4 +1,4 @@
-import {Component, inject,  signal, WritableSignal} from '@angular/core';
+import { Component, inject,  signal, WritableSignal } from '@angular/core';
 import { HeaderSlimComponent } from '../../header/header-slim/header-slim.component';
 import { CampaignService } from '../../../services/campaign-service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,7 +10,9 @@ import { PortraitComponent } from '../../character/portrait/portrait.component';
 import { Character } from '../../../entities/Character';
 import { MovementObject } from '../../../entities/MovementObject';
 import { Creature } from '../../../entities/Creature';
-import {CreatureComponent} from '../../creatures/creature/creature.component';
+import { CreatureComponent } from '../../creatures/creature/creature.component';
+import {CampaignMapPlayer} from '../../../entities/CampaignMapPlayer';
+import {CampaignMapCreature} from '../../../entities/CampaignMapCreature';
 
 @Component({
     selector: 'app-maps-view',
@@ -185,8 +187,8 @@ export class MapsViewComponent {
             return 'images/silhouette.png';
     }
 
-    // recursively get the player element from the target, as event target might be nested element
-    getMapEntity(target: SVGElement): SVGElement | undefined {
+    // recursively get the entity SVG element from the target, as event target might be nested element
+    getMapSVGEntity(target: SVGElement): SVGElement | undefined {
         if ((target).tagName === 'svg')
             return undefined;
 
@@ -197,7 +199,17 @@ export class MapsViewComponent {
         )
             return target;
 
-        return this.getMapEntity(target.parentNode as SVGElement);
+        return this.getMapSVGEntity(target.parentNode as SVGElement);
+    }
+
+    getCurrentSelectedObject(): CampaignMapPlayer | CampaignMapCreature | undefined {
+        if (this.movementObject.entityType === 'character') {
+            return this.campaignMap.players.find(c => c.guid === this.movementObject.entityGuid);
+        } else if (this.movementObject.entityType === 'creature') {
+            return this.campaignMap.creatures.find(c => c.guid === this.movementObject.entityGuid);
+        }
+
+        return undefined;
     }
 
     mapMouseDownHandler(event: MouseEvent): void {
@@ -206,7 +218,7 @@ export class MapsViewComponent {
             return;
 
         if (this.mapMode === 'Pointer') {
-            const mapEntity = this.getMapEntity(event.target as SVGElement);
+            const mapEntity = this.getMapSVGEntity(event.target as SVGElement);
 
             if (mapEntity !== undefined) {
                 this.movementObject.inMotion = true;
@@ -223,6 +235,8 @@ export class MapsViewComponent {
 
     mapMouseUpHandler(event: MouseEvent): void {
         if (this.mapMode === 'Pointer' && this.movementObject.inMotion) {
+            this.movementObject.inMotion = false;
+
             this.movementObject.endX = event.offsetX;
             this.movementObject.endY = event.offsetY;
 
@@ -230,7 +244,7 @@ export class MapsViewComponent {
             const dy = event.offsetY - this.movementObject.startY;
 
             // no point making a request to backend for what is effectively no movement
-            if (dx < 5 || dy < 5)
+            if (Math.abs(dx) < 5 || Math.abs(dy) < 5)
                 return;
 
             const updateData = {
@@ -252,9 +266,6 @@ export class MapsViewComponent {
                     this.moveSvgElement(target, elementStartX, elementStartY);
                 }
             })
-
-            //this.movementObject = new MovementObject();
-            this.movementObject.inMotion = false;
         }
     }
 
@@ -300,5 +311,25 @@ export class MapsViewComponent {
         if ((event.currentTarget as HTMLInputElement).value !== '-') {
             this.creatureSearch = '';
         }
+    }
+
+    saveRingColour(event: Event): void {
+        //const entity = this.getCurrentSelectedObject();
+        const newRingColor = (event.currentTarget as HTMLInputElement).value;
+
+        const updateData = {
+            guid: this.movementObject.entityGuid,
+            type: this.movementObject.entityType,
+            highlight_colour: newRingColor,
+        };
+
+        this.campaignService.updateMapEntity(this.campaignMap.guid, this.movementObject.entityGuid, updateData).subscribe({
+            next: (map) => {
+                this.campaignMap = map;
+            },
+            error: (error) => {
+
+            }
+        })
     }
 }
