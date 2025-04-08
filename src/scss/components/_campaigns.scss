@@ -191,9 +191,9 @@
     .map-action-settings {
         background-color: rgba(colours.$white, .85);
         left: 7rem;
-        position: absolute;
+        position: fixed;
         width: 20rem;
-        top: 2rem;
+        top: 10rem;
 
         .close-map-settings {
             appearance: none;
@@ -229,6 +229,14 @@
                 margin-right: .5rem;
                 width: 2rem;
             }
+
+            &.fantasy-btn {
+                margin-top: 1rem;
+            }
+        }
+
+        .object-type {
+            margin-bottom: .5rem;
         }
 
         .tabs {

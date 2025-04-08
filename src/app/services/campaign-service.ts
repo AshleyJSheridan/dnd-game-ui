@@ -85,6 +85,13 @@ export class CampaignService {
         );
     }
 
+    public removeMapEntity(mapGuid: string, entityGuid: string): Observable<CampaignMap> {
+        return this.http.delete<CampaignMap>(
+            `${this.apiUrl}/campaigns/${this.campaignGuid}/maps/${mapGuid}/entities/${entityGuid}`,
+            {headers: this.headers}
+        );
+    }
+
     public getCreatures(): Observable<Array<Creature>> {
         return this.http.get<Array<Creature>>(`${this.apiUrl}/creatures`, {headers: this.headers});
     }

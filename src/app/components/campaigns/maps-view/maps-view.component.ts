@@ -356,4 +356,16 @@ export class MapsViewComponent {
             }
         })
     }
+
+    removeEntityFromMap(): void {
+        this.campaignService.removeMapEntity(this.campaignMap.guid, this.movementObject.entityGuid).subscribe({
+            next: (map) => {
+                this.campaignMap = map;
+                this.movementObject = new MovementObject();
+            },
+            error: (error) => {
+
+            }
+        })
+    }
 }
