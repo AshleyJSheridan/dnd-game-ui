@@ -49,6 +49,13 @@
                             [patternSymbol]="drawing.stats?.pattern ?? ''"
                         />
                     }
+                    @if (mapMode === 'Draw' && drawing.distance > 0) {
+                        <app-map-pattern
+                            [patternId]="'pattern-temp-drawing'"
+                            [patternColour]="drawing.colour"
+                            [patternSymbol]="drawing.fillSymbol"
+                        />
+                    }
                 </defs>
                 @if (campaignMap.show_grid) {
                     <g id="scale">
@@ -94,6 +101,50 @@
                                             [attr.stroke]="drawing.highlight_colour"
                                             [attr.d]="'M 0 0 L ' + (drawing.stats.length ?? 0) + ' -' + ((drawing.stats.width ?? 0) / 2) + ' L ' + (drawing.stats.length ?? 0) + ' ' + ((drawing.stats.width ?? 0) / 2) + ' Z'"
                                             [attr.fill]="'url(#pattern-' + drawing.guid + ')'"
+                                        />
+                                    </g>
+                                }
+                            }
+                        </g>
+                    }
+                    @if (mapMode === 'Draw' && drawing.distance > 0) {
+                        <g
+                            class="drawing"
+                            [attr.transform]="'translate(' + drawing.startX + ', ' + drawing.startY + ')'"
+                            [attr.data-x]="drawing.startX"
+                            [attr.data-y]="drawing.startY"
+                            data-guid="temp-drawing"
+                            data-name=""
+                        >
+                            @switch (drawing.shape) {
+                                @case ('circle') {
+                                    <circle
+                                        cx="0"
+                                        cy="0"
+                                        [attr.r]="drawing.distance"
+                                        [attr.stroke]="drawing.colour"
+                                        stroke-width="4"
+                                        fill="url(#pattern-temp-drawing)"
+                                    />
+                                }
+                                @case ('rectangle') {
+                                    <rect
+                                        x="0"
+                                        y="0"
+                                        [attr.width]="drawing.width"
+                                        [attr.height]="drawing.height"
+                                        [attr.stroke]="drawing.colour"
+                                        stroke-width="4"
+                                        fill="url(#pattern-temp-drawing)"
+                                    />
+                                }
+                                @case ('cone') {
+                                    <g [attr.transform]="'rotate(' + (drawing.angle ?? 0) + ')'">
+                                        <path
+                                            stroke-width="4"
+                                            [attr.stroke]="drawing.colour"
+                                            [attr.d]="'M 0 0 L ' + (drawing.distance ?? 1) + ' -' + ((drawing.distance ?? 1) / 4) + ' L ' + (drawing.distance ?? 0) + ' ' + ((drawing.distance ?? 1) / 4) + ' Z'"
+                                            fill="url(#pattern-temp-drawing)"
                                         />
                                     </g>
                                 }
@@ -202,7 +253,59 @@
                         <button class="fantasy-btn fantasy-brown" (click)="removeEntityFromMap()">Remove from map</button>
                     }
                     @case ("Draw") {
+                        <fieldset>
+                            <legend>Shape</legend>
 
+                            <div class="radio-collection">
+                                <label class="radio-label">
+                                    <span class="accessible-hidden">Circle</span>
+                                    <input type="radio" name="drawingShape" value="circle"
+                                       (change)="drawing.shape = 'circle'" [checked]="drawing.shape === 'circle'"/>
+                                    <svg viewBox="0 0 24 24" width="24" height="24">
+                                        <circle r="10" cx="12" cy="12" fill="none" stroke="currentColor" stroke-width="1"/>
+                                    </svg>
+                                </label>
+                                <label class="radio-label">
+                                    <span class="accessible-hidden">Cone</span>
+                                    <input type="radio" name="drawingShape" value="cone"
+                                       (change)="drawing.shape = 'cone'" [checked]="drawing.shape === 'cone'"/>
+                                    <svg viewBox="0 0 24 24" width="24" height="24">
+                                        <path d="M 12 0 L 0 24 L 24 24 Z" fill="none" stroke="currentColor" stroke-width="1"/>
+                                    </svg>
+                                </label>
+                                <label class="radio-label">
+                                    <span class="accessible-hidden">Rectangle</span>
+                                    <input type="radio" name="drawingShape" value="rectangle"
+                                       (change)="drawing.shape = 'rectangle'" [checked]="drawing.shape === 'rectangle'"/>
+                                    <svg viewBox="0 0 24 24" width="24" height="24">
+                                        <rect height="20" width="20" x="2" y="2" fill="none" stroke="currentColor" stroke-width="1"/>
+                                    </svg>
+                                </label>
+                            </div>
+
+                        </fieldset>
+                        <fieldset>
+                            <legend>Symbol</legend>
+
+                            <div class="radio-collection">
+                                @for (damageType of damageTypeIcons; track damageType) {
+                                    <label class="radio-label">
+                                        <span class="accessible-hidden">{{ damageType }}</span>
+                                        <input type="radio" name="patternSymbol" value="{{ damageType.toLowerCase() }}"
+                                               (change)="drawing.fillSymbol = damageType.toLowerCase()" [checked]="drawing.fillSymbol === damageType.toLowerCase()"/>
+                                        <app-damage-icon [patternSymbol]="damageType"/>
+                                    </label>
+                                }
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <legend>Colour</legend>
+
+                            <label>
+                                <span class="accessible-hidden">Colour</span>
+                                <input type="color" [value]="drawing.colour" (change)="changeDrawingColour($event)"/>
+                            </label>
+                        </fieldset>
                     }
                     @case ("Ruler") {
 

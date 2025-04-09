@@ -1,4 +1,4 @@
-import { Component, inject,  signal, WritableSignal } from '@angular/core';
+import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { HeaderSlimComponent } from '../../header/header-slim/header-slim.component';
 import { CampaignService } from '../../../services/campaign-service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,10 +11,12 @@ import { Character } from '../../../entities/Character';
 import { MovementObject } from '../../../entities/MovementObject';
 import { Creature } from '../../../entities/Creature';
 import { CreatureComponent } from '../../creatures/creature/creature.component';
-import {CampaignMapPlayer} from '../../../entities/CampaignMapPlayer';
-import {CampaignMapCreature} from '../../../entities/CampaignMapCreature';
-import {MapPatternComponent} from '../../map-pattern/map-pattern.component';
-import {CampaignMapDrawing} from '../../../entities/CampaignMapDrawing';
+import { CampaignMapPlayer } from '../../../entities/CampaignMapPlayer';
+import { CampaignMapCreature } from '../../../entities/CampaignMapCreature';
+import { MapPatternComponent } from '../map-pattern/map-pattern.component';
+import { CampaignMapDrawing } from '../../../entities/CampaignMapDrawing';
+import { DamageIconComponent } from '../../icons/damage-icon/damage-icon.component';
+import {DrawingObject} from '../../../entities/DrawingObject';
 
 @Component({
     selector: 'app-maps-view',
@@ -24,7 +26,8 @@ import {CampaignMapDrawing} from '../../../entities/CampaignMapDrawing';
         FormsModule,
         PortraitComponent,
         CreatureComponent,
-        MapPatternComponent
+        MapPatternComponent,
+        DamageIconComponent
     ],
     templateUrl: './maps-view.component.html'
 })
@@ -41,6 +44,9 @@ export class MapsViewComponent {
     creatures: Array<Creature> = [];
     creatureType: string = '-';
     creatureSearch: string = '';
+    drawing: DrawingObject = new DrawingObject();
+    damageTypeIcons: Array<string> = ['Bludgeoning', 'Piercing', 'Slashing', 'Acid', 'Cold', 'Fire', 'Force', 'Lightning',
+        'Necrotic', 'Poison', 'Psychic', 'Radiant', 'None'];
 
     constructor(private campaignService: CampaignService, private router: Router) {}
 
@@ -236,6 +242,15 @@ export class MapsViewComponent {
                 this.movementObject.startX = event.offsetX;
                 this.movementObject.startY = event.offsetY;
             }
+        } else if (this.mapMode === 'Draw') {
+            this.drawing.startX = event.offsetX;
+            this.drawing.startY = event.offsetY;
+            this.drawing.distance = 0;
+            this.drawing.height = 0;
+            this.drawing.width = 0;
+            this.drawing.angle = 0;
+            this.drawing.angle = 0;
+            this.drawing.drawing = true;
         }
     }
 
@@ -272,6 +287,18 @@ export class MapsViewComponent {
                     this.moveSvgElement(target, elementStartX, elementStartY);
                 }
             })
+        } else if (this.mapMode === 'Draw') {
+            this.drawing.drawing = false;
+
+            this.campaignService.addDrawingToMap(this.campaignMap.guid, this.drawing).subscribe({
+                next: (map) => {
+                    this.campaignMap = map;
+                    this.drawing = new DrawingObject();
+                },
+                error: (error) => {
+                    // TODO handle error
+                }
+            })
         }
     }
 
@@ -282,6 +309,13 @@ export class MapsViewComponent {
 
             // @ts-ignore
             this.moveSvgElement(this.movementObject.target, dx, dy);
+        } else if (this.mapMode === 'Draw' && this.drawing.drawing) {
+            const endX = event.offsetX;
+            const endY = event.offsetY;
+            this.drawing.distance = Math.sqrt(Math.pow(Math.abs(endX - this.drawing.startX), 2) + Math.pow(Math.abs(endY - this.drawing.startY), 2));
+            this.drawing.width = Math.abs(this.drawing.startX - endX);
+            this.drawing.height = Math.abs(this.drawing.startY - endY);
+            this.drawing.angle = this.getAngleInDegrees(this.drawing.startX, this.drawing.startY, endX, endY);
         }
     }
 
@@ -367,5 +401,17 @@ export class MapsViewComponent {
 
             }
         })
+    }
+
+    changeDrawingColour(event: Event): void {
+        this.drawing.colour = (event.currentTarget as HTMLInputElement).value;
+    }
+
+    private getAngleInDegrees(x1: number, y1: number, x2: number, y2: number): number
+    {
+        const deltaY = y2 - y1;
+        const deltaX = x2 - x1;
+        const radians = Math.atan2(deltaY, deltaX);
+        return radians * (180 / Math.PI);
     }
 }

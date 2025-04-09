@@ -190,10 +190,10 @@
 
     .map-action-settings {
         background-color: rgba(colours.$white, .85);
-        left: 7rem;
+        left: 6rem;
         position: fixed;
         width: 20rem;
-        top: 10rem;
+        top: 7rem;
 
         .close-map-settings {
             appearance: none;
@@ -215,6 +215,33 @@
         label {
             display: block;
             margin-bottom: .5rem;
+        }
+
+        .radio-collection {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        label.radio-label {
+            padding: 0;
+
+            input {
+                clip: rect(1px 1px 1px 1px);
+                height: 1px;
+                overflow: hidden;
+                position: absolute;
+                white-space: nowrap;
+
+                &:checked + svg,
+                &:checked + * svg {
+                    background-color: colours.$gold;
+                }
+            }
+
+            svg {
+                padding: .25rem;
+            }
         }
 
         button {

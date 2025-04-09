@@ -77,6 +77,14 @@ export class CampaignService {
         );
     }
 
+    public addDrawingToMap(mapGuid: string, data: object): Observable<CampaignMap> {
+        return this.http.post<CampaignMap>(
+            `${this.apiUrl}/campaigns/${this.campaignGuid}/maps/${mapGuid}/entities`,
+            {type: 'drawing', ...data},
+            {headers: this.headers}
+        );
+    }
+
     public updateMapEntity(mapGuid: string, entityGuid: string, data: object): Observable<CampaignMap> {
         return this.http.patch<CampaignMap>(
             `${this.apiUrl}/campaigns/${this.campaignGuid}/maps/${mapGuid}/entities/${entityGuid}`,
