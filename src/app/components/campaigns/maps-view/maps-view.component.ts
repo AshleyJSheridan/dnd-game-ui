@@ -16,7 +16,7 @@ import { CampaignMapCreature } from '../../../entities/CampaignMapCreature';
 import { MapPatternComponent } from '../map-pattern/map-pattern.component';
 import { CampaignMapDrawing } from '../../../entities/CampaignMapDrawing';
 import { DamageIconComponent } from '../../icons/damage-icon/damage-icon.component';
-import {DrawingObject} from '../../../entities/DrawingObject';
+import { DrawingObject } from '../../../entities/DrawingObject';
 
 @Component({
     selector: 'app-maps-view',
@@ -251,6 +251,14 @@ export class MapsViewComponent {
             this.drawing.angle = 0;
             this.drawing.angle = 0;
             this.drawing.drawing = true;
+        } else if (this.mapMode === 'Ruler') {
+            this.drawing.startX = event.offsetX;
+            this.drawing.startY = event.offsetY;
+            this.drawing.endX = event.offsetX;
+            this.drawing.endY = event.offsetY;
+            this.drawing.distance = 0;
+            this.drawing.angle = 0;
+            this.drawing.isRuler = true;
         }
     }
 
@@ -299,6 +307,9 @@ export class MapsViewComponent {
                     // TODO handle error
                 }
             })
+        } else if (this.mapMode === 'Ruler') {
+            // fine to reset it for the ruler as we don't need to display it anymore once the user has released the mouse button
+            this.drawing = new DrawingObject();
         }
     }
 
@@ -316,6 +327,10 @@ export class MapsViewComponent {
             this.drawing.width = Math.abs(this.drawing.startX - endX);
             this.drawing.height = Math.abs(this.drawing.startY - endY);
             this.drawing.angle = this.getAngleInDegrees(this.drawing.startX, this.drawing.startY, endX, endY);
+        } else if (this.mapMode === 'Ruler' && this.drawing.isRuler) {
+            this.drawing.endX = event.offsetX;
+            this.drawing.endY = event.offsetY;
+            this.drawing.distance = Math.round(Math.sqrt(Math.pow(Math.abs(this.drawing.endX - this.drawing.startX), 2) + Math.pow(Math.abs(this.drawing.endY - this.drawing.startY), 2)) / this.campaignMap.grid_size * 5);
         }
     }
 

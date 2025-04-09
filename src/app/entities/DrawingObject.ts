@@ -9,4 +9,7 @@ export class DrawingObject {
     height: number = 0;
     drawing: boolean = false;
     angle: number = 0;
+    isRuler: boolean = false;
+    endX: number = 0;
+    endY: number = 0;
 }
