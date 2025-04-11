@@ -27,6 +27,7 @@ export class AppComponent {
     heartbeat(): void {
         this.authService.heartbeat().subscribe({
             next: (tokenResponse) => {
+
             },
             error: (error) => {
                 // on an error, log out and cancel the heartbeat

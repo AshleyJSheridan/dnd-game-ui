@@ -20,7 +20,7 @@ export class CharacterService {
     private headers: HttpHeaders = new HttpHeaders();
 
     constructor(private http: HttpClient, private storageService: LocalStorageService) {
-        this.headers = this.headers.set('Authorization', 'Bearer ' + this.storageService.getItem('token'));
+        this.headers = this.headers.set('Authorization', 'Bearer ' + this.storageService.getItem('access_token'));
     }
 
     public setCharGuid(charGuid: string): void {

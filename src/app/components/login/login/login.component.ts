@@ -17,7 +17,8 @@ export class LoginComponent {
     email: string = '';
     password: string = '';
     error: string = '';
-    tokenKey: string = 'token';
+    tokenKey: string = 'access_token';
+    refreshTokenKey = 'refresh_token';
 
     constructor(private authService: AuthService, private storageService: LocalStorageService, private router: Router) {}
 
@@ -34,12 +35,16 @@ export class LoginComponent {
 
         this.authService.login(this.email, this.password).subscribe({
             next: (tokenResponse) => {
-                this.storageService.setItem(this.tokenKey, tokenResponse.token);
+                this.storageService.setItem(this.tokenKey, tokenResponse.access_token);
+                this.storageService.setItem(this.refreshTokenKey, tokenResponse.refresh_token);
+                this.storageService.setItem('expires_in', tokenResponse.expires_in.toString());
 
                 this.router.navigate(['/characters']);
             },
             error: (error) => {
                 this.storageService.removeItem(this.tokenKey);
+                this.storageService.removeItem(this.refreshTokenKey);
+                this.storageService.removeItem('expires_in');
 
                 switch (error.status) {
                     case 401:
