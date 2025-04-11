@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
 import { CharacterService } from '../../../services/character.service';
 import {Character} from '../../../entities/Character';
+import {PortraitComponent} from '../portrait/portrait.component';
 
 @Component({
     selector: 'app-edit-portrait',
-    imports: [],
+    imports: [
+        PortraitComponent
+    ],
     templateUrl: './edit-portrait.component.html'
 })
 export class EditPortraitComponent {
@@ -13,7 +16,7 @@ export class EditPortraitComponent {
     fileError: string = '';
     character: Character | undefined = undefined;
 
-    constructor(private characterService: CharacterService) {}
+    constructor(public characterService: CharacterService) {}
 
     onFileSelected(event: Event): void {
         this.fileError = '';
@@ -33,7 +36,7 @@ export class EditPortraitComponent {
 
         this.characterService.setCharacterPortrait(this.file).subscribe({
             next: (character) => {
-                this.character = character;
+                this.characterService.character = character;
             },
             error: (error) => {
                 this.fileError = 'There was an error uploading the file. Please try again.';
