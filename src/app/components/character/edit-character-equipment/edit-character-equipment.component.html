@@ -1,19 +1,45 @@
 <h2>Character Creation - Equipment</h2>
 
+<h3>Class Equipment Choices</h3>
 <div class="char-edit-equipment-panel">
     @for (set of startingEquipment; track $index) {
-        <div>
-            <details class="char-edit-equipment-set" open>
-                <summary>{{ set.choice_name }}</summary>
+        @if (set.type === 'class') {
+            <div>
+                <details class="char-edit-equipment-set" open>
+                    <summary>{{ set.choice_name }}</summary>
 
-                <div class="starting-gold"><strong>Starting gold: </strong> {{ set.gold }} gp</div>
+                    <div class="starting-gold"><strong>Starting gold: </strong> {{ set.gold }} gp</div>
 
-                <div class="set-items-panel">
-                    @for (item of set.items; track $index) {
-                        <app-game-item [item]="item"/>
-                    }
-                </div>
-            </details>
-        </div>
+                    <div class="set-items-panel">
+                        @for (item of set.items; track $index) {
+                            <app-game-item [item]="item"/>
+                        }
+                    </div>
+
+                    <button type="button" class="fantasy-btn fantasy-blue" (click)="selectEquipmentChoice(set.id)">Select Equipment</button>
+                </details>
+            </div>
+        }
+    }
+</div>
+
+<h3>Background Equipment</h3>
+<div class="char-edit-equipment-panel">
+    @for (set of startingEquipment; track $index) {
+        @if (set.type === 'background') {
+            <div>
+                <details class="char-edit-equipment-set" open>
+                    <summary>{{ set.choice_name }}</summary>
+
+                    <div class="starting-gold"><strong>Starting gold: </strong> {{ set.gold }} gp</div>
+
+                    <div class="set-items-panel">
+                        @for (item of set.items; track $index) {
+                            <app-game-item [item]="item"/>
+                        }
+                    </div>
+                </details>
+            </div>
+        }
     }
 </div>

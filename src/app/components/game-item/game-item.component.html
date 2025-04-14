@@ -12,9 +12,8 @@
             <p>{{ item()?.description }}</p>
         }
 
-        <div class="item-property"><strong>Cost:</strong> {{ item()?.cost }} {{ item()?.cost_unit }}</div>
-        @if (item()?.weight) {
-            <div class="item-property"><strong>Weight:</strong> {{ item()?.weight }} lbs</div>
+        @if (item()?.proficiency) {
+            <div class="item-property"><strong>Proficiency:</strong> {{ item()?.proficiency }}</div>
         }
         @if (item()?.weapon_properties) {
             <div class="item-property"><strong>Damage:</strong>
@@ -29,6 +28,10 @@
             @if (item()?.weapon_properties?.range) {
                 <div class="item-property"><strong>Range:</strong> {{ getItemRangeString() }}</div>
             }
+        }
+        <div class="item-property"><strong>Cost:</strong> {{ item()?.cost }} {{ item()?.cost_unit }}</div>
+        @if (item()?.weight) {
+            <div class="item-property"><strong>Weight:</strong> {{ item()?.weight }} lbs</div>
         }
 
         @if (item()?.items?.length) {

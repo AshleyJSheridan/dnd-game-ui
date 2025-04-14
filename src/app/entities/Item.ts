@@ -13,6 +13,7 @@ export class Item {
         range: Array<number>,
         weapon_versatility?: string;
     };
+    'proficiency': string = '';
     isContainer: boolean = false;
     items: Array<Item> = [];
 }
