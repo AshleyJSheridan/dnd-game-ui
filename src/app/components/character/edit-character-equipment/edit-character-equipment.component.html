@@ -1,0 +1,22 @@
+<h2>Character Creation - Equipment</h2>
+
+<div class="char-edit-equipment-panel">
+    @for (set of startingEquipment; track $index) {
+        <div>
+            <details class="char-edit-equipment-set">
+                <summary>{{ set.choice_name }}</summary>
+
+                <div class="set-items-panel">
+                    @for (item of set.items; track $index) {
+                        <app-game-item
+                            [itemName]="item.name"
+                            [itemType]="item.type"
+                            [itemDescription]="item.description"
+                            [subItems]="item.items ?? []"
+                        />
+                    }
+                </div>
+            </details>
+        </div>
+    }
+</div>

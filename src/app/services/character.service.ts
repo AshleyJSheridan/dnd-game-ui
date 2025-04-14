@@ -11,6 +11,8 @@ import { DiceRolls } from '../entities/DiceRolls';
 import { Language } from '../entities/Language';
 import { AvailableSpells } from '../entities/AvailableSpells';
 import { LocalStorageService } from './local-storage.service';
+import { Item } from '../entities/Item';
+import {StartingEquipment} from '../entities/StartingEquipment';
 
 @Injectable({providedIn: 'root'})
 export class CharacterService {
@@ -150,6 +152,11 @@ export class CharacterService {
             `${this.apiUrl}/characters/${this.charGuid}/portrait`, formData, {headers: this.headers}
         );
     }
+
+    public getCharClassStartingEquipment(charClass: string): Observable<Array<StartingEquipment>> {
+        return this.http.get<Array<StartingEquipment>>(
+            `${this.apiUrl}/characters/classes/${charClass}/startingEquipment`,
+            {headers: this.headers}
+        );
+    }
 }
-
-

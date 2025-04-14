@@ -1,0 +1,29 @@
+@use "../colours";
+
+.char-edit-equipment-panel {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+}
+
+details.char-edit-equipment-set,
+details.item {
+    border: 1px solid colours.$black;
+    border-radius: .5rem;
+    box-shadow: 2px 2px 7px colours.$medium-grey;
+    margin-bottom: .5rem;
+    padding: .5rem;
+
+    summary {
+        cursor: pointer;
+    }
+
+    summary + div {
+        margin-top: .5rem;
+    }
+
+    .item-type {
+        font-style: italic;
+    }
+}

@@ -1,3 +1,5 @@
+import { Item } from './Item';
+
 export class CharacterClass {
     id: number = 0;
     name: string = '';
@@ -48,17 +50,6 @@ export class CharacterClass {
         id: number;
         pack_name: string;
         gold: number;
-        items: Array<{
-            name: string;
-            type: string;
-            cost: number;
-            cost_unit: string;
-            weight?: number;
-            weapon_properties?: {
-                damage: string;
-                damage_type: string;
-                range: Array<number>
-            }
-        }>;
+        items: Array<Item>;
     }> = [];
 }
