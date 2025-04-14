@@ -18,16 +18,13 @@ export class EditCharacterEquipmentComponent {
     constructor(private characterService: CharacterService, private router: Router) {}
 
     ngOnInit(): void {
-        this.characterService.getCharacter().subscribe(character => {
-            this.characterService.getCharClassStartingEquipment(character.charClass).subscribe({
-                next: (equipment) => {
-                    this.startingEquipment = equipment;
-                },
-                error: (error) => {
+        this.characterService.getCharClassStartingEquipment().subscribe({
+            next: (equipment) => {
+                this.startingEquipment = equipment;
+            },
+            error: (error) => {
 
-                }
-            })
-        })
-
+            }
+        });
     }
 }

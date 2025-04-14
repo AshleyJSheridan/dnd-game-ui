@@ -153,9 +153,9 @@ export class CharacterService {
         );
     }
 
-    public getCharClassStartingEquipment(charClass: string): Observable<Array<StartingEquipment>> {
+    public getCharClassStartingEquipment(): Observable<Array<StartingEquipment>> {
         return this.http.get<Array<StartingEquipment>>(
-            `${this.apiUrl}/characters/classes/${charClass}/startingEquipment`,
+            `${this.apiUrl}/characters/${this.charGuid}/startingEquipment`,
             {headers: this.headers}
         );
     }
