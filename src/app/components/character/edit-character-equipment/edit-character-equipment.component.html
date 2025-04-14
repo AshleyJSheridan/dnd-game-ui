@@ -3,17 +3,14 @@
 <div class="char-edit-equipment-panel">
     @for (set of startingEquipment; track $index) {
         <div>
-            <details class="char-edit-equipment-set">
+            <details class="char-edit-equipment-set" open>
                 <summary>{{ set.choice_name }}</summary>
+
+                <div class="starting-gold"><strong>Starting gold: </strong> {{ set.gold }} gp</div>
 
                 <div class="set-items-panel">
                     @for (item of set.items; track $index) {
-                        <app-game-item
-                            [itemName]="item.name"
-                            [itemType]="item.type"
-                            [itemDescription]="item.description"
-                            [subItems]="item.items ?? []"
-                        />
+                        <app-game-item [item]="item"/>
                     }
                 </div>
             </details>

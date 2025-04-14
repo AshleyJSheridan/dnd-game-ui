@@ -1,9 +1,43 @@
-<details class="item">
-    <summary>{{ itemName() }} <span class="item-type">({{ itemType() }})</span></summary>
+<details class="item rarity-{{ getRarityString() }}">
+    <summary>
+        {{ item()?.name }}
+        @if ((item()?.total ?? 1) > 1) {
+            <span class="item-quantity">(&times;{{ item()?.total }})</span>
+        }
+        <span class="item-type">({{ item()?.type }})</span>
+    </summary>
 
     <div>
-        @if (itemDescription() !== '') {
-            <p>{{ itemDescription() }}</p>
+        @if (item()?.description !== '') {
+            <p>{{ item()?.description }}</p>
+        }
+
+        <div class="item-property"><strong>Cost:</strong> {{ item()?.cost }} {{ item()?.cost_unit }}</div>
+        @if (item()?.weight) {
+            <div class="item-property"><strong>Weight:</strong> {{ item()?.weight }} lbs</div>
+        }
+        @if (item()?.weapon_properties) {
+            <div class="item-property"><strong>Damage:</strong>
+                {{ item()?.weapon_properties?.damage }}
+                {{ item()?.weapon_properties?.damage_type }}
+            </div>
+            @if (item()?.weapon_properties?.weapon_versatility) {
+                <div class="item-property"><strong>Versatile: </strong>strong>
+                    {{ item()?.weapon_properties?.weapon_versatility }}
+                </div>
+            }
+            @if (item()?.weapon_properties?.range) {
+                <div class="item-property"><strong>Range:</strong> {{ getItemRangeString() }}</div>
+            }
+        }
+
+        @if (item()?.items?.length) {
+            <p>Contains:</p>
+            <div class="item-children">
+                @for (subItem of item()?.items; track $index) {
+                    <app-game-item [item]="subItem"/>
+                }
+            </div>
         }
     </div>
 </details>

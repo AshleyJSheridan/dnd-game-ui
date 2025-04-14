@@ -67,3 +67,10 @@ $spell-school-enchantment: rgb(185, 70, 185);
 $spell-school-illusion: rgb(119, 0, 255);
 $spell-school-necromancy: rgb(0, 126, 38);
 $spell-school-transmutation: rgb(221, 206, 0);
+
+// item rarity
+$item-rarity-common: $black;
+$item-rarity-uncommon: rgb(0, 126, 38);
+$item-rarity-rare: rgb(74, 145, 227);
+$item-rarity-very-rare: rgb(152, 16, 224);
+$item-rarity-legendary: rgb(221, 113, 46);

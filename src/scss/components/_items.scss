@@ -15,12 +15,29 @@ details.item {
     margin-bottom: .5rem;
     padding: .5rem;
 
+    &.rarity-uncommon {
+        color: colours.$item-rarity-uncommon;
+    }
+    &.rarity-rare {
+        color: colours.$item-rarity-rare;
+    }
+    &.rarity-very-rare {
+        color: colours.$item-rarity-very-rare;
+    }
+    &.rarity-legendary {
+        color: colours.$item-rarity-legendary;
+    }
+
     summary {
         cursor: pointer;
     }
 
-    summary + div {
-        margin-top: .5rem;
+    .starting-gold {
+        margin: .5rem 0;
+    }
+
+    .item-quantity {
+        margin-right: .25rem;
     }
 
     .item-type {

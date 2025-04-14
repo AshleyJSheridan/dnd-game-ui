@@ -8,7 +8,7 @@ import {LocalStorageService} from './services/local-storage.service';
     selector: 'app-root',
     imports: [RouterOutlet, CommonModule],
     templateUrl: './app.component.html',
-    styleUrl: '/src/styles.scss'
+    //styleUrl: '/src/styles.scss'
 })
 export class AppComponent {
     title = 'dnd-game-ui';

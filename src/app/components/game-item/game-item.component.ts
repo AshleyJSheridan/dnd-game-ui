@@ -1,5 +1,5 @@
 import { Component, input, InputSignal } from '@angular/core';
-import {Item} from '../../entities/Item';
+import { Item } from '../../entities/Item';
 
 @Component({
     selector: 'app-game-item',
@@ -7,8 +7,16 @@ import {Item} from '../../entities/Item';
     templateUrl: './game-item.component.html'
 })
 export class GameItemComponent {
-    readonly itemName: InputSignal<string> = input<string>('');
-    readonly itemDescription: InputSignal<string> = input<string>('');
-    readonly itemType: InputSignal<string> = input<string>('');
-    readonly subItems: InputSignal<Array<Item>> = input<Array<Item>>([]);
+    readonly item: InputSignal<Item|undefined> = input();
+
+    getRarityString(): string {
+        return this.item()?.rarity ? (this.item()?.rarity as string).replace(' ', '-') : 'Common';
+    }
+
+    getItemRangeString(): string {
+        if ((this.item()?.weapon_properties?.range ?? []).length > 1)
+            return this.item()?.weapon_properties?.range[0] + '/' + this.item()?.weapon_properties?.range[1];
+
+        return '';
+    }
 }
