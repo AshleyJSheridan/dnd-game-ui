@@ -9,6 +9,7 @@
 
 details.char-edit-equipment-set,
 details.item {
+    background-color: colours.$white;
     border: 1px solid colours.$black;
     border-radius: .5rem;
     box-shadow: 2px 2px 7px colours.$medium-grey;
@@ -47,4 +48,33 @@ details.item {
     button {
         margin-top: 1rem;
     }
+}
+
+details.char-edit-equipment-set.selected {
+    background-color: colours.$light-grey;
+}
+
+.instrument-selection-panel {
+    button {
+        appearance: none;
+        background-color: transparent;
+        border: 1px solid colours.$dark-grey;
+        border-radius: .5rem;
+        cursor: pointer;
+        display: block;
+        font-size: 100%;
+        margin-bottom: .5rem;
+        padding: .25rem;
+        text-align: left;
+        width: 50%;
+
+        &.selected {
+            background-color: colours.$light-grey;
+        }
+    }
+}
+
+.equipment-actions-container {
+    display: flex;
+    justify-content: right;
 }

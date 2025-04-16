@@ -61,8 +61,8 @@ export class CharacterService {
         return this.http.get<Array<CharacterClass>>(`${this.apiUrl}/characters/classes`, {headers: this.headers});
     }
 
-    public setCharacterClass(data: {charClassId: number, classPathId: number}): Observable<ICharacter> {
-        return this.http.patch<ICharacter>(
+    public setCharacterClass(data: {charClassId: number, classPathId: number}): Observable<Character> {
+        return this.http.patch<Character>(
             `${this.apiUrl}/characters/${this.charGuid}`,
             {...data, updateType: 'class'},
             {headers: this.headers}
@@ -73,8 +73,8 @@ export class CharacterService {
         return this.http.get<Array<CharacterBackground>>(`${this.apiUrl}/characters/backgrounds`, {headers: this.headers});
     }
 
-    public setCharacterBackground(backgroundId: number, characteristics: Array<number>): Observable<ICharacter> {
-        return this.http.patch<ICharacter>(
+    public setCharacterBackground(backgroundId: number, characteristics: Array<number>): Observable<Character> {
+        return this.http.patch<Character>(
             `${this.apiUrl}/characters/${this.charGuid}`,
             {
                 updateType: 'background',
@@ -156,6 +156,14 @@ export class CharacterService {
     public getCharClassStartingEquipment(): Observable<Array<StartingEquipment>> {
         return this.http.get<Array<StartingEquipment>>(
             `${this.apiUrl}/characters/${this.charGuid}/startingEquipment`,
+            {headers: this.headers}
+        );
+    }
+
+    public setCharStartingEquipment(data: any): Observable<any> {
+        return this.http.post<any>(
+            `${this.apiUrl}/characters/${this.charGuid}/startingEquipment`,
+            data,
             {headers: this.headers}
         );
     }

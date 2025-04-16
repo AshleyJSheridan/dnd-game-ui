@@ -69,9 +69,14 @@ export class EditCharacterBackgroundComponent {
             let data = {charBackgroundId: this.selectedCharBackground?.id, characteristics: characteristics};
 
             // this won't ever be called without a selected background, but coalesce to 0 to keep IDE happy
-            this.characterService.setCharacterBackground(this.selectedCharBackground?.id ?? 0, characteristics).subscribe((character) => {
-                this.router.navigate([`/characters/${character.guid}/edit/race`]);
-            });
+            this.characterService.setCharacterBackground(this.selectedCharBackground?.id ?? 0, characteristics).subscribe(
+                {
+                    next: (character) => {
+                        this.characterService.character = character;
+                        this.router.navigate([`/characters/${character.guid}/edit/race`]);
+                    }
+                }
+            );
         } else {
             this.characteristicsError = true;
         }

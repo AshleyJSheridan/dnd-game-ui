@@ -135,8 +135,11 @@ export class EditCharacterClassComponent {
             this.confirm?.cancelModal();
         }
 
-        this.characterService.setCharacterClass({charClassId: this.selectedCharClass, classPathId: selectedPath}).subscribe((character) => {
-            this.router.navigate([`/characters/${character.guid}/edit/background`]);
+        this.characterService.setCharacterClass({charClassId: this.selectedCharClass, classPathId: selectedPath}).subscribe({
+            next: (character) => {
+                this.characterService.character = character;
+                this.router.navigate([`/characters/${character.guid}/edit/background`]);
+            }
         });
     }
 

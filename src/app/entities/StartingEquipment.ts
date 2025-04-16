@@ -6,4 +6,6 @@ export class StartingEquipment {
     type: string = '';
     gold: number = 0;
     items: Array<Item> = [];
+    instrumentsCount: number = 0;
+    toolsCount: number = 0;
 }
