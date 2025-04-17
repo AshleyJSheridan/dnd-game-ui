@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { StartingEquipment } from '../../../entities/StartingEquipment';
 import { GameItemComponent } from '../../game-item/game-item.component';
 import { AuthService } from '../../../services/auth.service';
-import {Item} from '../../../entities/Item';
-import {ItemService} from '../../../services/item.service';
+import { Item } from '../../../entities/Item';
+import { ItemService } from '../../../services/item.service';
 
 @Component({
     selector: 'app-edit-character-equipment',
@@ -24,41 +24,47 @@ export class EditCharacterEquipmentComponent {
     errorMessage: string = '';
 
     constructor(
-        private characterService: CharacterService, private router: Router, private authService: AuthService,
+        public characterService: CharacterService, private router: Router, private authService: AuthService,
         private itemService: ItemService
     ) {}
 
     ngOnInit(): void {
-        this.characterService.getCharClassStartingEquipment().subscribe({
-            next: (equipment) => {
-                this.startingEquipment = equipment;
+        if (!this.characterService.character?.inventory?.items.length) {
+            this.characterService.getCharClassStartingEquipment().subscribe({
+                next: (equipment) => {
+                    this.startingEquipment = equipment;
 
-                if (this.startingEquipment.filter((set) => {return set.toolsCount > 0;}).length ?? 0) {
-                    this.itemService.getItemsByType('artisan').subscribe({
-                        next: (tools) => {
-                            this.artisansTools = tools;
-                        }
-                    })
-                }
+                    if (this.startingEquipment.filter((set) => {
+                        return set.toolsCount > 0;
+                    }).length ?? 0) {
+                        this.itemService.getItemsByType('artisan').subscribe({
+                            next: (tools) => {
+                                this.artisansTools = tools;
+                            }
+                        })
+                    }
 
-                if (this.startingEquipment.filter((set) => {return set.instrumentsCount > 0;}).length ?? 0) {
-                    this.itemService.getItemsByType('instrument').subscribe({
-                        next: (instruments) => {
-                            this.instruments = instruments;
-                        }
-                    })
+                    if (this.startingEquipment.filter((set) => {
+                        return set.instrumentsCount > 0;
+                    }).length ?? 0) {
+                        this.itemService.getItemsByType('instrument').subscribe({
+                            next: (instruments) => {
+                                this.instruments = instruments;
+                            }
+                        })
+                    }
+                },
+                error: (error) => {
+                    switch (error.status) {
+                        case 401:
+                            this.authService.refreshToken();
+                            break;
+                        default:
+                            console.error('There was an unexpected error. Please try again later.');
+                    }
                 }
-            },
-            error: (error) => {
-                switch (error.status) {
-                    case 401:
-                        this.authService.refreshToken();
-                        break;
-                    default:
-                        console.error('There was an unexpected error. Please try again later.');
-                }
-            }
-        });
+            });
+        }
     }
 
     selectEquipmentChoice(setId: number): void {
@@ -127,8 +133,8 @@ export class EditCharacterEquipmentComponent {
         };
 
         this.characterService.setCharStartingEquipment(data).subscribe({
-            next: (inventory) => {
-
+            next: (character) => {
+                this.characterService.character = character;
             },
             error: (error) => {
 

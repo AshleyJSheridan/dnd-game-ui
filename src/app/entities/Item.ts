@@ -1,5 +1,6 @@
 export class Item {
     id: number = 0;
+    parent_id: number = 0;
     name: string = '';
     description: string = '';
     type: string = '';
@@ -14,7 +15,7 @@ export class Item {
         range: Array<number>,
         weapon_versatility?: string;
     };
-    'proficiency': string = '';
+    proficiency: string = '';
     isContainer: boolean = false;
     items: Array<Item> = [];
 }

@@ -1,6 +1,7 @@
 import { Skill } from './Skill';
 import { Spell } from './Spell';
-import {Language} from './Language';
+import { Language } from './Language';
+import { Item } from './Item';
 
 export class Character {
     name: string = '';
@@ -73,5 +74,18 @@ export class Character {
         other_known_spells: [],
     };
     custom_portrait: string = '';
+    inventory: {
+        money: {
+            copper?: number;
+            silver?: number;
+            electrum?: number;
+            gold?: number;
+            platinum?: number;
+        },
+        items: Array<Item>,
+    } = {
+        money: {},
+        items: []
+    };
     created_at: Date = new Date();
 }

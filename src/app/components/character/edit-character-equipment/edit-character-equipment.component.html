@@ -1,71 +1,16 @@
 <h2>Character Creation - Equipment</h2>
 
-<div class="equipment-actions-container">
-    <button type="button" class="fantasy-btn fantasy-blue" (click)="setEquipment()">Set Equipment</button>
-</div>
+@if (!characterService.character?.inventory?.items) {
+    <div class="equipment-actions-container">
+        <button type="button" class="fantasy-btn fantasy-blue" (click)="setEquipment()">Set Equipment</button>
+    </div>
 
-<h3>Class Equipment Choices</h3>
-<div class="char-edit-equipment-panel">
-    @for (set of startingEquipment; track $index) {
-        @if (set.type === 'class') {
-            <div>
-                <details class="char-edit-equipment-set" [class.selected]="selectedClassSet === set.id" open>
-                    <summary>{{ set.choice_name }}</summary>
-
-                    <div class="starting-gold"><strong>Starting gold: </strong> {{ set.gold }} gp</div>
-
-                    <div class="set-items-panel">
-                        @for (item of set.items; track $index) {
-                            <app-game-item [item]="item"/>
-                        }
-                    </div>
-
-                    <button type="button" class="fantasy-btn fantasy-brown" (click)="selectEquipmentChoice(set.id)">Select Equipment</button>
-                </details>
-            </div>
-        }
-    }
-
-    @if (getInstrumentsTotal() > 0) {
-        <div class="instrument-selection-panel">
-            <h3>Musical Instruments <span>(select {{ getInstrumentsTotal() }})</span></h3>
-            @for (instrument of instruments; track instrument.id) {
-                @if (instrument.name !== 'Musical instrument') {
-                    <button
-                        class="instrument"
-                        [class.selected]="isInstrumentSelected(instrument.id)"
-                        (click)="selectInstrument(instrument.id)"
-                    >
-                        <div>{{ instrument.name }}</div>
-                    </button>
-                }
-            }
-        </div>
-    }
-
-    @if (getToolsTotal() > 0) {
-        <div class="tool-selection-panel">
-            <h3>Artisan's Tools <span>(select {{ getToolsTotal() }})</span></h3>
-            @for (tool of artisansTools; track tool.id) {
-                @if (tool.name !== 'Musical instrument') {
-                    <button
-                        class="instrument"
-                        [class.selected]="isToolsSelected(tool.id)"
-                        (click)="selectTool(tool.id)"
-                    >
-                        <div>{{ tool.name }}</div>
-                    </button>
-                }
-            }
-        </div>
-    }
-
-    <div class="background-equipment-panel">
-        <h3>Background Equipment</h3>
+    <h3>Class Equipment Choices</h3>
+    <div class="char-edit-equipment-panel">
         @for (set of startingEquipment; track $index) {
-            @if (set.type === 'background') {
+            @if (set.type === 'class') {
                 <div>
-                    <details class="char-edit-equipment-set" open>
+                    <details class="char-edit-equipment-set" [class.selected]="selectedClassSet === set.id" open>
                         <summary>{{ set.choice_name }}</summary>
 
                         <div class="starting-gold"><strong>Starting gold: </strong> {{ set.gold }} gp</div>
@@ -75,13 +20,80 @@
                                 <app-game-item [item]="item"/>
                             }
                         </div>
+
+                        <button type="button" class="fantasy-btn fantasy-brown" (click)="selectEquipmentChoice(set.id)">Select Equipment</button>
                     </details>
                 </div>
             }
         }
-    </div>
-</div>
 
-<div class="equipment-actions-container">
-    <button type="button" class="fantasy-btn fantasy-blue" (click)="setEquipment()">Set Equipment</button>
-</div>
+        @if (getInstrumentsTotal() > 0) {
+            <div class="instrument-selection-panel">
+                <h3>Musical Instruments <span>(select {{ getInstrumentsTotal() }})</span></h3>
+                @for (instrument of instruments; track instrument.id) {
+                    @if (instrument.name !== 'Musical instrument') {
+                        <button
+                            class="instrument"
+                            [class.selected]="isInstrumentSelected(instrument.id)"
+                            (click)="selectInstrument(instrument.id)"
+                        >
+                            <div>{{ instrument.name }}</div>
+                        </button>
+                    }
+                }
+            </div>
+        }
+
+        @if (getToolsTotal() > 0) {
+            <div class="tool-selection-panel">
+                <h3>Artisan's Tools <span>(select {{ getToolsTotal() }})</span></h3>
+                @for (tool of artisansTools; track tool.id) {
+                    @if (tool.name !== 'Musical instrument') {
+                        <button
+                            class="instrument"
+                            [class.selected]="isToolsSelected(tool.id)"
+                            (click)="selectTool(tool.id)"
+                        >
+                            <div>{{ tool.name }}</div>
+                        </button>
+                    }
+                }
+            </div>
+        }
+
+        <div class="background-equipment-panel">
+            <h3>Background Equipment</h3>
+            @for (set of startingEquipment; track $index) {
+                @if (set.type === 'background') {
+                    <div>
+                        <details class="char-edit-equipment-set" open>
+                            <summary>{{ set.choice_name }}</summary>
+
+                            <div class="starting-gold"><strong>Starting gold: </strong> {{ set.gold }} gp</div>
+
+                            <div class="set-items-panel">
+                                @for (item of set.items; track $index) {
+                                    <app-game-item [item]="item"/>
+                                }
+                            </div>
+                        </details>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <div class="equipment-actions-container">
+        <button type="button" class="fantasy-btn fantasy-blue" (click)="setEquipment()">Set Equipment</button>
+    </div>
+} @else {
+    <h3>Inventory</h3>
+
+    <div class="inventory-list">
+        @for (item of characterService?.character?.inventory?.items; track $index) {
+            @if (item.parent_id === 0) {
+                <app-game-item [item]="item"/>
+            }
+        }
+    </div>
+}
