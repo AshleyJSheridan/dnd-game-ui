@@ -16,6 +16,10 @@ nav.char-create-nav ul {
                 background-color: colours.$dark-grey;
                 color: colours.$white;
             }
+
+            &.active {
+                background-color: colours.$gold;
+            }
         }
     }
 }
