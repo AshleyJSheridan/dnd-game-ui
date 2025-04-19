@@ -14,11 +14,17 @@ export class Item {
         unit: 'gp',
     };
     weight?: number;
-    weapon_properties?: {
-        damage: string;
-        damage_type: string;
+    weapon_props?: {
+        damage: {
+            amount: string,
+            type: string,
+        },
+        ammo_type: string,
         range: Array<number>,
         weapon_versatility?: string;
+    };
+    armor_props?: {
+
     };
     proficiency: string = '';
     isContainer: boolean = false;

@@ -15,23 +15,24 @@
         @if (item()?.proficiency) {
             <div class="item-property"><strong>Proficiency:</strong> {{ item()?.proficiency }}</div>
         }
-        @if (item()?.weapon_properties) {
+        @if (item()?.weapon_props) {
             <div class="item-property"><strong>Damage:</strong>
-                {{ item()?.weapon_properties?.damage }}
-                {{ item()?.weapon_properties?.damage_type }}
+                {{ item()?.weapon_props?.damage?.amount }}
+                {{ item()?.weapon_props?.damage?.type }}
             </div>
-            @if (item()?.weapon_properties?.weapon_versatility) {
+            @if (item()?.weapon_props?.weapon_versatility) {
                 <div class="item-property"><strong>Versatile: </strong>strong>
-                    {{ item()?.weapon_properties?.weapon_versatility }}
+                    {{ item()?.weapon_props?.weapon_versatility }}
                 </div>
             }
-            @if (item()?.weapon_properties?.range) {
+            @if (item()?.weapon_props?.range?.length) {
                 <div class="item-property"><strong>Range:</strong> {{ getItemRangeString() }}</div>
             }
         }
         <div class="item-property"><strong>Cost:</strong> {{ getItemCost() }}</div>
+
         @if (item()?.weight) {
-            <div class="item-property"><strong>Weight:</strong> {{ item()?.weight }} lbs</div>
+            <div class="item-property"><strong>Weight:</strong> {{ getItemWeight() }} lbs</div>
         }
 
         @if (item()?.items?.length) {

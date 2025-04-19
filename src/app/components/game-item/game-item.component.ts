@@ -14,17 +14,25 @@ export class GameItemComponent {
     }
 
     getItemRangeString(): string {
-        if ((this.item()?.weapon_properties?.range ?? []).length > 1)
-            return this.item()?.weapon_properties?.range[0] + '/' + this.item()?.weapon_properties?.range[1];
+        if ((this.item()?.weapon_props?.range ?? []).length > 1)
+            return this.item()?.weapon_props?.range[0] + '/' + this.item()?.weapon_props?.range[1];
 
         return '';
     }
 
     getItemCost(): string {
+        if (this.item()?.cost.value) {
+            const value = (this.item()?.cost?.value ?? 0) * (this.item()?.quantity ?? 1);
 
+            return `${value} ${this.item()?.cost.unit}`;
+        }
 
-        if (this.item()?.cost.value)
-            return `${this.item()?.cost.value} ${this.item()?.cost.unit}`;
+        return '';
+    }
+
+    getItemWeight(): string {
+        if (this.item()?.weight)
+            return ((this.item()?.weight ?? 0) * (this.item()?.quantity ?? 1)).toString();
 
         return '';
     }
