@@ -19,4 +19,13 @@ export class GameItemComponent {
 
         return '';
     }
+
+    getItemCost(): string {
+
+
+        if (this.item()?.cost.value)
+            return `${this.item()?.cost.value} ${this.item()?.cost.unit}`;
+
+        return '';
+    }
 }

@@ -29,7 +29,7 @@
                 <div class="item-property"><strong>Range:</strong> {{ getItemRangeString() }}</div>
             }
         }
-        <div class="item-property"><strong>Cost:</strong> {{ item()?.cost }} {{ item()?.cost_unit }}</div>
+        <div class="item-property"><strong>Cost:</strong> {{ getItemCost() }}</div>
         @if (item()?.weight) {
             <div class="item-property"><strong>Weight:</strong> {{ item()?.weight }} lbs</div>
         }

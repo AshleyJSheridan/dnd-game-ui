@@ -6,8 +6,13 @@ export class Item {
     type: string = '';
     rarity: string = 'common';
     total: number = 1;
-    cost: number = 1;
-    cost_unit: string = 'gp';
+    cost: {
+        value: number;
+        unit: string;
+    } = {
+        value: 1,
+        unit: 'gp',
+    };
     weight?: number;
     weapon_properties?: {
         damage: string;
