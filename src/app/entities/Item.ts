@@ -4,8 +4,8 @@ export class Item {
     name: string = '';
     description: string = '';
     type: string = '';
+    quantity: number = 1;
     rarity: string = 'common';
-    total: number = 1;
     cost: {
         value: number;
         unit: string;

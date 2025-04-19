@@ -1,8 +1,8 @@
 <details class="item rarity-{{ getRarityString() }}">
     <summary>
         {{ item()?.name }}
-        @if ((item()?.total ?? 1) > 1) {
-            <span class="item-quantity">(&times;{{ item()?.total }})</span>
+        @if ((item()?.quantity ?? 1) > 1) {
+            <span class="item-quantity">(&times;{{ item()?.quantity }})</span>
         }
         <span class="item-type">({{ item()?.type }})</span>
     </summary>
