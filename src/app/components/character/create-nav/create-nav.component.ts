@@ -13,7 +13,7 @@ import { CharacterService } from '../../../services/character.service';
 export class CreateNavComponent {
     charGuid: string = '';
 
-    constructor(private characterService: CharacterService) {}
+    constructor(public characterService: CharacterService) {}
 
     ngOnInit() {
         this.charGuid = this.characterService.getCharGuid();
