@@ -7,6 +7,13 @@
         <div class="char-list-panel">
             <a class="fantasy-btn fantasy-blue" routerLink="/char-create" routerLinkActive="active" ariaCurrentWhenActive="page">Create Character</a>
 
+            @if (error.length > 0) {
+                <div class="error">{{ error }}</div>
+            }
+            @if (success) {
+                <p class="success">Your character was sent to the belly of a Tarasque.</p>
+            }
+
             <ul>
                 @for (character of characters; track character.guid) {
                     <li class="char-panel">

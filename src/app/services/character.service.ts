@@ -40,6 +40,13 @@ export class CharacterService {
         );
     }
 
+    public deleteCharacter(characterGuid: string): Observable<Array<Character>> {
+        return this.http.delete<Array<Character>>(
+            `${this.apiUrl}/characters/${characterGuid}`,
+            {headers: this.authService.getAuthHeader()}
+        )
+    }
+
     public getCharacters(): Observable<Array<Character>> {
         return this.http.get<Array<Character>>(`${this.apiUrl}/characters`, {headers: this.authService.getAuthHeader()});
     }
