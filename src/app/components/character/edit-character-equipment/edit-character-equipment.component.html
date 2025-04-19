@@ -1,6 +1,6 @@
 <h2>Character Creation - Equipment</h2>
 
-@if (!characterService.character?.inventory?.items) {
+@if (!characterService.character?.inventory?.items?.length) {
     <div class="equipment-actions-container">
         <button type="button" class="fantasy-btn fantasy-blue" (click)="setEquipment()">Set Equipment</button>
     </div>
