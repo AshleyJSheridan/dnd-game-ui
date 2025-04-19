@@ -24,6 +24,12 @@ export class AuthService {
         );
     }
 
+    public register(name: string, email: string, password: string, password_confirmation: string): Observable<any> {
+        return this.http.post<any>(`${this.apiUrl}/user/register`,
+            {name: name, email: email, password: password, password_confirmation: password_confirmation}
+        );
+    }
+
     public logout() {
         return this.http.post(`${this.apiUrl}/user/logout`, {}, {headers: this.getAuthHeader()});
     }

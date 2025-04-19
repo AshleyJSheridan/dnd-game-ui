@@ -15,14 +15,14 @@ import { EditCharacterSkillsComponent } from './components/character/edit-charac
 import { CampaignListComponent } from './components/campaigns/campaign-list/campaign-list.component';
 import { CampaignComponent } from './components/campaigns/campaign/campaign.component';
 import { MapsViewComponent } from './components/campaigns/maps-view/maps-view.component';
-import {EditPortraitComponent} from './components/character/edit-portrait/edit-portrait.component';
-import {
-    EditCharacterEquipmentComponent
-} from './components/character/edit-character-equipment/edit-character-equipment.component';
+import { EditPortraitComponent } from './components/character/edit-portrait/edit-portrait.component';
+import { EditCharacterEquipmentComponent } from './components/character/edit-character-equipment/edit-character-equipment.component';
+import { RegisterComponent } from './components/register/register.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
     { path: 'login', component: LoginComponent },
+    { path: 'register', component: RegisterComponent },
 
     { path: 'char-create', component: CreateComponent },
     { path: 'characters', component: CharactersListComponent },

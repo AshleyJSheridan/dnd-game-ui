@@ -3,13 +3,15 @@ import { LogoFullComponent } from '../../logo-full/logo-full.component';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { LocalStorageService } from '../../../services/local-storage.service';
-import { Router } from '@angular/router';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 
 @Component({
     selector: 'app-login',
     imports: [
         LogoFullComponent,
-        FormsModule
+        FormsModule,
+        RouterLink,
+        RouterLinkActive
     ],
     templateUrl: './login.component.html'
 })
@@ -21,8 +23,6 @@ export class LoginComponent {
     refreshTokenKey = 'refresh_token';
 
     constructor(private authService: AuthService, private storageService: LocalStorageService, private router: Router) {}
-
-    ngOnInit() {}
 
     submitHandler() {
         this.error = '';

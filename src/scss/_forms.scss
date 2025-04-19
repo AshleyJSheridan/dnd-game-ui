@@ -152,11 +152,21 @@ button .dice-d6-icon {
     width: 1rem;
 }
 
+.error,
+.success {
+    padding: .5rem;
+}
+
 .error {
     background-color: colours.$error-background;
     border: 1px solid colours.$error-border;
     color: colours.$error-text;
-    padding: .5rem;
+}
+
+.success {
+    background-color: colours.$success-background;
+    border: 1px solid colours.$success-border;
+    color: colours.$success-text;
 }
 
 [role="tablist"] {

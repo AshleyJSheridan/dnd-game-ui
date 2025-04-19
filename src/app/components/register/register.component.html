@@ -1,0 +1,38 @@
+<main class="register-block">
+    <form name="register" aria-labelledby="register-heading">
+        <h1>
+            <app-logo-full/>
+        </h1>
+
+        <h2 id="register-heading">Register</h2>
+
+        @if (error.length > 0) {
+            <div class="error">{{ error }}</div>
+        }
+        @if (success) {
+            <p class="success">Your account was created successfully! Please
+                <a routerLink="/login" routerLinkActive="active">log in with your credentials</a> to continue your adventure.</p>
+        }
+
+        <label>Name:
+            <input type="text" name="name" [(ngModel)]="name" required/>
+        </label>
+
+        <label>Email:
+            <input type="email" name="email" [(ngModel)]="email" required/>
+        </label>
+
+        <label>Password:
+            <input type="password" name="password" [(ngModel)]="password" required/>
+        </label>
+
+        <label>Password confirmation:
+            <input type="password" name="password_confirmation" [(ngModel)]="password_confirmation" required/>
+        </label>
+
+        <div class="actions">
+            <button type="button" class="fantasy-btn fantasy-blue" (click)="submitHandler()">Register</button>
+        </div>
+    </form>
+
+</main>
