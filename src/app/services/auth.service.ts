@@ -8,12 +8,14 @@ import { Router } from '@angular/router';
 @Injectable({providedIn: 'root'})
 export class AuthService {
     private apiUrl = 'http://127.0.0.1:8000/api';
-    private headers: HttpHeaders = new HttpHeaders();
 
-    constructor(private http: HttpClient, private storageService: LocalStorageService, private router: Router) {
-        if (this.storageService.getItem('access_token')) {
-            this.headers = this.headers.set('Authorization', 'Bearer ' + this.storageService.getItem('access_token'));
-        }
+    constructor(private http: HttpClient, private storageService: LocalStorageService, private router: Router) {}
+
+    public getAuthHeader(): HttpHeaders {
+        let headers = new HttpHeaders();
+        headers = headers.set('Authorization', 'Bearer ' + this.storageService.getItem('access_token'));
+
+        return headers;
     }
 
     public login(email: string, password: string): Observable<Token> {
@@ -23,19 +25,15 @@ export class AuthService {
     }
 
     public logout() {
-        return this.http.post(`${this.apiUrl}/user/logout`, {}, {headers: this.headers});
+        return this.http.post(`${this.apiUrl}/user/logout`, {}, {headers: this.getAuthHeader()});
     }
 
     public heartbeat() {
-        return this.http.get(`${this.apiUrl}/heartbeat`, {headers: this.headers});
-    }
-
-    public setTokenHeader(token: string): void {
-        this.headers = this.headers.set('Authorization', 'Bearer ' + token);
+        return this.http.get(`${this.apiUrl}/heartbeat`, {headers: this.getAuthHeader()});
     }
 
     public refreshToken() {
-        return this.http.post(`${this.apiUrl}/user/refresh`, {}, {headers: this.headers}).subscribe({
+        return this.http.post(`${this.apiUrl}/user/refresh`, {}, {headers: this.getAuthHeader()}).subscribe({
             next: (tokenResponse) => {
                 this.storageService.setItem('access_token', (tokenResponse as Token).access_token);
                 this.storageService.setItem('refresh_token', (tokenResponse as Token).refresh_token);
