@@ -78,3 +78,18 @@ details.char-edit-equipment-set.selected {
     display: flex;
     justify-content: right;
 }
+
+.item-actions {
+    display: flex;
+    gap: .5rem;
+
+    button {
+        align-content: center;
+        display: flex;
+        font-size: 1.2rem;
+        font-weight: bold;
+        height: 2rem;
+        justify-content: center;
+        width: 2rem;
+    }
+}

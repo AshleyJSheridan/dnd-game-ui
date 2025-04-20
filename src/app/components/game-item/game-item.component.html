@@ -8,6 +8,19 @@
     </summary>
 
     <div>
+        <div class="item-actions">
+            @if ((item()?.quantity ?? 1) > 1) {
+                <button type="button" title="Remove one"(click)="decreaseItemStack()"><app-down-icon/></button>
+            } @else {
+                <button type="button" title="Remove" (click)="removeItem()"><app-delete-icon/></button>
+            }
+            @if (!item()?.isContainer) {
+                <button type="button" title="Add one" (click)="increaseItemStack()"><app-up-icon/></button>
+            }
+            <button type="button" title="Rename" (click)="renameItem()"><app-edit-icon/></button>
+            <button type="button" title="Change description" (click)="changeDescription()"><app-description-icon/></button>
+        </div>
+
         @if (item()?.description !== '') {
             <p>{{ item()?.description }}</p>
         }

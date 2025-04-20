@@ -13,4 +13,19 @@ export class ItemService {
     public getItemsByType(itemType: string): Observable<Array<Item>> {
         return this.http.get<Array<Item>>(`${this.apiUrl}/game/items/${itemType}`, {headers: this.authService.getAuthHeader()});
     }
+
+    public updateItem(charGuid: string, item: Item, data: any): Observable<Array<Item>> {
+        return this.http.patch<Array<Item>>(
+            `${this.apiUrl}/characters/${charGuid}/inventory/${item.guid}`,
+            data,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
+
+    public removeItem(charGuid: string, item: Item): Observable<Array<Item>> {
+        return this.http.delete<Array<Item>>(
+            `${this.apiUrl}/characters/${charGuid}/inventory/${item.guid}`,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
 }

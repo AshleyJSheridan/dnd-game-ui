@@ -1,4 +1,5 @@
 export class Item {
+    guid: string = '';
     id: number = 0;
     parent_id: number = 0;
     name: string = '';
