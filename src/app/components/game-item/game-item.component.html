@@ -17,9 +17,26 @@
             @if (!item()?.isContainer) {
                 <button type="button" title="Add one" (click)="increaseItemStack()"><app-up-icon/></button>
             }
-            <button type="button" title="Rename" (click)="renameItem()"><app-edit-icon/></button>
-            <button type="button" title="Change description" (click)="changeDescription()"><app-description-icon/></button>
+            <button type="button" title="Rename" (click)="showRenameItemForm()"><app-edit-icon/></button>
+            <button type="button" title="Change description" (click)="showChangeDescriptionForm()"><app-description-icon/></button>
         </div>
+
+        @if (editingName) {
+            <form name="nameEdit" class="slim">
+                <label>New Name
+                    <input type="text" name="newName" [(ngModel)]="newName"/>
+                </label>
+                <button type="button" class="fantasy-btn fantasy-blue" (click)="renameItem()">Save</button>
+            </form>
+        }
+        @if (editingDescription) {
+        <form name="descriptionEdit" class="slim">
+            <label>New Description
+                <textarea name="newDescription" [(ngModel)]="newDescription"></textarea>
+            </label>
+            <button type="button" class="fantasy-btn fantasy-blue" (click)="changeDescription()">Save</button>
+        </form>
+    }
 
         @if (item()?.description !== '') {
             <p>{{ item()?.description }}</p>

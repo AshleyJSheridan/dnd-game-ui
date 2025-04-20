@@ -7,6 +7,7 @@ import { ItemService } from '../../services/item.service';
 import { CharacterService } from '../../services/character.service';
 import { DownIconComponent } from '../icons/down-icon/down-icon.component';
 import { UpIconComponent } from '../icons/up-icon/up-icon.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @Component({
     selector: 'app-game-item',
@@ -15,12 +16,18 @@ import { UpIconComponent } from '../icons/up-icon/up-icon.component';
         DescriptionIconComponent,
         EditIconComponent,
         DownIconComponent,
-        UpIconComponent
+        UpIconComponent,
+        FormsModule,
+        ReactiveFormsModule
     ],
     templateUrl: './game-item.component.html'
 })
 export class GameItemComponent {
     readonly item: InputSignal<Item|undefined> = input();
+    editingName: boolean = false;
+    editingDescription: boolean = false;
+    newName: string = '';
+    newDescription: string = '';
 
     constructor(private itemService: ItemService, private characterService: CharacterService) {}
 
@@ -89,11 +96,39 @@ export class GameItemComponent {
         });
     }
 
-    renameItem(): void {
+    showRenameItemForm(): void {
+        this.editingName = true;
+        this.newName = this.item()?.name ?? '';
+    }
 
+    renameItem(): void {
+        const data = {name: this.newName};
+
+        // @ts-ignore
+        this.itemService.updateItem(this.characterService.charGuid, this.item(), data).subscribe({
+            next: (items) => {
+                // @ts-ignore
+                this.characterService.character.inventory.items = items;
+                this.editingName = false;
+            }
+        });
+    }
+
+    showChangeDescriptionForm(): void {
+        this.editingDescription = true;
+        this.newDescription = this.item()?.description ?? '';
     }
 
     changeDescription(): void {
+        const data = {description: this.newDescription};
 
+        // @ts-ignore
+        this.itemService.updateItem(this.characterService.charGuid, this.item(), data).subscribe({
+            next: (items) => {
+                // @ts-ignore
+                this.characterService.character.inventory.items = items;
+                this.editingDescription = false;
+            }
+        });
     }
 }

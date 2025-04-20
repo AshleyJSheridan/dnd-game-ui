@@ -48,6 +48,17 @@ details.item {
     button {
         margin-top: 1rem;
     }
+
+    form.slim {
+        textarea {
+            height: 3rem;
+            width: 10rem;
+        }
+
+        button {
+            margin-top: 0;
+        }
+    }
 }
 
 details.char-edit-equipment-set.selected {
