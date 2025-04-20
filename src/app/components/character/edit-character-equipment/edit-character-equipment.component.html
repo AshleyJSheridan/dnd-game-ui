@@ -96,4 +96,28 @@
             }
         }
     </div>
+
+    <h3>Add Items to Inventory</h3>
+
+    <div class="add-items-panel">
+        <form name="addToInventory">
+            <label>Filter by Type:
+                <select name="itemTypeFilter" [(ngModel)]="itemTypeFilter" (change)="getAddItemsByType()">
+                    <option value="-">all</option>
+                    @for (itemType of itemTypes; track itemType) {
+                        <option value="{{ itemType }}">{{ itemType }}</option>
+                    }
+                </select>
+            </label>
+            <label>
+                Filter by name:
+                <input type="text" name="itemNameFilter" [(ngModel)]="itemNameFilter"/>
+            </label>
+            <div class="add-items-list">
+                @for (item of getFilteredItems(); track $index) {
+                    <app-game-item [item]="item" [itemLocation]="'add'"/>
+                }
+            </div>
+        </form>
+    </div>
 }

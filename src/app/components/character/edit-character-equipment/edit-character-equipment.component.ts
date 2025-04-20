@@ -6,11 +6,13 @@ import { GameItemComponent } from '../../game-item/game-item.component';
 import { AuthService } from '../../../services/auth.service';
 import { Item } from '../../../entities/Item';
 import { ItemService } from '../../../services/item.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-edit-character-equipment',
     imports: [
-        GameItemComponent
+        GameItemComponent,
+        FormsModule
     ],
     templateUrl: './edit-character-equipment.component.html'
 })
@@ -22,6 +24,11 @@ export class EditCharacterEquipmentComponent {
     selectedInstruments: Array<number> = [];
     selectedTools: Array<number> = [];
     errorMessage: string = '';
+    addItems: Array<Item> = [];
+    itemTypes: Array<string> = ['armor', 'art object', 'artisan', 'bag', 'book', 'clothing', 'food', 'gaming', 'instrument',
+        'gemstone', 'other', 'pack', 'potion', 'projectile', 'weapon'];
+    itemTypeFilter: string = '-';
+    itemNameFilter: string = '';
 
     constructor(
         public characterService: CharacterService, private router: Router, private authService: AuthService,
@@ -139,6 +146,24 @@ export class EditCharacterEquipmentComponent {
             error: (error) => {
 
             }
+        });
+    }
+
+    getAddItemsByType(): void {
+        this.itemService.getItemsByType(this.itemTypeFilter).subscribe({
+            next: (items) => {
+                this.addItems = items;
+            }
+        })
+    }
+
+    getFilteredItems(): Array<Item> {
+        if (this.itemNameFilter === '')
+            return this.addItems;
+
+        return this.addItems.filter((item) => {
+            // force a case-insensitive search
+            return item.name.toLowerCase().includes(this.itemNameFilter.toLowerCase());
         });
     }
 }

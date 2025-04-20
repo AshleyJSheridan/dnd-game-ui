@@ -28,4 +28,16 @@ export class ItemService {
             {headers: this.authService.getAuthHeader()}
         );
     }
+
+    public addItem(charGuid: string, item: Item): Observable<Array<Item>> {
+        const data = {
+            itemId: item.id,
+        }
+
+        return this.http.post<Array<Item>>(
+            `${this.apiUrl}/characters/${charGuid}/inventory`,
+            data,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
 }

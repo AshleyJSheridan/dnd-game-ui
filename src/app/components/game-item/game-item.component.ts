@@ -7,7 +7,8 @@ import { ItemService } from '../../services/item.service';
 import { CharacterService } from '../../services/character.service';
 import { DownIconComponent } from '../icons/down-icon/down-icon.component';
 import { UpIconComponent } from '../icons/up-icon/up-icon.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {AddToInventoryIconComponent} from '../icons/add-to-inventory-icon/add-to-inventory-icon.component';
 
 @Component({
     selector: 'app-game-item',
@@ -18,12 +19,14 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
         DownIconComponent,
         UpIconComponent,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        AddToInventoryIconComponent
     ],
     templateUrl: './game-item.component.html'
 })
 export class GameItemComponent {
     readonly item: InputSignal<Item|undefined> = input();
+    readonly itemLocation: InputSignal<string> = input('inventory');
     editingName: boolean = false;
     editingDescription: boolean = false;
     newName: string = '';
@@ -65,7 +68,7 @@ export class GameItemComponent {
         const data = {quantity: this.item().quantity + 1};
 
         // @ts-ignore
-        this.itemService.updateItem(this.characterService.charGuid, this.item(), data).subscribe({
+        this.itemService.updateItem(this.characterService.getCharGuid(), this.item(), data).subscribe({
             next: (items) => {
                 // @ts-ignore
                 this.characterService.character.inventory.items = items;
@@ -78,7 +81,7 @@ export class GameItemComponent {
         const data = {quantity: this.item().quantity - 1};
 
         // @ts-ignore
-        this.itemService.updateItem(this.characterService.charGuid, this.item(), data).subscribe({
+        this.itemService.updateItem(this.characterService.getCharGuid(), this.item(), data).subscribe({
             next: (items) => {
                 // @ts-ignore
                 this.characterService.character.inventory.items = items;
@@ -88,7 +91,7 @@ export class GameItemComponent {
 
     removeItem(): void {
         // @ts-ignore
-        this.itemService.removeItem(this.characterService.charGuid, this.item()).subscribe({
+        this.itemService.removeItem(this.characterService.getCharGuid(), this.item()).subscribe({
             next: (items) => {
                 // @ts-ignore
                 this.characterService.character.inventory.items = items;
@@ -105,7 +108,7 @@ export class GameItemComponent {
         const data = {name: this.newName};
 
         // @ts-ignore
-        this.itemService.updateItem(this.characterService.charGuid, this.item(), data).subscribe({
+        this.itemService.updateItem(this.characterService.getCharGuid(), this.item(), data).subscribe({
             next: (items) => {
                 // @ts-ignore
                 this.characterService.character.inventory.items = items;
@@ -123,11 +126,21 @@ export class GameItemComponent {
         const data = {description: this.newDescription};
 
         // @ts-ignore
-        this.itemService.updateItem(this.characterService.charGuid, this.item(), data).subscribe({
+        this.itemService.updateItem(this.characterService.getCharGuid(), this.item(), data).subscribe({
             next: (items) => {
                 // @ts-ignore
                 this.characterService.character.inventory.items = items;
                 this.editingDescription = false;
+            }
+        });
+    }
+
+    addToInventory(): void {
+        // @ts-ignore
+        this.itemService.addItem(this.characterService.getCharGuid(), this.item()).subscribe({
+            next: (items) => {
+                // @ts-ignore
+                //this.characterService.character.inventory.items = items;
             }
         });
     }
