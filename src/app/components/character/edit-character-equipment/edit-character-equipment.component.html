@@ -103,7 +103,7 @@
         <form name="addToInventory">
             <label>Filter by Type:
                 <select name="itemTypeFilter" [(ngModel)]="itemTypeFilter" (change)="getAddItemsByType()">
-                    <option value="-">all</option>
+                    <option value="-">-</option>
                     @for (itemType of itemTypes; track itemType) {
                         <option value="{{ itemType }}">{{ itemType }}</option>
                     }

@@ -150,6 +150,11 @@ export class EditCharacterEquipmentComponent {
     }
 
     getAddItemsByType(): void {
+        if (this.itemTypeFilter === '-') {
+            this.addItems = [];
+            return;
+        }
+
         this.itemService.getItemsByType(this.itemTypeFilter).subscribe({
             next: (items) => {
                 this.addItems = items;
