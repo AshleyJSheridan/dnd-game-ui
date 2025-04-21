@@ -29,9 +29,10 @@ export class ItemService {
         );
     }
 
-    public addItem(charGuid: string, item: Item): Observable<Array<Item>> {
+    public addItem(charGuid: string, item: Item, quantity: number): Observable<Array<Item>> {
         const data = {
             itemId: item.id,
+            quantity: quantity,
         }
 
         return this.http.post<Array<Item>>(

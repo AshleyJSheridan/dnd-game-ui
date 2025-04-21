@@ -8,7 +8,7 @@ import { CharacterService } from '../../services/character.service';
 import { DownIconComponent } from '../icons/down-icon/down-icon.component';
 import { UpIconComponent } from '../icons/up-icon/up-icon.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {AddToInventoryIconComponent} from '../icons/add-to-inventory-icon/add-to-inventory-icon.component';
+import { AddToInventoryIconComponent } from '../icons/add-to-inventory-icon/add-to-inventory-icon.component';
 
 @Component({
     selector: 'app-game-item',
@@ -31,6 +31,7 @@ export class GameItemComponent {
     editingDescription: boolean = false;
     newName: string = '';
     newDescription: string = '';
+    quantityToAdd: number = 1;
 
     constructor(private itemService: ItemService, private characterService: CharacterService) {}
 
@@ -137,10 +138,10 @@ export class GameItemComponent {
 
     addToInventory(): void {
         // @ts-ignore
-        this.itemService.addItem(this.characterService.getCharGuid(), this.item()).subscribe({
+        this.itemService.addItem(this.characterService.getCharGuid(), this.item(), this.quantityToAdd).subscribe({
             next: (items) => {
                 // @ts-ignore
-                //this.characterService.character.inventory.items = items;
+                this.characterService.character.inventory.items = items;
             }
         });
     }

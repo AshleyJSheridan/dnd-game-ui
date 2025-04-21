@@ -8,7 +8,7 @@
     </summary>
 
     <div>
-        <div class="item-actions">
+        <form class="slim item-actions">
             @if (itemLocation() === 'inventory') {
                 @if ((item()?.quantity ?? 1) > 1) {
                     <button type="button" title="Remove one" (click)="decreaseItemStack()"><app-down-icon/></button>
@@ -22,9 +22,13 @@
                 <button type="button" title="Change description" (click)="showChangeDescriptionForm()"><app-description-icon/></button>
             }
             @if (itemLocation() === 'add') {
+                <label>
+                    <span class="accessible-hidden">Quantity</span>
+                    <input type="number" name="quantity" [(ngModel)]="quantityToAdd" class="very-small" title="Quantity" min="1" max="100"/>
+                </label>
                 <button type="button" title="Add to Inventory" (click)="addToInventory()"><app-add-to-inventory-icon/></button>
             }
-        </div>
+        </form>
 
         @if (editingName) {
             <form name="nameEdit" class="slim">

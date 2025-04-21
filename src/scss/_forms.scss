@@ -17,6 +17,10 @@ form.slim {
         align-items: center;
         gap: .5rem;
     }
+
+    input.very-small {
+        width: 3rem;
+    }
 }
 
 label.aligned {
