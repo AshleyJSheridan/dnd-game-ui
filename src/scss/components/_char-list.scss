@@ -72,6 +72,14 @@
         a {
             color: colours.$black;
         }
+
+        a,
+        button {
+            &:hover svg {
+                filter: drop-shadow(colours.$white 0 0 4px)
+                    drop-shadow(colours.$focus 0 0 4px);
+            }
+        }
     }
 }
 
