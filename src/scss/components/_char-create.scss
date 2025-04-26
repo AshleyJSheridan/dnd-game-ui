@@ -72,3 +72,57 @@ nav.char-create-nav ul {
         }
     }
 }
+
+.char-edit-alignment-panel {
+    display: flex;
+
+    form.alignments {
+        background-image: url("/images/alignments.png");
+        background-size: contain;
+        border-radius: 0;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        height: 40rem;
+        margin-bottom: 1rem;
+        min-width: 40rem;
+        padding: 0;
+        width: 40rem;
+
+        button {
+            appearance: none;
+            backdrop-filter: blur(3px);
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            transition: backdrop-filter .2s;
+
+            .alignment-label {
+                opacity: 0;
+                font-family: "Lugrasimo", serif;
+                font-size: 2rem;
+                font-weight: bold;
+                transition: opacity .2s;
+            }
+
+            &:hover,
+            &:focus,
+            &.selected {
+                backdrop-filter: none;
+
+                .alignment-label {
+                    opacity: 100%;
+                }
+            }
+
+            &.selected .alignment-label {
+                text-shadow: 0 0 8px #fff, 0 0 8px #fff;
+            }
+        }
+    }
+
+    .alignment-description {
+        padding: 0 1rem;
+        width: 20rem;
+    }
+}

@@ -1,0 +1,17 @@
+<h2>Character Creation - Alignment</h2>
+
+<div class="char-edit-alignment-panel">
+    <form class="alignments">
+        @for (alignment of alignments; track alignment.id) {
+            <button type="button" [class.selected]="isAlignmentSelected(alignment.id)" (click)="selectAlignment(alignment.id)">
+                <span class="alignment-label">{{ alignment.alignment }}</span>
+            </button>
+        }
+    </form>
+
+    <div class="alignment-description">
+        {{ getSelectedAlignmentDescription() }}
+    </div>
+</div>
+
+<button type="button" class="fantasy-btn fantasy-blue" (click)="setAlignment()">Set Alignment</button>

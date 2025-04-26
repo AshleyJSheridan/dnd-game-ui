@@ -12,6 +12,7 @@ import { Language } from '../entities/Language';
 import { AvailableSpells } from '../entities/AvailableSpells';
 import { StartingEquipment } from '../entities/StartingEquipment';
 import { AuthService } from './auth.service';
+import { CreatureAlignment } from '../entities/CreatureAlignment';
 
 @Injectable({providedIn: 'root'})
 export class CharacterService {
@@ -182,6 +183,21 @@ export class CharacterService {
         return this.http.post<Character>(
             `${this.apiUrl}/characters/${this.charGuid}/startingEquipment`,
             data,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
+
+    public getAlignments(): Observable<Array<CreatureAlignment>> {
+        return this.http.get<Array<CreatureAlignment>>(
+            `${this.apiUrl}/characters/alignments`,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
+
+    public setAlignment(alignment: number): Observable<Character> {
+        return this.http.patch<Character>(
+            `${this.apiUrl}/characters/${this.charGuid}`,
+            {updateType: 'alignment', alignment: alignment},
             {headers: this.authService.getAuthHeader()}
         );
     }

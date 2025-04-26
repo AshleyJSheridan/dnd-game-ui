@@ -2,6 +2,7 @@ import { Skill } from './Skill';
 import { Spell } from './Spell';
 import { Language } from './Language';
 import { Item } from './Item';
+import { CreatureAlignment } from './CreatureAlignment';
 
 export class Character {
     name: string = '';
@@ -87,5 +88,6 @@ export class Character {
         money: {},
         items: []
     };
+    alignment: CreatureAlignment | undefined;
     created_at: Date = new Date();
 }

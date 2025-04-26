@@ -18,6 +18,7 @@ import { MapsViewComponent } from './components/campaigns/maps-view/maps-view.co
 import { EditPortraitComponent } from './components/character/edit-portrait/edit-portrait.component';
 import { EditCharacterEquipmentComponent } from './components/character/edit-character-equipment/edit-character-equipment.component';
 import { RegisterComponent } from './components/register/register.component';
+import {CharAlignmentComponent} from './components/character/char-alignment/char-alignment.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -32,6 +33,7 @@ export const routes: Routes = [
         component: EditCharacterComponent,
         children: [
             { path: 'class', component: EditCharacterClassComponent },
+            { path: 'alignment', component: CharAlignmentComponent },
             { path: 'background', component: EditCharacterBackgroundComponent },
             { path: 'race', component: EditCharacterRaceComponent },
             { path: 'skills', component: EditCharacterSkillsComponent },
