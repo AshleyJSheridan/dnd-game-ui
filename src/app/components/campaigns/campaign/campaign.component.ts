@@ -10,6 +10,7 @@ import { ToastComponent } from '../../dialogs/toast/toast.component';
 import { CharacterService } from '../../../services/character.service';
 import { Character } from '../../../entities/Character';
 import {PortraitComponent} from '../../character/portrait/portrait.component';
+import {CampaignStateIconComponent} from '../../icons/campaign-state-icon/campaign-state-icon.component';
 
 @Component({
     selector: 'app-campaign',
@@ -19,6 +20,7 @@ import {PortraitComponent} from '../../character/portrait/portrait.component';
         CopyIconComponent,
         ToastComponent,
         PortraitComponent,
+        CampaignStateIconComponent,
     ],
     templateUrl: './campaign.component.html'
 })
@@ -170,5 +172,9 @@ export class CampaignComponent {
 
             }
         })
+    }
+
+    setCampaignState(state: string): void {
+        this.updateCampaign({state: state})
     }
 }
