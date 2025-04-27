@@ -15,10 +15,12 @@
                     } @else {
                         <span (dblclick)="editCampaignName()">{{ campaign.name }}</span>
                     }
-                    <button class="copy-campaign-link" (click)="copyCampaignLink($event)">
-                        <app-copy-icon/>
-                        <app-toast #toastComponent>Campaign link copied.</app-toast>
-                    </button>
+                    <div class="campaign-actions">
+                        <button type="button" class="copy-campaign-link" (click)="copyCampaignLink($event)">
+                            <app-copy-icon/>
+                            <app-toast #toastComponent>Campaign link copied.</app-toast>
+                        </button>
+                    </div>
                 </h3>
 
                 @if (editingCampaignDescription) {
