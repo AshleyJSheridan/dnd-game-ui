@@ -1,8 +1,12 @@
 <h2>Character Creation - Spells</h2>
 
 <div class="char-edit-spells">
+    <input type="checkbox" name="detailedView" id="detailedView" class="accessible-hidden"/>
+
     @if (availableSpells) {
         <div class="spell-actions-container">
+            <label class="detailed-view-checkbox" for="detailedView">Show detailed view?</label>
+
             <button type="button" class="fantasy-btn fantasy-blue" (click)="setSpells()">Set Spells</button>
         </div>
 
@@ -14,6 +18,7 @@
     @if (getKnownSpells().length > 0) {
         <details class="spell-level">
             <summary>Known Spells <em>({{ getKnownSpells().length }} known)</em></summary>
+            <p>These are spells known to your character by default, typically because of their race.</p>
             <ul>
                 @for (spell of getKnownSpells(); track $index) {
                     <li class="spell">
@@ -24,6 +29,7 @@
         </details>
     }
 
+    <p>Select your spells</p>
     @if (availableSpells) {
         @for (level of spellLevels; track $index) {
             @if (getSpellCountAvailableForLevel(level) > 0) {
@@ -39,13 +45,14 @@
 
                     <ul>
                         @for (spell of getAvailableSpellsByLevel(level); track spell.id) {
-                            <li class="spell">
-                                @if (!otherKnownSpellIds.includes(spell.id)) {
+
+                            @if (!otherKnownSpellIds.includes(spell.id)) {
+                                <li class="spell">
                                     <button type="button" (click)="selectSpell(spell)" [class.selected]="isSpellSelected(spell)">
                                         <app-edit-character-spell [spell]="spell"/>
                                     </button>
-                                }
-                            </li>
+                                </li>
+                            }
                         }
                     </ul>
                 </details>

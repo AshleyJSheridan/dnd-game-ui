@@ -3,7 +3,24 @@
 .char-edit-spells {
     .spell-actions-container {
         display: flex;
-        justify-content: right;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+    }
+
+    .detailed-view-checkbox {
+        align-items: center;
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20%3E%20%3Cpath%20d%3D%22M18%206l-12%2012%22%20%2F%3E%20%3Cpath%20d%3D%22M6%206l12%2012%22%20%2F%3E%20%3C%2Fsvg%3E%20");
+        background-position: center right .25rem;
+        background-repeat: no-repeat;
+        border: 1px solid colours.$dark-grey;
+        border-radius: .5rem;
+        cursor: pointer;
+        display: flex;
+        padding: .5rem 2rem .5rem .5rem;
+    }
+
+    input[name=detailedView]:checked + .spell-actions-container .detailed-view-checkbox {
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20%3E%20%3Cpath%20d%3D%22M5%2012l5%205l10%20-10%22%20%2F%3E%20%3C%2Fsvg%3E%20");
     }
 
     .spell-level summary
@@ -21,6 +38,14 @@
     ul {
         margin: 0;
         padding: 0;
+
+        display: grid;
+        gap: .5rem;
+        grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    }
+
+    input[name=detailedView]:checked ~ details ul {
+        display: block;
     }
 
     .spell {
@@ -43,13 +68,6 @@
 
                 .spell-school-icon {
                     outline: 1px solid colours.$white;
-                }
-
-                table {
-                    td,
-                    th {
-                        border-color: colours.$white;
-                    }
                 }
             }
         }
@@ -74,50 +92,50 @@
 
             &.spell-school-abjuration svg {
                 filter: drop-shadow(colours.$white 0 0 2px)
-                    drop-shadow(colours.$spell-school-abjuration 0 0 4px)
-                    drop-shadow(colours.$spell-school-abjuration 0 0 5px);
+                drop-shadow(colours.$spell-school-abjuration 0 0 4px)
+                drop-shadow(colours.$spell-school-abjuration 0 0 5px);
             }
 
             &.spell-school-conjuration svg {
                 filter: drop-shadow(colours.$white 0 0 2px)
-                    drop-shadow(colours.$spell-school-conjuration 0 0 4px)
-                    drop-shadow(colours.$spell-school-conjuration 0 0 5px);
+                drop-shadow(colours.$spell-school-conjuration 0 0 4px)
+                drop-shadow(colours.$spell-school-conjuration 0 0 5px);
             }
 
             &.spell-school-divination svg {
                 filter: drop-shadow(colours.$white 0 0 2px)
-                    drop-shadow(colours.$spell-school-divination 0 0 4px)
-                    drop-shadow(colours.$spell-school-divination 0 0 5px);
+                drop-shadow(colours.$spell-school-divination 0 0 4px)
+                drop-shadow(colours.$spell-school-divination 0 0 5px);
             }
 
             &.spell-school-enchantment svg {
                 filter: drop-shadow(colours.$white 0 0 2px)
-                    drop-shadow(colours.$spell-school-enchantment 0 0 4px)
-                    drop-shadow(colours.$spell-school-enchantment 0 0 5px);
+                drop-shadow(colours.$spell-school-enchantment 0 0 4px)
+                drop-shadow(colours.$spell-school-enchantment 0 0 5px);
             }
 
             &.spell-school-evocation svg {
                 filter: drop-shadow(colours.$white 0 0 2px)
-                    drop-shadow(colours.$spell-school-evocation 0 0 4px)
-                    drop-shadow(colours.$spell-school-evocation 0 0 5px);
+                drop-shadow(colours.$spell-school-evocation 0 0 4px)
+                drop-shadow(colours.$spell-school-evocation 0 0 5px);
             }
 
             &.spell-school-illusion svg {
                 filter: drop-shadow(colours.$white 0 0 2px)
-                    drop-shadow(colours.$spell-school-illusion 0 0 4px)
-                    drop-shadow(colours.$spell-school-illusion 0 0 5px);
+                drop-shadow(colours.$spell-school-illusion 0 0 4px)
+                drop-shadow(colours.$spell-school-illusion 0 0 5px);
             }
 
             &.spell-school-necromancy svg {
                 filter: drop-shadow(colours.$white 0 0 2px)
-                    drop-shadow(colours.$spell-school-necromancy 0 0 4px)
-                    drop-shadow(colours.$spell-school-necromancy 0 0 5px);
+                drop-shadow(colours.$spell-school-necromancy 0 0 4px)
+                drop-shadow(colours.$spell-school-necromancy 0 0 5px);
             }
 
             &.spell-school-transmutation svg {
                 filter: drop-shadow(colours.$white 0 0 2px)
-                    drop-shadow(colours.$spell-school-transmutation 0 0 4px)
-                    drop-shadow(colours.$spell-school-transmutation 0 0 5px);
+                drop-shadow(colours.$spell-school-transmutation 0 0 4px)
+                drop-shadow(colours.$spell-school-transmutation 0 0 5px);
             }
         }
 
@@ -131,7 +149,25 @@
         }
 
         table {
+            display: none;
+        }
+    }
+
+    input[name=detailedView]:checked ~ details .spell {
+        button {
+            &.selected {
+                table {
+                    td,
+                    th {
+                        border-color: colours.$white;
+                    }
+                }
+            }
+        }
+
+        table {
             border-collapse: collapse;
+            display: table;
             margin-top: .5rem;
             width: 100%;
 
