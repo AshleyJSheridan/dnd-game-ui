@@ -118,6 +118,15 @@ input[type=email] {
     padding: .5rem;
 }
 
+textarea {
+    border: solid 1px colours.$grey;
+    border-radius: .25rem;
+    font-size: 1rem;
+    height: 4rem;
+    padding: .5rem;
+    width: 30rem;
+}
+
 select {
     font-size: 100%;
     padding: .5rem;

@@ -5,16 +5,27 @@
         <h2>Campaign - Manage</h2>
 
         @if (campaign) {
-            <div class="manage-campaign">
+            <form class="manage-campaign" name="manage-campaign">
                 <h3>
-                    <span>{{ campaign.name }}</span>
+                    @if (editingCampaignName) {
+                        <label>
+                            <span class="accessible-hidden">New campaign name: </span>
+                            <input type="text" name="edit-name" #campaignName value="{{ campaign.name }}" (blur)="updateCampaignName()"/>
+                        </label>
+                    } @else {
+                        <span (dblclick)="editCampaignName()">{{ campaign.name }}</span>
+                    }
                     <button class="copy-campaign-link" (click)="copyCampaignLink($event)">
                         <app-copy-icon/>
                         <app-toast #toastComponent>Campaign link copied.</app-toast>
                     </button>
                 </h3>
 
-                <p>{{ campaign.description }}</p>
+                @if (editingCampaignDescription) {
+                    <textarea name="campaignDescription" #campaignDescription (blur)="updateCampaignDescription()">{{ campaign.description }}</textarea>
+                } @else {
+                    <p (dblclick)="editCampaignDescription()">{{ campaign.description }}</p>
+                }
 
                 @if (campaign.owner) {
                     <div class="maps">
@@ -120,7 +131,7 @@
                         }
                     </ul>
                 </div>
-            </div>
+            </form>
         }
     </main>
 </div>

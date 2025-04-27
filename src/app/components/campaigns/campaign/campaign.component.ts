@@ -30,10 +30,14 @@ export class CampaignComponent {
     fileName: string = '';
     file: File | undefined;
     fileError: string = '';
+    editingCampaignName: boolean = false;
+    editingCampaignDescription: boolean = false;
 
     @ViewChild('name') mapName: any;
     @ViewChild('description') mapDescription: any;
     @ViewChild('toastComponent') toast: ToastComponent | undefined;
+    @ViewChild('campaignName') campaignName: any | undefined;
+    @ViewChild('campaignDescription') campaignDescription: any | undefined;
 
     constructor(
         private campaignService: CampaignService, private router: Router, private clipboardService: ClipboardService,
@@ -132,5 +136,39 @@ export class CampaignComponent {
 
     doesCharacterBelongToMe(characterGuid: string): boolean {
         return !!this.characters.find(p => p.guid === characterGuid);
+    }
+
+    editCampaignName(): void {
+        this.editingCampaignName = true;
+        window.setTimeout(() => {
+            this.campaignName.nativeElement.focus();
+        }, 100)
+    }
+
+    editCampaignDescription(): void {
+        this.editingCampaignDescription = true;
+    }
+
+    updateCampaignName(): void {
+        this.editingCampaignName = false;
+
+        this.updateCampaign({name: this.campaignName.nativeElement.value})
+    }
+
+    updateCampaignDescription(): void {
+        this.editingCampaignDescription = false;
+
+        this.updateCampaign({description: this.campaignDescription.nativeElement.value})
+    }
+
+    updateCampaign(data: any): void {
+        this.campaignService.updateCampaign(data).subscribe({
+            next: (campaign) => {
+                this.campaign = campaign;
+            },
+            error: (error) => {
+
+            }
+        })
     }
 }

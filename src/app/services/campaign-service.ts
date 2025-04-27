@@ -111,4 +111,12 @@ export class CampaignService {
     public getCreatures(): Observable<Array<Creature>> {
         return this.http.get<Array<Creature>>(`${this.apiUrl}/creatures`, {headers: this.authService.getAuthHeader()});
     }
+
+    public updateCampaign(data: any): Observable<Campaign> {
+        return this.http.patch<Campaign>(
+            `${this.apiUrl}/campaigns/${this.campaignGuid}`,
+            data,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
 }
