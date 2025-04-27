@@ -39,7 +39,11 @@ export class AuthService {
     }
 
     public refreshToken() {
-        return this.http.post(`${this.apiUrl}/user/refresh`, {}, {headers: this.getAuthHeader()}).subscribe({
+        return this.http.post(
+            `${this.apiUrl}/user/refresh`,
+            {'refresh_token': this.storageService.getItem('refresh_token')},
+            {headers: this.getAuthHeader()}
+        ).subscribe({
             next: (tokenResponse) => {
                 this.storageService.setItem('access_token', (tokenResponse as Token).access_token);
                 this.storageService.setItem('refresh_token', (tokenResponse as Token).refresh_token);
