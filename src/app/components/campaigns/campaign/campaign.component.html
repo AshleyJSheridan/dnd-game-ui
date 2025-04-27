@@ -16,29 +16,31 @@
                         <span (dblclick)="editCampaignName()">{{ campaign.name }} <em>({{ campaign.state }})</em></span>
                     }
                     <div class="campaign-actions">
-                        @if (campaign.state === 'active') {
-                            <button type="button" (click)="setCampaignState('paused')" title="Pause campaign">
-                                <app-campaign-state-icon [campaignState]="'paused'"/>
-                                <span class="accessible-hidden">Pause</span>
-                            </button>
-                        }
-                        @if (campaign.state === 'paused') {
-                            <button type="button" (click)="setCampaignState('active')" title="Start campaign">
-                                <app-campaign-state-icon [campaignState]="'active'"/>
-                                <span class="accessible-hidden">Unpause</span>
-                            </button>
-                        }
+                        @if (campaign.owner) {
+                            @if (campaign.state === 'active') {
+                                <button type="button" (click)="setCampaignState('paused')" title="Pause campaign">
+                                    <app-campaign-state-icon [campaignState]="'paused'"/>
+                                    <span class="accessible-hidden">Pause</span>
+                                </button>
+                            }
+                            @if (campaign.state === 'paused') {
+                                <button type="button" (click)="setCampaignState('active')" title="Start campaign">
+                                    <app-campaign-state-icon [campaignState]="'active'"/>
+                                    <span class="accessible-hidden">Unpause</span>
+                                </button>
+                            }
 
-                        @if (campaign.state === 'ended') {
-                            <button type="button" (click)="setCampaignState('paused')" title="Pause campaign">
-                                <app-campaign-state-icon [campaignState]="'paused'"/>
-                                <span class="accessible-hidden">Reactivate Paused</span>
-                            </button>
-                        } @else {
-                            <button type="button" (click)="setCampaignState('ended')" title="End campaign">
-                                <app-campaign-state-icon [campaignState]="'ended'"/>
-                                <span class="accessible-hidden">End Campaign</span>
-                            </button>
+                            @if (campaign.state === 'ended') {
+                                <button type="button" (click)="setCampaignState('paused')" title="Pause campaign">
+                                    <app-campaign-state-icon [campaignState]="'paused'"/>
+                                    <span class="accessible-hidden">Reactivate Paused</span>
+                                </button>
+                            } @else {
+                                <button type="button" (click)="setCampaignState('ended')" title="End campaign">
+                                    <app-campaign-state-icon [campaignState]="'ended'"/>
+                                    <span class="accessible-hidden">End Campaign</span>
+                                </button>
+                            }
                         }
                         <button type="button" class="copy-campaign-link" (click)="copyCampaignLink($event)" title="Copy campaign link">
                             <app-copy-icon/>
