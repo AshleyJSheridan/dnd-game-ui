@@ -45,3 +45,14 @@ h2 {
 .ucfirst {
     text-transform: capitalize;
 }
+
+.grid-col-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+label.grid-col-2 {
+    align-items: baseline;
+    display: flex;
+}

@@ -5,136 +5,216 @@
         <h2>Campaign - Manage</h2>
 
         @if (campaign) {
-            <form class="manage-campaign" name="manage-campaign">
-                <h3>
-                    @if (editingCampaignName) {
-                        <label>
-                            <span class="accessible-hidden">New campaign name: </span>
-                            <input type="text" name="edit-name" #campaignName value="{{ campaign.name }}" (blur)="updateCampaignName()"/>
-                        </label>
-                    } @else {
-                        <span (dblclick)="editCampaignName()">{{ campaign.name }} <em>({{ campaign.state }})</em></span>
-                    }
-                    <div class="campaign-actions">
-                        @if (campaign.owner) {
-                            @if (campaign.state === 'active') {
-                                <button type="button" (click)="setCampaignState('paused')" title="Pause campaign">
-                                    <app-campaign-state-icon [campaignState]="'paused'"/>
-                                    <span class="accessible-hidden">Pause</span>
-                                </button>
-                            }
-                            @if (campaign.state === 'paused') {
-                                <button type="button" (click)="setCampaignState('active')" title="Start campaign">
-                                    <app-campaign-state-icon [campaignState]="'active'"/>
-                                    <span class="accessible-hidden">Unpause</span>
-                                </button>
-                            }
-
-                            @if (campaign.state === 'ended') {
-                                <button type="button" (click)="setCampaignState('paused')" title="Pause campaign">
-                                    <app-campaign-state-icon [campaignState]="'paused'"/>
-                                    <span class="accessible-hidden">Reactivate Paused</span>
-                                </button>
-                            } @else {
-                                <button type="button" (click)="setCampaignState('ended')" title="End campaign">
-                                    <app-campaign-state-icon [campaignState]="'ended'"/>
-                                    <span class="accessible-hidden">End Campaign</span>
-                                </button>
-                            }
+            <div class="manage-campaign">
+                <form name="manage-campaign">
+                    <h3>
+                        @if (editingCampaignName) {
+                            <label>
+                                <span class="accessible-hidden">New campaign name: </span>
+                                <input type="text" name="edit-name" #campaignName value="{{ campaign.name }}" (blur)="updateCampaignName()"/>
+                            </label>
+                        } @else {
+                            <span (dblclick)="editCampaignName()">{{ campaign.name }} <em>({{ campaign.state }})</em></span>
                         }
-                        <button type="button" class="copy-campaign-link" (click)="copyCampaignLink($event)" title="Copy campaign link">
-                            <app-copy-icon/>
-                            <app-toast #toastComponent>Campaign link copied.</app-toast>
-                        </button>
-                    </div>
-                </h3>
+                        <div class="campaign-actions">
+                            @if (campaign.owner) {
+                                @if (campaign.state === 'active') {
+                                    <button type="button" (click)="setCampaignState('paused')" title="Pause campaign">
+                                        <app-campaign-state-icon [campaignState]="'paused'"/>
+                                        <span class="accessible-hidden">Pause</span>
+                                    </button>
+                                }
+                                @if (campaign.state === 'paused') {
+                                    <button type="button" (click)="setCampaignState('active')" title="Start campaign">
+                                        <app-campaign-state-icon [campaignState]="'active'"/>
+                                        <span class="accessible-hidden">Unpause</span>
+                                    </button>
+                                }
 
-                @if (editingCampaignDescription) {
-                    <textarea name="campaignDescription" #campaignDescription (blur)="updateCampaignDescription()">{{ campaign.description }}</textarea>
-                } @else {
-                    <p (dblclick)="editCampaignDescription()">{{ campaign.description }}</p>
-                }
+                                @if (campaign.state === 'ended') {
+                                    <button type="button" (click)="setCampaignState('paused')" title="Pause campaign">
+                                        <app-campaign-state-icon [campaignState]="'paused'"/>
+                                        <span class="accessible-hidden">Reactivate Paused</span>
+                                    </button>
+                                } @else {
+                                    <button type="button" (click)="setCampaignState('ended')" title="End campaign">
+                                        <app-campaign-state-icon [campaignState]="'ended'"/>
+                                        <span class="accessible-hidden">End Campaign</span>
+                                    </button>
+                                }
+                            }
+                            <button type="button" class="copy-campaign-link" (click)="copyCampaignLink($event)" title="Copy campaign link">
+                                <app-copy-icon/>
+                                <app-toast #toastComponent>Campaign link copied.</app-toast>
+                            </button>
+                        </div>
+                    </h3>
+
+                    @if (editingCampaignDescription) {
+                        <textarea name="campaignDescription" #campaignDescription (blur)="updateCampaignDescription()">{{ campaign.description }}</textarea>
+                    } @else {
+                        <p (dblclick)="editCampaignDescription()">{{ campaign.description }}</p>
+                    }
+                </form>
 
                 @if (campaign.owner) {
-                    <div class="maps">
-                        <h4>Campaign Maps</h4>
-                        <button type="button" class="fantasy-btn" (click)="showAddMapForm = !showAddMapForm">New Map</button>
+                    <details class="maps">
+                        <summary>Campaign Maps</summary>
 
-                        @if (showAddMapForm) {
-                            <form name="addMapForm" (submit)="addMapHandler()">
-                                <label>Map Name:
-                                    <input type="text" name="name" required #name>
-                                </label>
-                                <label>Description:
-                                    <input type="text" name="description" required #description>
-                                </label>
+                        <div class="campaign-block-contents">
+                            <button type="button" class="fantasy-btn" (click)="showAddMapForm = !showAddMapForm">Create New Map</button>
 
-                                <label>Image:
-                                    <input type="file" name="image" #image (change)="onFileSelected($event)" accept=".jpg,.jpeg,.png"/>
-                                    @if (fileError) {
-                                        <div class="error">{{ fileError }}</div>
-                                    }
-                                    <div class="filename">{{ fileName || "No file uploaded yet." }}</div>
-                                    <button
-                                        type="button"
-                                        class="file-upload fantasy-btn"
-                                        (click)="image.click()"
-                                    >Upload Image</button>
-                                </label>
+                            @if (showAddMapForm) {
+                                <form name="addMapForm" (submit)="addMapHandler()" class="grid-col-2">
+                                    <div class="col">
+                                        <label class="grid-col-2">
+                                            <div class="input-label">Map name:</div>
+                                            <input type="text" name="name" required #mapName class="large">
+                                        </label>
+                                        <label class="grid-col-2">
+                                            <div class="input-label">Description:</div>
+                                            <input type="text" name="description" required #mapDescription class="large">
+                                        </label>
+                                    </div>
+                                    <div class="col">
+                                        <label class="grid-col-2">Image:
+                                            <input type="file" name="image" #image (change)="onFileSelected($event)" accept=".jpg,.jpeg,.png"/>
+                                            @if (mapFileError) {
+                                                <div class="error">{{ mapFileError }}</div>
+                                            }
+                                            <div class="filename">{{ fileName || "No file uploaded yet." }}</div>
+                                            <button
+                                                type="button"
+                                                class="file-upload fantasy-btn"
+                                                (click)="image.click()"
+                                            >Upload Image</button>
+                                        </label>
 
-                                <button type="submit" class="fantasy-btn fantasy-blue">Add Map</button>
+                                        <button type="submit" class="fantasy-btn fantasy-blue">Add Map</button>
+                                    </div>
+                                </form>
+                            }
 
+                            <ul class="map-preview-list">
+                                @for (map of campaign.maps; track map.guid) {
+                                    <li class="map">
+                                        <app-map-preview [campaignMap]="map" [campaignGuid]="campaign.guid"/>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </details>
+                }
+
+                <details open>
+                    <summary>Campaign Lore</summary>
+
+                    <div class="campaign-block-contents">
+                        @if (campaign.owner) {
+                            <button type="button" class="fantasy-btn" (click)="showAddLoreForm = !showAddLoreForm">Create Lore</button>
+                        }
+
+                        @if (showAddLoreForm) {
+                            <form name="addLoreForm" (submit)="addLoreHandler()" class="grid-col-2">
+                                <div class="col">
+                                    <label class="grid-col-2">
+                                        <div class="input-label">Lore item name:</div>
+                                        <input type="text" name="name" #loreItemName class="large">
+                                    </label>
+
+                                    <label class="grid-col-2">
+                                        <div class="input-label">Type:</div>
+                                        <select name="type" [(ngModel)]="loreItemType" class="large">
+                                            <option value="text">Text</option>
+                                            <option value="link">Link</option>
+                                            <option value="file">File</option>
+                                        </select>
+                                    </label>
+
+                                    <label class="grid-col-2">
+                                        <div class="input-label">Link URL:</div>
+                                        <input type="text" name="url" #loreItemUrl [disabled]="loreItemType !== 'link'" class="large"/>
+                                    </label>
+
+                                    <label class="grid-col-2">
+                                        <div class="input-label">Group:</div>
+                                        <div>
+                                            <input type="text" name="group" #loreItemGroup class="large" list="lore-groups" aria-describedby="loreGroupDescription"/>
+                                            <datalist id="lore-groups">
+                                                @for (group of loreGroups; track group) {
+                                                    <option value="{{ group }}">{{ group }}</option>
+                                                }
+                                            </datalist>
+                                            <p id="loreGroupDescription" class="input-description">Select from list or type to create a new group.</p>
+                                        </div>
+                                    </label>
+                                    <label class="grid-col-2">
+                                        <div class="input-label">Hide from players:</div>
+                                        <div>
+                                            <input type="checkbox" name="hideFromPlayers" #loreItemHideFromPlayers value="hide"/>
+                                        </div>
+                                    </label>
+
+                                    <label class="grid-col-2">File Upload:
+                                        <input type="file" name="image" #loreItemFile (change)="onLoreFileSelected($event)" accept=".jpg,.jpeg,.png,.pdf"/>
+                                        @if (loreFileError) {
+                                            <div class="error">{{ loreFileError }}</div>
+                                        }
+                                        <div class="filename">{{ loreFileName || "No file uploaded yet." }}</div>
+                                        <button
+                                            type="button"
+                                            class="file-upload fantasy-btn"
+                                            (click)="loreItemFile.click()"
+                                        >Upload File</button>
+                                    </label>
+
+                                    <button type="submit" class="fantasy-btn fantasy-blue">Add Lore</button>
+                                </div>
+                                <div class="col">
+                                    <label>
+                                        <div>Content:</div>
+                                        <textarea
+                                            name="content"
+                                            #loreItemContent
+                                            class="large"
+                                            [disabled]="loreItemType !== 'text'"
+                                            aria-describedby="loreContentDescription"
+                                        ></textarea>
+                                        <p id="loreContentDescription" class="input-description">Markdown is supported.</p>
+                                    </label>
+                                </div>
                             </form>
                         }
 
-                        <ul class="map-preview-list">
-                            @for (map of campaign.maps; track map.guid) {
-                                <li class="map">
-                                    <app-map-preview [campaignMap]="map" [campaignGuid]="campaign.guid"/>
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                }
 
-                <div class="char-list-panel">
-                    <h4>Campaign Characters</h4>
-
-                    <ul>
-                        @for (character of campaign.players; track character.guid) {
-                            <li class="char-panel">
-                                <span class="char-image">
-                                    <app-portrait [character]="character"/>
-                                </span>
-
-                                <span class="char-details">
-                                    <div class="char-name">{{ character.name }}</div>
-                                    <div>Level {{ character.level }} {{ character.charRace }} {{ character.charClass }}</div>
-
-                                    <div class="char-actions">
-                                        <!-- only allow owner of campaigh or owner of specific user to remove it from campaign -->
-                                        @if (campaign.owner || doesCharacterBelongToMe(character.guid)) {
-                                            <button
-                                                type="button"
-                                                class="fantasy-btn fantasy-brown"
-                                                (click)="removeCharacterFromCampaign(character)"
-                                            >
-                                                Remove
-                                            </button>
-                                        }
-                                    </div>
-                                </span>
-                            </li>
+                        @for (loreGroup of getLoreGroups(); track $index) {
+                            <section class="lore-group">
+                                <h4>{{ loreGroup }}</h4>
+                                <ul class="lore-list">
+                                    @for (loreItem of getLoreByGroup(loreGroup); track loreItem.guid) {
+                                        <li class="lore-item">
+                                            <app-lore
+                                                [loreItem]="loreItem"
+                                                [campaignGuid]="campaign.guid"
+                                                (loreReadEvent)="loreReadEvent($event, loreItem)"
+                                                (loreDeleteEvent)="loreDeleteEvent($event, loreItem)"
+                                            ></app-lore>
+                                        </li>
+                                    }
+                                </ul>
+                            </section>
                         }
-                    </ul>
-                </div>
+                    </div>
+                </details>
 
-                <div class="char-list-panel">
-                    <h4>Add Character to Campaign</h4>
+                <details class="char-list-panel">
+                    <summary>Campaign Characters</summary>
 
-                    <ul>
-                        @for (character of characters; track character.guid) {
-                            @if (!isCharacterPartOfCampaign(character.guid)) {
+                    <div class="campaign-block-contents">
+                        <h4>Current Characters in Campaign</h4>
+
+                        <ul>
+                            @for (character of campaign.players; track character.guid) {
                                 <li class="char-panel">
                                     <span class="char-image">
                                         <app-portrait [character]="character"/>
@@ -145,21 +225,78 @@
                                         <div>Level {{ character.level }} {{ character.charRace }} {{ character.charClass }}</div>
 
                                         <div class="char-actions">
-                                            <button
-                                                type="button"
-                                                class="fantasy-btn fantasy-blue"
-                                                (click)="addCharacterToCampaign(character)"
-                                            >
-                                                Add to campaign
-                                            </button>
+                                            <!-- only allow owner of campaigh or owner of specific user to remove it from campaign -->
+                                            @if (campaign.owner || doesCharacterBelongToMe(character.guid)) {
+                                                <button
+                                                    type="button"
+                                                    class="fantasy-btn fantasy-brown"
+                                                    (click)="removeCharacterFromCampaign(character)"
+                                                >
+                                                    Remove
+                                                </button>
+                                            }
                                         </div>
                                     </span>
                                 </li>
                             }
-                        }
-                    </ul>
-                </div>
-            </form>
+                        </ul>
+
+                        <div class="char-list-panel">
+                            <h4>Add New Character to Campaign</h4>
+
+                            <ul>
+                                @for (character of characters; track character.guid) {
+                                    @if (!isCharacterPartOfCampaign(character.guid)) {
+                                        <li class="char-panel">
+                                        <span class="char-image">
+                                            <app-portrait [character]="character"/>
+                                        </span>
+
+                                            <span class="char-details">
+                                            <div class="char-name">{{ character.name }}</div>
+                                            <div>Level {{ character.level }} {{ character.charRace }} {{ character.charClass }}</div>
+
+                                            <div class="char-actions">
+                                                <button
+                                                    type="button"
+                                                    class="fantasy-btn fantasy-blue"
+                                                    (click)="addCharacterToCampaign(character)"
+                                                >
+                                                    Add to campaign
+                                                </button>
+                                            </div>
+                                        </span>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </details>
+
+            </div>
         }
     </main>
+
+    <app-lightbox #loreLightbox heading="{{ selectedLore?.name }}" cancelLabel="Close">
+        <div class="lore-details">
+            <p>Group: <strong>{{ selectedLore?.lore_group }}</strong></p>
+
+            @if (selectedLore?.type === CampaignLoreType.TEXT) {
+                @if (editingLore) {
+                    <textarea #editedContent (blur)="saveEditedContent()">{{ selectedLore?.content_raw }}</textarea>
+                } @else {
+                    <div class="lore-content" [innerHTML]="selectedLore?.content" (dblclick)="editCampaignLore()"></div>
+                }
+            }
+        </div>
+    </app-lightbox>
+
+    <app-confirm
+        heading="{{ selectedLore?.name }}"
+        (confirmClass)="confirmDelete(selectedLore?.guid)"
+        #confirm
+    >
+        <p>Are you sure you want to remove this {{ selectedLore?.type }} lore item?</p>
+    </app-confirm>
 </div>

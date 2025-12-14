@@ -11,4 +11,8 @@ export class MovementObject {
     endX: number = 0;
     endY: number = 0;
     inMotion: boolean = false;
+
+    hasObjectSelected(): boolean {
+        return this.target !== null;
+    }
 }

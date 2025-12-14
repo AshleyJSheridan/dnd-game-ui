@@ -337,6 +337,8 @@ export class MapsViewComponent {
     moveSvgElement(element: SVGElement, dx: number, dy: number): void {
         // @ts-ignore
         element.transform.baseVal.getItem(0).setTranslate(this.movementObject.elementStartX + dx, this.movementObject.elementStartY + dy);
+        element.setAttribute('data-x', (this.movementObject.elementStartX + dx).toString());
+        element.setAttribute('data-y', (this.movementObject.elementStartY + dy).toString());
     }
 
     getFilteredCreatures(): Array<Creature> {

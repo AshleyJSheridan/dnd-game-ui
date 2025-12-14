@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { CampaignMap } from '../entities/CampaignMap';
 import { Creature } from '../entities/Creature';
 import { AuthService } from './auth.service';
+import { CampaignLore } from '../entities/CampaignLore';
 
 @Injectable({providedIn: 'root'})
 export class CampaignService {
@@ -27,6 +28,47 @@ export class CampaignService {
 
     public setCampaignGuid(guid: string): void {
         this.campaignGuid = guid;
+    }
+
+    public getCampaignLoreGroups(): Observable<Array<string>> {
+        return this.http.get<Array<string>>(
+            `${this.apiUrl}/campaigns/lore-groups`,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
+
+    public removeCampaignLore(loreGuid: string): Observable<Array<CampaignLore>> {
+        return this.http.delete<Array<CampaignLore>>(
+            `${this.apiUrl}/campaigns/${this.campaignGuid}/lore/${loreGuid}`,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
+
+    public updateCampaignLoreContent(loreGuid: string, content: string): Observable<Array<CampaignLore>> {
+        return this.http.patch<Array<CampaignLore>>(
+            `${this.apiUrl}/campaigns/${this.campaignGuid}/lore/${loreGuid}`,
+            {content: content},
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
+
+    public createLoreItemForCampaign(loreItemName: string, loreItemType: string, loreItemUrl: string, loreItemGroup: string,
+        loreItemContent: string, loreItemHideFromPlayers: string, loreItemFile: File
+    ): Observable<CampaignLore> {
+        const formData = new FormData();
+        formData.append('name', loreItemName);
+        formData.append('type', loreItemType);
+        formData.append('url', loreItemUrl);
+        formData.append('group', loreItemGroup);
+        formData.append('content', loreItemContent);
+        formData.append('hidden', loreItemHideFromPlayers);
+        formData.append('file', loreItemFile);
+
+        return this.http.post<CampaignLore>(
+            `${this.apiUrl}/campaigns/${this.campaignGuid}/lore`,
+            formData,
+            {headers: this.authService.getAuthHeader()}
+        );
     }
 
     public createMap(name: string, description: string, image: File): Observable<CampaignMap> {
@@ -112,9 +154,11 @@ export class CampaignService {
         return this.http.get<Array<Creature>>(`${this.apiUrl}/creatures`, {headers: this.authService.getAuthHeader()});
     }
 
-    public updateCampaign(data: any): Observable<Campaign> {
+    public updateCampaign(data: any, guid: string = ''): Observable<Campaign> {
+        const campaignGuid = !this.campaignGuid ? guid : this.campaignGuid;
+
         return this.http.patch<Campaign>(
-            `${this.apiUrl}/campaigns/${this.campaignGuid}`,
+            `${this.apiUrl}/campaigns/${campaignGuid}`,
             data,
             {headers: this.authService.getAuthHeader()}
         );

@@ -1,0 +1,74 @@
+@use "../colours";
+
+.lore-group {
+    border: 1px solid colours.$medium-grey;
+    border-radius: .5rem;
+    margin-top: 1rem;
+    padding: 1rem;
+
+    h4 {
+        margin-top: 0;
+    }
+}
+
+.lore-list {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    gap: 1rem;
+
+    .lore-item {
+        border: 1px solid colours.$medium-grey;
+        border-radius: .5rem;
+        box-shadow: 2px 2px 7px colours.$medium-grey;
+        display: inline-block;
+        padding: .5rem;
+        width: 10rem;
+    }
+
+    .lore-item-name {
+        font-weight: bold;
+    }
+
+    .lore-actions {
+        display: flex;
+        gap: .5rem;
+    }
+
+    button,
+    a.button-link {
+        align-items: center;
+        display: flex;
+        gap: .25rem;
+        margin-top: .5rem;
+    }
+
+    a.lore-item-document {
+        display: block;
+        text-align: center;
+
+        svg {
+            width: 50%;
+        }
+    }
+
+    .lore-item-thumb {
+        margin-top: .5rem;
+        max-width: 100%;
+    }
+}
+
+.lore-details {
+    .lore-content {
+        border: 1px solid colours.$medium-grey;
+        border-radius: .5rem;
+        overflow: auto;
+        padding: 0 1.5rem .5rem 1rem;
+    }
+
+    textarea {
+        box-sizing: border-box;
+        min-height: 12rem;
+        width: 100%;
+    }
+}

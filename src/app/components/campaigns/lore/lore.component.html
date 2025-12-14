@@ -1,0 +1,43 @@
+<div class="lore-item-name">{{ loreItem()?.name }}</div>
+
+@if (loreItem()?.type === CampaignLoreType.TEXT) {
+    <div class="lore-actions">
+        <button (click)="readLore($event)" class="lore-item-read">
+            <app-read-icon />
+            Read
+        </button>
+        <button (click)="deleteLore($event)" class="lore-item-delete">
+            <app-delete-icon/>
+        </button>
+    </div>
+}
+
+@if (loreItem()?.type === CampaignLoreType.LINK) {
+    <div class="lore-actions">
+        <a href="{{ loreItem()?.url }}" target="_blank" class="button-link">
+            <app-link-icon />
+            Open link
+        </a>
+        <button (click)="deleteLore($event)" class="lore-item-delete">
+            <app-delete-icon/>
+        </button>
+    </div>
+}
+
+@if (loreItem()?.type === CampaignLoreType.FILE) {
+    @if (loreItem()?.is_image) {
+        <a href="{{ getFileUrl() }}" target="_blank">
+            <img src="{{ getThumbUrl() }}" alt="" class="lore-item-thumb"/>
+        </a>
+    } @else {
+        <a class="lore-item-document" href="{{ getFileUrl() }}" target="_blank">
+            <app-pdf-icon/>
+        </a>
+    }
+
+    <div class="lore-actions">
+        <button (click)="deleteLore($event)" class="lore-item-delete">
+            <app-delete-icon/>
+        </button>
+    </div>
+}

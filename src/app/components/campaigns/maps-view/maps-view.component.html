@@ -245,36 +245,38 @@
                 @switch (mapMode)
                 {
                     @case ("Pointer") {
-                        @if (movementObject.entityType === 'character') {
-                            <div class="object-type">Character</div>
-                            <div>Name: {{ getCurrentSelectedObject()?.entity_name }}</div>
-                        } @else {
-                            <div class="ucfirst object-type">{{ movementObject.entityType }}</div>
+                        @if (movementObject.hasObjectSelected()) {
+                            @if (movementObject.entityType === 'character') {
+                                <div class="object-type">Character</div>
+                                <div>Name: {{ getCurrentSelectedObject()?.entity_name }}</div>
+                            } @else {
+                                <div class="ucfirst object-type">{{ movementObject.entityType }}</div>
+                                <label>
+                                    Name:
+                                    <input
+                                        type="text"
+                                        name="entityName"
+                                        [value]="getCurrentSelectedObject()?.entity_name"
+                                        (change)="saveEntityName($event)"
+                                    />
+                                </label>
+                            }
+
                             <label>
-                                Name:
+                                @if (movementObject.entityType === 'drawing') {
+                                    Colour:
+                                } @else {
+                                    Ring colour:
+                                }
                                 <input
-                                    type="text"
-                                    name="entityName"
-                                    [value]="getCurrentSelectedObject()?.entity_name"
-                                    (change)="saveEntityName($event)"
+                                    type="color"
+                                    name="ringColour"
+                                    [value]="getCurrentSelectedObject()?.highlight_colour"
+                                    (change)="saveRingColour($event)"
                                 />
                             </label>
+                            <button class="fantasy-btn fantasy-brown" (click)="removeEntityFromMap()">Remove from map</button>
                         }
-
-                        <label>
-                            @if (movementObject.entityType === 'drawing') {
-                                Colour:
-                            } @else {
-                                Ring colour:
-                            }
-                            <input
-                                type="color"
-                                name="ringColour"
-                                [value]="getCurrentSelectedObject()?.highlight_colour"
-                                (change)="saveRingColour($event)"
-                            />
-                        </label>
-                        <button class="fantasy-btn fantasy-brown" (click)="removeEntityFromMap()">Remove from map</button>
                     }
                     @case ("Draw") {
                         <fieldset>

@@ -108,6 +108,17 @@ button.button-link {
     cursor: pointer;
 }
 
+.input-label {
+    display: inline-block;
+}
+
+.grid-col-2 .input-label {
+    margin-right: 1rem;
+    max-width: 50%;
+    text-align: right;
+    width: 9rem;
+}
+
 input[type=text],
 input[type=number],
 input[type=password],
@@ -116,6 +127,8 @@ input[type=email] {
     border-radius: .25rem;
     font-size: 100%;
     padding: .5rem;
+
+
 }
 
 textarea {
@@ -125,11 +138,47 @@ textarea {
     height: 4rem;
     padding: .5rem;
     width: 30rem;
+
+    &.large {
+        height: 20rem;
+        width: 90%;
+    }
 }
 
 select {
     font-size: 100%;
     padding: .5rem;
+}
+
+input[type=checkbox] {
+    height: 1.5rem;
+    width: 1.5rem;
+}
+
+input[type=text],
+input[type=number],
+input[type=password],
+input[type=email],
+select {
+    box-sizing: border-box;
+    max-width: 20rem;
+    width: 100%;
+}
+
+input[type=text],
+input[type=number],
+input[type=password],
+input[type=email],
+select,
+textarea {
+    &:disabled {
+        background-color: colours.$light-grey;
+        cursor: not-allowed;
+    }
+}
+
+.input-description {
+    font-style: italic;
 }
 
 button.dice-icon {
