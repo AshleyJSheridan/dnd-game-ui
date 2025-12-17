@@ -18,7 +18,8 @@ import { MapsViewComponent } from './components/campaigns/maps-view/maps-view.co
 import { EditPortraitComponent } from './components/character/edit-portrait/edit-portrait.component';
 import { EditCharacterEquipmentComponent } from './components/character/edit-character-equipment/edit-character-equipment.component';
 import { RegisterComponent } from './components/register/register.component';
-import {CharAlignmentComponent} from './components/character/char-alignment/char-alignment.component';
+import { CharAlignmentComponent } from './components/character/char-alignment/char-alignment.component';
+import { CampaignMapComponent } from './components/campaigns/campaign-map/campaign-map.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -46,7 +47,7 @@ export const routes: Routes = [
     },
     { path: 'campaigns', component: CampaignListComponent },
     { path: 'campaigns/:guid', component: CampaignComponent },
-    { path: 'campaigns/:guid/maps/:mapGuid', component: MapsViewComponent },
+    { path: 'campaigns/:guid/maps/:mapGuid', component: CampaignMapComponent },
 ];
 
 export const appConfig: ApplicationConfig = {

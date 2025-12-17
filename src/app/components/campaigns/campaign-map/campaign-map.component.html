@@ -1,0 +1,201 @@
+<app-header-slim></app-header-slim>
+
+@if (error.length) {
+    <div class="error">{{ error }}</div>
+}
+<div class="campaign-map-container">
+    <nav class="map-actions">
+        @if (campaign?.owner) {
+            <app-map-action-icon [mapAction]="'Settings'" (mapMode)="setMapMode($event)" [currentMapMode]="mapMode"/>
+        }
+        <app-map-action-icon [mapAction]="'Pointer'" (mapMode)="setMapMode($event)" [currentMapMode]="mapMode"/>
+        <app-map-action-icon [mapAction]="'Draw'" (mapMode)="setMapMode($event)" [currentMapMode]="mapMode"/>
+        <app-map-action-icon [mapAction]="'Ruler'" (mapMode)="setMapMode($event)" [currentMapMode]="mapMode"/>
+        <app-map-action-icon [mapAction]="'Creature'" (mapMode)="setMapMode($event)" [currentMapMode]="mapMode"/>
+        <app-map-action-icon [mapAction]="'Object'" (mapMode)="setMapMode($event)" [currentMapMode]="mapMode"/>
+        <!--<app-map-action-icon [mapAction]="'Grid'" (mapMode)="setMapMode($event)" [currentMapMode]="mapMode"/>-->
+    </nav>
+    <div class="campaign-map">
+        @if (campaignMap?.guid) {
+            <div class="map" [style]="'width: ' + campaignMap?.width + '; height: ' + campaignMap?.height + ';'">
+                <img
+                    class="map-image"
+                    src="{{ getImageUrl() }}"
+                    [attr.width]="campaignMap?.width"
+                    [attr.height]="campaignMap?.height"
+                />
+                <svg
+                    class="map-interactive"
+                    [attr.width]="campaignMap?.width"
+                    [attr.height]="campaignMap?.height"
+                    [attr.viewBox]="'0 0 ' + getViewBoxWidth() + ' ' + getViewBoxHeight()"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <defs>
+                        <pattern id="grid" [attr.width]="campaignMap.grid_size" [attr.height]="campaignMap.grid_size" patternUnits="userSpaceOnUse">
+                            <path
+                                [attr.d]="'M ' + campaignMap.grid_size + ' 0 L 0 0 0 ' + campaignMap.grid_size + ''"
+                                fill="none"
+                                [attr.stroke]="gridColour()"
+                                stroke-width="1"
+                            />
+                        </pattern>
+
+                        <!-- drawing patterns, as needed by particular map -->
+                        @for (drawing of campaignMap.drawings; track drawing.guid) {
+                            <app-map-pattern
+                                [patternId]="'pattern-' + drawing.guid"
+                                [patternColour]="drawing.highlight_colour"
+                                [patternSymbol]="drawing.stats?.pattern ?? ''"
+                            />
+                        }
+
+                    </defs>
+                    @if (campaignMap.show_grid) {
+                        <g id="scale">
+                            <rect width="100%" height="100%" fill="url(#grid)" />
+                        </g>
+                    }
+
+                    <g id="mapCreatures">
+                        @for (player of campaignMap.players; track player.guid) {
+                            <g
+                                class="character"
+                                [attr.data-x]="player.x"
+                                [attr.data-y]="player.y"
+                                [attr.data-guid]="player.guid"
+                                [attr.data-name]="player.player.name"
+                                [attr.transform]="'translate(' + player.x + ', ' + player.y + ')'"
+                            >
+                                <circle
+                                    [attr.cx]="campaignMap.grid_size / 2"
+                                    [attr.cy]="campaignMap.grid_size / 2"
+                                    [attr.r]="campaignMap.grid_size / 2"
+                                    [attr.stroke]="player.highlight_colour"
+                                    stroke-width="4"
+                                />
+                                <image
+                                    x="0"
+                                    y="0"
+                                    [attr.width]="campaignMap.grid_size"
+                                    [attr.height]="campaignMap.grid_size"
+                                    [attr.xlink:href]="getCharacterImageUrl(player.player.custom_portrait, player.player.guid)"
+                                    style="clip-path: inset(0 0 0 0 round 50%);"
+                                ></image>
+                            </g>
+                        }
+                    </g>
+                </svg>
+            </div>
+        }
+    </div>
+</div>
+@if (showSettings) {
+    <div class="map-settings">
+        @if (mapMode === 'Settings') {
+            <form>
+                <fieldset>
+                    <legend>Map Settings</legend>
+
+                    <div class="settings-block-container">
+                        <fieldset class="settings-block">
+                            <legend>Grid Details</legend>
+
+                            <label>
+                                Show Grid
+                                <input type="checkbox" name="showGrid" [(ngModel)]="campaignMap.show_grid" (change)="toggleGrid()"/>
+                            </label>
+                            <label>
+                                Grid Colour
+                                <input type="color" name="gridColour" [(ngModel)]="gridColour" (change)="saveGridColour()"/>
+                            </label>
+                        </fieldset>
+
+                        <fieldset class="settings-block">
+                            <legend>Grid Size</legend>
+                            <button type="button" (click)="changeGridSize(-50)" class="large">
+                                <span class="accessible-hidden">Reduce grid size</span>
+                                <span aria-hidden="true">-</span>
+                            </button>
+                            <button type="button" (click)="changeGridSize(50)" class="large">
+                                <span class="accessible-hidden">Increase grid size</span>
+                                <span aria-hidden="true">+</span>
+                            </button>
+                        </fieldset>
+
+                        <fieldset class="settings-block">
+                            <legend>Map Size</legend>
+
+                            <label>
+                                Width
+                                <input type="number" value="{{ campaignMap.width }}" step="100" (change)="updateMapSize('width', $event)"/>
+                            </label>
+                            <label>
+                                Height
+                                <input type="number" value="{{ campaignMap.height }}" step="100" (change)="updateMapSize('height', $event)"/>
+                            </label>
+                        </fieldset>
+                    </div>
+                </fieldset>
+            </form>
+        }
+        @if (mapMode === 'Creature') {
+            <div class="tabs" id="creatureTabs">
+                <div role="tablist" aria-label="Creature selection tabs">
+                    <button type="button" role="tab" aria-controls="playerPanel" id="creature-tab-1" tabindex="-1" (click)="selectTab($event)" aria-selected="true">Players</button>
+                    <button type="button" role="tab" aria-controls="creaturePanel" id="creature-tab-2" tabindex="-1" (click)="selectTab($event)">Creatures</button>
+                </div>
+                <div id="playerPanel" role="tabpanel" tabindex="0" aria-labelledby="creature-tab-1" class="tab-panel">
+                    <ul class="creature-list">
+                        @for (character of campaign?.players; track character.guid) {
+                            @if (!isCharacterInMap(character)) {
+                                <li>
+                                    <button class="character" (click)="addCharacterToMap(character)">
+                                        <app-portrait [character]="character"/>
+                                        <div class="character-name">{{ character.name }}</div>
+                                    </button>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+                <div id="creaturePanel" role="tabpanel" tabindex="0" aria-labelledby="creature-tab-2" hidden class="tab-panel">
+                    @if (creatures) {
+                        <label>Type:
+                            <select [(ngModel)]="creatureType" name="creatureType" (change)="clearCreatureSearch($event)">
+                                <option value="-">Select Creature Type</option>
+                                <option value="aberration">Aberration</option>
+                                <option value="beast">Beast</option>
+                                <option value="celestial">Celestial</option>
+                                <option value="construct">Construct</option>
+                                <option value="dragon">Dragon</option>
+                                <option value="elemental">Elemental</option>
+                                <option value="fey">Fey</option>
+                                <option value="fiend">Fiend</option>
+                                <option value="giant">Giant</option>
+                                <option value="humanoid">Humanoid</option>
+                                <option value="monstrosity">Monstrosity</option>
+                                <option value="ooze">Ooze</option>
+                                <option value="plant">Plant</option>
+                                <option value="undead">Undead</option>
+                            </select>
+                        </label>
+                        <label>Search:
+                            <input type="text" name="creatureSearch" [(ngModel)]="creatureSearch" (keyup)="clearCreatureType($event)"/>
+                        </label>
+                        <em>Search begins after second letter</em>
+                        <ul class="creature-list">
+                            @for (creature of getFilteredCreatures(); track $index) {
+                                <li>
+                                    <button class="creature" (click)="addCreatureToMap(creature)">
+                                        <app-creature [creature]="creature"/>
+                                    </button>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}

@@ -42,6 +42,7 @@ export class LightboxComponent {
     }
 
     showModal(focusReturnElement: EventTarget): void {
+        console.log('wtf')
         this.focusReturnElement = focusReturnElement;
         this.canShowModal = true;
 
