@@ -18,6 +18,7 @@ import { CampaignMapDrawing } from '../../../entities/CampaignMapDrawing';
 import { DamageIconComponent } from '../../icons/damage-icon/damage-icon.component';
 import { DrawingObject } from '../../../entities/DrawingObject';
 import {CallbackLightboxComponent} from '../../dialogs/callback-lightbox/callback-lightbox.component';
+import {SvgDragDropEvent, SvgDraggableDirective} from '../../../directives/svg-draggable.directive';
 
 @Component({
     selector: 'app-campaign-map',
@@ -28,7 +29,8 @@ import {CallbackLightboxComponent} from '../../dialogs/callback-lightbox/callbac
         FormsModule,
         MapPatternComponent,
         CreatureComponent,
-        PortraitComponent
+        PortraitComponent,
+        SvgDraggableDirective
     ],
     templateUrl: './campaign-map.component.html'
 })
@@ -77,6 +79,15 @@ export class CampaignMapComponent {
                 })
             }
         );
+
+        this.campaignService.getCreatures().subscribe({
+            next: (creatures) => {
+                this.creatures = creatures;
+            },
+            error: (error) => {
+                // TODO handle error loading creatures
+            }
+        });
     }
 
     setMapMode(mode: string): void {
@@ -230,5 +241,36 @@ export class CampaignMapComponent {
         });
 
         return found.length > 0;
+    }
+
+    onTokenDropped(event: SvgDragDropEvent, entityType: string) {
+        const newX = event.start.x + event.delta.dx;
+        const newY = event.start.y + event.delta.dy;
+        const updateData = {
+            guid: event.id,
+            type: entityType,
+            x: newX,
+            y: newY,
+
+        };
+
+        let creature = null;
+        if (entityType === 'creature') {
+            creature = this.campaignMap.creatures.find(x => x.guid === event.id);
+        }
+        if (entityType === 'character') {
+            creature = this.campaignMap.players.find(x => x.guid === event.id);
+        }
+
+        if (creature) {
+            this.campaignService.updateMapEntity(this.campaignMap.guid, event.id!, updateData).subscribe({
+                next: (map) => {
+                    this.campaignMap = map;
+                },
+                error: (error) => {
+                    // TODO handle error updating entity position.
+                }
+            })
+        }
     }
 }

@@ -174,10 +174,15 @@ app-campaign-map {
     position: relative;
 
     .tabs {
+        .creater-panel {
+            height: 10rem;
+            overflow: auto;
+        }
 
         .creature-list {
             align-items: stretch;
             display: flex;
+            flex-wrap: wrap;
             margin: 0;
             padding: 0;
 

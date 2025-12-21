@@ -66,6 +66,10 @@
                                 [attr.data-guid]="player.guid"
                                 [attr.data-name]="player.player.name"
                                 [attr.transform]="'translate(' + player.x + ', ' + player.y + ')'"
+
+                                svgDraggable
+                                [dragId]="player.guid"
+                                (dragDrop)="onTokenDropped($event, 'character')"
                             >
                                 <circle
                                     [attr.cx]="campaignMap.grid_size / 2"
@@ -80,6 +84,36 @@
                                     [attr.width]="campaignMap.grid_size"
                                     [attr.height]="campaignMap.grid_size"
                                     [attr.xlink:href]="getCharacterImageUrl(player.player.custom_portrait, player.player.guid)"
+                                    style="clip-path: inset(0 0 0 0 round 50%);"
+                                ></image>
+                            </g>
+                        }
+                        @for (creature of campaignMap.creatures; track creature.guid) {
+                            <g
+                                class="creature"
+                                [attr.data-x]="creature.x"
+                                [attr.data-y]="creature.y"
+                                [attr.data-guid]="creature.guid"
+                                [attr.data-name]="creature.entity_name"
+                                [attr.transform]="'translate(' + creature.x + ', ' + creature.y + ')'"
+
+                                svgDraggable
+                                [dragId]="creature.guid"
+                                (dragDrop)="onTokenDropped($event, 'creature')"
+                            >
+                                <circle
+                                    [attr.cx]="campaignMap.grid_size / 2"
+                                    [attr.cy]="campaignMap.grid_size / 2"
+                                    [attr.r]="campaignMap.grid_size / 2"
+                                    [attr.stroke]="creature.highlight_colour"
+                                    stroke-width="4"
+                                />
+                                <image
+                                    x="0"
+                                    y="0"
+                                    [attr.width]="campaignMap.grid_size"
+                                    [attr.height]="campaignMap.grid_size"
+                                    [attr.xlink:href]="'/images/creature-icons/' + (creature.creature?.name ?? '').toLowerCase() + '.png'"
                                     style="clip-path: inset(0 0 0 0 round 50%);"
                                 ></image>
                             </g>
@@ -159,7 +193,7 @@
                         }
                     </ul>
                 </div>
-                <div id="creaturePanel" role="tabpanel" tabindex="0" aria-labelledby="creature-tab-2" hidden class="tab-panel">
+                <div id="creaturePanel" role="tabpanel" tabindex="0" aria-labelledby="creature-tab-2" hidden class="tab-panel creater-panel">
                     @if (creatures) {
                         <label>Type:
                             <select [(ngModel)]="creatureType" name="creatureType" (change)="clearCreatureSearch($event)">
