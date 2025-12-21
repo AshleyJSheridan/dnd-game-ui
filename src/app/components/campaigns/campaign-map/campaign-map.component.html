@@ -104,15 +104,15 @@
                                 <circle
                                     [attr.cx]="campaignMap.grid_size / 2"
                                     [attr.cy]="campaignMap.grid_size / 2"
-                                    [attr.r]="campaignMap.grid_size / 2"
+                                    [attr.r]="campaignMap.grid_size / 2 * getTokenSizeMultiplier(creature!.creature!.size)"
                                     [attr.stroke]="creature.highlight_colour"
                                     stroke-width="4"
                                 />
                                 <image
-                                    x="0"
-                                    y="0"
-                                    [attr.width]="campaignMap.grid_size"
-                                    [attr.height]="campaignMap.grid_size"
+                                    [attr.x]="0 - campaignMap.grid_size / 2 * (getTokenSizeMultiplier(creature!.creature!.size) - 1)"
+                                    [attr.y]="0 - campaignMap.grid_size / 2 * (getTokenSizeMultiplier(creature!.creature!.size) - 1)"
+                                    [attr.width]="campaignMap.grid_size * getTokenSizeMultiplier(creature!.creature!.size)"
+                                    [attr.height]="campaignMap.grid_size * getTokenSizeMultiplier(creature!.creature!.size)"
                                     [attr.xlink:href]="'/images/creature-icons/' + (creature.creature?.name ?? '').toLowerCase() + '.png'"
                                     style="clip-path: inset(0 0 0 0 round 50%);"
                                 ></image>

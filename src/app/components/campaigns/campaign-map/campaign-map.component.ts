@@ -273,4 +273,23 @@ export class CampaignMapComponent {
             })
         }
     }
+
+    getTokenSizeMultiplier(size: string): number {
+        switch (size) {
+            case 'tiny':
+                return 0.5;
+            case 'small':
+                return 0.75;
+            case 'medium':
+                return 1;
+            case 'large':
+                return 2;
+            case 'huge':
+                return 3;
+            case 'gargantuan':
+                return 4;
+            default:
+                return 1;
+        }
+    }
 }
