@@ -148,6 +148,10 @@ app-campaign-map {
     background-color: colours.$white;
     position: relative;
 
+    legend {
+        text-transform: capitalize;
+    }
+
     .tabs {
         .creater-panel {
             height: 10rem;

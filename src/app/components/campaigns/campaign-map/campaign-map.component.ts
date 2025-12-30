@@ -17,8 +17,8 @@ import { MapPatternComponent } from '../map-pattern/map-pattern.component';
 import { CampaignMapDrawing } from '../../../entities/CampaignMapDrawing';
 import { DamageIconComponent } from '../../icons/damage-icon/damage-icon.component';
 import { DrawingObject } from '../../../entities/DrawingObject';
-import {CallbackLightboxComponent} from '../../dialogs/callback-lightbox/callback-lightbox.component';
-import {SvgDragDropEvent, SvgDraggableDirective} from '../../../directives/svg-draggable.directive';
+import { CallbackLightboxComponent } from '../../dialogs/callback-lightbox/callback-lightbox.component';
+import { SvgDragDropEvent, SvgDraggableDirective } from '../../../directives/svg-draggable.directive';
 
 @Component({
     selector: 'app-campaign-map',
@@ -47,6 +47,7 @@ export class CampaignMapComponent {
     creatures: Array<Creature> = [];
     creatureType: string = '-';
     creatureSearch: string = '';
+    selectedEntity: CampaignMapCreature | CampaignMapPlayer | CampaignMapDrawing | null = null;
 
     drawing: DrawingObject = new DrawingObject();
     damageTypeIcons: Array<string> = ['Bludgeoning', 'Piercing', 'Slashing', 'Acid', 'Cold', 'Fire', 'Force', 'Lightning',
@@ -247,34 +248,37 @@ export class CampaignMapComponent {
     }
 
     onTokenDropped(event: SvgDragDropEvent, entityType: string) {
-        const newX = event.start.x + event.delta.dx;
-        const newY = event.start.y + event.delta.dy;
-        const updateData = {
-            guid: event.id,
-            type: entityType,
-            x: newX,
-            y: newY,
+        if (this.mapMode === 'Pointer') {
+            const newX = event.start.x + event.delta.dx;
+            const newY = event.start.y + event.delta.dy;
+            const updateData = {
+                guid: event.id,
+                type: entityType,
+                x: newX,
+                y: newY,
 
-        };
+            };
 
-        let creature = null;
-        if (entityType === 'creature') {
-            creature = this.campaignMap.creatures.find(x => x.guid === event.id);
-        }
-        if (entityType === 'character') {
-            creature = this.campaignMap.players.find(x => x.guid === event.id);
+            let creature = null;
+            if (entityType === 'creature') {
+                creature = this.campaignMap.creatures.find(x => x.guid === event.id);
+            }
+            if (entityType === 'character') {
+                creature = this.campaignMap.players.find(x => x.guid === event.id);
+            }
+
+            if (creature) {
+                this.campaignService.updateMapEntity(this.campaignMap.guid, event.id!, updateData).subscribe({
+                    next: (map) => {
+                        this.campaignMap = map;
+                    },
+                    error: (error) => {
+                        // TODO handle error updating entity position.
+                    }
+                })
+            }
         }
 
-        if (creature) {
-            this.campaignService.updateMapEntity(this.campaignMap.guid, event.id!, updateData).subscribe({
-                next: (map) => {
-                    this.campaignMap = map;
-                },
-                error: (error) => {
-                    // TODO handle error updating entity position.
-                }
-            })
-        }
     }
 
     getTokenSizeMultiplier(size: string): number {
@@ -314,6 +318,26 @@ export class CampaignMapComponent {
             this.drawing.angle = 0;
             this.drawing.angle = 0;
             this.drawing.drawing = true;
+        }
+
+        if (this.mapMode === 'Pointer') {
+            const mapEntity = this.getMapSVGEntity(event.target as SVGElement);
+
+            if (mapEntity) {
+                // Get the selected object from it's type and guid.
+                const entityType = mapEntity.getAttribute('data-type') ?? '';
+                const entityGuid = mapEntity.getAttribute('data-guid') ?? '';
+
+                if (entityType !== '' && entityGuid !== '') {
+                    const entity = this.getEntityByTypeAndGuid(entityType, entityGuid);
+
+                    if (entity) {
+                        this.selectedEntity = entity;
+
+                        console.log(entity);
+                    }
+                }
+            }
         }
     }
 
@@ -359,5 +383,99 @@ export class CampaignMapComponent {
         const deltaX = x2 - x1;
         const radians = Math.atan2(deltaY, deltaX);
         return radians * (180 / Math.PI);
+    }
+
+    // recursively get the entity SVG element from the target, as event target might be nested element
+    getMapSVGEntity(target: SVGElement): SVGElement | undefined {
+        if ((target).tagName === 'svg')
+            return undefined;
+
+        if (target.hasAttribute('data-type')) {
+            const targetType = target.getAttribute('data-type');
+
+            if (
+                targetType === 'character' ||
+                targetType === 'creature' ||
+                targetType === 'object' ||
+                targetType === 'drawing'
+            )
+                return target;
+        }
+
+        return this.getMapSVGEntity(target.parentNode as SVGElement);
+    }
+
+    getEntityByTypeAndGuid(type: string, guid: string): CampaignMapCreature | CampaignMapPlayer | CampaignMapDrawing | undefined {
+        if (type === 'creature') {
+            return this.campaignMap.creatures.find(x => x.guid === guid);
+        }
+        if (type === 'character') {
+            return this.campaignMap.players.find(x => x.guid === guid);
+        }
+        if (type === 'drawing') {
+            return this.campaignMap.drawings.find(x => x.guid === guid);
+        }
+
+        return undefined;
+    }
+
+    changeSelectedEntitySymbol(symbol: string): void {
+        if (this.selectedEntity && this.selectedEntity.type === 'drawing') {
+            const drawing = this.selectedEntity as CampaignMapDrawing;
+
+            drawing.stats.pattern = symbol;
+
+            const updateData = {
+                guid: drawing.guid,
+                type: 'drawing',
+                stats: {
+                    pattern: symbol,
+                }
+            };
+
+            this.campaignService.updateMapEntity(this.campaignMap.guid, drawing.guid, updateData).subscribe({
+                next: (map) => {
+                    this.campaignMap = map;
+                    this.selectedEntity = null;
+                },
+                error: (error) => {
+                    // TODO handle error updating drawing symbol
+                }
+            })
+        }
+    }
+
+    selectedEntitySymbolMatches(symbol: string): boolean {
+        if (this.selectedEntity && this.selectedEntity.type === 'drawing') {
+            const drawing = this.selectedEntity as CampaignMapDrawing;
+
+            return drawing.stats.pattern === symbol;
+        }
+
+        return false;
+    }
+
+    changeSelectedEntityColour(event: Event): void {
+        if (this.selectedEntity) {
+            const colour = (event.currentTarget as HTMLInputElement).value;
+
+            this.selectedEntity.highlight_colour = colour;
+
+            const updateData = {
+                guid: this.selectedEntity.guid,
+                type: this.selectedEntity.type,
+                highlight_colour: colour,
+            };
+
+            this.campaignService.updateMapEntity(this.campaignMap.guid, this.selectedEntity.guid, updateData).subscribe({
+                next: (map) => {
+                    this.campaignMap = map;
+                    this.selectedEntity = null;
+                },
+                error: (error) => {
+                    // TODO handle error updating drawing colour
+                }
+            })
+        }
     }
 }

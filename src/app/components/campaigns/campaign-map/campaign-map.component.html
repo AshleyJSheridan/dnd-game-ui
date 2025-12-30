@@ -73,11 +73,16 @@
                         @for (drawing of campaignMap.drawings; track drawing.guid) {
                             <g
                                 class="drawing"
+                                data-type="drawing"
                                 [attr.transform]="'translate(' + drawing.x + ', ' + drawing.y + ')'"
                                 [attr.data-x]="drawing.x"
                                 [attr.data-y]="drawing.y"
                                 [attr.data-guid]="drawing.guid"
                                 data-name=""
+
+                                svgDraggable
+                                [dragId]="drawing.guid"
+                                [enabled]="this.mapMode === 'Pointer'"
                             >
                                 @switch (drawing.stats.type ?? '') {
                                     @case ('circle') {
@@ -106,7 +111,7 @@
                                             <path
                                                 stroke-width="4"
                                                 [attr.stroke]="drawing.highlight_colour"
-                                                [attr.d]="'M 0 0 L ' + (drawing.stats.length ?? 1) + ' -' + ((drawing.stats.width ?? 1) / 4) + ' L ' + (drawing.stats.length ?? 0) + ' ' + ((drawing.stats.width ?? 1) / 4) + ' Z'"
+                                                [attr.d]="'M 0 0 L ' + (drawing.stats.length ?? 1) + ' -' + ((drawing.stats.length ?? 1) / 4) + ' L ' + (drawing.stats.length ?? 0) + ' ' + ((drawing.stats.length ?? 1) / 4) + ' Z'"
                                                 [attr.fill]="'url(#pattern-' + drawing.guid + ')'"
                                             />
                                         </g>
@@ -159,7 +164,7 @@
                             </g>
                         }
                         @if (mapMode === 'Ruler' && drawing.isRuler) {
-                            <g class="drawing" data-guid="ruler" data-name="">
+                            <g class="drawing" data-guid="ruler" data-name="" data-type="drawing">
                                 <line
                                     [attr.x1]="(drawing.startX ?? 1)"
                                     [attr.y1]="(drawing.startY ?? 1)"
@@ -188,6 +193,7 @@
                         @for (player of campaignMap.players; track player.guid) {
                             <g
                                 class="character"
+                                data-type="character"
                                 [attr.data-x]="player.x"
                                 [attr.data-y]="player.y"
                                 [attr.data-guid]="player.guid"
@@ -196,6 +202,7 @@
 
                                 svgDraggable
                                 [dragId]="player.guid"
+                                [enabled]="this.mapMode === 'Pointer'"
                                 (dragDrop)="onTokenDropped($event, 'character')"
                             >
                                 <circle
@@ -218,6 +225,7 @@
                         @for (creature of campaignMap.creatures; track creature.guid) {
                             <g
                                 class="creature"
+                                data-type="creature"
                                 [attr.data-x]="creature.x"
                                 [attr.data-y]="creature.y"
                                 [attr.data-guid]="creature.guid"
@@ -226,6 +234,7 @@
 
                                 svgDraggable
                                 [dragId]="creature.guid"
+                                [enabled]="this.mapMode === 'Pointer'"
                                 (dragDrop)="onTokenDropped($event, 'creature')"
                             >
                                 <circle
@@ -361,60 +370,96 @@
             </form>
         }
         @if (mapMode === 'Draw') {
-            <fieldset>
-                <legend>Shape</legend>
+            <form>
+                <fieldset>
+                    <legend>Shape</legend>
 
-                <div class="radio-collection">
-                    <label class="radio-label" title="Circle">
-                        <span class="accessible-hidden">Circle</span>
-                        <input type="radio" name="drawingShape" value="circle"
-                               (change)="drawing.shape = 'circle'" [checked]="drawing.shape === 'circle'"/>
-                        <svg viewBox="0 0 24 24" width="24" height="24">
-                            <circle r="10" cx="12" cy="12" fill="none" stroke="currentColor" stroke-width="1"/>
-                        </svg>
-                    </label>
-                    <label class="radio-label" title="Cone">
-                        <span class="accessible-hidden">Cone</span>
-                        <input type="radio" name="drawingShape" value="cone"
-                               (change)="drawing.shape = 'cone'" [checked]="drawing.shape === 'cone'"/>
-                        <svg viewBox="0 0 24 24" width="24" height="24">
-                            <path d="M 12 0 L 0 24 L 24 24 Z" fill="none" stroke="currentColor" stroke-width="1"/>
-                        </svg>
-                    </label>
-                    <label class="radio-label" title="Rectangle">
-                        <span class="accessible-hidden">Rectangle</span>
-                        <input type="radio" name="drawingShape" value="rectangle"
-                               (change)="drawing.shape = 'rectangle'" [checked]="drawing.shape === 'rectangle'"/>
-                        <svg viewBox="0 0 24 24" width="24" height="24">
-                            <rect height="20" width="20" x="2" y="2" fill="none" stroke="currentColor" stroke-width="1"/>
-                        </svg>
-                    </label>
-                </div>
-            </fieldset>
-
-            <fieldset>
-                <legend>Symbol</legend>
-
-                <div class="radio-collection">
-                    @for (damageType of damageTypeIcons; track damageType) {
-                        <label class="radio-label" title="{{ damageType }}">
-                            <span class="accessible-hidden">{{ damageType }}</span>
-                            <input type="radio" name="patternSymbol" value="{{ damageType.toLowerCase() }}"
-                                   (change)="drawing.fillSymbol = damageType.toLowerCase()" [checked]="drawing.fillSymbol === damageType.toLowerCase()"/>
-                            <app-damage-icon [patternSymbol]="damageType"/>
+                    <div class="radio-collection">
+                        <label class="radio-label" title="Circle">
+                            <span class="accessible-hidden">Circle</span>
+                            <input type="radio" name="drawingShape" value="circle"
+                                   (change)="drawing.shape = 'circle'" [checked]="drawing.shape === 'circle'"/>
+                            <svg viewBox="0 0 24 24" width="24" height="24">
+                                <circle r="10" cx="12" cy="12" fill="none" stroke="currentColor" stroke-width="1"/>
+                            </svg>
                         </label>
+                        <label class="radio-label" title="Cone">
+                            <span class="accessible-hidden">Cone</span>
+                            <input type="radio" name="drawingShape" value="cone"
+                                   (change)="drawing.shape = 'cone'" [checked]="drawing.shape === 'cone'"/>
+                            <svg viewBox="0 0 24 24" width="24" height="24">
+                                <path d="M 12 0 L 0 24 L 24 24 Z" fill="none" stroke="currentColor" stroke-width="1"/>
+                            </svg>
+                        </label>
+                        <label class="radio-label" title="Rectangle">
+                            <span class="accessible-hidden">Rectangle</span>
+                            <input type="radio" name="drawingShape" value="rectangle"
+                                   (change)="drawing.shape = 'rectangle'" [checked]="drawing.shape === 'rectangle'"/>
+                            <svg viewBox="0 0 24 24" width="24" height="24">
+                                <rect height="20" width="20" x="2" y="2" fill="none" stroke="currentColor" stroke-width="1"/>
+                            </svg>
+                        </label>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Symbol</legend>
+
+                    <div class="radio-collection">
+                        @for (damageType of damageTypeIcons; track damageType) {
+                            <label class="radio-label" title="{{ damageType }}">
+                                <span class="accessible-hidden">{{ damageType }}</span>
+                                <input type="radio" name="patternSymbol" value="{{ damageType.toLowerCase() }}"
+                                       (change)="drawing.fillSymbol = damageType.toLowerCase()" [checked]="drawing.fillSymbol === damageType.toLowerCase()"/>
+                                <app-damage-icon [patternSymbol]="damageType"/>
+                            </label>
+                        }
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Colour</legend>
+
+                    <label>
+                        <span class="accessible-hidden">Colour</span>
+                        <input type="color" [value]="drawing.colour" (change)="changeDrawingColour($event)"/>
+                    </label>
+                </fieldset>
+            </form>
+        }
+
+        @if (mapMode === 'Pointer' && selectedEntity !== null) {
+            <form>
+                <fieldset>
+                    <legend>Selected: {{ selectedEntity.type }}</legend>
+
+                    @if (selectedEntity.type === 'drawing') {
+                        <fieldset>
+                            <legend>Symbol</legend>
+
+                            <div class="radio-collection">
+                                @for (damageType of damageTypeIcons; track damageType) {
+                                    <label class="radio-label" title="{{ damageType }}">
+                                        <span class="accessible-hidden">{{ damageType }}</span>
+                                        <input type="radio" name="patternSymbol" value="{{ damageType.toLowerCase() }}"
+                                               (change)="changeSelectedEntitySymbol(damageType.toLowerCase())" [checked]="selectedEntitySymbolMatches(damageType.toLowerCase())"/>
+                                        <app-damage-icon [patternSymbol]="damageType"/>
+                                    </label>
+                                }
+                            </div>
+                        </fieldset>
                     }
-                </div>
-            </fieldset>
 
-            <fieldset>
-                <legend>Colour</legend>
+                    <fieldset>
+                        <legend>Colour</legend>
 
-                <label>
-                    <span class="accessible-hidden">Colour</span>
-                    <input type="color" [value]="drawing.colour" (change)="changeDrawingColour($event)"/>
-                </label>
-            </fieldset>
+                        <label>
+                            <span class="accessible-hidden">Colour</span>
+                            <input type="color" [value]="selectedEntity.highlight_colour" (change)="changeSelectedEntityColour($event)"/>
+                        </label>
+                    </fieldset>
+                </fieldset>
+            </form>
         }
     </div>
 }

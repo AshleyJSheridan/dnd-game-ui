@@ -22,6 +22,7 @@ export interface SvgDragDropEvent {
 })
 export class SvgDraggableDirective implements OnDestroy {
     @Input() dragId?: string;
+    @Input() enabled = false;
 
     /** Optional: snap movement to a grid size (e.g. 10). */
     @Input() snap = 0;
@@ -50,13 +51,18 @@ export class SvgDraggableDirective implements OnDestroy {
     // --- Pointer down starts drag ---
     @HostListener('pointerdown', ['$event'])
     onPointerDown(ev: PointerEvent) {
+        if (!this.enabled)
+            return;
+
         const g = this.elRef.nativeElement;
 
         // Only left button for mouse; touch/pen will have button===0 anyway.
-        if (ev.pointerType === 'mouse' && ev.button !== 0) return;
+        if (ev.pointerType === 'mouse' && ev.button !== 0)
+            return;
 
         this.svg = (g.ownerSVGElement as SVGSVGElement)!;
-        if (!this.svg) return;
+        if (!this.svg)
+            return;
 
         ev.preventDefault();
 
@@ -78,8 +84,11 @@ export class SvgDraggableDirective implements OnDestroy {
     // --- Pointer move updates transform live ---
     @HostListener('pointermove', ['$event'])
     onPointerMove(ev: PointerEvent) {
-        if (!this.dragging) return;
-        if (this.pointerId !== null && ev.pointerId !== this.pointerId) return;
+        if (!this.dragging)
+            return;
+
+        if (this.pointerId !== null && ev.pointerId !== this.pointerId)
+            return;
 
         const g = this.elRef.nativeElement;
 
@@ -110,8 +119,11 @@ export class SvgDraggableDirective implements OnDestroy {
     @HostListener('pointerup', ['$event'])
     @HostListener('pointercancel', ['$event'])
     onPointerUp(ev: PointerEvent) {
-        if (!this.dragging) return;
-        if (this.pointerId !== null && ev.pointerId !== this.pointerId) return;
+        if (!this.dragging)
+            return;
+
+        if (this.pointerId !== null && ev.pointerId !== this.pointerId)
+            return;
 
         const g = this.elRef.nativeElement;
 
@@ -156,10 +168,12 @@ export class SvgDraggableDirective implements OnDestroy {
 
         // supports: translate(12 34) or translate(12,34)
         const m = tf.match(/translate\(\s*([-\d.]+)(?:[ ,]\s*([-\d.]+))?\s*\)/);
-        if (!m) return { x: 0, y: 0 };
+        if (!m)
+            return { x: 0, y: 0 };
 
         const x = parseFloat(m[1]);
         const y = parseFloat(m[2] ?? '0');
+
         return { x: isFinite(x) ? x : 0, y: isFinite(y) ? y : 0 };
     }
 }
