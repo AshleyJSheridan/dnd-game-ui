@@ -30,7 +30,8 @@ import {SvgDragDropEvent, SvgDraggableDirective} from '../../../directives/svg-d
         MapPatternComponent,
         CreatureComponent,
         PortraitComponent,
-        SvgDraggableDirective
+        SvgDraggableDirective,
+        DamageIconComponent
     ],
     templateUrl: './campaign-map.component.html'
 })
@@ -46,6 +47,10 @@ export class CampaignMapComponent {
     creatures: Array<Creature> = [];
     creatureType: string = '-';
     creatureSearch: string = '';
+
+    drawing: DrawingObject = new DrawingObject();
+    damageTypeIcons: Array<string> = ['Bludgeoning', 'Piercing', 'Slashing', 'Acid', 'Cold', 'Fire', 'Force', 'Lightning',
+        'Necrotic', 'Poison', 'Psychic', 'Radiant', 'None'];
 
     @ViewChild('settingsLightbox') settingsLightbox: CallbackLightboxComponent | undefined;
 
@@ -93,8 +98,6 @@ export class CampaignMapComponent {
     setMapMode(mode: string): void {
         this.showSettings = true;
         this.mapMode = mode;
-
-
     }
 
     getImageUrl(): string {
@@ -291,5 +294,70 @@ export class CampaignMapComponent {
             default:
                 return 1;
         }
+    }
+
+    onSvgPointerDown(event: PointerEvent) {
+        if (this.mapMode === 'Draw') {
+            // reset the drawing objects start x,y for each new drawing to prevent drawing jumps
+            if (this.mapMode === 'Draw') {
+                this.drawing.startX = 0;
+                this.drawing.startY = 0;
+            }
+
+            event.stopPropagation();
+
+            this.drawing.startX = event.offsetX;
+            this.drawing.startY = event.offsetY;
+            this.drawing.distance = 0;
+            this.drawing.height = 0;
+            this.drawing.width = 0;
+            this.drawing.angle = 0;
+            this.drawing.angle = 0;
+            this.drawing.drawing = true;
+        }
+    }
+
+    onSvgPointerMove(event: PointerEvent) {
+        if (this.mapMode === 'Draw') {
+            event.stopPropagation();
+
+            const endX = event.offsetX;
+            const endY = event.offsetY;
+            this.drawing.distance = Math.sqrt(Math.pow(Math.abs(endX - this.drawing.startX), 2) + Math.pow(Math.abs(endY - this.drawing.startY), 2));
+            this.drawing.width = Math.abs(this.drawing.startX - endX);
+            this.drawing.height = Math.abs(this.drawing.startY - endY);
+            this.drawing.angle = this.getAngleInDegrees(this.drawing.startX, this.drawing.startY, endX, endY);
+        }
+    }
+
+    onSvgPointerUp(event: PointerEvent) {
+        if (this.mapMode === 'Draw') {
+            event.stopPropagation();
+
+            this.drawing.drawing = false;
+
+            this.campaignService.addDrawingToMap(this.campaignMap.guid, this.drawing).subscribe({
+                next: (map) => {
+                    this.campaignMap = map;
+                },
+                error: (error) => {
+                    // TODO handle error
+                }
+            })
+
+            this.drawing = new DrawingObject();
+        }
+    }
+
+    changeDrawingColour(event: Event): void {
+        this.drawing.colour = (event.currentTarget as HTMLInputElement).value;
+    }
+
+    private getAngleInDegrees(x1: number, y1: number, x2: number, y2: number): number
+    {
+        const deltaY = y2 - y1;
+        const deltaX = x2 - x1;
+        const radians = Math.atan2(deltaY, deltaX);
+        return radians * (180 / Math.PI);
     }
 }

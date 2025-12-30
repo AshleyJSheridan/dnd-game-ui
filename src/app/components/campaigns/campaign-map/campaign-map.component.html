@@ -30,6 +30,11 @@
                     [attr.height]="campaignMap?.height"
                     [attr.viewBox]="'0 0 ' + getViewBoxWidth() + ' ' + getViewBoxHeight()"
                     xmlns="http://www.w3.org/2000/svg"
+
+                    (pointerdown)="onSvgPointerDown($event)"
+                    (pointermove)="onSvgPointerMove($event)"
+                    (pointerup)="onSvgPointerUp($event)"
+                    (pointercancel)="onSvgPointerUp($event)"
                 >
                     <defs>
                         <pattern id="grid" [attr.width]="campaignMap.grid_size" [attr.height]="campaignMap.grid_size" patternUnits="userSpaceOnUse">
@@ -49,13 +54,135 @@
                                 [patternSymbol]="drawing.stats?.pattern ?? ''"
                             />
                         }
-
+                        <!-- if the map is in drawing mode, add a temporary pattern for the current drawing -->
+                        @if (mapMode === 'Draw' && drawing.distance > 0 && !drawing.isRuler) {
+                            <app-map-pattern
+                                [patternId]="'pattern-temp-drawing'"
+                                [patternColour]="drawing.colour"
+                                [patternSymbol]="drawing.fillSymbol"
+                            />
+                        }
                     </defs>
                     @if (campaignMap.show_grid) {
                         <g id="scale">
                             <rect width="100%" height="100%" fill="url(#grid)" />
                         </g>
                     }
+
+                    <g id="mapDrawings">
+                        @for (drawing of campaignMap.drawings; track drawing.guid) {
+                            <g
+                                class="drawing"
+                                [attr.transform]="'translate(' + drawing.x + ', ' + drawing.y + ')'"
+                                [attr.data-x]="drawing.x"
+                                [attr.data-y]="drawing.y"
+                                [attr.data-guid]="drawing.guid"
+                                data-name=""
+                            >
+                                @switch (drawing.stats.type ?? '') {
+                                    @case ('circle') {
+                                        <circle
+                                            cx="0"
+                                            cy="0"
+                                            [attr.r]="drawing.stats?.r"
+                                            [attr.stroke]="drawing.highlight_colour"
+                                            stroke-width="4"
+                                            [attr.fill]="'url(#pattern-' + drawing.guid + ')'"
+                                        />
+                                    }
+                                    @case ('rectangle') {
+                                        <rect
+                                            x="0"
+                                            y="0"
+                                            [attr.width]="drawing.stats?.width"
+                                            [attr.height]="drawing.stats?.height"
+                                            [attr.stroke]="drawing.highlight_colour"
+                                            stroke-width="4"
+                                            [attr.fill]="'url(#pattern-' + drawing.guid + ')'"
+                                        />
+                                    }
+                                    @case ('cone') {
+                                        <g [attr.transform]="'rotate(' + (drawing.stats.angle ?? 0) + ')'">
+                                            <path
+                                                stroke-width="4"
+                                                [attr.stroke]="drawing.highlight_colour"
+                                                [attr.d]="'M 0 0 L ' + (drawing.stats.length ?? 1) + ' -' + ((drawing.stats.width ?? 1) / 4) + ' L ' + (drawing.stats.length ?? 0) + ' ' + ((drawing.stats.width ?? 1) / 4) + ' Z'"
+                                                [attr.fill]="'url(#pattern-' + drawing.guid + ')'"
+                                            />
+                                        </g>
+                                    }
+                                }
+                            </g>
+                        }
+                        @if (mapMode === 'Draw' && drawing.distance > 0 && (drawing.startX !== 0 && drawing.startY !== 0)) {
+                            <g
+                                class="drawing"
+                                [attr.transform]="'translate(' + drawing.startX + ', ' + drawing.startY + ')'"
+                                [attr.data-x]="drawing.startX"
+                                [attr.data-y]="drawing.startY"
+                                data-guid="temp-drawing"
+                                data-name=""
+                            >
+                                @switch (drawing.shape) {
+                                    @case ('circle') {
+                                        <circle
+                                            cx="0"
+                                            cy="0"
+                                            [attr.r]="drawing.distance"
+                                            [attr.stroke]="drawing.colour"
+                                            stroke-width="4"
+                                            fill="url(#pattern-temp-drawing)"
+                                        />
+                                    }
+                                    @case ('rectangle') {
+                                        <rect
+                                            x="0"
+                                            y="0"
+                                            [attr.width]="drawing.width"
+                                            [attr.height]="drawing.height"
+                                            [attr.stroke]="drawing.colour"
+                                            stroke-width="4"
+                                            fill="url(#pattern-temp-drawing)"
+                                        />
+                                    }
+                                    @case ('cone') {
+                                        <g [attr.transform]="'rotate(' + (drawing.angle ?? 0) + ')'">
+                                            <path
+                                                stroke-width="4"
+                                                [attr.stroke]="drawing.colour"
+                                                [attr.d]="'M 0 0 L ' + (drawing.distance ?? 1) + ' -' + ((drawing.distance ?? 1) / 4) + ' L ' + (drawing.distance ?? 0) + ' ' + ((drawing.distance ?? 1) / 4) + ' Z'"
+                                                fill="url(#pattern-temp-drawing)"
+                                            />
+                                        </g>
+                                    }
+                                }
+                            </g>
+                        }
+                        @if (mapMode === 'Ruler' && drawing.isRuler) {
+                            <g class="drawing" data-guid="ruler" data-name="">
+                                <line
+                                    [attr.x1]="(drawing.startX ?? 1)"
+                                    [attr.y1]="(drawing.startY ?? 1)"
+                                    [attr.x2]="(drawing.endX ?? 1)"
+                                    [attr.y2]="(drawing.endY ?? 1)"
+                                    stroke="#ff0000"
+                                    stroke-width="4"
+                                />
+                                <rect
+                                    [attr.x]="(drawing.startX ?? 1) + 5"
+                                    [attr.y]="(drawing.startY ?? 1) - 25"
+                                    [attr.width]="(drawing.distance ?? 1) > 99 ? 40 : (drawing.distance ?? 1) > 9 ? 30 : 20"
+                                    height="20"
+                                    fill="#ffffff"
+                                />
+                                <text
+                                    [attr.x]="(drawing.startX ?? 1) + 10"
+                                    [attr.y]="(drawing.startY ?? 1) - 10"
+                                    fill="#ff0000"
+                                    font-size="16">{{ drawing.distance }}</text>
+                            </g>
+                        }
+                    </g>
 
                     <g id="mapCreatures">
                         @for (player of campaignMap.players; track player.guid) {
@@ -174,62 +301,120 @@
             </form>
         }
         @if (mapMode === 'Creature') {
-            <div class="tabs" id="creatureTabs">
-                <div role="tablist" aria-label="Creature selection tabs">
-                    <button type="button" role="tab" aria-controls="playerPanel" id="creature-tab-1" tabindex="-1" (click)="selectTab($event)" aria-selected="true">Players</button>
-                    <button type="button" role="tab" aria-controls="creaturePanel" id="creature-tab-2" tabindex="-1" (click)="selectTab($event)">Creatures</button>
-                </div>
-                <div id="playerPanel" role="tabpanel" tabindex="0" aria-labelledby="creature-tab-1" class="tab-panel">
-                    <ul class="creature-list">
-                        @for (character of campaign?.players; track character.guid) {
-                            @if (!isCharacterInMap(character)) {
-                                <li>
-                                    <button class="character" (click)="addCharacterToMap(character)">
-                                        <app-portrait [character]="character"/>
-                                        <div class="character-name">{{ character.name }}</div>
-                                    </button>
-                                </li>
-                            }
-                        }
-                    </ul>
-                </div>
-                <div id="creaturePanel" role="tabpanel" tabindex="0" aria-labelledby="creature-tab-2" hidden class="tab-panel creater-panel">
-                    @if (creatures) {
-                        <label>Type:
-                            <select [(ngModel)]="creatureType" name="creatureType" (change)="clearCreatureSearch($event)">
-                                <option value="-">Select Creature Type</option>
-                                <option value="aberration">Aberration</option>
-                                <option value="beast">Beast</option>
-                                <option value="celestial">Celestial</option>
-                                <option value="construct">Construct</option>
-                                <option value="dragon">Dragon</option>
-                                <option value="elemental">Elemental</option>
-                                <option value="fey">Fey</option>
-                                <option value="fiend">Fiend</option>
-                                <option value="giant">Giant</option>
-                                <option value="humanoid">Humanoid</option>
-                                <option value="monstrosity">Monstrosity</option>
-                                <option value="ooze">Ooze</option>
-                                <option value="plant">Plant</option>
-                                <option value="undead">Undead</option>
-                            </select>
-                        </label>
-                        <label>Search:
-                            <input type="text" name="creatureSearch" [(ngModel)]="creatureSearch" (keyup)="clearCreatureType($event)"/>
-                        </label>
-                        <em>Search begins after second letter</em>
+            <form>
+                <div class="tabs" id="creatureTabs">
+                    <div role="tablist" aria-label="Creature selection tabs">
+                        <button type="button" role="tab" aria-controls="playerPanel" id="creature-tab-1" tabindex="-1" (click)="selectTab($event)" aria-selected="true">Players</button>
+                        <button type="button" role="tab" aria-controls="creaturePanel" id="creature-tab-2" tabindex="-1" (click)="selectTab($event)">Creatures</button>
+                    </div>
+                    <div id="playerPanel" role="tabpanel" tabindex="0" aria-labelledby="creature-tab-1" class="tab-panel">
                         <ul class="creature-list">
-                            @for (creature of getFilteredCreatures(); track $index) {
-                                <li>
-                                    <button class="creature" (click)="addCreatureToMap(creature)">
-                                        <app-creature [creature]="creature"/>
-                                    </button>
-                                </li>
+                            @for (character of campaign?.players; track character.guid) {
+                                @if (!isCharacterInMap(character)) {
+                                    <li>
+                                        <button class="character" (click)="addCharacterToMap(character)">
+                                            <app-portrait [character]="character"/>
+                                            <div class="character-name">{{ character.name }}</div>
+                                        </button>
+                                    </li>
+                                }
                             }
                         </ul>
+                    </div>
+                    <div id="creaturePanel" role="tabpanel" tabindex="0" aria-labelledby="creature-tab-2" hidden class="tab-panel creater-panel">
+                        @if (creatures) {
+                            <label>Type:
+                                <select [(ngModel)]="creatureType" name="creatureType" (change)="clearCreatureSearch($event)">
+                                    <option value="-">Select Creature Type</option>
+                                    <option value="aberration">Aberration</option>
+                                    <option value="beast">Beast</option>
+                                    <option value="celestial">Celestial</option>
+                                    <option value="construct">Construct</option>
+                                    <option value="dragon">Dragon</option>
+                                    <option value="elemental">Elemental</option>
+                                    <option value="fey">Fey</option>
+                                    <option value="fiend">Fiend</option>
+                                    <option value="giant">Giant</option>
+                                    <option value="humanoid">Humanoid</option>
+                                    <option value="monstrosity">Monstrosity</option>
+                                    <option value="ooze">Ooze</option>
+                                    <option value="plant">Plant</option>
+                                    <option value="undead">Undead</option>
+                                </select>
+                            </label>
+                            <label>Search:
+                                <input type="text" name="creatureSearch" [(ngModel)]="creatureSearch" (keyup)="clearCreatureType($event)"/>
+                            </label>
+                            <em>Search begins after second letter</em>
+                            <ul class="creature-list">
+                                @for (creature of getFilteredCreatures(); track $index) {
+                                    <li>
+                                        <button class="creature" (click)="addCreatureToMap(creature)">
+                                            <app-creature [creature]="creature"/>
+                                        </button>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
+            </form>
+        }
+        @if (mapMode === 'Draw') {
+            <fieldset>
+                <legend>Shape</legend>
+
+                <div class="radio-collection">
+                    <label class="radio-label" title="Circle">
+                        <span class="accessible-hidden">Circle</span>
+                        <input type="radio" name="drawingShape" value="circle"
+                               (change)="drawing.shape = 'circle'" [checked]="drawing.shape === 'circle'"/>
+                        <svg viewBox="0 0 24 24" width="24" height="24">
+                            <circle r="10" cx="12" cy="12" fill="none" stroke="currentColor" stroke-width="1"/>
+                        </svg>
+                    </label>
+                    <label class="radio-label" title="Cone">
+                        <span class="accessible-hidden">Cone</span>
+                        <input type="radio" name="drawingShape" value="cone"
+                               (change)="drawing.shape = 'cone'" [checked]="drawing.shape === 'cone'"/>
+                        <svg viewBox="0 0 24 24" width="24" height="24">
+                            <path d="M 12 0 L 0 24 L 24 24 Z" fill="none" stroke="currentColor" stroke-width="1"/>
+                        </svg>
+                    </label>
+                    <label class="radio-label" title="Rectangle">
+                        <span class="accessible-hidden">Rectangle</span>
+                        <input type="radio" name="drawingShape" value="rectangle"
+                               (change)="drawing.shape = 'rectangle'" [checked]="drawing.shape === 'rectangle'"/>
+                        <svg viewBox="0 0 24 24" width="24" height="24">
+                            <rect height="20" width="20" x="2" y="2" fill="none" stroke="currentColor" stroke-width="1"/>
+                        </svg>
+                    </label>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Symbol</legend>
+
+                <div class="radio-collection">
+                    @for (damageType of damageTypeIcons; track damageType) {
+                        <label class="radio-label" title="{{ damageType }}">
+                            <span class="accessible-hidden">{{ damageType }}</span>
+                            <input type="radio" name="patternSymbol" value="{{ damageType.toLowerCase() }}"
+                                   (change)="drawing.fillSymbol = damageType.toLowerCase()" [checked]="drawing.fillSymbol === damageType.toLowerCase()"/>
+                            <app-damage-icon [patternSymbol]="damageType"/>
+                        </label>
                     }
                 </div>
-            </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Colour</legend>
+
+                <label>
+                    <span class="accessible-hidden">Colour</span>
+                    <input type="color" [value]="drawing.colour" (change)="changeDrawingColour($event)"/>
+                </label>
+            </fieldset>
         }
     </div>
 }

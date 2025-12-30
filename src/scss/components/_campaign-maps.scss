@@ -111,32 +111,7 @@ app-campaign-map {
             margin-bottom: .5rem;
         }
 
-        .radio-collection {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
 
-        label.radio-label {
-            padding: 0;
-
-            input {
-                clip: rect(1px 1px 1px 1px);
-                height: 1px;
-                overflow: hidden;
-                position: absolute;
-                white-space: nowrap;
-
-                &:checked + svg,
-                &:checked + * svg {
-                    background-color: colours.$gold;
-                }
-            }
-
-            svg {
-                padding: .25rem;
-            }
-        }
 
         button {
             font-size: 1rem;
@@ -248,6 +223,33 @@ app-campaign-map {
                 width: 50px;
             }
         }*/
+    }
+
+    .radio-collection {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    label.radio-label {
+        cursor: pointer;
+        padding: 0;
+
+        input {
+            clip: rect(1px 1px 1px 1px);
+            height: 1px;
+            overflow: hidden;
+            position: absolute;
+            white-space: nowrap;
+
+            &:checked + svg,
+            &:checked + * svg {
+                background-color: colours.$gold;
+            }
+        }
+
+        svg {
+            padding: .25rem;
+        }
     }
 }
 
