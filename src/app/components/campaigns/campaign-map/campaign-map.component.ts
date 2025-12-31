@@ -19,6 +19,7 @@ import { DamageIconComponent } from '../../icons/damage-icon/damage-icon.compone
 import { DrawingObject } from '../../../entities/DrawingObject';
 import { CallbackLightboxComponent } from '../../dialogs/callback-lightbox/callback-lightbox.component';
 import { SvgDragDropEvent, SvgDraggableDirective } from '../../../directives/svg-draggable.directive';
+import {DeleteIconComponent} from '../../icons/delete-icon/delete-icon.component';
 
 @Component({
     selector: 'app-campaign-map',
@@ -31,7 +32,8 @@ import { SvgDragDropEvent, SvgDraggableDirective } from '../../../directives/svg
         CreatureComponent,
         PortraitComponent,
         SvgDraggableDirective,
-        DamageIconComponent
+        DamageIconComponent,
+        DeleteIconComponent
     ],
     templateUrl: './campaign-map.component.html'
 })
@@ -474,6 +476,20 @@ export class CampaignMapComponent {
                 },
                 error: (error) => {
                     // TODO handle error updating drawing colour
+                }
+            })
+        }
+    }
+
+    deleteSelectedEntity(): void {
+        if (this.selectedEntity) {
+            this.campaignService.removeMapEntity(this.campaignMap.guid, this.selectedEntity.guid).subscribe({
+                next: (map) => {
+                    this.campaignMap = map;
+                    this.selectedEntity = null;
+                },
+                error: (error) => {
+                    // TODO handle error deleting entity
                 }
             })
         }

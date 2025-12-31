@@ -458,6 +458,14 @@
                             <input type="color" [value]="selectedEntity.highlight_colour" (change)="changeSelectedEntityColour($event)"/>
                         </label>
                     </fieldset>
+
+                    <fieldset>
+                        <legend>Actions</legend>
+
+                        <button type="button" title="Delete {{ selectedEntity.type }}" (click)="deleteSelectedEntity()">
+                            <app-delete-icon/>
+                        </button>
+                    </fieldset>
                 </fieldset>
             </form>
         }
