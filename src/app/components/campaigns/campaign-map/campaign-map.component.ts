@@ -8,7 +8,6 @@ import { FormsModule } from '@angular/forms';
 import { Campaign } from '../../../entities/Campaign';
 import { PortraitComponent } from '../../character/portrait/portrait.component';
 import { Character } from '../../../entities/Character';
-import { MovementObject } from '../../../entities/MovementObject';
 import { Creature } from '../../../entities/Creature';
 import { CreatureComponent } from '../../creatures/creature/creature.component';
 import { CampaignMapPlayer } from '../../../entities/CampaignMapPlayer';
@@ -19,21 +18,20 @@ import { DamageIconComponent } from '../../icons/damage-icon/damage-icon.compone
 import { DrawingObject } from '../../../entities/DrawingObject';
 import { CallbackLightboxComponent } from '../../dialogs/callback-lightbox/callback-lightbox.component';
 import { SvgDragDropEvent, SvgDraggableDirective } from '../../../directives/svg-draggable.directive';
-import {DeleteIconComponent} from '../../icons/delete-icon/delete-icon.component';
+import { DeleteIconComponent } from '../../icons/delete-icon/delete-icon.component';
 
 @Component({
     selector: 'app-campaign-map',
     imports: [
         HeaderSlimComponent,
         MapActionIconComponent,
-        CallbackLightboxComponent,
         FormsModule,
         MapPatternComponent,
         CreatureComponent,
         PortraitComponent,
         SvgDraggableDirective,
         DamageIconComponent,
-        DeleteIconComponent
+        DeleteIconComponent,
     ],
     templateUrl: './campaign-map.component.html'
 })
@@ -303,13 +301,7 @@ export class CampaignMapComponent {
     }
 
     onSvgPointerDown(event: PointerEvent) {
-        if (this.mapMode === 'Draw') {
-            // reset the drawing objects start x,y for each new drawing to prevent drawing jumps
-            if (this.mapMode === 'Draw') {
-                this.drawing.startX = 0;
-                this.drawing.startY = 0;
-            }
-
+        if (this.mapMode === 'Draw' || this.mapMode === 'Ruler') {
             event.stopPropagation();
 
             this.drawing.startX = event.offsetX;
@@ -318,8 +310,17 @@ export class CampaignMapComponent {
             this.drawing.height = 0;
             this.drawing.width = 0;
             this.drawing.angle = 0;
-            this.drawing.angle = 0;
-            this.drawing.drawing = true;
+
+            if (this.mapMode === 'Draw') {
+                this.drawing.drawing = true;
+            }
+
+            if (this.mapMode === 'Ruler') {
+                this.drawing.isRuler = true;
+                this.drawing.endX = event.offsetX;
+                this.drawing.endY = event.offsetY;
+            }
+
         }
 
         if (this.mapMode === 'Pointer') {
@@ -344,15 +345,24 @@ export class CampaignMapComponent {
     }
 
     onSvgPointerMove(event: PointerEvent) {
-        if (this.mapMode === 'Draw') {
+        if (this.mapMode === 'Draw' || this.mapMode === 'Ruler') {
             event.stopPropagation();
 
             const endX = event.offsetX;
             const endY = event.offsetY;
-            this.drawing.distance = Math.sqrt(Math.pow(Math.abs(endX - this.drawing.startX), 2) + Math.pow(Math.abs(endY - this.drawing.startY), 2));
-            this.drawing.width = Math.abs(this.drawing.startX - endX);
-            this.drawing.height = Math.abs(this.drawing.startY - endY);
-            this.drawing.angle = this.getAngleInDegrees(this.drawing.startX, this.drawing.startY, endX, endY);
+
+            if (this.mapMode === 'Draw') {
+                this.drawing.distance = Math.sqrt(Math.pow(Math.abs(endX - this.drawing.startX), 2) + Math.pow(Math.abs(endY - this.drawing.startY), 2));
+                this.drawing.width = Math.abs(this.drawing.startX - endX);
+                this.drawing.height = Math.abs(this.drawing.startY - endY);
+                this.drawing.angle = this.getAngleInDegrees(this.drawing.startX, this.drawing.startY, endX, endY);
+            }
+
+            if (this.mapMode === 'Ruler') {
+                this.drawing.endX = endX;
+                this.drawing.endY = endY;
+                this.drawing.distance = Math.round(Math.sqrt(Math.pow(Math.abs(this.drawing.endX - this.drawing.startX), 2) + Math.pow(Math.abs(this.drawing.endY - this.drawing.startY), 2)) / this.campaignMap.grid_size * 5);
+            }
         }
     }
 
@@ -371,6 +381,10 @@ export class CampaignMapComponent {
                 }
             })
 
+            this.drawing = new DrawingObject();
+        }
+
+        if (this.mapMode === 'Ruler') {
             this.drawing = new DrawingObject();
         }
     }
