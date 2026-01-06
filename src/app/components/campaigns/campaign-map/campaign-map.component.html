@@ -181,6 +181,7 @@
                         @for (player of campaignMap.players; track player.guid) {
                             <g
                                 class="character"
+                                [class.selected]="player.guid === selectedEntity?.guid"
                                 data-type="character"
                                 [attr.data-x]="player.x"
                                 [attr.data-y]="player.y"
@@ -213,6 +214,7 @@
                         @for (creature of campaignMap.creatures; track creature.guid) {
                             <g
                                 class="creature"
+                                [class.selected]="creature.guid === selectedEntity?.guid"
                                 data-type="creature"
                                 [attr.data-x]="creature.x"
                                 [attr.data-y]="creature.y"
