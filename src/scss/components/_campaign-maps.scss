@@ -12,7 +12,7 @@ app-campaign-map {
 
 .campaign-map-container {
     display: grid;
-    grid-template-areas: "sidebar map";
+    grid-template-areas: "sidebar map settings";
     grid-template-columns: auto minmax(0, 1fr);
     flex: 1 1 auto;
 
@@ -107,188 +107,98 @@ app-campaign-map {
         }
     }
 
-    /*
+    .map-settings {
+        background-color: colours.$white;
+        grid-area: settings;
+        max-width: 30rem;
+        position: relative;
+        width: 22rem;
 
-    .map-action-settings {
-        background-color: rgba(colours.$white, .85);
-        left: 6rem;
-        position: fixed;
-        width: 20rem;
-        top: 7rem;
+        legend {
+            text-transform: capitalize;
+        }
 
-        .close-map-settings {
-            appearance: none;
-            background-color: transparent;
-            border: none;
+        .tabs {
+            .creater-panel {
+                overflow: auto;
+
+                label {
+                    display: block;
+                }
+            }
+
+            .creature-list {
+                align-items: stretch;
+                display: flex;
+                flex-wrap: wrap;
+                margin: 1rem 0;
+                padding: 0;
+
+                li {
+                    display: inline-block;
+                }
+
+                .character,
+                .creature {
+                    align-items: center;
+                    appearance: none;
+                    background-color: transparent;
+                    border: none;
+                    cursor: pointer;
+                    display: flex;
+                    flex-direction: column;
+                    height: 100%;
+                    gap: .5rem;
+                    width: 6rem;
+
+                    &:hover {
+                        background-color: colours.$light-grey;
+                    }
+
+                    img {
+                        border-radius: 50%;
+                        height: 50px;
+                        width: 50px;
+                    }
+                }
+            }
+        }
+
+        .radio-collection {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        label.radio-label {
             cursor: pointer;
-            position: absolute;
-            right: .25rem;
-            top: .25rem;
-        }
+            padding: 0;
 
-        form {
-            border: none;
-            box-shadow: none;
-            font-size: 1rem;
-            padding: 1rem;
+            input {
+                clip: rect(1px 1px 1px 1px);
+                height: 1px;
+                overflow: hidden;
+                position: absolute;
+                white-space: nowrap;
+
+                &:checked + svg,
+                &:checked + * svg {
+                    background-color: colours.$gold;
+                }
+            }
+
+            svg {
+                padding: .25rem;
+            }
         }
+    }
+
+    .settings-block-container {
+        display: flex;
+        gap: 1rem;
 
         label {
             display: block;
-            margin-bottom: .5rem;
-        }
-
-
-
-        button {
-            font-size: 1rem;
-
-            &.large {
-                align-items: center;
-                display: inline-flex;
-                font-size: 1.5rem;
-                height: 2rem;
-                justify-content: center;
-                margin-right: .5rem;
-                width: 2rem;
-            }
-
-            &.fantasy-btn {
-                margin-top: 1rem;
-            }
-        }
-
-        .object-type {
-            margin-bottom: .5rem;
-        }
-
-
-
-        .creature-list {
-            max-height: 20rem;
-            overflow-y: auto;
-        }
-    }*/
-}
-
-.map-settings {
-    background-color: colours.$white;
-    position: relative;
-
-    legend {
-        text-transform: capitalize;
-    }
-
-    .tabs {
-        .creater-panel {
-            height: 10rem;
-            overflow: auto;
-        }
-
-        .creature-list {
-            align-items: stretch;
-            display: flex;
-            flex-wrap: wrap;
-            margin: 0;
-            padding: 0;
-
-            li {
-                display: inline-block;
-            }
-
-            .character,
-            .creature {
-                align-items: center;
-                appearance: none;
-                background-color: transparent;
-                border: none;
-                cursor: pointer;
-                display: flex;
-                flex-direction: column;
-                height: 100%;
-                gap: .5rem;
-                width: 6rem;
-
-                &:hover {
-                    background-color: colours.$light-grey;
-                }
-
-                img {
-                    border-radius: 50%;
-                    height: 50px;
-                    width: 50px;
-                }
-            }
-        }
-
-        /*.creature-list {
-            margin: 2rem 0 0;
-            padding: 0;
-
-            li {
-                list-style: none;
-                margin: 0;
-                padding: 0;
-            }
-        }*/
-
-        /*.character,
-        .creature {
-            align-items: center;
-            appearance: none;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            justify-items: center;
-            gap: .5rem;
-            width: 100%;
-
-            &:hover {
-                background-color: colours.$light-grey;
-            }
-
-            img {
-                border-radius: 50%;
-                height: 50px;
-                width: 50px;
-            }
-        }*/
-    }
-
-    .radio-collection {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    label.radio-label {
-        cursor: pointer;
-        padding: 0;
-
-        input {
-            clip: rect(1px 1px 1px 1px);
-            height: 1px;
-            overflow: hidden;
-            position: absolute;
-            white-space: nowrap;
-
-            &:checked + svg,
-            &:checked + * svg {
-                background-color: colours.$gold;
-            }
-        }
-
-        svg {
-            padding: .25rem;
         }
     }
 }
 
-.settings-block-container {
-    display: flex;
-    gap: 1rem;
-
-    label {
-        display: block;
-    }
-}

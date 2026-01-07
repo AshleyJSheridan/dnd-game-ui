@@ -276,215 +276,216 @@
             </div>
         }
     </div>
-</div>
-@if (showSettings) {
-    <div class="map-settings">
-        @if (mapMode === 'Settings') {
-            <form>
-                <fieldset>
-                    <legend>Map Settings</legend>
+    @if (showSettings) {
+        <div class="map-settings">
+            @if (mapMode === 'Settings') {
+                <form>
+                    <fieldset>
+                        <legend>Map Settings</legend>
 
-                    <div class="settings-block-container">
-                        <fieldset class="settings-block">
-                            <legend>Grid Details</legend>
+                        <div class="settings-block-container">
+                            <fieldset class="settings-block">
+                                <legend>Grid Details</legend>
 
-                            <label>
-                                Show Grid
-                                <input type="checkbox" name="showGrid" [(ngModel)]="campaignMap.show_grid" (change)="toggleGrid()"/>
-                            </label>
-                            <label>
-                                Grid Colour
-                                <input type="color" name="gridColour" [(ngModel)]="gridColour" (change)="saveGridColour()"/>
-                            </label>
-                        </fieldset>
+                                <label>
+                                    Show Grid
+                                    <input type="checkbox" name="showGrid" [(ngModel)]="campaignMap.show_grid" (change)="toggleGrid()"/>
+                                </label>
+                                <label>
+                                    Grid Colour
+                                    <input type="color" name="gridColour" [(ngModel)]="gridColour" (change)="saveGridColour()"/>
+                                </label>
+                            </fieldset>
 
-                        <fieldset class="settings-block">
-                            <legend>Grid Size</legend>
-                            <button type="button" (click)="changeGridSize(-50)" class="large">
-                                <span class="accessible-hidden">Reduce grid size</span>
-                                <span aria-hidden="true">-</span>
-                            </button>
-                            <button type="button" (click)="changeGridSize(50)" class="large">
-                                <span class="accessible-hidden">Increase grid size</span>
-                                <span aria-hidden="true">+</span>
-                            </button>
-                        </fieldset>
+                            <fieldset class="settings-block">
+                                <legend>Grid Size</legend>
+                                <button type="button" (click)="changeGridSize(-50)" class="large">
+                                    <span class="accessible-hidden">Reduce grid size</span>
+                                    <span aria-hidden="true">-</span>
+                                </button>
+                                <button type="button" (click)="changeGridSize(50)" class="large">
+                                    <span class="accessible-hidden">Increase grid size</span>
+                                    <span aria-hidden="true">+</span>
+                                </button>
+                            </fieldset>
 
-                        <fieldset class="settings-block">
-                            <legend>Map Size</legend>
+                            <fieldset class="settings-block">
+                                <legend>Map Size</legend>
 
-                            <label>
-                                Width
-                                <input type="number" value="{{ campaignMap.width }}" step="100" (change)="updateMapSize('width', $event)"/>
-                            </label>
-                            <label>
-                                Height
-                                <input type="number" value="{{ campaignMap.height }}" step="100" (change)="updateMapSize('height', $event)"/>
-                            </label>
-                        </fieldset>
-                    </div>
-                </fieldset>
-            </form>
-        }
-        @if (mapMode === 'Creature') {
-            <form>
-                <div class="tabs" id="creatureTabs">
-                    <div role="tablist" aria-label="Creature selection tabs">
-                        <button type="button" role="tab" aria-controls="playerPanel" id="creature-tab-1" tabindex="-1" (click)="selectTab($event)" aria-selected="true">Players</button>
-                        <button type="button" role="tab" aria-controls="creaturePanel" id="creature-tab-2" tabindex="-1" (click)="selectTab($event)">Creatures</button>
-                    </div>
-                    <div id="playerPanel" role="tabpanel" tabindex="0" aria-labelledby="creature-tab-1" class="tab-panel">
-                        <ul class="creature-list">
-                            @for (character of campaign?.players; track character.guid) {
-                                @if (!isCharacterInMap(character)) {
-                                    <li>
-                                        <button class="character" (click)="addCharacterToMap(character)">
-                                            <app-portrait [character]="character"/>
-                                            <div class="character-name">{{ character.name }}</div>
-                                        </button>
-                                    </li>
-                                }
-                            }
-                        </ul>
-                    </div>
-                    <div id="creaturePanel" role="tabpanel" tabindex="0" aria-labelledby="creature-tab-2" hidden class="tab-panel creater-panel">
-                        @if (creatures) {
-                            <label>Type:
-                                <select [(ngModel)]="creatureType" name="creatureType" (change)="clearCreatureSearch($event)">
-                                    <option value="-">Select Creature Type</option>
-                                    <option value="aberration">Aberration</option>
-                                    <option value="beast">Beast</option>
-                                    <option value="celestial">Celestial</option>
-                                    <option value="construct">Construct</option>
-                                    <option value="dragon">Dragon</option>
-                                    <option value="elemental">Elemental</option>
-                                    <option value="fey">Fey</option>
-                                    <option value="fiend">Fiend</option>
-                                    <option value="giant">Giant</option>
-                                    <option value="humanoid">Humanoid</option>
-                                    <option value="monstrosity">Monstrosity</option>
-                                    <option value="ooze">Ooze</option>
-                                    <option value="plant">Plant</option>
-                                    <option value="undead">Undead</option>
-                                </select>
-                            </label>
-                            <label>Search:
-                                <input type="text" name="creatureSearch" [(ngModel)]="creatureSearch" (keyup)="clearCreatureType($event)"/>
-                            </label>
-                            <em>Search begins after second letter</em>
+                                <label>
+                                    Width
+                                    <input type="number" value="{{ campaignMap.width }}" step="100" (change)="updateMapSize('width', $event)"/>
+                                </label>
+                                <label>
+                                    Height
+                                    <input type="number" value="{{ campaignMap.height }}" step="100" (change)="updateMapSize('height', $event)"/>
+                                </label>
+                            </fieldset>
+                        </div>
+                    </fieldset>
+                </form>
+            }
+            @if (mapMode === 'Creature') {
+                <form>
+                    <div class="tabs" id="creatureTabs">
+                        <div role="tablist" aria-label="Creature selection tabs">
+                            <button type="button" role="tab" aria-controls="playerPanel" id="creature-tab-1" tabindex="-1" (click)="selectTab($event)" aria-selected="true">Players</button>
+                            <button type="button" role="tab" aria-controls="creaturePanel" id="creature-tab-2" tabindex="-1" (click)="selectTab($event)">Creatures</button>
+                        </div>
+                        <div id="playerPanel" role="tabpanel" tabindex="0" aria-labelledby="creature-tab-1" class="tab-panel">
                             <ul class="creature-list">
-                                @for (creature of getFilteredCreatures(); track $index) {
-                                    <li>
-                                        <button class="creature" (click)="addCreatureToMap(creature)">
-                                            <app-creature [creature]="creature"/>
-                                        </button>
-                                    </li>
+                                @for (character of campaign?.players; track character.guid) {
+                                    @if (!isCharacterInMap(character)) {
+                                        <li>
+                                            <button class="character" (click)="addCharacterToMap(character)">
+                                                <app-portrait [character]="character"/>
+                                                <div class="character-name">{{ character.name }}</div>
+                                            </button>
+                                        </li>
+                                    }
                                 }
                             </ul>
-                        }
+                        </div>
+                        <div id="creaturePanel" role="tabpanel" tabindex="0" aria-labelledby="creature-tab-2" hidden class="tab-panel creater-panel">
+                            @if (creatures) {
+                                <label>Type:
+                                    <select [(ngModel)]="creatureType" name="creatureType" (change)="clearCreatureSearch($event)">
+                                        <option value="-">Select Creature Type</option>
+                                        <option value="aberration">Aberration</option>
+                                        <option value="beast">Beast</option>
+                                        <option value="celestial">Celestial</option>
+                                        <option value="construct">Construct</option>
+                                        <option value="dragon">Dragon</option>
+                                        <option value="elemental">Elemental</option>
+                                        <option value="fey">Fey</option>
+                                        <option value="fiend">Fiend</option>
+                                        <option value="giant">Giant</option>
+                                        <option value="humanoid">Humanoid</option>
+                                        <option value="monstrosity">Monstrosity</option>
+                                        <option value="ooze">Ooze</option>
+                                        <option value="plant">Plant</option>
+                                        <option value="undead">Undead</option>
+                                    </select>
+                                </label>
+                                <label>Search:
+                                    <input type="text" name="creatureSearch" [(ngModel)]="creatureSearch" (keyup)="clearCreatureType($event)"/>
+                                </label>
+                                <em>Search begins after second letter</em>
+                                <ul class="creature-list">
+                                    @for (creature of getFilteredCreatures(); track $index) {
+                                        <li>
+                                            <button class="creature" (click)="addCreatureToMap(creature)">
+                                                <app-creature [creature]="creature"/>
+                                            </button>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </div>
                     </div>
-                </div>
-            </form>
-        }
-        @if (mapMode === 'Draw') {
-            <form>
-                <fieldset>
-                    <legend>Shape</legend>
+                </form>
+            }
+            @if (mapMode === 'Draw') {
+                <form>
+                    <fieldset>
+                        <legend>Shape</legend>
 
-                    <div class="radio-collection">
-                        <label class="radio-label" title="Circle">
-                            <span class="accessible-hidden">Circle</span>
-                            <input type="radio" name="drawingShape" value="circle"
-                                   (change)="drawing.shape = 'circle'" [checked]="drawing.shape === 'circle'"/>
-                            <svg viewBox="0 0 24 24" width="24" height="24">
-                                <circle r="10" cx="12" cy="12" fill="none" stroke="currentColor" stroke-width="1"/>
-                            </svg>
-                        </label>
-                        <label class="radio-label" title="Cone">
-                            <span class="accessible-hidden">Cone</span>
-                            <input type="radio" name="drawingShape" value="cone"
-                                   (change)="drawing.shape = 'cone'" [checked]="drawing.shape === 'cone'"/>
-                            <svg viewBox="0 0 24 24" width="24" height="24">
-                                <path d="M 12 0 L 0 24 L 24 24 Z" fill="none" stroke="currentColor" stroke-width="1"/>
-                            </svg>
-                        </label>
-                        <label class="radio-label" title="Rectangle">
-                            <span class="accessible-hidden">Rectangle</span>
-                            <input type="radio" name="drawingShape" value="rectangle"
-                                   (change)="drawing.shape = 'rectangle'" [checked]="drawing.shape === 'rectangle'"/>
-                            <svg viewBox="0 0 24 24" width="24" height="24">
-                                <rect height="20" width="20" x="2" y="2" fill="none" stroke="currentColor" stroke-width="1"/>
-                            </svg>
-                        </label>
-                    </div>
-                </fieldset>
-
-                <fieldset>
-                    <legend>Symbol</legend>
-
-                    <div class="radio-collection">
-                        @for (damageType of damageTypeIcons; track damageType) {
-                            <label class="radio-label" title="{{ damageType }}">
-                                <span class="accessible-hidden">{{ damageType }}</span>
-                                <input type="radio" name="patternSymbol" value="{{ damageType.toLowerCase() }}"
-                                       (change)="drawing.fillSymbol = damageType.toLowerCase()" [checked]="drawing.fillSymbol === damageType.toLowerCase()"/>
-                                <app-damage-icon [patternSymbol]="damageType"/>
+                        <div class="radio-collection">
+                            <label class="radio-label" title="Circle">
+                                <span class="accessible-hidden">Circle</span>
+                                <input type="radio" name="drawingShape" value="circle"
+                                       (change)="drawing.shape = 'circle'" [checked]="drawing.shape === 'circle'"/>
+                                <svg viewBox="0 0 24 24" width="24" height="24">
+                                    <circle r="10" cx="12" cy="12" fill="none" stroke="currentColor" stroke-width="1"/>
+                                </svg>
                             </label>
-                        }
-                    </div>
-                </fieldset>
+                            <label class="radio-label" title="Cone">
+                                <span class="accessible-hidden">Cone</span>
+                                <input type="radio" name="drawingShape" value="cone"
+                                       (change)="drawing.shape = 'cone'" [checked]="drawing.shape === 'cone'"/>
+                                <svg viewBox="0 0 24 24" width="24" height="24">
+                                    <path d="M 12 0 L 0 24 L 24 24 Z" fill="none" stroke="currentColor" stroke-width="1"/>
+                                </svg>
+                            </label>
+                            <label class="radio-label" title="Rectangle">
+                                <span class="accessible-hidden">Rectangle</span>
+                                <input type="radio" name="drawingShape" value="rectangle"
+                                       (change)="drawing.shape = 'rectangle'" [checked]="drawing.shape === 'rectangle'"/>
+                                <svg viewBox="0 0 24 24" width="24" height="24">
+                                    <rect height="20" width="20" x="2" y="2" fill="none" stroke="currentColor" stroke-width="1"/>
+                                </svg>
+                            </label>
+                        </div>
+                    </fieldset>
 
-                <fieldset>
-                    <legend>Colour</legend>
+                    <fieldset>
+                        <legend>Symbol</legend>
 
-                    <label>
-                        <span class="accessible-hidden">Colour</span>
-                        <input type="color" [value]="drawing.colour" (change)="changeDrawingColour($event)"/>
-                    </label>
-                </fieldset>
-            </form>
-        }
-
-        @if (mapMode === 'Pointer' && selectedEntity !== null) {
-            <form>
-                <fieldset>
-                    <legend>Selected: {{ selectedEntity.type }}</legend>
-
-                    @if (selectedEntity.type === 'drawing') {
-                        <fieldset>
-                            <legend>Symbol</legend>
-
-                            <div class="radio-collection">
-                                @for (damageType of damageTypeIcons; track damageType) {
-                                    <label class="radio-label" title="{{ damageType }}">
-                                        <span class="accessible-hidden">{{ damageType }}</span>
-                                        <input type="radio" name="patternSymbol" value="{{ damageType.toLowerCase() }}"
-                                               (change)="changeSelectedEntitySymbol(damageType.toLowerCase())" [checked]="selectedEntitySymbolMatches(damageType.toLowerCase())"/>
-                                        <app-damage-icon [patternSymbol]="damageType"/>
-                                    </label>
-                                }
-                            </div>
-                        </fieldset>
-                    }
+                        <div class="radio-collection">
+                            @for (damageType of damageTypeIcons; track damageType) {
+                                <label class="radio-label" title="{{ damageType }}">
+                                    <span class="accessible-hidden">{{ damageType }}</span>
+                                    <input type="radio" name="patternSymbol" value="{{ damageType.toLowerCase() }}"
+                                           (change)="drawing.fillSymbol = damageType.toLowerCase()" [checked]="drawing.fillSymbol === damageType.toLowerCase()"/>
+                                    <app-damage-icon [patternSymbol]="damageType"/>
+                                </label>
+                            }
+                        </div>
+                    </fieldset>
 
                     <fieldset>
                         <legend>Colour</legend>
 
                         <label>
                             <span class="accessible-hidden">Colour</span>
-                            <input type="color" [value]="selectedEntity.highlight_colour" (change)="changeSelectedEntityColour($event)"/>
+                            <input type="color" [value]="drawing.colour" (change)="changeDrawingColour($event)"/>
                         </label>
                     </fieldset>
+                </form>
+            }
 
+            @if (mapMode === 'Pointer' && selectedEntity !== null) {
+                <form>
                     <fieldset>
-                        <legend>Actions</legend>
+                        <legend>Selected: {{ selectedEntity.type }}</legend>
 
-                        <button type="button" title="Delete {{ selectedEntity.type }}" (click)="deleteSelectedEntity()">
-                            <app-delete-icon/>
-                        </button>
+                        @if (selectedEntity.type === 'drawing') {
+                            <fieldset>
+                                <legend>Symbol</legend>
+
+                                <div class="radio-collection">
+                                    @for (damageType of damageTypeIcons; track damageType) {
+                                        <label class="radio-label" title="{{ damageType }}">
+                                            <span class="accessible-hidden">{{ damageType }}</span>
+                                            <input type="radio" name="patternSymbol" value="{{ damageType.toLowerCase() }}"
+                                                   (change)="changeSelectedEntitySymbol(damageType.toLowerCase())" [checked]="selectedEntitySymbolMatches(damageType.toLowerCase())"/>
+                                            <app-damage-icon [patternSymbol]="damageType"/>
+                                        </label>
+                                    }
+                                </div>
+                            </fieldset>
+                        }
+
+                        <fieldset>
+                            <legend>Colour</legend>
+
+                            <label>
+                                <span class="accessible-hidden">Colour</span>
+                                <input type="color" [value]="selectedEntity.highlight_colour" (change)="changeSelectedEntityColour($event)"/>
+                            </label>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Actions</legend>
+
+                            <button type="button" title="Delete {{ selectedEntity.type }}" (click)="deleteSelectedEntity()">
+                                <app-delete-icon/>
+                            </button>
+                        </fieldset>
                     </fieldset>
-                </fieldset>
-            </form>
-        }
-    </div>
-}
+                </form>
+            }
+        </div>
+    }
+</div>
+
