@@ -73,6 +73,7 @@
                         @for (drawing of campaignMap.drawings; track drawing.guid) {
                             <g
                                 class="drawing"
+                                [class.selected]="drawing.guid === selectedEntity?.guid"
                                 data-type="drawing"
                                 [attr.transform]="'translate(' + drawing.x + ', ' + drawing.y + ')'"
                                 [attr.data-x]="drawing.x"
