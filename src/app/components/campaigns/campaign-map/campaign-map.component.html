@@ -84,6 +84,7 @@
                                 svgDraggable
                                 [dragId]="drawing.guid"
                                 [enabled]="this.mapMode === 'Pointer'"
+                                (dragDrop)="onTokenDropped($event, 'drawing')"
                             >
                                 @switch (drawing.stats.type ?? '') {
                                     @case ('circle') {

@@ -259,15 +259,18 @@ export class CampaignMapComponent {
 
             };
 
-            let creature = null;
+            let entity = null;
             if (entityType === 'creature') {
-                creature = this.campaignMap.creatures.find(x => x.guid === event.id);
+                entity = this.campaignMap.creatures.find(x => x.guid === event.id);
             }
             if (entityType === 'character') {
-                creature = this.campaignMap.players.find(x => x.guid === event.id);
+                entity = this.campaignMap.players.find(x => x.guid === event.id);
             }
+           if (entityType === 'drawing') {
+                entity = this.campaignMap.drawings.find(x => x.guid === event.id);
+           }
 
-            if (creature) {
+            if (entity) {
                 this.campaignService.updateMapEntity(this.campaignMap.guid, event.id!, updateData).subscribe({
                     next: (map) => {
                         this.campaignMap = map;
@@ -346,8 +349,6 @@ export class CampaignMapComponent {
 
                     if (entity) {
                         this.selectedEntity = entity;
-
-                        console.log(entity);
                     }
                 }
             }
