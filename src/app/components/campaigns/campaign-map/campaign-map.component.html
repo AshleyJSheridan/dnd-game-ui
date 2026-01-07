@@ -164,18 +164,6 @@
                                 }
                             </g>
                         }
-                        @if (mapMode === 'Ruler' && drawing.isRuler) {
-                            <g class="drawing" data-guid="ruler" data-name="" data-type="drawing">
-                                <line [attr.x1]="(drawing.startX ?? 1)" [attr.y1]="(drawing.startY ?? 1)" [attr.x2]="(drawing.endX ?? 1)" [attr.y2]="(drawing.endY ?? 1)"
-                                      stroke="#ff0000" stroke-width="4"/>
-                                <circle [attr.cx]="(drawing.startX ?? 1)" [attr.cy]="(drawing.startY ?? 1)" r="8" fill="#ff0000"/>
-                                <circle [attr.cx]="(drawing.endX ?? 1)" [attr.cy]="(drawing.endY ?? 1)" r="8" fill="#ff0000"/>
-
-                                <rect [attr.x]="(drawing.startX ?? 1) + 5" [attr.y]="(drawing.startY ?? 1) - 25"
-                                      [attr.width]="(drawing.distance ?? 1) > 99 ? 40 : (drawing.distance ?? 1) > 9 ? 30 : 20" height="20" fill="#ffffff" />
-                                <text [attr.x]="(drawing.startX ?? 1) + 10" [attr.y]="(drawing.startY ?? 1) - 10" fill="#ff0000" font-size="16">{{ drawing.distance }}</text>
-                            </g>
-                        }
                     </g>
 
                     <g id="mapCreatures">
@@ -269,6 +257,21 @@
                                         ry="5"></rect>
                                     <text text-anchor="middle" alignment-baseline="middle" [attr.id]="'label-' + creature.guid">{{ creature.entity_name }}</text>
                                 </g>
+                            </g>
+                        }
+                    </g>
+
+                    <g id="mapRuler">
+                        @if (mapMode === 'Ruler' && drawing.isRuler) {
+                            <g class="drawing" data-guid="ruler" data-name="" data-type="drawing">
+                                <line [attr.x1]="(drawing.startX ?? 1)" [attr.y1]="(drawing.startY ?? 1)" [attr.x2]="(drawing.endX ?? 1)" [attr.y2]="(drawing.endY ?? 1)"
+                                      stroke="#ff0000" stroke-width="4"/>
+                                <circle [attr.cx]="(drawing.startX ?? 1)" [attr.cy]="(drawing.startY ?? 1)" r="8" fill="#ff0000"/>
+                                <circle [attr.cx]="(drawing.endX ?? 1)" [attr.cy]="(drawing.endY ?? 1)" r="8" fill="#ff0000"/>
+
+                                <rect [attr.x]="(drawing.startX ?? 1) + 5" [attr.y]="(drawing.startY ?? 1) - 25"
+                                      [attr.width]="(drawing.distance ?? 1) > 99 ? 40 : (drawing.distance ?? 1) > 9 ? 30 : 20" height="20" fill="#ffffff" />
+                                <text [attr.x]="(drawing.startX ?? 1) + 10" [attr.y]="(drawing.startY ?? 1) - 10" fill="#ff0000" font-size="16">{{ drawing.distance }}</text>
                             </g>
                         }
                     </g>
