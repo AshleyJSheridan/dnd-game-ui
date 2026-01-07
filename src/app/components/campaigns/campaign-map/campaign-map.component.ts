@@ -1,4 +1,4 @@
-import {Component, inject, signal, ViewChild, WritableSignal} from '@angular/core';
+import { Component, inject, signal, ViewChild, WritableSignal, AfterViewInit, ChangeDetectorRef, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { HeaderSlimComponent } from '../../header/header-slim/header-slim.component';
 import { CampaignService } from '../../../services/campaign-service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -35,7 +35,7 @@ import { DeleteIconComponent } from '../../icons/delete-icon/delete-icon.compone
     ],
     templateUrl: './campaign-map.component.html'
 })
-export class CampaignMapComponent {
+export class CampaignMapComponent implements AfterViewInit {
     private readonly route = inject(ActivatedRoute);
     campaignMap: CampaignMap = new CampaignMap();
     campaign: Campaign | undefined = undefined;
@@ -53,9 +53,13 @@ export class CampaignMapComponent {
     damageTypeIcons: Array<string> = ['Bludgeoning', 'Piercing', 'Slashing', 'Acid', 'Cold', 'Fire', 'Force', 'Lightning',
         'Necrotic', 'Poison', 'Psychic', 'Radiant', 'None'];
 
-    @ViewChild('settingsLightbox') settingsLightbox: CallbackLightboxComponent | undefined;
+    readonly entityLabelPadding = 10;
+    labelWidths = new Map<string, number>();
 
-    constructor(private campaignService: CampaignService, private router: Router) {}
+    @ViewChild('settingsLightbox') settingsLightbox: CallbackLightboxComponent | undefined;
+    @ViewChildren('entityLabel') entityLabels!: QueryList<ElementRef<SVGTextElement>>;
+
+    constructor(private campaignService: CampaignService, private router: Router, private cdr: ChangeDetectorRef) {}
 
     ngOnInit(): void {
         const campaignGuid = this.route.snapshot.paramMap.get('guid') ?? '';
@@ -93,6 +97,39 @@ export class CampaignMapComponent {
             error: (error) => {
                 // TODO handle error loading creatures
             }
+        });
+    }
+
+    ngAfterViewInit(): void {
+        // Re-measure whenever the entity
+        this.entityLabels.changes.subscribe(() => this.measureEntityLabels());
+
+        // Initial measurement
+        this.measureEntityLabels();
+    }
+
+    private measureEntityLabels(): void {
+        // Wait until the DOM is updated for this change-detection tick
+        queueMicrotask(() => {
+            const next = new Map<string, number>();
+
+            for (const ref of this.entityLabels.toArray()) {
+                const el = ref.nativeElement;
+                const guid = el.getAttribute('data-guid');
+                if (!guid) continue;
+
+                let width = this.entityLabelPadding;
+                try {
+                    width = el.getBBox().width + this.entityLabelPadding;
+                } catch {
+                    // If not in render tree yet, keep fallback
+                }
+
+                next.set(guid, width);
+            }
+
+            this.labelWidths = next;
+            this.cdr.detectChanges(); // avoids ExpressionChangedAfter... and updates rects immediately
         });
     }
 

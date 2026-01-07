@@ -202,13 +202,13 @@
                                 <g class="creature-label"
                                    [attr.transform]="'translate(0, ' + (campaignMap.grid_size / 2 * getTokenSizeMultiplier('') + 20) + ')'">
                                     <rect
-                                        [attr.x]="0 - getTokenLabelTextWidth('label-' + player.guid) / 2"
+                                        [attr.x]="0 - ((labelWidths.get(player.guid) ?? entityLabelPadding) / 2)"
                                         y="-15"
-                                        [attr.width]="getTokenLabelTextWidth('label-' + player.guid)"
+                                        [attr.width]="labelWidths.get(player.guid) ?? entityLabelPadding"
                                         height="20"
                                         rx="5"
                                         ry="5"></rect>
-                                    <text text-anchor="middle" alignment-baseline="middle" [attr.id]="'label-' + player.guid">{{ player.entity_name }}</text>
+                                    <text #entityLabel text-anchor="middle" alignment-baseline="middle" [attr.data-guid]="player.guid">{{ player.entity_name }}</text>
                                 </g>
                             </g>
                         }
@@ -246,13 +246,13 @@
                                 <g class="creature-label"
                                    [attr.transform]="'translate(0, ' + (campaignMap.grid_size / 2 * getTokenSizeMultiplier(creature!.creature!.size) + 20) + ')'">
                                     <rect
-                                        [attr.x]="0 - getTokenLabelTextWidth('label-' + creature.guid) / 2"
+                                        [attr.x]="0 - ((labelWidths.get(creature.guid) ?? entityLabelPadding) / 2)"
                                         y="-15"
-                                        [attr.width]="getTokenLabelTextWidth('label-' + creature.guid)"
+                                        [attr.width]="labelWidths.get(creature.guid) ?? entityLabelPadding"
                                         height="20"
                                         rx="5"
                                         ry="5"></rect>
-                                    <text text-anchor="middle" alignment-baseline="middle" [attr.id]="'label-' + creature.guid">{{ creature.entity_name }}</text>
+                                    <text #entityLabel text-anchor="middle" alignment-baseline="middle" [attr.data-guid]="creature.guid">{{ creature.entity_name }}</text>
                                 </g>
                             </g>
                         }
