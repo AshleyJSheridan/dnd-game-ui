@@ -195,20 +195,33 @@
                                 (dragDrop)="onTokenDropped($event, 'character')"
                             >
                                 <circle
-                                    [attr.cx]="campaignMap.grid_size / 2"
-                                    [attr.cy]="campaignMap.grid_size / 2"
+                                    [attr.cx]="0"
+                                    [attr.cy]="0"
                                     [attr.r]="campaignMap.grid_size / 2"
                                     [attr.stroke]="player.highlight_colour"
                                     stroke-width="4"
                                 />
                                 <image
-                                    x="0"
-                                    y="0"
+                                    [attr.x]="0 - campaignMap.grid_size / 2"
+                                    [attr.y]="0 - campaignMap.grid_size / 2"
                                     [attr.width]="campaignMap.grid_size"
                                     [attr.height]="campaignMap.grid_size"
                                     [attr.xlink:href]="getCharacterImageUrl(player.player.custom_portrait, player.player.guid)"
                                     style="clip-path: inset(0 0 0 0 round 50%);"
                                 ></image>
+                                <g class="creature-label"
+                                   [attr.transform]="'translate(0, ' + (campaignMap.grid_size / 2 * getTokenSizeMultiplier('') + 20) + ')'">
+                                    <rect
+                                        [attr.x]="0 - getTokenLabelTextWidth('label-' + player.guid) / 2"
+                                        y="-15"
+                                        [attr.width]="getTokenLabelTextWidth('label-' + player.guid)"
+                                        height="20"
+                                        fill="#ffffff"
+                                        opacity="0.8"
+                                        rx="5"
+                                        ry="5"></rect>
+                                    <text text-anchor="middle" alignment-baseline="middle" [attr.id]="'label-' + player.guid">{{ player.entity_name }}</text>
+                                </g>
                             </g>
                         }
                         @for (creature of campaignMap.creatures; track creature.guid) {
@@ -228,20 +241,33 @@
                                 (dragDrop)="onTokenDropped($event, 'creature')"
                             >
                                 <circle
-                                    [attr.cx]="campaignMap.grid_size / 2"
-                                    [attr.cy]="campaignMap.grid_size / 2"
+                                    [attr.cx]="0"
+                                    [attr.cy]="0"
                                     [attr.r]="campaignMap.grid_size / 2 * getTokenSizeMultiplier(creature!.creature!.size)"
                                     [attr.stroke]="creature.highlight_colour"
                                     stroke-width="4"
                                 />
                                 <image
-                                    [attr.x]="0 - campaignMap.grid_size / 2 * (getTokenSizeMultiplier(creature!.creature!.size) - 1)"
-                                    [attr.y]="0 - campaignMap.grid_size / 2 * (getTokenSizeMultiplier(creature!.creature!.size) - 1)"
+                                    [attr.x]="0 - campaignMap.grid_size / 2 * (getTokenSizeMultiplier(creature!.creature!.size) - 1) - campaignMap.grid_size / 2"
+                                    [attr.y]="0 - campaignMap.grid_size / 2 * (getTokenSizeMultiplier(creature!.creature!.size) - 1) - campaignMap.grid_size / 2"
                                     [attr.width]="campaignMap.grid_size * getTokenSizeMultiplier(creature!.creature!.size)"
                                     [attr.height]="campaignMap.grid_size * getTokenSizeMultiplier(creature!.creature!.size)"
                                     [attr.xlink:href]="'/images/creature-icons/' + (creature.creature?.name ?? '').toLowerCase() + '.png'"
                                     style="clip-path: inset(0 0 0 0 round 50%);"
                                 ></image>
+                                <g class="creature-label"
+                                   [attr.transform]="'translate(0, ' + (campaignMap.grid_size / 2 * getTokenSizeMultiplier(creature!.creature!.size) + 20) + ')'">
+                                    <rect
+                                        [attr.x]="0 - getTokenLabelTextWidth('label-' + creature.guid) / 2"
+                                        y="-15"
+                                        [attr.width]="getTokenLabelTextWidth('label-' + creature.guid)"
+                                        height="20"
+                                        fill="#ffffff"
+                                        opacity="0.8"
+                                        rx="5"
+                                        ry="5"></rect>
+                                    <text text-anchor="middle" alignment-baseline="middle" [attr.id]="'label-' + creature.guid">{{ creature.entity_name }}</text>
+                                </g>
                             </g>
                         }
                     </g>

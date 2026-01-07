@@ -300,6 +300,16 @@ export class CampaignMapComponent {
         }
     }
 
+    getTokenLabelTextWidth(labelId: string): number {
+        const padding = 10;
+        const labelElement = document.getElementById(labelId) as SVGTextElement | null;
+
+        if (labelElement)
+            return labelElement.getBBox().width + padding;
+
+        return padding;
+    }
+
     onSvgPointerDown(event: PointerEvent) {
         if (this.mapMode === 'Draw' || this.mapMode === 'Ruler') {
             event.stopPropagation();

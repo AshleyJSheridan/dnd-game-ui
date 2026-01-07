@@ -88,6 +88,17 @@ app-campaign-map {
                         filter: drop-shadow(0 0 10px rgb(255, 255, 0));
                     }
                 }
+
+                .creature-label {
+                    rect {
+                        fill: rgba(255, 255, 255, 0.8);
+                    }
+
+                    text {
+                        font-size: 1rem;
+                    }
+                }
+
             }
 
             img.map-image {
