@@ -193,11 +193,16 @@ app-campaign-map {
     }
 
     .settings-block-container {
-        display: flex;
-        gap: 1rem;
+        fieldset {
+            margin-top: 1rem;
+        }
 
         label {
             display: block;
+        }
+
+        label + label {
+            margin-top: 1rem;
         }
     }
 }
