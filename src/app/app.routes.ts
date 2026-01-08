@@ -14,7 +14,6 @@ import { LoginComponent } from './components/login/login/login.component';
 import { EditCharacterSkillsComponent } from './components/character/edit-character-skills/edit-character-skills.component';
 import { CampaignListComponent } from './components/campaigns/campaign-list/campaign-list.component';
 import { CampaignComponent } from './components/campaigns/campaign/campaign.component';
-import { MapsViewComponent } from './components/campaigns/maps-view/maps-view.component';
 import { EditPortraitComponent } from './components/character/edit-portrait/edit-portrait.component';
 import { EditCharacterEquipmentComponent } from './components/character/edit-character-equipment/edit-character-equipment.component';
 import { RegisterComponent } from './components/register/register.component';
