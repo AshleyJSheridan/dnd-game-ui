@@ -466,6 +466,19 @@
                             </fieldset>
                         }
 
+                        @if (selectedEntity.type === 'creature') {
+                            <fieldset>
+                                <legend>Label</legend>
+
+                                <label>
+                                    Name:
+                                    <input type="text" [value]="selectedEntity.entity_name" (change)="changeSelectedEntityName($event)"/>
+                                </label>
+                                <!-- fake button - the change handler on the text field triggers the update, this just triggers the change event by input losing focus -->
+                                <button type="button">Change label</button>
+                            </fieldset>
+                        }
+
                         <fieldset>
                             <legend>Colour</legend>
 

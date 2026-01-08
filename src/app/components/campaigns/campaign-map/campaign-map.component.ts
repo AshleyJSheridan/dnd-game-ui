@@ -500,7 +500,6 @@ export class CampaignMapComponent implements AfterViewInit {
             this.campaignService.updateMapEntity(this.campaignMap.guid, drawing.guid, updateData).subscribe({
                 next: (map) => {
                     this.campaignMap = map;
-                    this.selectedEntity = null;
                 },
                 error: (error) => {
                     // TODO handle error updating drawing symbol
@@ -534,10 +533,32 @@ export class CampaignMapComponent implements AfterViewInit {
             this.campaignService.updateMapEntity(this.campaignMap.guid, this.selectedEntity.guid, updateData).subscribe({
                 next: (map) => {
                     this.campaignMap = map;
-                    this.selectedEntity = null;
                 },
                 error: (error) => {
                     // TODO handle error updating drawing colour
+                }
+            })
+        }
+    }
+
+    changeSelectedEntityName(event: Event): void {
+        if (this.selectedEntity) {
+            const entity_name = (event.currentTarget as HTMLInputElement).value;
+
+            this.selectedEntity.entity_name = entity_name;
+
+            const updateData = {
+                guid: this.selectedEntity.guid,
+                type: this.selectedEntity.type,
+                entity_name: entity_name,
+            };
+
+            this.campaignService.updateMapEntity(this.campaignMap.guid, this.selectedEntity.guid, updateData).subscribe({
+                next: (map) => {
+                    this.campaignMap = map;
+                },
+                error: (error) => {
+                    // TODO handle error updating drawing name
                 }
             })
         }
