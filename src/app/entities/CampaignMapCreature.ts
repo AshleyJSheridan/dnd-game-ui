@@ -7,5 +7,5 @@ export class CampaignMapCreature {
     x: number = 0;
     y: number = 0;
     highlight_colour: string = '#000000';
-    creature: Creature | undefined;
+    entity: Creature | undefined;
 }

@@ -16,10 +16,14 @@ export class Creature {
         dice_amount: number;
         dice_sides: string;
         plus_fixed: number;
+        hp: number;
+        max_hp: number;
     } = {
         dice_amount: 1,
         dice_sides: 'd6',
-        plus_fixed: 0
+        plus_fixed: 0,
+        hp: 0,
+        max_hp: 0,
     };
     speed: {
         walk: number;

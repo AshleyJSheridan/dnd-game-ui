@@ -19,6 +19,8 @@ import { DrawingObject } from '../../../entities/DrawingObject';
 import { CallbackLightboxComponent } from '../../dialogs/callback-lightbox/callback-lightbox.component';
 import { SvgDragDropEvent, SvgDraggableDirective } from '../../../directives/svg-draggable.directive';
 import { DeleteIconComponent } from '../../icons/delete-icon/delete-icon.component';
+import { MapCreatureDetailsComponent } from '../map-creature-details/map-creature-details.component';
+import { ToastComponent } from '../../dialogs/toast/toast.component';
 
 @Component({
     selector: 'app-campaign-map',
@@ -32,6 +34,8 @@ import { DeleteIconComponent } from '../../icons/delete-icon/delete-icon.compone
         SvgDraggableDirective,
         DamageIconComponent,
         DeleteIconComponent,
+        MapCreatureDetailsComponent,
+        ToastComponent,
     ],
     templateUrl: './campaign-map.component.html'
 })
@@ -48,6 +52,7 @@ export class CampaignMapComponent implements AfterViewInit {
     creatureType: string = '-';
     creatureSearch: string = '';
     selectedEntity: CampaignMapCreature | CampaignMapPlayer | CampaignMapDrawing | null = null;
+    diceRollResult: string = '';
 
     drawing: DrawingObject = new DrawingObject();
     damageTypeIcons: Array<string> = ['Bludgeoning', 'Piercing', 'Slashing', 'Acid', 'Cold', 'Fire', 'Force', 'Lightning',
@@ -58,6 +63,7 @@ export class CampaignMapComponent implements AfterViewInit {
 
     @ViewChild('settingsLightbox') settingsLightbox: CallbackLightboxComponent | undefined;
     @ViewChildren('entityLabel') entityLabels!: QueryList<ElementRef<SVGTextElement>>;
+    @ViewChild('toastComponent') toast: ToastComponent | undefined;
 
     constructor(private campaignService: CampaignService, private router: Router, private cdr: ChangeDetectorRef) {}
 
@@ -136,6 +142,7 @@ export class CampaignMapComponent implements AfterViewInit {
     setMapMode(mode: string): void {
         this.showSettings = true;
         this.mapMode = mode;
+        this.selectedEntity = null;
     }
 
     getImageUrl(): string {
@@ -278,7 +285,7 @@ export class CampaignMapComponent implements AfterViewInit {
 
     isCharacterInMap(character: Character): boolean {
         const found = this.campaignMap.players.filter((mapCharacter: CampaignMapPlayer) => {
-            return mapCharacter.player.guid === character.guid;
+            return mapCharacter!.entity!.guid === character.guid;
         });
 
         return found.length > 0;
@@ -576,5 +583,21 @@ export class CampaignMapComponent implements AfterViewInit {
                 }
             })
         }
+    }
+
+    getSelectedCreatureEntity(): CampaignMapCreature | undefined {
+        if (this.selectedEntity && this.selectedEntity.type === 'creature') {
+            return this.selectedEntity as CampaignMapCreature;
+        }
+
+        return undefined;
+    }
+
+    showDiceRoll(event: any): void {
+        // TODO show this in a toast notification or something?
+        //console.log(`Rolled a ${event.roll} + ${event.modifier}`);
+
+        this.diceRollResult = `Rolled a ${event.roll + event.modifier} (${event.roll} + ${event.modifier})`;
+        this.toast?.showToast();
     }
 }

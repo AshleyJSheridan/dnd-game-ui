@@ -1,3 +1,5 @@
+import { Character } from './Character';
+
 export class CampaignMapPlayer {
     guid: string = '';
     type: string = 'character';
@@ -5,13 +7,5 @@ export class CampaignMapPlayer {
     x: number = 0;
     y: number = 0;
     highlight_colour: string = '#000000';
-    player: {
-        name: string;
-        guid: string;
-        custom_portrait: string;
-    } = {
-        name: '',
-        guid: '',
-        custom_portrait: ''
-    };
+    entity: Character | undefined;
 }

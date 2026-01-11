@@ -1,0 +1,61 @@
+<div class="selected-entity-details">
+    <dl>
+        <dt>Name</dt>
+            <dd>{{ creature()?.entity_name }}</dd>
+        <dt>Creature</dt>
+            <dd>{{ creature()?.entity?.name }}</dd>
+        <dt>Type</dt>
+            <dd>{{ creature()?.entity?.type }}</dd>
+        <dt>Size</dt>
+            <dd>{{ creature()?.entity?.size }}</dd>
+        <dt>Speed</dt>
+            <dd>{{ getCreatureSpeeds() }}</dd>
+        <dt title="Armor Class">AC</dt>
+            <dd>{{ creature()?.entity?.armor?.armor_class }}
+                @if (creature()?.entity?.armor?.wears_armor === false) {
+                    <em>(no armor)</em>
+                }
+            </dd>
+        <dt>Hit Points</dt>
+            <dd>{{ creature()?.entity?.hit_points?.hp }} / {{ creature()?.entity?.hit_points?.max_hp }}</dd>
+    </dl>
+
+    <fieldset class="selected-entity-abilities">
+        <legend>Stats</legend>
+
+        <ul>
+            <li>
+                <strong title="Charisma">Cha</strong>
+                <div>{{ creature()?.entity?.abilities?.cha?.base }} ({{ creature()?.entity?.abilities?.cha?.modifier }})</div>
+                <app-dice sides="20" (rollEvent)="showRoll($event, creature()?.entity?.abilities?.cha?.modifier ?? 0)"></app-dice>
+            </li>
+            <li>
+                <strong title="Constitution">Con</strong>
+                <div>{{ creature()?.entity?.abilities?.con?.base }} ({{ creature()?.entity?.abilities?.con?.modifier }})</div>
+                <app-dice sides="20" (rollEvent)="showRoll($event, creature()?.entity?.abilities?.con?.modifier ?? 0)"></app-dice>
+            </li>
+            <li>
+                <strong title="Dexterity">Dex</strong>
+                <div>{{ creature()?.entity?.abilities?.dex?.base }} ({{ creature()?.entity?.abilities?.dex?.modifier }})</div>
+                <app-dice sides="20" (rollEvent)="showRoll($event, creature()?.entity?.abilities?.dex?.modifier ?? 0)"></app-dice>
+            </li>
+            <li>
+                <strong title="Intelligence">Int</strong>
+                <div>{{ creature()?.entity?.abilities?.int?.base }} ({{ creature()?.entity?.abilities?.int?.modifier }})</div>
+                <app-dice sides="20" (rollEvent)="showRoll($event, creature()?.entity?.abilities?.int?.modifier ?? 0)"></app-dice>
+            </li>
+            <li>
+                <strong title="Strength">Str</strong>
+                <div>{{ creature()?.entity?.abilities?.str?.base }} ({{ creature()?.entity?.abilities?.str?.modifier }})</div>
+                <app-dice sides="20" (rollEvent)="showRoll($event, creature()?.entity?.abilities?.str?.modifier ?? 0)"></app-dice>
+            </li>
+            <li>
+                <strong title="Wisdom">Wis</strong>
+                <div>{{ creature()?.entity?.abilities?.wis?.base }} ({{ creature()?.entity?.abilities?.wis?.modifier }})</div>
+                <app-dice sides="20" (rollEvent)="showRoll($event, creature()?.entity?.abilities?.wis?.modifier ?? 0)"></app-dice>
+            </li>
+
+        </ul>
+    </fieldset>
+
+</div>

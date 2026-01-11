@@ -82,10 +82,10 @@ app-campaign-map {
 
                 @keyframes creature-glow {
                     from {
-                        filter: drop-shadow(0 0 0 rgba(0, 0, 0, 0));
+                        filter: drop-shadow(0 0 0 colours.$glow-off);
                     }
                     to {
-                        filter: drop-shadow(0 0 10px rgb(255, 255, 0));
+                        filter: drop-shadow(0 0 10px colours.$glow-on);
                     }
                 }
 
@@ -110,7 +110,9 @@ app-campaign-map {
     .map-settings {
         background-color: colours.$white;
         grid-area: settings;
+        max-height: 90vh;
         max-width: 30rem;
+        overflow: auto;
         position: relative;
         width: 22rem;
 
@@ -190,6 +192,46 @@ app-campaign-map {
                 padding: .25rem;
             }
         }
+
+        .selected-entity-form {
+            details {
+                border: 1px solid colours.$dark-grey;
+                border-radius: .5rem;
+                margin-bottom: 1rem;
+            }
+
+            summary {
+                background-color: colours.$light-grey;
+                cursor: pointer;
+                padding: .5rem;
+            }
+
+            .selected-entity-details-content {
+                padding: .5rem;
+            }
+        }
+
+        .selected-entity-details {
+            dl {
+                display: grid;
+                grid-template-columns: auto 1fr;
+                row-gap: .5rem;
+            }
+        }
+
+        .selected-entity-abilities {
+            ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            li {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
     }
 
     .settings-block-container {
@@ -204,6 +246,12 @@ app-campaign-map {
         label + label {
             margin-top: 1rem;
         }
+    }
+
+    .toast-content {
+        background-color: colours.$glow-on;
+        left: 50%;
+        padding: .5rem;
     }
 }
 

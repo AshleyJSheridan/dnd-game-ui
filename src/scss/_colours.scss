@@ -35,6 +35,8 @@ $success-border: #080;
 $success-background: #aeddae;
 $success-text: $black;
 
+$highlight: rgb(255, 255, 0);
+
 // logout button
 $logout-fire: #ec4a24;
 $logout-sticks: #985600;
@@ -77,3 +79,7 @@ $item-rarity-uncommon: rgb(0, 126, 38);
 $item-rarity-rare: rgb(74, 145, 227);
 $item-rarity-very-rare: rgb(152, 16, 224);
 $item-rarity-legendary: rgb(221, 113, 46);
+
+// glow
+$glow-off: rgba(0, 0, 0, 0);
+$glow-on: $highlight;

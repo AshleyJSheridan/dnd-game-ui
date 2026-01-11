@@ -13,7 +13,6 @@
         <app-map-action-icon [mapAction]="'Ruler'" (mapMode)="setMapMode($event)" [currentMapMode]="mapMode"/>
         <app-map-action-icon [mapAction]="'Creature'" (mapMode)="setMapMode($event)" [currentMapMode]="mapMode"/>
         <app-map-action-icon [mapAction]="'Object'" (mapMode)="setMapMode($event)" [currentMapMode]="mapMode"/>
-        <!--<app-map-action-icon [mapAction]="'Grid'" (mapMode)="setMapMode($event)" [currentMapMode]="mapMode"/>-->
     </nav>
     <div class="campaign-map">
         @if (campaignMap?.guid) {
@@ -176,7 +175,7 @@
                                 [attr.data-x]="player.x"
                                 [attr.data-y]="player.y"
                                 [attr.data-guid]="player.guid"
-                                [attr.data-name]="player.player.name"
+                                [attr.data-name]="player.entity!.name"
                                 [attr.transform]="'translate(' + player.x + ', ' + player.y + ')'"
 
                                 svgDraggable
@@ -196,7 +195,7 @@
                                     [attr.y]="0 - campaignMap.grid_size / 2"
                                     [attr.width]="campaignMap.grid_size"
                                     [attr.height]="campaignMap.grid_size"
-                                    [attr.xlink:href]="getCharacterImageUrl(player.player.custom_portrait, player.player.guid)"
+                                    [attr.xlink:href]="getCharacterImageUrl(player.entity!.custom_portrait, player.entity!.guid)"
                                     style="clip-path: inset(0 0 0 0 round 50%);"
                                 ></image>
                                 <g class="creature-label"
@@ -231,20 +230,20 @@
                                 <circle
                                     [attr.cx]="0"
                                     [attr.cy]="0"
-                                    [attr.r]="campaignMap.grid_size / 2 * getTokenSizeMultiplier(creature!.creature!.size)"
+                                    [attr.r]="campaignMap.grid_size / 2 * getTokenSizeMultiplier(creature!.entity!.size)"
                                     [attr.stroke]="creature.highlight_colour"
                                     stroke-width="4"
                                 />
                                 <image
-                                    [attr.x]="0 - campaignMap.grid_size / 2 * (getTokenSizeMultiplier(creature!.creature!.size) - 1) - campaignMap.grid_size / 2"
-                                    [attr.y]="0 - campaignMap.grid_size / 2 * (getTokenSizeMultiplier(creature!.creature!.size) - 1) - campaignMap.grid_size / 2"
-                                    [attr.width]="campaignMap.grid_size * getTokenSizeMultiplier(creature!.creature!.size)"
-                                    [attr.height]="campaignMap.grid_size * getTokenSizeMultiplier(creature!.creature!.size)"
-                                    [attr.xlink:href]="'/images/creature-icons/' + (creature.creature?.name ?? '').toLowerCase() + '.png'"
+                                    [attr.x]="0 - campaignMap.grid_size / 2 * (getTokenSizeMultiplier(creature!.entity!.size) - 1) - campaignMap.grid_size / 2"
+                                    [attr.y]="0 - campaignMap.grid_size / 2 * (getTokenSizeMultiplier(creature!.entity!.size) - 1) - campaignMap.grid_size / 2"
+                                    [attr.width]="campaignMap.grid_size * getTokenSizeMultiplier(creature!.entity!.size)"
+                                    [attr.height]="campaignMap.grid_size * getTokenSizeMultiplier(creature!.entity!.size)"
+                                    [attr.xlink:href]="'/images/creature-icons/' + (creature.entity?.name ?? '').toLowerCase() + '.png'"
                                     style="clip-path: inset(0 0 0 0 round 50%);"
                                 ></image>
                                 <g class="creature-label"
-                                   [attr.transform]="'translate(0, ' + (campaignMap.grid_size / 2 * getTokenSizeMultiplier(creature!.creature!.size) + 20) + ')'">
+                                   [attr.transform]="'translate(0, ' + (campaignMap.grid_size / 2 * getTokenSizeMultiplier(creature!.entity!.size) + 20) + ')'">
                                     <rect
                                         [attr.x]="0 - ((labelWidths.get(creature.guid) ?? entityLabelPadding) / 2)"
                                         y="-15"
@@ -273,6 +272,7 @@
                         }
                     </g>
                 </svg>
+                <app-toast #toastComponent>{{ diceRollResult }}</app-toast>
             </div>
         }
     </div>
@@ -445,57 +445,69 @@
             }
 
             @if (mapMode === 'Pointer' && selectedEntity !== null) {
-                <form>
-                    <fieldset>
-                        <legend>Selected: {{ selectedEntity.type }}</legend>
+                <form class="selected-entity-form">
+                    <details open>
+                        <summary>Map Entity Details</summary>
 
-                        @if (selectedEntity.type === 'drawing') {
+                        <div class="selected-entity-details-content">
+                            @if (selectedEntity.type === 'drawing') {
+                                <fieldset>
+                                    <legend>Symbol</legend>
+
+                                    <div class="radio-collection">
+                                        @for (damageType of damageTypeIcons; track damageType) {
+                                            <label class="radio-label" title="{{ damageType }}">
+                                                <span class="accessible-hidden">{{ damageType }}</span>
+                                                <input type="radio" name="patternSymbol" value="{{ damageType.toLowerCase() }}"
+                                                       (change)="changeSelectedEntitySymbol(damageType.toLowerCase())" [checked]="selectedEntitySymbolMatches(damageType.toLowerCase())"/>
+                                                <app-damage-icon [patternSymbol]="damageType"/>
+                                            </label>
+                                        }
+                                    </div>
+                                </fieldset>
+                            }
+
+                            @if (selectedEntity.type === 'creature') {
+                                <fieldset>
+                                    <legend>Label</legend>
+
+                                    <label>
+                                        Name:
+                                        <input type="text" [value]="selectedEntity.entity_name" (change)="changeSelectedEntityName($event)"/>
+                                    </label>
+                                    <!-- fake button - the change handler on the text field triggers the update, this just triggers the change event by input losing focus -->
+                                    <button type="button">Change label</button>
+                                </fieldset>
+                            }
+
                             <fieldset>
-                                <legend>Symbol</legend>
-
-                                <div class="radio-collection">
-                                    @for (damageType of damageTypeIcons; track damageType) {
-                                        <label class="radio-label" title="{{ damageType }}">
-                                            <span class="accessible-hidden">{{ damageType }}</span>
-                                            <input type="radio" name="patternSymbol" value="{{ damageType.toLowerCase() }}"
-                                                   (change)="changeSelectedEntitySymbol(damageType.toLowerCase())" [checked]="selectedEntitySymbolMatches(damageType.toLowerCase())"/>
-                                            <app-damage-icon [patternSymbol]="damageType"/>
-                                        </label>
-                                    }
-                                </div>
-                            </fieldset>
-                        }
-
-                        @if (selectedEntity.type === 'creature') {
-                            <fieldset>
-                                <legend>Label</legend>
+                                <legend>Ring Colour</legend>
 
                                 <label>
-                                    Name:
-                                    <input type="text" [value]="selectedEntity.entity_name" (change)="changeSelectedEntityName($event)"/>
+                                    <span class="accessible-hidden">Colour</span>
+                                    <input type="color" [value]="selectedEntity.highlight_colour" (change)="changeSelectedEntityColour($event)"/>
                                 </label>
-                                <!-- fake button - the change handler on the text field triggers the update, this just triggers the change event by input losing focus -->
-                                <button type="button">Change label</button>
                             </fieldset>
-                        }
 
-                        <fieldset>
-                            <legend>Colour</legend>
+                            <fieldset>
+                                <legend>Actions</legend>
 
-                            <label>
-                                <span class="accessible-hidden">Colour</span>
-                                <input type="color" [value]="selectedEntity.highlight_colour" (change)="changeSelectedEntityColour($event)"/>
-                            </label>
-                        </fieldset>
+                                <button type="button" title="Delete {{ selectedEntity.type }}" (click)="deleteSelectedEntity()">
+                                    <app-delete-icon/>
+                                </button>
+                            </fieldset>
+                        </div>
+                    </details>
 
-                        <fieldset>
-                            <legend>Actions</legend>
+                    @if (selectedEntity.type === 'creature') {
+                        <details open>
+                            <summary>Create Stats &amp; Actions</summary>
 
-                            <button type="button" title="Delete {{ selectedEntity.type }}" (click)="deleteSelectedEntity()">
-                                <app-delete-icon/>
-                            </button>
-                        </fieldset>
-                    </fieldset>
+                            <div class="selected-entity-details-content">
+                                <app-map-creature-details [creature]="getSelectedCreatureEntity()" (diceRoll)="showDiceRoll($event)"></app-map-creature-details>
+                            </div>
+                        </details>
+                    }
                 </form>
             }
         </div>
