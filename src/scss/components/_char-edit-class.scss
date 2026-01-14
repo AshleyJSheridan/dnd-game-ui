@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "../colours";
 
 .char-edit-class-list ul {
@@ -264,7 +265,7 @@
             }
 
             &:checked + label {
-                background-image: radial-gradient(circle, darken(colours.$gold, 20%) 0%, colours.$gold 35%, transparent 37%, transparent 45%, colours.$black 46%, colours.$black 52%, transparent 53%);
+                background-image: radial-gradient(circle, color.adjust(colours.$gold, $lightness: -20%) 0%, colours.$gold 35%, transparent 37%, transparent 45%, colours.$black 46%, colours.$black 52%, transparent 53%);
             }
         }
 
