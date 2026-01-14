@@ -11,6 +11,7 @@ export class DiceComponent {
     @Output() rollEvent = new EventEmitter();
 
     handleDiceRoll(): void {
+        // TODO pass this off to the dice roll endpoint to capture the dice roll against the game.
         this.rollEvent.emit({value: (Math.floor(Math.random() * this.sides()) + 1)});
     }
 }

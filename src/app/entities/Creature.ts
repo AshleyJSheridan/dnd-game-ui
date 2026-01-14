@@ -78,11 +78,15 @@ export class Creature {
         Stealth?: number;
         Survival?: number;
     } = {};
-    resistances: [] | {
+    resistances: {
         immunities?: Array<string>;
         resistances?: Array<string>;
         vulnerabilities?: Array<string>;
-    } = {};
+    } = {
+        immunities: [],
+        resistances: [],
+        vulnerabilities: []
+    };
     senses: {
         Blindsight?: number;
         Darkvision?: number;

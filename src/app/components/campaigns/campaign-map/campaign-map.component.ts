@@ -594,10 +594,10 @@ export class CampaignMapComponent implements AfterViewInit {
     }
 
     showDiceRoll(event: any): void {
-        // TODO show this in a toast notification or something?
-        //console.log(`Rolled a ${event.roll} + ${event.modifier}`);
+        this.diceRollResult = event.roll === 1 ? '1 (nat 1)' :
+            event.roll === 20 ? '20 (nat 20)' :
+                `Rolled a ${event.roll + event.modifier} (${event.roll} + ${event.modifier})`;
 
-        this.diceRollResult = `Rolled a ${event.roll + event.modifier} (${event.roll} + ${event.modifier})`;
         this.toast?.showToast();
     }
 }

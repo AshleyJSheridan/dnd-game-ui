@@ -217,9 +217,16 @@ app-campaign-map {
                 grid-template-columns: auto 1fr;
                 row-gap: .5rem;
             }
+
+            ul {
+                margin: 0.25rem auto;
+                padding-left: 1rem;
+            }
         }
 
-        .selected-entity-abilities {
+        .selected-entity-abilities,
+        .selected-entity-skill-proficiencies,
+        .selected-entity-saving-throws {
             ul {
                 list-style: none;
                 margin: 0;
@@ -231,6 +238,16 @@ app-campaign-map {
                 align-items: center;
                 justify-content: space-between;
             }
+        }
+
+        .selected-entity-senses dl {
+            margin: 0;
+        }
+
+        .selected-entity-resistances,
+        .selected-entity-senses,
+        .selected-entity-languages {
+            margin-top: 1rem;
         }
     }
 

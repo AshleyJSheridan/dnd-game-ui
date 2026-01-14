@@ -18,6 +18,8 @@
             </dd>
         <dt>Hit Points</dt>
             <dd>{{ creature()?.entity?.hit_points?.hp }} / {{ creature()?.entity?.hit_points?.max_hp }}</dd>
+        <dt title="Challenge Rating">CR</dt>
+            <dd>{{ creature()?.entity?.challenge_rating }}</dd>
     </dl>
 
     <fieldset class="selected-entity-abilities">
@@ -54,8 +56,256 @@
                 <div>{{ creature()?.entity?.abilities?.wis?.base }} ({{ creature()?.entity?.abilities?.wis?.modifier }})</div>
                 <app-dice sides="20" (rollEvent)="showRoll($event, creature()?.entity?.abilities?.wis?.modifier ?? 0)"></app-dice>
             </li>
-
         </ul>
     </fieldset>
 
+    @if (creatureHasSavingThrows()) {
+        <fieldset class="selected-entity-saving-throws">
+            <legend>Saving Throws</legend>
+
+            <ul>
+                @if (creature()?.entity?.saving_throws?.cha) {
+                    <li>
+                        <strong title="Charisma">Cha</strong>
+                        <div>{{ creature()?.entity?.saving_throws?.cha?.base }} ({{ creature()?.entity?.saving_throws?.cha?.modifier }})</div>
+                        <app-dice sides="20" (rollEvent)="showRoll($event, creature()?.entity?.saving_throws?.cha?.modifier ?? 0)"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.saving_throws?.con) {
+                    <li>
+                        <strong title="Constitution">Con</strong>
+                        <div>{{ creature()?.entity?.saving_throws?.con?.base }} ({{ creature()?.entity?.saving_throws?.con?.modifier }})</div>
+                        <app-dice sides="20" (rollEvent)="showRoll($event, creature()?.entity?.saving_throws?.con?.modifier ?? 0)"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.saving_throws?.dex) {
+                    <li>
+                        <strong title="Dexterity">Dex</strong>
+                        <div>{{ creature()?.entity?.saving_throws?.dex?.base }} ({{ creature()?.entity?.saving_throws?.dex?.modifier }})</div>
+                        <app-dice sides="20" (rollEvent)="showRoll($event, creature()?.entity?.saving_throws?.dex?.modifier ?? 0)"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.saving_throws?.int) {
+                    <li>
+                        <strong title="Intelligence">Int</strong>
+                        <div>{{ creature()?.entity?.saving_throws?.int?.base }} ({{ creature()?.entity?.saving_throws?.int?.modifier }})</div>
+                        <app-dice sides="20" (rollEvent)="showRoll($event, creature()?.entity?.saving_throws?.int?.modifier ?? 0)"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.saving_throws?.str) {
+                    <li>
+                        <strong title="Strength">Str</strong>
+                        <div>{{ creature()?.entity?.saving_throws?.str?.base }} ({{ creature()?.entity?.saving_throws?.str?.modifier }})</div>
+                        <app-dice sides="20" (rollEvent)="showRoll($event, creature()?.entity?.saving_throws?.str?.modifier ?? 0)"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.saving_throws?.wis) {
+                    <li>
+                        <strong title="Wisdom">Wis</strong>
+                        <div>{{ creature()?.entity?.saving_throws?.wis?.base }} ({{ creature()?.entity?.saving_throws?.wis?.modifier }})</div>
+                        <app-dice sides="20" (rollEvent)="showRoll($event, creature()?.entity?.saving_throws?.wis?.modifier ?? 0)"></app-dice>
+                    </li>
+                }
+            </ul>
+        </fieldset>
+    }
+
+    @if (creatureHasResistances()) {
+        <fieldset class="selected-entity-resistances">
+            <legend>Resistances &amp; Immunities</legend>
+
+            @if (creature()?.entity?.resistances?.vulnerabilities) {
+                <strong>Vulnerabilities</strong>
+                <ul>
+                    @for (vulnerability of creature()?.entity?.resistances?.vulnerabilities; track vulnerability) {
+                        <li>{{ vulnerability }}</li>
+                    }
+                </ul>
+            }
+            @if (creature()?.entity?.resistances?.immunities) {
+                <strong>Immunities</strong>
+                <ul>
+                    @for (immunity of creature()?.entity?.resistances?.immunities; track immunity) {
+                        <li>{{ immunity }}</li>
+                    }
+                </ul>
+            }
+            @if (creature()?.entity?.resistances?.resistances) {
+                <strong>Resistances</strong>
+                <ul>
+                    @for (resistance of creature()?.entity?.resistances?.resistances; track resistance) {
+                        <li>{{ resistance }}</li>
+                    }
+                </ul>
+            }
+        </fieldset>
+    }
+
+    @if (creatureHasSenses()) {
+        <fieldset class="selected-entity-senses">
+            <legend>Senses</legend>
+
+            <dl>
+                @if (creature()?.entity?.senses?.Blindsight) {
+                    <dt>Blindsight</dt><dd>{{ creature()?.entity?.senses?.Blindsight }}ft</dd>
+                }
+                @if (creature()?.entity?.senses?.Darkvision) {
+                    <dt>Darkvision</dt><dd>{{ creature()?.entity?.senses?.Darkvision }}ft</dd>
+                }
+                @if (creature()?.entity?.senses?.Tremorsense) {
+                    <dt>Tremorsense</dt><dd>{{ creature()?.entity?.senses?.Tremorsense }}ft</dd>
+                }
+                @if (creature()?.entity?.senses?.Truesight) {
+                    <dt>Truesight</dt><dd>{{ creature()?.entity?.senses?.Truesight }}ft</dd>
+                }
+            </dl>
+        </fieldset>
+    }
+
+    @if (creatureHasLanguages()) {
+        <fieldset class="selected-entity-languages">
+            <legend>Languages</legend>
+
+            <ul>
+                @for (language of creature()?.entity?.languages; track language) {
+                    <li>{{ language.name }}</li>
+                }
+            </ul>
+        </fieldset>
+    }
+
+    @if (creatureHasSkillProficiencies()) {
+        <fieldset class="selected-entity-skill-proficiencies">
+            <legend>Skill Proficiencies</legend>
+
+            <ul>
+                @if (creature()?.entity?.skill_modifiers?.Acrobatics) {
+                    <li>
+                        <strong>Acrobatics</strong>
+                        <div>{{ creature()?.entity?.skill_modifiers?.Acrobatics }}</div>
+                        <app-dice sides="20" (rollEvent)="showSkillRoll($event, 'Acrobatics')"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.skill_modifiers?.Animal_handling) {
+                    <li>
+                        <strong>Animal handling</strong>
+                        <div>{{ creature()?.entity?.skill_modifiers?.Animal_handling }}</div>
+                        <app-dice sides="20" (rollEvent)="showSkillRoll($event, 'Animal_handling')"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.skill_modifiers?.Arcana) {
+                    <li>
+                        <strong>Arcana</strong>
+                        <div>{{ creature()?.entity?.skill_modifiers?.Arcana }}</div>
+                        <app-dice sides="20" (rollEvent)="showSkillRoll($event, 'Arcana')"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.skill_modifiers?.Athletics) {
+                    <li>
+                        <strong>Athletics</strong>
+                        <div>{{ creature()?.entity?.skill_modifiers?.Athletics }}</div>
+                        <app-dice sides="20" (rollEvent)="showSkillRoll($event, 'Athletics')"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.skill_modifiers?.Deception) {
+                    <li>
+                        <strong>Deception</strong>
+                        <div>{{ creature()?.entity?.skill_modifiers?.Deception }}</div>
+                        <app-dice sides="20" (rollEvent)="showSkillRoll($event, 'Deception')"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.skill_modifiers?.History) {
+                    <li>
+                        <strong>History</strong>
+                        <div>{{ creature()?.entity?.skill_modifiers?.History }}</div>
+                        <app-dice sides="20" (rollEvent)="showSkillRoll($event, 'History')"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.skill_modifiers?.Insight) {
+                    <li>
+                        <strong>Insight</strong>
+                        <div>{{ creature()?.entity?.skill_modifiers?.Insight }}</div>
+                        <app-dice sides="20" (rollEvent)="showSkillRoll($event, 'Insight')"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.skill_modifiers?.Intimidation) {
+                    <li>
+                        <strong>Intimidation</strong>
+                        <div>{{ creature()?.entity?.skill_modifiers?.Intimidation }}</div>
+                        <app-dice sides="20" (rollEvent)="showSkillRoll($event, 'Intimidation')"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.skill_modifiers?.Investigation) {
+                    <li>
+                        <strong>Investigation</strong>
+                        <div>{{ creature()?.entity?.skill_modifiers?.Investigation }}</div>
+                        <app-dice sides="20" (rollEvent)="showSkillRoll($event, 'Investigation')"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.skill_modifiers?.Medicine) {
+                    <li>
+                        <strong>Medicine</strong>
+                        <div>{{ creature()?.entity?.skill_modifiers?.Medicine }}</div>
+                        <app-dice sides="20" (rollEvent)="showSkillRoll($event, 'Medicine')"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.skill_modifiers?.Nature) {
+                    <li>
+                        <strong>Nature</strong>
+                        <div>{{ creature()?.entity?.skill_modifiers?.Nature }}</div>
+                        <app-dice sides="20" (rollEvent)="showSkillRoll($event, 'Nature')"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.skill_modifiers?.Perception) {
+                    <li>
+                        <strong>Perception</strong>
+                        <div>{{ creature()?.entity?.skill_modifiers?.Perception }}</div>
+                        <app-dice sides="20" (rollEvent)="showSkillRoll($event, 'Perception')"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.skill_modifiers?.Performance) {
+                    <li>
+                        <strong>Performance</strong>
+                        <div>{{ creature()?.entity?.skill_modifiers?.Performance }}</div>
+                        <app-dice sides="20" (rollEvent)="showSkillRoll($event, 'Performance')"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.skill_modifiers?.Persuasion) {
+                    <li>
+                        <strong>Persuasion</strong>
+                        <div>{{ creature()?.entity?.skill_modifiers?.Persuasion }}</div>
+                        <app-dice sides="20" (rollEvent)="showSkillRoll($event, 'Persuasion')"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.skill_modifiers?.Religion) {
+                    <li>
+                        <strong>Religion</strong>
+                        <div>{{ creature()?.entity?.skill_modifiers?.Religion }}</div>
+                        <app-dice sides="20" (rollEvent)="showSkillRoll($event, 'Religion')"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.skill_modifiers?.Sleight_of_hand) {
+                    <li>
+                        <strong>Sleight of Hand</strong>
+                        <div>{{ creature()?.entity?.skill_modifiers?.Sleight_of_hand }}</div>
+                        <app-dice sides="20" (rollEvent)="showSkillRoll($event, 'Sleight_of_hand')"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.skill_modifiers?.Stealth) {
+                    <li>
+                        <strong>Stealth</strong>
+                        <div>{{ creature()?.entity?.skill_modifiers?.Stealth }}</div>
+                        <app-dice sides="20" (rollEvent)="showSkillRoll($event, 'Stealth')"></app-dice>
+                    </li>
+                }
+                @if (creature()?.entity?.skill_modifiers?.Survival) {
+                    <li>
+                        <strong>Survival</strong>
+                        <div>{{ creature()?.entity?.skill_modifiers?.Survival }}</div>
+                        <app-dice sides="20" (rollEvent)="showSkillRoll($event, 'Survival')"></app-dice>
+                    </li>
+                }
+            </ul>
+        </fieldset>
+    }
 </div>
