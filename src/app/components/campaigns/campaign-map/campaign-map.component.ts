@@ -293,6 +293,11 @@ export class CampaignMapComponent implements AfterViewInit {
 
     onTokenDropped(event: SvgDragDropEvent, entityType: string) {
         if (this.mapMode === 'Pointer') {
+            // Don't update if the delta is very small (to avoid PATCH updates when selecting an entity).
+            const deltaThreshold = 2;
+            if (event.delta.dx < deltaThreshold && event.delta.dy < deltaThreshold)
+                return;
+
             const newX = event.start.x + event.delta.dx;
             const newY = event.start.y + event.delta.dy;
             const updateData = {
@@ -345,16 +350,6 @@ export class CampaignMapComponent implements AfterViewInit {
             default:
                 return 1;
         }
-    }
-
-    getTokenLabelTextWidth(labelId: string): number {
-        const padding = 10;
-        const labelElement = document.getElementById(labelId) as SVGTextElement | null;
-
-        if (labelElement)
-            return labelElement.getBBox().width + padding;
-
-        return padding;
     }
 
     onSvgPointerDown(event: PointerEvent) {
