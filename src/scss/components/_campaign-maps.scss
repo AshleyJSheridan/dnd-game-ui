@@ -211,6 +211,12 @@ app-campaign-map {
             }
         }
 
+        .selected-entity-actions {
+            button {
+                margin-right: .5rem;
+            }
+        }
+
         .selected-entity-details {
             dl {
                 display: grid;

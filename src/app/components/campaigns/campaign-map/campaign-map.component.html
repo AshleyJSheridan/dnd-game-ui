@@ -489,12 +489,24 @@
                                 </label>
                             </fieldset>
 
-                            <fieldset>
+                            <fieldset class="selected-entity-actions">
                                 <legend>Actions</legend>
 
                                 <button type="button" title="Delete {{ selectedEntity.type }}" (click)="deleteSelectedEntity()">
                                     <app-delete-icon/>
                                 </button>
+
+                                @if (selectedEntity.type === 'creature') {
+                                    @if (getSelectedCreatureEntity()?.visible ) {
+                                        <button type="button" title="Hide from players" (click)="toggleSelectedEntityVisibility()">
+                                            <app-eye-on-icon/>
+                                        </button>
+                                    } @else {
+                                        <button type="button" title="Hide from players" (click)="toggleSelectedEntityVisibility()">
+                                            <app-eye-off-icon/>
+                                        </button>
+                                    }
+                                }
                             </fieldset>
                         </div>
                     </details>

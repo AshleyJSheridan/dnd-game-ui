@@ -21,6 +21,8 @@ import { SvgDragDropEvent, SvgDraggableDirective } from '../../../directives/svg
 import { DeleteIconComponent } from '../../icons/delete-icon/delete-icon.component';
 import { MapCreatureDetailsComponent } from '../map-creature-details/map-creature-details.component';
 import { ToastComponent } from '../../dialogs/toast/toast.component';
+import {EyeOnIconComponent} from '../../icons/eye-on-icon/eye-on-icon.component';
+import {EyeOffIconComponent} from '../../icons/eye-off-icon/eye-off-icon.component';
 
 @Component({
     selector: 'app-campaign-map',
@@ -36,6 +38,8 @@ import { ToastComponent } from '../../dialogs/toast/toast.component';
         DeleteIconComponent,
         MapCreatureDetailsComponent,
         ToastComponent,
+        EyeOnIconComponent,
+        EyeOffIconComponent,
     ],
     templateUrl: './campaign-map.component.html'
 })
@@ -575,6 +579,27 @@ export class CampaignMapComponent implements AfterViewInit {
                 },
                 error: (error) => {
                     // TODO handle error deleting entity
+                }
+            })
+        }
+    }
+
+    toggleSelectedEntityVisibility() {
+        if (this.selectedEntity) {
+            this.selectedEntity.visible = !this.selectedEntity.visible;
+
+            const updateData = {
+                guid: this.selectedEntity.guid,
+                type: this.selectedEntity.type,
+                visible: this.selectedEntity.visible,
+            };
+
+            this.campaignService.updateMapEntity(this.campaignMap.guid, this.selectedEntity.guid, updateData).subscribe({
+                next: (map) => {
+                    this.campaignMap = map;
+                },
+                error: (error) => {
+                    // TODO handle error updating entity visibility
                 }
             })
         }

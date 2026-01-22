@@ -5,6 +5,7 @@ export class CampaignMapDrawing {
     x: number = 0;
     y: number = 0;
     highlight_colour: string = '#000000';
+    visible: boolean = true;
     stats: {
         width?: number;
         height?: number;
