@@ -26,7 +26,7 @@
                     <strong>Hit points at first level:</strong>
                         <span>{{ getClassBySelectionId().hit_points_at_first_level }}</span>
                     <br/>
-                    <strong>Hit dice:</strong>
+                    <strong>Hit dice per level:</strong>
                         <span>d{{ getClassBySelectionId().hit_die }}</span>
                     <br/>
                     <strong>{{ getPrimaryAbilityStrings()[0] }}:</strong>
@@ -55,6 +55,7 @@
                                         name="path-{{ getClassBySelectionId().id }}"
                                         value="{{ path.id }}"
                                         id="path-{{ getClassBySelectionId().id }}-{{ path.id }}"
+                                        [checked]="characterService.character?.selected_class_path?.id === path.id"
                                     />
                                     <label for="path-{{ getClassBySelectionId().id }}-{{ path.id }}">
                                         <span class="accessible-hidden">{{ path.name }}</span>

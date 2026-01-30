@@ -3,6 +3,8 @@ import { Spell } from './Spell';
 import { Language } from './Language';
 import { Item } from './Item';
 import { CreatureAlignment } from './CreatureAlignment';
+import { Money } from './Money';
+import {CharacterClassFeature} from './CharacterClassFeature';
 
 export class Character {
     name: string = '';
@@ -18,6 +20,18 @@ export class Character {
     }
     proficiency_bonus: number = 2;
     charClass: string = '';
+    class_path_available: boolean = false;
+    class_path_name: string = '';
+    selected_class_path: {
+        id: number;
+        name: string;
+        features: Array<CharacterClassFeature>;
+    } = {
+        id: 0,
+        name: '',
+        features: [],
+    };
+    class_features: Array<CharacterClassFeature> = [];
     saving_throws: Array<{
         name: string;
         short_name: string;
@@ -76,13 +90,7 @@ export class Character {
     };
     custom_portrait: string = '';
     inventory: {
-        money: {
-            copper?: number;
-            silver?: number;
-            electrum?: number;
-            gold?: number;
-            platinum?: number;
-        },
+        money: Money,
         items: Array<Item>,
     } = {
         money: {},

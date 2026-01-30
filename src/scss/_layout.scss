@@ -56,3 +56,80 @@ label.grid-col-2 {
     align-items: baseline;
     display: flex;
 }
+
+.columns {
+    display: flex;
+    gap: 1rem;
+
+    .col-3-1 {
+        width: 33%;
+    }
+
+    .col-3-2 {
+        width: 66%;
+    }
+
+    .col-2-1 {
+        width: 50%;
+    }
+}
+
+.tabs {
+    [role="tablist"] {
+        max-width: 100%;
+        min-width: 100%;
+    }
+
+    [role="tab"],
+    [role="tab"]:focus,
+    [role="tab"]:hover {
+        background-color: colours.$light-grey;
+        border-radius: 5px 5px 0 0;
+        cursor: pointer;
+        display: inline-block;
+        max-width: 22%;
+        outline: none;
+        padding: 0;
+        position: relative;
+        text-align: left;
+        top: 2px;
+        z-index: 2;
+
+        span {
+            display: inline-block;
+            margin-bottom: -2px;
+            padding: .5rem;
+        }
+    }
+
+    [role="tab"][aria-selected="true"] {
+        background-color: colours.$white;
+        border-width: 6px 2px 2px 2px;
+        border-bottom-color: colours.$white;
+        border-top-color: colours.$gold;
+
+        span {
+            background-color: colours.$white;
+
+        }
+    }
+
+    [role="tabpanel"] {
+        background-color: colours.$white;
+        box-sizing: border-box;
+        border: 2px solid colours.$medium-grey;
+        border-radius: 0 5px 5px;
+        min-height: 10em;
+        overflow: auto;
+        padding: .5rem;
+        width: 100%;
+    }
+
+    [role="tabpanel"].is-hidden {
+        display: none;
+    }
+
+    [role="tabpanel"] p {
+        margin: 0;
+    }
+}

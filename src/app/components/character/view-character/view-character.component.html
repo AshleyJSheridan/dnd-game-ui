@@ -1,24 +1,20 @@
-<header class="header-small">
-    <app-logo-full/>
-    <nav>
-        <a routerLink="/characters" routerLinkActive="active" ariaCurrentWhenActive="page">Characters</a>
-        <a routerLink="/campaigns">Campaigns</a>
-    </nav>
-</header>
+<app-header-slim></app-header-slim>
 
 <div class="char-sheet">
     <div class="char-sheet-content">
         <div class="sheet-header">
+            <div class="portrait"><app-portrait [character]="character"/></div>
             <div class="name">{{ character?.name }}</div>
             <div class="main-details">
-                <div class="class-level">{{ character?.charClass }} {{ character?.level }}</div>
+                <div class="class-level">{{ character?.charClass }} level {{ character?.level }}</div>
                 <div class="background">{{ character?.charBackground?.name }}</div>
                 <div class="race">{{ character?.charRace }}</div>
+                <div class="alignment">{{ character?.alignment?.alignment }}</div>
             </div>
         </div>
 
         <div class="columns">
-            <div class="col cols-3">
+            <div class="col col-3-1">
                 <div class="columns">
                     <div class="col ability-scores">
                         @for (ability of abilityNames; track ability) {
@@ -65,66 +61,164 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="senses">
-                    <div class="simple-score-standalone">
-                        <div class="simple-score-value">{{ 10 + getSkillProficiencyBonus({name: "perception", ability: "wis"}) }}</div>
-                        <div class="simple-score-name">Passive Perception</div>
-                    </div>
-                    <div class="simple-score-standalone">
-                        <div class="simple-score-value">{{ 10 + getSkillProficiencyBonus({name: "investigation", ability: "int"}) }}</div>
-                        <div class="simple-score-name">Passive Investigation</div>
-                    </div>
-                    <div class="simple-score-standalone">
-                        <div class="simple-score-value">{{ 10 + getSkillProficiencyBonus({name: "insight", ability: "wis"}) }}</div>
-                        <div class="simple-score-name">Passive Insight</div>
-                    </div>
-                </div>
-
-                <div class="languages">
-
-                </div>
             </div>
 
-            <div class="col cols-3">
-                <div class="ac-init-speed">
-                    <div class="simple-score ac">
-                        <!-- todo once equipment is added -->
-                        <div class="simple-score-name">Armor Class</div>
-                        <div class="simple-score-value">0</div>
-                    </div>
-                    <div class="simple-score initative">
-                        <div class="simple-score-name">Initiative</div>
-                        <div class="simple-score-value">{{ 10 + getAbilityDetails('dex').modifier }}</div>
-                    </div>
-                    <div class="simple-score speed">
-                        <div class="simple-score-name">Speed</div>
-                        <div class="simple-score-value">{{ character?.speed }}</div>
-                    </div>
-                </div>
-
-                <div class="hit-points">
-                    Hit Points
-                    <div class="current">{{ character?.hit_points?.current }} / {{ character?.hit_points?.max }}</div>
-                </div>
-
-                <div class="attacks">
-                    Attacks &amp; Spellcasting
-                </div>
-
-                <div class="equipment">
-                    Equipment
-                </div>
-            </div>
-
-            <div class="col cols-3">
-                <div class="traits">
-                    @for (trait of character?.charBackground?.characteristics; track trait.id) {
-                        <div class="trait">
-                            <div class="trait-name">{{ trait.characteristic_type }}</div>
-                            <div class="trait-details">{{ trait.details }}</div>
+            <div class="col col-3-2">
+                <div class="columns">
+                    <div class="col col-2-1">
+                        <div class="ac-init-speed">
+                            <div class="simple-score ac">
+                                <!-- todo once equipment is added -->
+                                <div class="simple-score-name">Armor Class</div>
+                                <div class="simple-score-value">0</div>
+                            </div>
+                            <div class="simple-score initative">
+                                <div class="simple-score-name">Initiative</div>
+                                <div class="simple-score-value">{{ 10 + getAbilityDetails('dex').modifier }}</div>
+                            </div>
+                            <div class="simple-score speed">
+                                <div class="simple-score-name">Speed</div>
+                                <div class="simple-score-value">{{ character?.speed }}</div>
+                            </div>
                         </div>
-                    }
+
+                        <div class="hit-points">
+                            <div>♥ Hit Points</div>
+                            <div class="current">{{ character?.hit_points?.current }} / {{ character?.hit_points?.max }}</div>
+                        </div>
+                    </div>
+
+                    <div class="col col-2-1">
+                        <div class="senses">
+                            <div class="simple-score-standalone">
+                                <div class="simple-score-value">{{ 10 + getSkillProficiencyBonus({name: "perception", ability: "wis"}) }}</div>
+                                <div class="simple-score-name">Passive Perception</div>
+                            </div>
+                            <div class="simple-score-standalone">
+                                <div class="simple-score-value">{{ 10 + getSkillProficiencyBonus({name: "investigation", ability: "int"}) }}</div>
+                                <div class="simple-score-name">Passive Investigation</div>
+                            </div>
+                            <div class="simple-score-standalone">
+                                <div class="simple-score-value">{{ 10 + getSkillProficiencyBonus({name: "insight", ability: "wis"}) }}</div>
+                                <div class="simple-score-name">Passive Insight</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="tabs">
+                        <div role="tablist" aria-label="Character capabilities">
+                            <button id="tab-abilities" type="button" role="tab" aria-controls="tabpanel-abilities"
+                                (click)="selectTab('abilities')"
+                                [attr.aria-selected]="selectedTab === 'abilities' ? 'true' : 'false'">
+                                <span>Abilities</span>
+                            </button>
+                            <button id="tab-spells" type="button" role="tab" aria-controls="tabpanel-spells"
+                                (click)="selectTab('spells')"
+                                [attr.aria-selected]="selectedTab === 'spells' ? 'true' : 'false'">
+                                <span>Spells</span>
+                            </button>
+                            <button id="tab-languages" type="button" role="tab" aria-controls="tabpanel-languages"
+                                (click)="selectTab('languages')"
+                                [attr.aria-selected]="selectedTab === 'languages' ? 'true' : 'false'">
+                                <span>Languages</span>
+                            </button>
+                            <button id="tab-equipment" type="button" role="tab" aria-controls="tabpanel-equipment"
+                                    (click)="selectTab('equipment')"
+                                    [attr.aria-selected]="selectedTab === 'equipment' ? 'true' : 'false'">
+                                <span>Equipment</span>
+                            </button>
+                            <button id="tab-traits" type="button" role="tab" aria-controls="tabpanel-traits"
+                                    (click)="selectTab('traits')"
+                                    [attr.aria-selected]="selectedTab === 'traits' ? 'true' : 'false'">
+                                <span>Traits</span>
+                            </button>
+                        </div>
+
+                        <div id="tabpanel-abilities" role="tabpanel" aria-labelledby="tab-abilities"
+                            [class.is-hidden]="selectedTab !== 'abilities'">
+
+                            @if (character?.selected_class_path) {
+                                <p><strong>Selected {{ character?.class_path_name }}</strong>: {{ character?.selected_class_path?.name }}</p>
+
+                                <table class="class-abilities">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Level Acquired</th>
+                                    </tr>
+                                    @for (ability of getCharacterClassAbilities(); track ability.id) {
+                                        <tr>
+                                            <td>{{ ability.name }}</td>
+                                            <td><div class="class-ability-description" [innerHTML]="ability.description"></div></td>
+                                            <td>{{ ability.level }}</td>
+                                        </tr>
+                                    }
+                                </table>
+                            }
+
+                        </div>
+                        <div id="tabpanel-spells" role="tabpanel" aria-labelledby="tab-spells"
+                            [class.is-hidden]="selectedTab !== 'spells'">
+
+                            @if (getCharacterSpells().length === 0) {
+                                <p>No spells known.</p>
+                            } @else {
+                                <input type="checkbox" name="detailedView" id="detailedView" class="accessible-hidden"/>
+                                <label class="detailed-view-checkbox" for="detailedView">Show detailed view?</label>
+
+                                @for (spellLevel of spellLevels; track spellLevel) {
+                                    @if (getSpellsAtLevel(spellLevel).length > 0) {
+                                        <details open class="spell-level-group">
+                                            <summary>
+                                                @if (spellLevel === 0) {
+                                                    Cantrips
+                                                } @else {
+                                                    Spell Level {{ spellLevel }}
+                                                }
+                                            </summary>
+
+                                            <ul class="spells">
+                                                @for (spell of getSpellsAtLevel(spellLevel); track spell.id) {
+                                                    <li class="spell">
+                                                        <app-edit-character-spell [spell]="spell"/>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </details>
+                                    }
+                                }
+                            }
+                        </div>
+                        <div id="tabpanel-languages" role="tabpanel" aria-labelledby="tab-languages"
+                            [class.is-hidden]="selectedTab !== 'languages'">
+                            <ul class="languages">
+                                @for (language of getCharacterLanguages(); track language) {
+                                    <li class="language">
+                                        {{ language.name }}
+                                        <app-language-script scriptName="{{ language.script.toLowerCase() }}"/>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        <div id="tabpanel-equipment" role="tabpanel" aria-labelledby="tab-equipment"
+                             [class.is-hidden]="selectedTab !== 'equipment'">
+                            <app-money [money]="character?.inventory?.money"/>
+                            <app-inventory-list [items]="character?.inventory?.items ?? []"/>
+                        </div>
+                        <div id="tabpanel-traits" role="tabpanel" aria-labelledby="tab-traits"
+                             [class.is-hidden]="selectedTab !== 'traits'">
+                            <div class="traits">
+                                @for (trait of character?.charBackground?.characteristics; track trait.id) {
+                                    <div class="trait">
+                                        <div class="trait-name">{{ trait.characteristic_type }}</div>
+                                        <div class="trait-details">{{ trait.details }}</div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

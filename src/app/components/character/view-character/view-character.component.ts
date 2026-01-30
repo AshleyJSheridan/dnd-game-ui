@@ -1,16 +1,28 @@
 import { Component, inject } from '@angular/core';
 import { CharacterService } from '../../../services/character.service';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Character } from '../../../entities/Character';
 import { AbilityScoreComponent } from './ability-score/ability-score.component';
-import { LogoFullComponent } from '../../logo-full/logo-full.component';
+import { HeaderSlimComponent } from "../../header/header-slim/header-slim.component";
+import { Language } from '../../../entities/Language';
+import { LanguageScriptComponent } from '../../icons/language-script/language-script.component';
+import { MoneyComponent } from '../money/money.component';
+import { InventoryListComponent } from '../inventory-list/inventory-list.component';
+import { Spell } from '../../../entities/Spell';
+import {EditCharacterSpellComponent} from '../edit-character-spell/edit-character-spell.component';
+import {CharacterClassFeature} from '../../../entities/CharacterClassFeature';
+import {PortraitComponent} from '../portrait/portrait.component';
 
 @Component({
     selector: 'app-view-character',
     imports: [
         AbilityScoreComponent,
-        LogoFullComponent,
-        RouterLink
+        HeaderSlimComponent,
+        LanguageScriptComponent,
+        MoneyComponent,
+        InventoryListComponent,
+        EditCharacterSpellComponent,
+        PortraitComponent
     ],
     templateUrl: './view-character.component.html'
 })
@@ -26,6 +38,8 @@ export class ViewCharacterComponent {
         {name: "Persuasion", ability: "cha"}, {name: "Religion", ability: "int"}, {name: "Sleight of Hand", ability: "dex"},
         {name: "Stealth", ability: "dex"}, {name: "Survival", ability: "wis"}
     ];
+    selectedTab: string = 'abilities';
+    readonly spellLevels: number[] = Array(10).fill(0).map((x,i) => i);
 
     constructor(private characterService: CharacterService, private router: Router) {}
 
@@ -89,5 +103,34 @@ export class ViewCharacterComponent {
         }
 
         return this.getAbilitySavingThrow(skill.ability) + proficiencyBonus;
+    }
+
+    getCharacterLanguages(): Array<Language> {
+        return (this.character?.languages.known ?? [])
+            .concat(this.character?.languages.racial ?? [])
+            .concat(this.character?.languages.class ?? [])
+            .filter((lang, index, self) => self.findIndex(l => l.name === lang.name) === index);
+    }
+
+    // Tabbed interface
+    selectTab(tabName: string): void {
+        this.selectedTab = tabName;
+    }
+
+    getCharacterSpells(): Array<Spell> {
+        return (this.character?.magic.learned_spells ?? [])
+            .concat(this.character?.magic.other_known_spells ?? [])
+            .filter((spell, index, self) => self.findIndex(s => s.name === spell.name) === index);
+    }
+
+    getSpellsAtLevel(level: number): Array<Spell> {
+        return this.getCharacterSpells().filter(spell => spell.level === level);
+    }
+
+    getCharacterClassAbilities(): Array<CharacterClassFeature> {
+        return (this.character?.class_features ?? [])
+            .concat(this.character?.selected_class_path.features ?? [])
+            .filter((feature, index, self) => self.findIndex(l => l.name === feature.name) === index)
+            .sort((a, b) => a.level - b.level);
     }
 }

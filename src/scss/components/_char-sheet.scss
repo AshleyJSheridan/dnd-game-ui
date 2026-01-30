@@ -16,8 +16,21 @@
 
     .sheet-header {
         display: flex;
+        gap: 1rem;
         justify-content: space-between;
         margin-bottom: 1rem;
+
+        .portrait {
+            background-color: #fff;
+            border: 1px solid #000;
+            border-radius: 6px;
+            height: 5.5rem;
+
+            img {
+                height: 100%;
+                width: auto;
+            }
+        }
 
         .name,
         .main-details {
@@ -39,13 +52,8 @@
         }
     }
 
-    .columns {
-        display: flex;
-        gap: 1rem;
-
-        .cols-3 {
-            width: 33%;
-        }
+    .senses {
+        margin-left: 1rem;
     }
 
     .simple-score-standalone {
@@ -214,10 +222,16 @@
         background-color: colours.$white;
         border: 3px double colours.$black;
         box-sizing: border-box;
+        display: flex;
+        justify-content: space-between;
         margin-bottom: .5rem;
         padding: .5rem;
         position: relative;
         text-align: center;
+    }
+
+    .tabs [role="tabpanel"] {
+        max-height: 35rem;
     }
 
     .traits {
@@ -233,6 +247,290 @@
                 font-weight: bold;
                 margin-bottom: .5rem;
             }
+        }
+    }
+
+    .languages {
+        display: block;
+        margin: 0;
+        padding: 0;
+
+        .language {
+            background-color: colours.$white;
+            border: 1px solid colours.$black;
+            border-radius: .5rem;
+            margin: 0 0 .25rem;
+            padding: .5rem;
+
+            svg {
+                display: block;
+                height: 1rem;
+            }
+        }
+    }
+
+    .money {
+        display: flex;
+        margin: 0;
+        padding: 0;
+
+        li {
+            display: inline-block;
+            margin-right: 1rem;
+        }
+
+        svg {
+            height: 1rem;
+            margin-right: .25rem;
+            width: auto;
+        }
+
+        .copper {
+            fill: colours.$copper;
+        }
+
+        .silver {
+            fill: colours.$silver;
+        }
+
+        .electrum {
+            fill: colours.$electrum;
+        }
+
+        .gold {
+            fill: colours.$gold;
+        }
+
+        .platinum {
+            fill: colours.$platinum;
+        }
+    }
+
+    .inventory {
+        margin: 1rem 0;
+
+        table {
+            border-collapse: collapse;
+            margin: 1rem 0;
+            width: 100%;
+        }
+
+        tr:nth-child(even) {
+            background-color: colours.$light-grey;
+        }
+
+        th {
+            text-align: left;
+        }
+
+        td {
+            padding: .25rem;
+        }
+
+        .item-rarity-indicator {
+            background-color: colours.$black;
+            border-radius: 50%;
+            display: inline-block;
+            height: 1rem;
+            width: 1rem;
+
+            &[data-rarity="common"] {
+                background-color: colours.$item-rarity-common;
+            }
+
+            &[data-rarity="uncommon"] {
+                background-color: colours.$item-rarity-uncommon;
+            }
+
+            &[data-rarity="rare"] {
+                background-color: colours.$item-rarity-rare;
+            }
+
+            &[data-rarity="very-rare"] {
+                background-color: colours.$item-rarity-very-rare;
+            }
+
+            &[data-rarity="legendary"] {
+                background-color: colours.$item-rarity-legendary;
+            }
+        }
+    }
+
+    .spell-level-group {
+        summary {
+            cursor: pointer;
+            font-weight: bold;
+        }
+    }
+
+    input[name=detailedView]:checked ~ details .spell table {
+        display: table;
+    }
+
+    .detailed-view-checkbox {
+        align-items: center;
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20%3E%20%3Cpath%20d%3D%22M18%206l-12%2012%22%20%2F%3E%20%3Cpath%20d%3D%22M6%206l12%2012%22%20%2F%3E%20%3C%2Fsvg%3E%20");
+        background-position: center right .25rem;
+        background-repeat: no-repeat;
+        border: 1px solid colours.$dark-grey;
+        border-radius: .5rem;
+        cursor: pointer;
+        display: flex;
+        margin-bottom: 1rem;
+        max-width: 10rem;
+        padding: .5rem 2rem .5rem .5rem;
+    }
+
+    input[name=detailedView]:checked ~ .detailed-view-checkbox {
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20%3E%20%3Cpath%20d%3D%22M5%2012l5%205l10%20-10%22%20%2F%3E%20%3C%2Fsvg%3E%20");
+    }
+
+    .spells {
+        margin: 0;
+        padding: 0;
+
+        .spell {
+            border: 1px solid colours.$dark-grey;
+            list-style: none;
+            margin: 0 0 .5rem 0;
+            padding: 0;
+
+            .spell-container {
+                display: flex;
+                gap: .5rem;
+                padding: .5rem;
+            }
+
+            .spell-school-icon {
+                align-items: center;
+                background-color: colours.$dark-grey;
+                display: flex;
+                padding: .25rem;
+
+                svg {
+                    fill: colours.$white;
+                    height: 2rem;
+                    width: 2rem;
+                }
+
+                &.spell-school-abjuration svg {
+                    filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$spell-school-abjuration 0 0 4px)
+                    drop-shadow(colours.$spell-school-abjuration 0 0 5px);
+                }
+
+                &.spell-school-conjuration svg {
+                    filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$spell-school-conjuration 0 0 4px)
+                    drop-shadow(colours.$spell-school-conjuration 0 0 5px);
+                }
+
+                &.spell-school-divination svg {
+                    filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$spell-school-divination 0 0 4px)
+                    drop-shadow(colours.$spell-school-divination 0 0 5px);
+                }
+
+                &.spell-school-enchantment svg {
+                    filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$spell-school-enchantment 0 0 4px)
+                    drop-shadow(colours.$spell-school-enchantment 0 0 5px);
+                }
+
+                &.spell-school-evocation svg {
+                    filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$spell-school-evocation 0 0 4px)
+                    drop-shadow(colours.$spell-school-evocation 0 0 5px);
+                }
+
+                &.spell-school-illusion svg {
+                    filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$spell-school-illusion 0 0 4px)
+                    drop-shadow(colours.$spell-school-illusion 0 0 5px);
+                }
+
+                &.spell-school-necromancy svg {
+                    filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$spell-school-necromancy 0 0 4px)
+                    drop-shadow(colours.$spell-school-necromancy 0 0 5px);
+                }
+
+                &.spell-school-transmutation svg {
+                    filter: drop-shadow(colours.$white 0 0 2px)
+                    drop-shadow(colours.$spell-school-transmutation 0 0 4px)
+                    drop-shadow(colours.$spell-school-transmutation 0 0 5px);
+                }
+            }
+
+            .spell-name {
+                font-weight: bold;
+            }
+
+            .spell-details {
+                flex-grow: 1;
+            }
+
+            .spell-description {
+                font-size: .8rem;
+            }
+
+            table {
+                display: none;
+            }
+        }
+
+        table {
+            border-collapse: collapse;
+            display: table;
+            font-size: .8rem;
+            margin-top: .5rem;
+            width: 100%;
+
+            td,
+            th {
+                border: 1px solid colours.$dark-grey;
+            }
+
+            .name,
+            .range,
+            .cast-time,
+            .duration {
+                width: 20%;
+            }
+
+            .components {
+                width: 20%;
+            }
+        }
+
+        .spell-component {
+            align-items: start;
+            display: inline-flex;
+            margin-right: .5rem;
+
+            svg {
+                height: 1.25rem;
+                margin-right: .25rem;
+                width: 1.25rem;
+            }
+        }
+    }
+
+    .class-abilities {
+        border-collapse: collapse;
+        font-size: .8rem;
+
+        tr:nth-child(even) {
+            background-color: colours.$light-grey;
+        }
+
+        td {
+            padding: .25rem;
+        }
+
+        .class-ability-description {
+            height: 7rem;
+            overflow: auto;
         }
     }
 }

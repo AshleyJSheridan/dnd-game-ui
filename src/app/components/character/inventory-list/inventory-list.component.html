@@ -1,0 +1,37 @@
+<fieldset class="inventory">
+    <legend>Filter Items</legend>
+
+    <label>Type:
+        <select (change)="setItemFilter($event)">
+            <option value="">All</option>
+            @for (itemType of itemTypes; track itemType) {
+                <option [attr.selected]="(selectedItemFilter === itemType) ? 'selected' : undefined" value="{{ itemType }}">{{ itemType }}</option>
+            }
+        </select>
+    </label>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Weight</th>
+            <th>Type</th>
+        </tr>
+
+        @for (item of getAllItems(this.items()); track item.id) {
+            @if (selectedItemFilter === '' || item.type === selectedItemFilter) {
+                <tr class="inventory-item">
+                    <td class="item-name">
+                        <span class="item-rarity-indicator" [attr.data-rarity]="item.rarity"></span>
+                        {{ item.name }}
+                    </td>
+                    <td class="item-quantity">&times;{{ item.quantity }}</td>
+                    <td class="item-weight">{{ item.weight }}</td>
+                    <td class="item-type">{{ item.type }}</td>
+                </tr>
+            }
+        }
+    </table>
+
+    <p><strong>Total weight:</strong> {{ getTotalWeight() }}</p>
+</fieldset>

@@ -15,6 +15,7 @@ export class Item {
         unit: 'gp',
     };
     weight?: number;
+    equipped?: boolean = false;
     weapon_props?: {
         damage: {
             amount: string,
