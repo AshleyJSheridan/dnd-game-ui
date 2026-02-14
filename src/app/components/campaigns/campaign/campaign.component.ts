@@ -16,6 +16,7 @@ import { CampaignLore, CampaignLoreType } from '../../../entities/CampaignLore';
 import { LoreComponent } from '../lore/lore.component';
 import { LightboxComponent } from '../../dialogs/lightbox/lightbox.component';
 import { ConfirmComponent } from '../../dialogs/confirm/confirm.component';
+import { CampaignMap } from '../../../entities/CampaignMap';
 
 @Component({
     selector: 'app-campaign',
@@ -52,6 +53,8 @@ export class CampaignComponent {
     public loreGroups: Array<string> = [];
     selectedLore: CampaignLore | null = null;
     protected readonly CampaignLoreType = CampaignLoreType;
+    inviteToastMessage: string = '';
+    selectedMap: CampaignMap | null = null;
 
     @ViewChild('mapName') mapName: any;
     @ViewChild('mapDescription') mapDescription: any;
@@ -64,8 +67,11 @@ export class CampaignComponent {
     @ViewChild('campaignName') campaignName: any | undefined;
     @ViewChild('campaignDescription') campaignDescription: any | undefined;
     @ViewChild('loreLightbox') loreLightbox: LightboxComponent | undefined;
-    @ViewChild('confirm') confirm: ConfirmComponent | undefined;
+    @ViewChild('loreConfirm') loreConfirm: ConfirmComponent | undefined;
     @ViewChild('editedContent') editedContent: any | undefined;
+    @ViewChild('inviteEmail') inviteEmail: any | undefined;
+    @ViewChild('inviteToast') inviteToast: ToastComponent | undefined;
+    @ViewChild('mapConfirm') mapConfirm: ConfirmComponent | undefined;
 
     constructor(
         private campaignService: CampaignService, private router: Router, private clipboardService: ClipboardService,
@@ -252,6 +258,52 @@ export class CampaignComponent {
         })
     }
 
+    updateMap(campaignMap: CampaignMap): void {
+        if (!this.campaign)
+            return;
+
+        const mapGuid = campaignMap.guid;
+
+        // as we only receive one updated map, this fixes changing the active map:
+        this.campaign.maps.forEach(campaignMap => {
+            campaignMap.active = false;
+        });
+
+        // go through this.campaign.maps and replace only the map with the same guid.
+        const updatedMaps = this.campaign.maps.map(map => {
+            if (map.guid === mapGuid) {
+                return campaignMap;
+            }
+
+            return map;
+        });
+        this.campaign.maps = updatedMaps;
+    }
+
+    deleteMap(event: MouseEvent, campaignMap: CampaignMap): void {
+        this.selectedMap = campaignMap;
+
+        if (event.currentTarget !== null) {
+            this.mapConfirm?.showModal(event.currentTarget);
+        }
+    }
+
+    confirmDeleteMap(): void {
+        this.mapConfirm?.cancelModal();
+
+        if (!this.selectedMap)
+            return;
+
+        this.campaignService.deleteMap(this.selectedMap!.guid).subscribe({
+            next: (campaign) => {
+                this.campaign!.maps = campaign.maps;
+            },
+            error: (error) => {
+
+            }
+        });
+    }
+
     setCampaignState(state: string): void {
         this.updateCampaign({state: state})
     }
@@ -267,7 +319,7 @@ export class CampaignComponent {
     loreReadEvent(event: MouseEvent, loreItem: CampaignLore): void {
         this.selectedLore = loreItem;
 
-        if(event.currentTarget !== null) {
+        if (event.currentTarget !== null) {
             this.loreLightbox?.showModal(event.currentTarget);
         }
     }
@@ -276,12 +328,12 @@ export class CampaignComponent {
         this.selectedLore = loreItem;
 
         if(event.currentTarget !== null) {
-            this.confirm?.showModal(event.currentTarget);
+            this.loreConfirm?.showModal(event.currentTarget);
         }
     }
 
-    confirmDelete(loreGuid: string | undefined): void {
-        this.confirm?.cancelModal();
+    confirmDeleteLore(loreGuid: string | undefined): void {
+        this.loreConfirm?.cancelModal();
 
         if (!loreGuid)
             return;
@@ -314,6 +366,23 @@ export class CampaignComponent {
             },
             error: (error) => {
 
+            }
+        });
+    }
+
+    invitePlayerByEmail(): void {
+        if (!this.inviteEmail.nativeElement.value)
+            return;
+
+        this.campaignService.invitePlayerByEmail(this.inviteEmail.nativeElement.value).subscribe({
+            next: (response) => {
+                this.inviteToastMessage = 'Invitation sent to ' + this.inviteEmail.nativeElement.value;
+                this.inviteToast?.showToast();
+                this.inviteEmail = '';
+            },
+            error: (error) => {
+                this.inviteToastMessage = error.error.message;
+                this.inviteToast?.showToast();
             }
         });
     }

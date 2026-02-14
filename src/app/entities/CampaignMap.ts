@@ -13,6 +13,8 @@ export class CampaignMap {
     show_grid: boolean = false;
     grid_size: number = 0;
     grid_colour: string = '#ffffff';
+    hidden: boolean = false;
+    active: boolean = false;
     players: Array<CampaignMapPlayer> = [];
     creatures: Array<CampaignMapCreature> = [];
     drawings: Array<CampaignMapDrawing> = [];

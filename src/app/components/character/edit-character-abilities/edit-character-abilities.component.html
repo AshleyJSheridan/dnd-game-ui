@@ -1,43 +1,35 @@
 <h2>Character Creation - Abilities</h2>
 
-<button type="button" class="secondary-btn" (click)="getDiceRollForStat()">Roll for all abilities
-    <span class="dice-d6-icon"></span></button>
-
 <p><em>Per standard rules, 4 d6 are rolled for each ability, lowest die of each group of 4 is discarded.</em></p>
 
-<div class="dice-roll-block-all">
-    @if (abilityDiceRolls[0].rolls[0] > 0) {
-        @for (i of [0,1,2,3,4,5]; track $index){
-            <div class="dice-roll-block">
-                <strong>{{ abilityDiceRolls[i].rolls[0] + abilityDiceRolls[i].rolls[1] + abilityDiceRolls[i].rolls[2] }}</strong>
-                <div class="dice-roll-block-rolls">
-                    @for (roll of abilityDiceRolls[i].rolls; track $index) {
-                        <span class="dice-roll-d6" [class.discarded]="$index == 3">
-                            <span>{{ roll }}</span>
-                        </span>
-                    }
-                </div>
-                <select (change)="setRollsForAbility($event, i)">
-                    <option>-</option>
-                    @for (ability of characterService.character?.abilities; track ability.id) {
-                        <!-- hide selected ability from all other select lists -->
-                        @if(canShowAbilityInSelectList(i, ability.id)) {
-                            <option value="{{ ability.id }}">{{ ability.name }}</option>
-                        }
-                    }
-                </select>
-            </div>
-        }
-    }
-</div>
-
-<div class="char-edit-abilities">
+<form class="slim char-edit-abilities">
     @for (ability of characterService.character?.abilities; track $index) {
         <div class="char-edit-ability">
             <div class="ability-name">{{ ability.name }}</div>
             <table class="ability-table">
                 <tr>
-                    <th>Base value</th><td>{{ getAbilityBaseValue(ability.id) }}</td>
+                    <th>Base value</th>
+                    <td>
+                        <div class="ability-base">
+                            <input type="text" [value]="getAbilityBaseValue(ability.id)" class="very-small">
+                            <button type="button" class="roll" (click)="rollAbility(ability.id)">
+                                <span class="accessible-hidden">Roll</span>
+                            </button>
+                        </div>
+
+                        @if (abilityDiceRolls[ability.id - 1].rolls[0] !== 0) {
+                            <table class="d6-rolls-table">
+                                <tr>
+                                    @for (die of abilityDiceRolls[ability.id - 1].rolls; track $index) {
+                                        <td [class.discarded]="$index === 3">{{ die }}</td>
+                                    }
+                                </tr>
+                                <tr>
+                                    <td colspan="4">{{ getRollsTotal(ability.id) }}</td>
+                                </tr>
+                            </table>
+                        }
+                    </td>
                 </tr>
                 <tr>
                     <th>Racial bonus</th><td>{{ ability.racialModifier }}</td>
@@ -48,6 +40,8 @@
             </table>
         </div>
     }
-</div>
+</form>
 
-<button type="button" class="fantasy-btn fantasy-blue" (click)="confirmAbilities()">Confirm Abilities</button>
+@if (assignedDiceTotals.length === 6 || hasSavedValues()) {
+    <button type="button" class="fantasy-btn fantasy-blue" (click)="confirmAbilities()">Confirm Abilities</button>
+}

@@ -62,6 +62,6 @@ export class ConfirmComponent {
     confirmModal(): void {
         this.confirmClass.emit();
 
-        //this.cancelModal();
+        this.cancelModal();
     }
 }

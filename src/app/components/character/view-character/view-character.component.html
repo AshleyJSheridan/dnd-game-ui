@@ -82,9 +82,27 @@
                             </div>
                         </div>
 
-                        <div class="hit-points">
+                        <div class="hit-points" [class.adjust-positive]="character?.hit_points!.hit_points_temp > 0"
+                            [class.adjust-negative]="character?.hit_points!.hit_points_temp < 0">
                             <div>♥ Hit Points</div>
-                            <div class="current">{{ character?.hit_points?.current }} / {{ character?.hit_points?.max }}</div>
+                            <div>
+                                @if (editMode.hitPoints) {
+                                    <input type="text" class="inline adjustment" [value]="character?.hit_points!.current"
+                                        />
+                                } @else {
+                                    <span class="current" (dblclick)="editMode.hitPoints = true">{{ character?.hit_points!.current }}</span>
+                                }
+                                /
+                                <span class="max">{{ character?.hit_points!.max }}</span>
+                                (
+                                    @if (editMode.hitPointsModifier) {
+                                        <input type="text" class="inline adjustment" [value]="character?.hit_points!.hit_points_temp"
+                                            (blur)="updateCharHitPointsModifier($event)"/>
+                                    } @else {
+                                        <span class="adjustment" (dblclick)="editMode.hitPointsModifier = true">{{ character?.hit_points!.hit_points_temp }}</span>
+                                    }
+                                )
+                            </div>
                         </div>
                     </div>
 

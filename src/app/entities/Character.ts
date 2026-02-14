@@ -14,9 +14,11 @@ export class Character {
     hit_points: {
         max: number;
         current: number;
+        hit_points_temp: number;
     } = {
         max: 0,
         current: 0,
+        hit_points_temp: 0,
     }
     proficiency_bonus: number = 2;
     charClass: string = '';

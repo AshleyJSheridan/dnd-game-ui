@@ -60,8 +60,8 @@ export class CharacterService {
     }
 
     // TODO type this
-    public createCharacter(data: any) {
-        return this.http.post(`${this.apiUrl}/characters`, data, {headers: this.authService.getAuthHeader()});
+    public createCharacter(data: any): Observable<Character> {
+        return this.http.post<Character>(`${this.apiUrl}/characters`, data, {headers: this.authService.getAuthHeader()});
     }
 
     public getCharacterClasses(): Observable<Array<CharacterClass>> {

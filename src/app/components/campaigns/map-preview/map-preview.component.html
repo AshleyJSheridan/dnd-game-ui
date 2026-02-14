@@ -1,7 +1,50 @@
-<div class="campaign-map-preview">
+<div class="campaign-map-preview" [class.active]="campaignMap()?.active === true">
+    @if (campaignMap()?.active === true) {
+        <div class="active-indicator">
+            <app-crown-icon/>
+        </div>
+    }
     <a routerLink="/campaigns/{{ campaignGuid() }}/maps/{{ campaignMap()?.guid }}" target="_blank">
-        <div class="map-name">{{ campaignMap()?.name }}</div>
+        <div class="map-name">{{ campaignMap()?.name }}
+            @if (campaignMap()?.hidden) {
+                <span class="visibility-indicator">
+                    <app-eye-off-icon/>
+                </span>
+            }
+        </div>
+
         <img src="{{ getThumbUrl() }}" alt="" />
-        <p>{{ campaignMap()?.description }}</p>
     </a>
+    <details>
+        <summary>Details</summary>
+
+        <dl>
+            <dt>Description:</dt>
+            <dd>{{ campaignMap()?.description }}</dd>
+
+            <dt>Size:</dt>
+            <dd>{{ campaignMap()?.width }} &times; {{ campaignMap()?.height }}</dd>
+        </dl>
+
+        <div class="actions">
+            <button (click)="deleteMap($event)">
+                <app-delete-icon/>
+            </button>
+
+            @if (campaignMap()?.hidden ) {
+                <button type="button" title="Hide from players" (click)="toggleMapVisibility()">
+                    <app-eye-off-icon/>
+                </button>
+            } @else {
+                <button type="button" title="Hide from players" (click)="toggleMapVisibility()">
+                    <app-eye-on-icon/>
+                </button>
+            }
+
+            <button type="button" title="Make this the primary map" (click)="makeActive()">
+                <app-crown-icon/>
+            </button>
+        </div>
+    </details>
+
 </div>

@@ -6,6 +6,7 @@ import { CampaignMap } from '../entities/CampaignMap';
 import { Creature } from '../entities/Creature';
 import { AuthService } from './auth.service';
 import { CampaignLore } from '../entities/CampaignLore';
+import { CampaignInvite } from '../entities/CampaignInvite';
 
 @Injectable({providedIn: 'root'})
 export class CampaignService {
@@ -14,7 +15,11 @@ export class CampaignService {
 
     constructor(private http: HttpClient, private authService: AuthService) {}
 
-    public getCampaigns(): Observable<Array<Campaign>> {
+    public getOwnCampaigns(): Observable<Array<Campaign>> {
+        return this.http.get<Array<Campaign>>(`${this.apiUrl}/campaigns/own`, {headers: this.authService.getAuthHeader()});
+    }
+
+    public getJoinedCampaigns(): Observable<Array<Campaign>> {
         return this.http.get<Array<Campaign>>(`${this.apiUrl}/campaigns`, {headers: this.authService.getAuthHeader()});
     }
 
@@ -99,6 +104,13 @@ export class CampaignService {
         );
     }
 
+    public deleteMap(mapGuid: string): Observable<Campaign> {
+        return this.http.delete<Campaign>(
+            `${this.apiUrl}/campaigns/${this.campaignGuid}/maps/${mapGuid}`,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
+
     public addCharacterToCampaign(characterGuid: string): Observable<Campaign> {
         return this.http.post<Campaign>(
             `${this.apiUrl}/campaigns/${this.campaignGuid}/characters`,
@@ -160,6 +172,36 @@ export class CampaignService {
         return this.http.patch<Campaign>(
             `${this.apiUrl}/campaigns/${campaignGuid}`,
             data,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
+
+    public invitePlayerByEmail(email: string): Observable<any> {
+        return this.http.post<any>(
+            `${this.apiUrl}/campaigns/${this.campaignGuid}/invite`,
+            {email: email},
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
+
+    public getInvites(): Observable<Array<CampaignInvite>> {
+        return this.http.get<Array<CampaignInvite>>(
+            `${this.apiUrl}/campaigns/invites`,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
+
+    public declineInvite(invite: CampaignInvite): Observable<Array<CampaignInvite>> {
+        return this.http.delete<Array<CampaignInvite>>(
+            `${this.apiUrl}/campaigns/invites/${invite.id}`,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
+
+    public acceptInvite(invite: CampaignInvite, characters: Array<string>): Observable<Array<Campaign>> {
+        return this.http.post<Array<Campaign>>(
+            `${this.apiUrl}/campaigns/invites/${invite.id}`,
+            {characterGuids: characters},
             {headers: this.authService.getAuthHeader()}
         );
     }

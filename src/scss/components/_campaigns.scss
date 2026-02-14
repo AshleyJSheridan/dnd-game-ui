@@ -3,6 +3,31 @@
 .campaign-content-container {
     padding: 0 1rem;
 
+    .campaign-invites {
+        display: flex;
+        margin: 0;
+        padding: 0;
+
+        .campaign-invite {
+            border: 1px solid colours.$medium-grey;
+            border-radius: 1rem;
+            display: block;
+            padding: 1rem;
+            width: 20%;
+
+            .campaign-name,
+            .campaign-owner {
+                margin-bottom: .5rem;
+            }
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+    }
+
     .campaign-list-panel ul {
         display: grid;
         gap: .5rem;
@@ -152,20 +177,114 @@
                 margin: 1rem 0 0 0;
                 padding: 0;
                 display: flex;
+                flex-wrap: wrap;
                 gap: 1rem;
 
                 li {
                     list-style: none;
                     width: 200px;
                 }
+            }
+
+            .campaign-map-preview {
+                border: 1px solid colours.$grey;
+                border-radius: .5rem;
+                box-shadow: 2px 2px 7px colours.$medium-grey;
+                padding: .5rem;
+                position: relative;
+
+                &.active {
+                    background-color: colours.$gold;
+                }
+
+                .active-indicator {
+                    display: inline-block;
+                    position: absolute;
+                    right: .5rem;
+                    top: .5rem;
+                    width: 1.5rem;
+
+                    svg {
+                        width: 1.5rem;
+                    }
+                }
+
+                img {
+                    max-width: 100%;
+                }
+
+                details {
+                    background-color: colours.$white;
+                    margin-bottom: 0;
+                }
+
+                dl {
+                    margin: .5rem;
+                }
+
+                dt {
+                    font-weight: bold;
+                }
+
+                dd {
+                    margin: 0 .5rem;
+                }
 
                 .map-name {
                     font-weight: bold;
                     height: 2.5rem;
-                    width: 100%;
+                    width: 85%;
+                }
+
+                .visibility-indicator svg {
+                    height: auto;
+                    width: 1rem;
+                }
+
+                .actions {
+                    padding: .5rem;
+
+                    button {
+                        margin-right: .5rem;
+                    }
                 }
             }
         }
+    }
+
+    .char-list-invite-panel {
+        display: flex;
+        gap: 1rem;
+
+        .char-panel {
+            width: 38%;
+
+            &.selected {
+                background-color: colours.$gold;
+            }
+
+            button {
+                appearance: none;
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+                display: flex;
+                font-size: inherit;
+                gap: .5rem;
+                margin: 0;
+                padding: 0;
+
+                .char-details {
+                    text-align: left;
+                }
+            }
+
+            img {
+                height: 5rem;
+                width: 5rem;
+            }
+        }
+
     }
 }
 

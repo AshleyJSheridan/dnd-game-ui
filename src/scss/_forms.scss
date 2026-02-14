@@ -182,6 +182,12 @@ textarea {
     font-style: italic;
 }
 
+input.inline {
+    display: inline-block;
+    padding: 0;
+    text-align: center;
+}
+
 button.dice-icon {
     appearance: none;
     background-color: transparent;

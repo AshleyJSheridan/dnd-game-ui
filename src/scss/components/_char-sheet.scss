@@ -228,6 +228,28 @@
         padding: .5rem;
         position: relative;
         text-align: center;
+
+        .adjustment {
+            font-style: italic;
+        }
+
+        &.adjust-positive {
+            .current,
+            .adjustment {
+                color: colours.$char-skill-green;
+            }
+        }
+
+        &.adjust-negative {
+            .current,
+            .adjustment {
+                color: colours.$char-skill-red;
+            }
+        }
+
+        input.inline {
+            width: 2.5rem;
+        }
     }
 
     .tabs [role="tabpanel"] {

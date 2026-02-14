@@ -3,6 +3,8 @@ import { CreateNavComponent } from '../create-nav/create-nav.component';
 import { HeaderComponent } from '../../header/header.component';
 import { FormsModule } from '@angular/forms';
 import { CharacterService } from '../../../services/character.service';
+import { Router } from '@angular/router';
+import {Character} from '../../../entities/Character';
 
 @Component({
   selector: 'app-create',
@@ -19,7 +21,7 @@ export class CreateComponent {
     suggestionType: string = 'generic';
     suggestions: Array<string> = [];
 
-    constructor(private characterService: CharacterService) {}
+    constructor(private characterService: CharacterService, private router: Router) {}
 
     suggestNamesHandler(): void {
         this.characterService.getNameSuggestions(this.suggestionType).subscribe((names) => {
@@ -35,10 +37,14 @@ export class CreateComponent {
         if(this.charName === '')
             return;
 
-        // TODO type this
-        let data = {charName: this.charName, charLevel: this.charLevel};
-        this.characterService.createCharacter(data).subscribe((response) => {
-            console.log(response)
+        let characterData = {charName: this.charName, charLevel: this.charLevel};
+        this.characterService.createCharacter(characterData).subscribe({
+            next: (character) => {
+                this.router.navigate([`/characters/${character.guid}/edit/class`]);
+            },
+            error: (error) => {
+                console.log(error);
+            }
         });
     }
 }

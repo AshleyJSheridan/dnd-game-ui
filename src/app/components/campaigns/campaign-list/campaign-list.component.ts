@@ -1,70 +1,122 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { HeaderComponent } from '../../header/header.component';
-import {Router, RouterLink} from '@angular/router';
+import { Router } from '@angular/router';
 import { CampaignService } from '../../../services/campaign-service';
-import {Campaign, CampaignState} from '../../../entities/Campaign';
+import { Campaign, CampaignState } from '../../../entities/Campaign';
 import { DatePipe } from '@angular/common';
-import { CampaignStateIconComponent } from '../../icons/campaign-state-icon/campaign-state-icon.component';
-import {CalendarIconComponent} from '../../icons/calendar-icon/calendar-icon.component';
-import {MapPreviewComponent} from '../map-preview/map-preview.component';
-import {CampaignMap} from '../../../entities/CampaignMap';
-import {ViewIconComponent} from '../../icons/view-icon/view-icon.component';
+import { CampaignInvite } from '../../../entities/CampaignInvite';
+import { LightboxComponent } from '../../dialogs/lightbox/lightbox.component';
+import { Character } from '../../../entities/Character';
+import { CharacterService } from '../../../services/character.service';
+import { PortraitComponent } from '../../character/portrait/portrait.component';
+import { ConfirmComponent } from '../../dialogs/confirm/confirm.component';
+import { CampaignStateComponent } from '../campaign-state/campaign-state.component';
 
 @Component({
     selector: 'app-campaign-list',
     imports: [
         HeaderComponent,
         DatePipe,
-        CampaignStateIconComponent,
-        RouterLink,
-        CalendarIconComponent,
-        MapPreviewComponent,
-        ViewIconComponent,
+        PortraitComponent,
+        ConfirmComponent,
+        CampaignStateComponent,
     ],
     templateUrl: './campaign-list.component.html'
 })
 export class CampaignListComponent {
-    campaigns: Array<Campaign> = [];
+    ownCampaigns: Array<Campaign> = [];
+    joinedCampaigns: Array<Campaign> = [];
+    invites: Array<CampaignInvite> = [];
+    selectedCharactersForInvites: Array<string> = [];
+    public characters: Array<Character> = [];
+    private activeInvite: CampaignInvite | null = null;
 
-    constructor(private campaignService: CampaignService, private router: Router) {}
+    @ViewChild('acceptInviteLightbox') acceptInviteLightbox: LightboxComponent | undefined;
+
+    constructor(private campaignService: CampaignService, private characterService: CharacterService, private router: Router) {}
 
     ngOnInit(): void {
-        this.campaignService.getCampaigns().subscribe({
+        this.campaignService.getOwnCampaigns().subscribe({
             next: (campaigns) => {
-                this.campaigns = campaigns;
+                this.ownCampaigns = campaigns;
             },
             error: (error) => {
                 this.router.navigate(['/']);
             }
         });
-    }
 
-    setCampaignState(campaign: Campaign, state: string): void {
-        const data = {state: state};
-
-        this.campaignService.updateCampaign(data, campaign.guid).subscribe({
-            next: (updatedCampaign) => {
-                // Only need to update the state, not the whole campaign object.
-                const modifiedCampaign = this.campaigns.find((c) => c.guid === campaign.guid);
-                if (modifiedCampaign) {
-                    modifiedCampaign.state = state as CampaignState;
-                }
+        this.campaignService.getJoinedCampaigns().subscribe({
+            next: (campaigns) => {
+                this.joinedCampaigns = campaigns;
             },
             error: (error) => {
-                console.error('Error updating campaign state:', error);
+                this.router.navigate(['/']);
+            }
+        });
+
+        this.campaignService.getInvites().subscribe({
+            next: (invites) => {
+                this.invites = invites;
+
+                this.characterService.getCharacters().subscribe(
+                    {
+                        next: (characters: Character[]) => {
+                            this.characters = characters;
+                        },
+                        error: (error => {
+                            console.log(error)
+                        })
+                    }
+                );
+            },
+            error: (error) => {
+                console.log(error)
             }
         });
     }
 
-    hasMaps(campaign: Campaign): boolean {
-        if (campaign.maps && campaign.maps.length > 0) {
-            //console.log(campaign.maps[0]);
-        }
-
-        return campaign.maps && campaign.maps.length > 0;
+    declineInvite(invite: CampaignInvite): void {
+        this.campaignService.declineInvite(invite).subscribe({
+            next: (invites) => {
+                this.invites = invites;
+            },
+            error: (error) => {
+                console.log(error)
+            }
+        });
     }
 
-    getCurrentMap(campaign: Campaign): CampaignMap | undefined {
-        return campaign.maps.length > 0 ? campaign.maps[0] : undefined;
+    acceptInvite(invite: CampaignInvite, event: MouseEvent): void {
+        // show modal with all characters to select one or more to join the campaign with.
+        if(event.currentTarget !== null) {
+            this.activeInvite = invite;
+            this.acceptInviteLightbox?.showModal(event.currentTarget);
+        }
+    }
+
+    toggleSelectCharacterForInvite(character: Character, event: MouseEvent): void {
+        if (this.selectedCharactersForInvites.includes(character.guid)) {
+            this.selectedCharactersForInvites = this.selectedCharactersForInvites.filter(guid => guid !== character.guid);
+        } else {
+            this.selectedCharactersForInvites.push(character.guid);
+        }
+    }
+
+    isCharacterSelectedForInvite(character: Character): boolean {
+        return this.selectedCharactersForInvites.includes(character.guid);
+    }
+
+    confirmAcceptInvite(): void {
+        if (!this.activeInvite)
+            return;
+
+        this.campaignService.acceptInvite(this.activeInvite, this.selectedCharactersForInvites).subscribe({
+            next: (campaigns) => {
+                this.joinedCampaigns = campaigns;
+            },
+            error: (error) => {
+                console.log(error)
+            }
+        })
     }
 }

@@ -2,64 +2,83 @@
 
 <div class="campaign-content-container">
     <main>
-        <h2>Campaigns</h2>
+        @if (invites.length > 0) {
+            <h2>Campaign Invites</h2>
+
+            <form>
+                <p>You have been invited to join {{ invites.length }} campaign(s):</p>
+                <ul class="campaign-invites">
+                    @for (invite of invites; track invite.id) {
+                        <li class="campaign-invite">
+                            <div class="campaign-name"><strong>{{ invite.campaign.name }}</strong></div>
+                            <div class="campaign-owner">from {{ invite.owner.name }}</div>
+                            <div class="sent-at"><em>(invite sent at {{ invite.created_at | date: 'medium' }}).</em></div>
+                            <div class="actions">
+                                <button type="button" (click)="declineInvite(invite)" class="fantasy-btn fantasy-brown">Decline</button>
+                                <button type="button" (click)="acceptInvite(invite, $event)" class="fantasy-btn fantasy-blue">Accept</button>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </form>
+        }
+
+        <h2>Your Own Campaigns</h2>
 
         <div class="campaign-list-panel">
-            <ul>
-                @for (campaign of campaigns; track campaign.guid) {
-                    <li class="campaigns">
-                        <div class="campaign">
-                            <div class="campaign-summary">
-                                <app-campaign-state-icon [campaignState]="campaign.state"/>
-                                <em>({{ campaign.state }})</em>
-                                <strong><a [routerLink]="['/campaigns/', campaign.guid]" title="View Campaign">{{ campaign.name }}</a></strong>
+            @if (ownCampaigns.length === 0) {
+                <p>You do not own any campaigns.</p>
+            } @else {
+                <ul>
+                    @for (campaign of ownCampaigns; track campaign.guid) {
+                        <li class="campaigns">
+                            <div class="campaign">
+                                <app-campaign-state [campaign]="campaign"></app-campaign-state>
                             </div>
-                            <div class="campaign-details">
-                                <div class="date">
-                                    <span class="accessible-hidden">Created at</span>
-                                    <app-calendar-icon/>
-                                    <time [attr.datetime]="campaign.created_at | date: 'yyyy-MM-dd'">{{ campaign.created_at | date: 'yyyy/MM/dd' }}</time>
-                                </div>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
 
-                                <div class="campaign-description">{{ campaign.description }}</div>
-                                @if (hasMaps(campaign) && campaign.owner) {
-                                    <app-map-preview [campaignMap]="getCurrentMap(campaign)" [campaignGuid]="campaign.guid"/>
-                                }
+        <h2>Joined Campaigns</h2>
 
-                                <div class="actions">
-                                    @if (campaign.state === 'active') {
-                                        <button type="button" (click)="setCampaignState(campaign, 'paused')" title="Pause campaign">
-                                            <app-campaign-state-icon [campaignState]="'paused'"/>
-                                            <span class="accessible-hidden">Pause</span>
-                                        </button>
-                                    }
-                                    @if (campaign.state === 'paused') {
-                                        <button type="button" (click)="setCampaignState(campaign, 'active')" title="Start campaign">
-                                            <app-campaign-state-icon [campaignState]="'active'"/>
-                                            <span class="accessible-hidden">Unpause</span>
-                                        </button>
-                                    }
-
-                                    @if (campaign.state === 'ended') {
-                                        <button type="button" (click)="setCampaignState(campaign, 'paused')" title="Pause campaign">
-                                            <app-campaign-state-icon [campaignState]="'paused'"/>
-                                            <span class="accessible-hidden">Reactivate Paused</span>
-                                        </button>
-                                    } @else {
-                                        <button type="button" (click)="setCampaignState(campaign, 'ended')" title="End campaign">
-                                            <app-campaign-state-icon [campaignState]="'ended'"/>
-                                            <span class="accessible-hidden">End Campaign</span>
-                                        </button>
-                                    }
-                                    <a [routerLink]="['/campaigns/', campaign.guid]" title="View Campaign">
-                                        <app-view-icon/>
-                                    </a>
-                                </div>
+        <div class="campaign-list-panel">
+            @if (joinedCampaigns.length === 0) {
+                <p>You have not joined any campaigns.</p>
+            } @else {
+                <ul>
+                    @for (campaign of joinedCampaigns; track campaign.guid) {
+                        <li class="campaigns">
+                            <div class="campaign">
+                                <app-campaign-state [campaign]="campaign"></app-campaign-state>
                             </div>
-                        </div>
-                    </li>
-                }
-            </ul>
+                        </li>
+                    }
+                </ul>
+            }
         </div>
     </main>
+
+    <app-confirm #acceptInviteLightbox heading="Accept invite with:" cancelLabel="Close" confirmLabel="Accept" (confirmClass)="confirmAcceptInvite()">
+        <p>You can select multiple characters to join the campaign.</p>
+        <p>Currently selected: {{ selectedCharactersForInvites.length }}</p>
+        <div class="char-list-invite-panel char-list-panel">
+            @if (characters.length > 0) {
+                <ul>
+                    @for (character of characters; track character.guid) {
+                        <li class="char-panel" [class.selected]="isCharacterSelectedForInvite(character)">
+                            <button (click)="toggleSelectCharacterForInvite(character, $event)">
+                                <app-portrait [character]="character"/>
+                                <div class="char-details">{{ character.name }}
+                                    (Level {{ character.level }} {{ character.charRace }} {{ character.charClass }})</div>
+                            </button>
+                        </li>
+                    }
+                </ul>
+            } @else {
+                <p>You don't have any characters to use for this campaign. Please create a character first.</p>
+            }
+        </div>
+    </app-confirm>
 </div>

@@ -4,6 +4,7 @@ import { CharacterService } from '../../../services/character.service';
 import { Router } from '@angular/router';
 import { Skill } from '../../../entities/Skill';
 import { SkillIconComponent } from '../../icons/skill-icon/skill-icon.component';
+import { CharacterEditRedirectService } from '../../../services/character-edit-redirect.service';
 
 @Component({
     selector: 'app-edit-character-skills',
@@ -19,7 +20,7 @@ export class EditCharacterSkillsComponent {
     skills: Array<Skill> = [];
     errorMessage: string = '';
 
-    constructor(private characterService: CharacterService, private router: Router) {}
+    constructor(private characterService: CharacterService, private characterEditRedirectService: CharacterEditRedirectService, private router: Router) {}
 
     ngOnInit(): void {
         this.characterService.getCharacter().subscribe(
@@ -92,7 +93,7 @@ export class EditCharacterSkillsComponent {
         }
 
         this.characterService.setSkills(this.selectedSkills).subscribe(character => {
-            this.router.navigate([`/characters/${character.guid}/edit/spells`]);
+            this.characterEditRedirectService.redirectToCorrectEditLocation();
         })
     }
 }

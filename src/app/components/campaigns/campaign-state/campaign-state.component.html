@@ -1,0 +1,51 @@
+<div class="campaign-summary">
+    <app-campaign-state-icon [campaignState]="campaign()?.state"/>
+    <em>({{ campaign()?.state }})</em>
+    <strong><a [routerLink]="['/campaigns/', campaign()?.guid]" title="View Campaign">{{ campaign()?.name }}</a></strong>
+</div>
+
+<div class="campaign-details">
+    <div class="date">
+        <span class="accessible-hidden">Created at</span>
+        <app-calendar-icon/>
+        <time [attr.datetime]="campaign()?.created_at | date: 'yyyy-MM-dd'">{{ campaign()?.created_at | date: 'yyyy/MM/dd' }}</time>
+    </div>
+
+    <div class="campaign-description">{{ campaign()?.description }}</div>
+    @if (hasMaps()) {
+        <app-map-preview [campaignMap]="getCurrentMap()" [campaignGuid]="campaign()!.guid"/>
+    }
+</div>
+
+<div class="actions">
+    @if (campaign()?.owner) {
+        @if (campaign()!.state === 'active') {
+            <button type="button" (click)="setCampaignState('paused')" title="Pause campaign">
+                <app-campaign-state-icon [campaignState]="'paused'"/>
+                <span class="accessible-hidden">Pause</span>
+            </button>
+        }
+        @if (campaign()!.state === 'paused') {
+            <button type="button" (click)="setCampaignState('active')" title="Start campaign">
+                <app-campaign-state-icon [campaignState]="'active'"/>
+                <span class="accessible-hidden">Unpause</span>
+            </button>
+        }
+
+        @if (campaign()!.state === 'ended') {
+            <button type="button" (click)="setCampaignState('paused')" title="Pause campaign">
+                <app-campaign-state-icon [campaignState]="'paused'"/>
+                <span class="accessible-hidden">Reactivate Paused</span>
+            </button>
+        } @else {
+            <button type="button" (click)="setCampaignState('ended')" title="End campaign">
+                <app-campaign-state-icon [campaignState]="'ended'"/>
+                <span class="accessible-hidden">End Campaign</span>
+            </button>
+        }
+    }
+
+    <a [routerLink]="['/campaigns/', campaign()?.guid]" title="View Campaign">
+        <app-view-icon/>
+    </a>
+</div>

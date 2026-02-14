@@ -1,5 +1,10 @@
 @use "../colours";
 
+.lore-groups {
+    display: flex;
+    flex-direction: column;
+}
+
 .lore-group {
     border: 1px solid colours.$medium-grey;
     border-radius: .5rem;

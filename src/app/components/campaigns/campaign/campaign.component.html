@@ -98,7 +98,12 @@
                             <ul class="map-preview-list">
                                 @for (map of campaign.maps; track map.guid) {
                                     <li class="map">
-                                        <app-map-preview [campaignMap]="map" [campaignGuid]="campaign.guid"/>
+                                        <app-map-preview
+                                            [campaignMap]="map"
+                                            [campaignGuid]="campaign.guid"
+                                            (updateMapEvent)="updateMap($event)"
+                                            (deleteMapEvent)="deleteMap($event, map)"
+                                        />
                                     </li>
                                 }
                             </ul>
@@ -106,7 +111,7 @@
                     </details>
                 }
 
-                <details open>
+                <details class="lore">
                     <summary>Campaign Lore</summary>
 
                     <div class="campaign-block-contents">
@@ -186,24 +191,25 @@
                             </form>
                         }
 
-
-                        @for (loreGroup of getLoreGroups(); track $index) {
-                            <section class="lore-group">
-                                <h4>{{ loreGroup }}</h4>
-                                <ul class="lore-list">
-                                    @for (loreItem of getLoreByGroup(loreGroup); track loreItem.guid) {
-                                        <li class="lore-item">
-                                            <app-lore
-                                                [loreItem]="loreItem"
-                                                [campaignGuid]="campaign.guid"
-                                                (loreReadEvent)="loreReadEvent($event, loreItem)"
-                                                (loreDeleteEvent)="loreDeleteEvent($event, loreItem)"
-                                            ></app-lore>
-                                        </li>
-                                    }
-                                </ul>
-                            </section>
-                        }
+                        <div class="lore-groups">
+                            @for (loreGroup of getLoreGroups(); track $index) {
+                                <section class="lore-group">
+                                    <h4>{{ loreGroup }}</h4>
+                                    <ul class="lore-list">
+                                        @for (loreItem of getLoreByGroup(loreGroup); track loreItem.guid) {
+                                            <li class="lore-item">
+                                                <app-lore
+                                                    [loreItem]="loreItem"
+                                                    [campaignGuid]="campaign.guid"
+                                                    (loreReadEvent)="loreReadEvent($event, loreItem)"
+                                                    (loreDeleteEvent)="loreDeleteEvent($event, loreItem)"
+                                                ></app-lore>
+                                            </li>
+                                        }
+                                    </ul>
+                                </section>
+                            }
+                        </div>
                     </div>
                 </details>
 
@@ -225,7 +231,7 @@
                                         <div>Level {{ character.level }} {{ character.charRace }} {{ character.charClass }}</div>
 
                                         <div class="char-actions">
-                                            <!-- only allow owner of campaigh or owner of specific user to remove it from campaign -->
+                                            <!-- only allow owner of campaign or owner of specific user to remove it from campaign -->
                                             @if (campaign.owner || doesCharacterBelongToMe(character.guid)) {
                                                 <button
                                                     type="button"
@@ -236,6 +242,9 @@
                                                 </button>
                                             }
                                         </div>
+                                        @if (doesCharacterBelongToMe(character.guid)) {
+                                            <p class="owner-character">Character belongs to you</p>
+                                        }
                                     </span>
                                 </li>
                             }
@@ -248,28 +257,40 @@
                                 @for (character of characters; track character.guid) {
                                     @if (!isCharacterPartOfCampaign(character.guid)) {
                                         <li class="char-panel">
-                                        <span class="char-image">
-                                            <app-portrait [character]="character"/>
-                                        </span>
+                                            <span class="char-image">
+                                                <app-portrait [character]="character"/>
+                                            </span>
 
                                             <span class="char-details">
-                                            <div class="char-name">{{ character.name }}</div>
-                                            <div>Level {{ character.level }} {{ character.charRace }} {{ character.charClass }}</div>
+                                                <div class="char-name">{{ character.name }}</div>
+                                                <div>Level {{ character.level }} {{ character.charRace }} {{ character.charClass }}</div>
 
-                                            <div class="char-actions">
-                                                <button
-                                                    type="button"
-                                                    class="fantasy-btn fantasy-blue"
-                                                    (click)="addCharacterToCampaign(character)"
-                                                >
-                                                    Add to campaign
-                                                </button>
-                                            </div>
-                                        </span>
+                                                <div class="char-actions">
+                                                    <button
+                                                        type="button"
+                                                        class="fantasy-btn fantasy-blue"
+                                                        (click)="addCharacterToCampaign(character)"
+                                                    >
+                                                        Add to campaign
+                                                    </button>
+                                                </div>
+                                                @if (doesCharacterBelongToMe(character.guid)) {
+                                                    <p class="owner-character">Character belongs to you</p>
+                                                }
+                                            </span>
+
                                         </li>
                                     }
                                 }
                             </ul>
+
+                            <form>
+                                <label>Invite player by email:
+                                    <input type="email" name="inviteEmail" #inviteEmail placeholder="player@example.co.uk"/>
+                                </label>
+                                <button type="button" class="fantasy-btn fantasy-brown" (click)="invitePlayerByEmail()">Send Invite</button>
+                                <app-toast #inviteToast>{{ inviteToastMessage }}</app-toast>
+                            </form>
                         </div>
                     </div>
                 </details>
@@ -294,9 +315,17 @@
 
     <app-confirm
         heading="{{ selectedLore?.name }}"
-        (confirmClass)="confirmDelete(selectedLore?.guid)"
-        #confirm
+        (confirmClass)="confirmDeleteLore(selectedLore?.guid)"
+        #loreConfirm
     >
         <p>Are you sure you want to remove this {{ selectedLore?.type }} lore item?</p>
+    </app-confirm>
+
+    <app-confirm
+        heading="{{ selectedLore?.name }}"
+        (confirmClass)="confirmDeleteMap()"
+        #mapConfirm
+    >
+        <p>Are you sure you want to remove this map?</p>
     </app-confirm>
 </div>

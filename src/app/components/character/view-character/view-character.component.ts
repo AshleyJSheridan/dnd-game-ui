@@ -40,6 +40,10 @@ export class ViewCharacterComponent {
     ];
     selectedTab: string = 'abilities';
     readonly spellLevels: number[] = Array(10).fill(0).map((x,i) => i);
+    editMode = {
+        hitPoints: false,
+        hitPointsModifier: false,
+    };
 
     constructor(private characterService: CharacterService, private router: Router) {}
 
@@ -132,5 +136,11 @@ export class ViewCharacterComponent {
             .concat(this.character?.selected_class_path.features ?? [])
             .filter((feature, index, self) => self.findIndex(l => l.name === feature.name) === index)
             .sort((a, b) => a.level - b.level);
+    }
+
+    // Methods for updating the character stats.
+    updateCharHitPointsModifier(event: FocusEvent): void {
+        const newValue = parseInt((<HTMLInputElement>event.target).value);
+        console.log(newValue);
     }
 }
