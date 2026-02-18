@@ -13,7 +13,7 @@
 
     <div class="campaign-description">{{ campaign()?.description }}</div>
     @if (hasMaps()) {
-        <app-map-preview [campaignMap]="getCurrentMap()" [campaignGuid]="campaign()!.guid"/>
+        <app-map-preview [campaignMap]="getCurrentMap()" [campaignGuid]="campaign()!.guid" [showFullDetails]="showFullDetails()"/>
     }
 </div>
 

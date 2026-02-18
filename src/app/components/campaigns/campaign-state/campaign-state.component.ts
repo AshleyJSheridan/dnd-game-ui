@@ -23,6 +23,7 @@ import { CampaignService } from '../../../services/campaign-service';
 })
 export class CampaignStateComponent {
     readonly campaign: InputSignal<Campaign|undefined> = input();
+    readonly showFullDetails: InputSignal<boolean> = input(false);
 
     constructor(private campaignService: CampaignService) {}
 

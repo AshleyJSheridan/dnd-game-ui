@@ -1,5 +1,5 @@
 <div class="campaign-map-preview" [class.active]="campaignMap()?.active === true">
-    @if (campaignMap()?.active === true) {
+    @if (campaignMap()?.active === true && showFullDetails()) {
         <div class="active-indicator">
             <app-crown-icon/>
         </div>
@@ -15,36 +15,37 @@
 
         <img src="{{ getThumbUrl() }}" alt="" />
     </a>
-    <details>
-        <summary>Details</summary>
+    @if (showFullDetails()) {
+        <details>
+            <summary>Details</summary>
 
-        <dl>
-            <dt>Description:</dt>
-            <dd>{{ campaignMap()?.description }}</dd>
+            <dl>
+                <dt>Description:</dt>
+                <dd>{{ campaignMap()?.description }}</dd>
 
-            <dt>Size:</dt>
-            <dd>{{ campaignMap()?.width }} &times; {{ campaignMap()?.height }}</dd>
-        </dl>
+                <dt>Size:</dt>
+                <dd>{{ campaignMap()?.width }} &times; {{ campaignMap()?.height }}</dd>
+            </dl>
 
-        <div class="actions">
-            <button (click)="deleteMap($event)">
-                <app-delete-icon/>
-            </button>
-
-            @if (campaignMap()?.hidden ) {
-                <button type="button" title="Hide from players" (click)="toggleMapVisibility()">
-                    <app-eye-off-icon/>
+            <div class="actions">
+                <button (click)="deleteMap($event)">
+                    <app-delete-icon/>
                 </button>
-            } @else {
-                <button type="button" title="Hide from players" (click)="toggleMapVisibility()">
-                    <app-eye-on-icon/>
+
+                @if (campaignMap()?.hidden ) {
+                    <button type="button" title="Hide from players" (click)="toggleMapVisibility()">
+                        <app-eye-off-icon/>
+                    </button>
+                } @else {
+                    <button type="button" title="Hide from players" (click)="toggleMapVisibility()">
+                        <app-eye-on-icon/>
+                    </button>
+                }
+
+                <button type="button" title="Make this the primary map" (click)="makeActive()">
+                    <app-crown-icon/>
                 </button>
-            }
-
-            <button type="button" title="Make this the primary map" (click)="makeActive()">
-                <app-crown-icon/>
-            </button>
-        </div>
-    </details>
-
+            </div>
+        </details>
+    }
 </div>

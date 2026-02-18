@@ -23,6 +23,7 @@ export class MapPreviewComponent {
 
     readonly campaignMap: InputSignal<CampaignMap|undefined> = input();
     readonly campaignGuid: InputSignal<string> = input('');
+    readonly showFullDetails: InputSignal<boolean> = input(false);
 
     @Output() updateMapEvent = new EventEmitter();
     @Output() deleteMapEvent = new EventEmitter();
