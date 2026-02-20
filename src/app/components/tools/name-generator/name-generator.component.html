@@ -1,1 +1,39 @@
-<p>name-generator works!</p>
+<app-header></app-header>
+
+<div class="name-generator-container">
+    <h2>Name Generator</h2>
+
+    <form (submit)="submitHandler($event)">
+        <div class="input-attached-button-aligned">
+            <label class="aligned">Suggest name for:
+                <select [(ngModel)]="suggestionType" name="suggestionType">
+                    <option value="generic" selected>Generic</option>
+                    <option value="dwarf">Dwarf</option>
+                    <option value="elf">Elf</option>
+                    <option value="halfling">Halfling</option>
+                    <option value="gnome">Gnome</option>
+                    <option value="dragon">Dragon</option>
+                    <option value="demon">Demon</option>
+                    <option value="angel">Angel</option>
+                    <option value="fey">Fey</option>
+                    <option value="goblin">Goblin</option>
+                    <option value="orc">Orc</option>
+                    <option value="ogre">Ogre</option>
+                </select>
+            </label>
+        </div>
+
+        <button type="submit" class="fantasy-btn">Suggest names</button>
+
+        @if(suggestions.length > 0) {
+            <div>
+                <h3>Suggestions:</h3>
+                <ul class="suggested-names">
+                    @for (name of suggestions; track name) {
+                        <li>{{ name }}</li>
+                    }
+                </ul>
+            </div>
+        }
+    </form>
+</div>

@@ -4,7 +4,6 @@ import { HeaderComponent } from '../../header/header.component';
 import { FormsModule } from '@angular/forms';
 import { CharacterService } from '../../../services/character.service';
 import { Router } from '@angular/router';
-import {Character} from '../../../entities/Character';
 
 @Component({
   selector: 'app-create',
