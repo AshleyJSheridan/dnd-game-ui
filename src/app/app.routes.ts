@@ -19,6 +19,7 @@ import { EditCharacterEquipmentComponent } from './components/character/edit-cha
 import { RegisterComponent } from './components/register/register.component';
 import { CharAlignmentComponent } from './components/character/char-alignment/char-alignment.component';
 import { CampaignMapComponent } from './components/campaigns/campaign-map/campaign-map.component';
+import {ToolsListComponent} from './components/tools/tools-list/tools-list.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -47,6 +48,7 @@ export const routes: Routes = [
     { path: 'campaigns', component: CampaignListComponent },
     { path: 'campaigns/:guid', component: CampaignComponent },
     { path: 'campaigns/:guid/maps/:mapGuid', component: CampaignMapComponent },
+    { path: 'tools', component: ToolsListComponent },
 ];
 
 export const appConfig: ApplicationConfig = {

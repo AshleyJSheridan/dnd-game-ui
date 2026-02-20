@@ -1,0 +1,30 @@
+<app-header></app-header>
+
+<div class="tools-list-container">
+    <ul class="tools-list">
+        <li class="tool">
+            <a [routerLink]="['/tools/name-generator/']">
+                <app-book-icon/>
+                <div class="tool-name">Name Generator</div>
+            </a>
+        </li>
+        <li class="tool">
+            <a [routerLink]="['/tools/dice-roller/']">
+                <app-dice-icon/>
+                <div class="tool-name">Dice Roller</div>
+            </a>
+        </li>
+        <li class="tool">
+            <a [routerLink]="['/tools/item-generator/']">
+                <app-sword-icon/>
+                <div class="tool-name">Item Generator</div>
+            </a>
+        </li>
+        <li class="tool">
+            <a [routerLink]="['/tools/encounter-creator/']">
+                <app-monster-icon/>
+                <div class="tool-name">Encounter Creator</div>
+            </a>
+        </li>
+    </ul>
+</div>
