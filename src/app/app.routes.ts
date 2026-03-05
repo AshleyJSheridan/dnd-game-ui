@@ -21,6 +21,9 @@ import { CharAlignmentComponent } from './components/character/char-alignment/ch
 import { CampaignMapComponent } from './components/campaigns/campaign-map/campaign-map.component';
 import {ToolsListComponent} from './components/tools/tools-list/tools-list.component';
 import {NameGeneratorComponent} from './components/tools/name-generator/name-generator.component';
+import {DiceRollerComponent} from './components/tools/dice-roller/dice-roller.component';
+import {ItemGeneratorComponent} from './components/tools/item-generator/item-generator.component';
+import {EncounterCreatorComponent} from './components/tools/encounter-creator/encounter-creator.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -50,7 +53,10 @@ export const routes: Routes = [
     { path: 'campaigns/:guid', component: CampaignComponent },
     { path: 'campaigns/:guid/maps/:mapGuid', component: CampaignMapComponent },
     { path: 'tools', component: ToolsListComponent },
-    { path: 'tools/name-generator', component: NameGeneratorComponent }
+    { path: 'tools/name-generator', component: NameGeneratorComponent },
+    { path: 'tools/dice-roller', component: DiceRollerComponent },
+    { path: 'tools/item-generator', component: ItemGeneratorComponent },
+    { path: 'tools/encounter-creator', component: EncounterCreatorComponent },
 ];
 
 export const appConfig: ApplicationConfig = {

@@ -120,6 +120,13 @@ export class CharacterService {
         );
     }
 
+    public getGenericDiceRoll(dice: any): Observable<DiceRolls> {
+        return this.http.post<DiceRolls>(
+            `${this.apiUrl}/game/dice`,
+            {dice: dice}, {headers: this.authService.getAuthHeader()}
+        );
+    }
+
     public setAbilityRolls(abilityRolls: {}): Observable<ICharacter> {
         return this.http.patch<ICharacter>(
             `${this.apiUrl}/characters/${this.charGuid}`,

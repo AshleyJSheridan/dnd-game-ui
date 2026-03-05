@@ -33,6 +33,18 @@ details.item {
         cursor: pointer;
     }
 
+    .item-type-icon {
+        position: relative;
+
+        svg {
+            height: auto;
+            position: absolute;
+            right: 0;
+            top: -1rem;
+            width: 2rem;
+        }
+    }
+
     .starting-gold {
         margin: .5rem 0;
     }
@@ -108,4 +120,20 @@ details.char-edit-equipment-set.selected {
 
 .add-items-list {
     margin-top: 1rem;
+}
+
+.item-special-abilities {
+    border: 1px solid colours.$dark-grey;
+    border-radius: .5rem;
+    box-shadow: 2px 2px 7px colours.$medium-grey;
+    padding: .5rem;
+}
+
+.item-special-ability {
+    border: 1px solid colours.$dark-grey;
+    border-radius: .5rem;
+    box-shadow: 2px 2px 7px colours.$medium-grey;
+    margin-top: .5rem;
+    padding: 0 .5rem;
+
 }

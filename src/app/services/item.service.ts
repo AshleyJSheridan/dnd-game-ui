@@ -41,4 +41,11 @@ export class ItemService {
             {headers: this.authService.getAuthHeader()}
         );
     }
+
+    public getItemByTypeAndRarity(itemType: string, rarity: string): Observable<Item> {
+        return this.http.get<Item>(
+            `${this.apiUrl}/game/items/${itemType}/random/${rarity}`,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
 }

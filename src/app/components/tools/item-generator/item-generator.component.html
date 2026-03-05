@@ -1,0 +1,37 @@
+<app-header></app-header>
+
+<div class="item-generator-container">
+    <h2>Item Generator</h2>
+
+    <form (submit)="submitHandler($event)">
+
+
+        <div class="input-attached-button-aligned">
+            <label class="aligned">Item Type
+                <select [(ngModel)]="itemType" name="itemType">
+                    @for (itemType of itemTypes; track itemType) {
+                        <option value="{{ itemType }}" [selected]="itemType === itemType">{{ itemType }}</option>
+                    }
+                </select>
+            </label>
+        </div>
+
+        <div class="input-attached-button-aligned">
+            <label class="aligned">Rarity
+                <select [(ngModel)]="rarity" name="rarity">
+                    @for (rarity of rarities; track rarity) {
+                        <option value="{{ rarity }}" [selected]="rarity === rarity">{{ rarity }}</option>
+                    }
+                </select>
+            </label>
+        </div>
+
+        <button type="submit" class="fantasy-btn fantasy-blue">Get random item</button>
+    </form>
+
+    @if (item) {
+        <h2>Item</h2>
+        <app-game-item [item]="item" [openStatus]="true" [itemLocation]="'generated'" (moveUpdatedItem)="saveAndMoveItem($event)"/>
+    }
+
+</div>

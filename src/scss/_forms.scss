@@ -188,6 +188,11 @@ input.inline {
     text-align: center;
 }
 
+select.inline {
+    display: inline-block;
+    padding: 0;
+}
+
 button.dice-icon {
     appearance: none;
     background-color: transparent;

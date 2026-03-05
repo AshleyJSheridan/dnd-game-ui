@@ -1,0 +1,47 @@
+<app-header></app-header>
+
+<div class="dice-roller-container">
+    <h2>Dice Roller</h2>
+
+    <form (submit)="submitHandler($event)">
+        <div class="input-attached-button-aligned">
+            <label class="aligned">Number of dice:
+                <input type="number" name="quantity" [(ngModel)]="quantity" min="1" />
+            </label>
+
+            <label class="aligned">Dice:
+                <select [(ngModel)]="sides" name="sides">
+                    @for (availableSide of availableSides; track availableSide) {
+                        <option value="{{ availableSide }}" [selected]="availableSide === sides">{{ availableSide }}</option>
+                    }
+                </select>
+            </label>
+
+            <label class="aligned">Modifier (optional):
+                <input type="number" name="modifier" [(ngModel)]="modifier" placeholder="2 or -1" />
+            </label>
+        </div>
+
+        <button type="submit" class="fantasy-btn fantasy-blue">Roll</button>
+
+        @if(rollResults.length > 0) {
+            <ul class="roll-results">
+                @for (diceRoll of rollResults; track $index) {
+                    <li class="roll-result">
+                        @for (rollGroup of getRollGroupsFromResult(diceRoll); track $index) {
+                            @for (roll of getRollsByGroupFromResult(diceRoll, rollGroup); track $index) {
+                                <span class="dice dice-{{ rollGroup }}">
+                                    <span class="value">{{ roll }}</span>
+                                </span>
+                            }
+                        }
+
+                        <span class="modifier">{{ getModifierString(modifiers[$index]) }}</span>
+                        =
+                        <span class="total"> {{ getTotalFromResult(diceRoll, modifiers[$index]) }}</span>
+                    </li>
+                }
+            </ul>
+        }
+    </form>
+</div>

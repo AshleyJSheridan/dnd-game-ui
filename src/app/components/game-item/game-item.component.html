@@ -1,11 +1,22 @@
-<details class="item rarity-{{ getRarityString() }}">
+<details class="item rarity-{{ getRarityString() }}" [open]="openStatus()">
     <summary>
-        {{ item()?.name }}
+        @if (editInPlace) {
+            <div class="tiny-label">
+                <label for="name">Name</label>
+                <input type="text" name="name" [(ngModel)]="item()!.name" id="name" class="inline"/>
+            </div>
+        } @else {
+            {{ item()?.name }}
+        }
         @if ((item()?.quantity ?? 1) > 1) {
             <span class="item-quantity">(&times;{{ item()?.quantity }})</span>
         }
         <span class="item-type">({{ item()?.type }})</span>
     </summary>
+
+    <div class="item-type-icon">
+        <app-item-type-icon [itemType]="item()?.type ?? ''" [itemBaseName]="item()?.base_name ?? ''"/>
+    </div>
 
     <div>
         <form class="slim item-actions">
@@ -28,6 +39,14 @@
                 </label>
                 <button type="button" title="Add to Inventory" (click)="addToInventory()"><app-add-to-inventory-icon/></button>
             }
+            @if (itemLocation() === 'generated') {
+                @if (!editInPlace) {
+                    <button type="button" title="Edit Details" (click)="editItemInPlace()"><app-edit-icon/></button>
+                } @else {
+                    <!--<button type="button" title="Save Changes" (click)="saveInPlaceEdits()"><app-save-icon/></button>-->
+                }
+                <button type="button" title="Add to Inventory" (click)="giveToCharacter()"><app-add-to-inventory-icon/></button>
+            }
         </form>
 
         @if (editingName) {
@@ -39,28 +58,68 @@
             </form>
         }
         @if (editingDescription) {
-        <form name="descriptionEdit" class="slim">
-            <label>New Description
-                <textarea name="newDescription" [(ngModel)]="newDescription"></textarea>
-            </label>
-            <button type="button" class="fantasy-btn fantasy-blue" (click)="changeDescription()">Save</button>
-        </form>
-    }
+            <form name="descriptionEdit" class="slim">
+                <label>New Description
+                    <textarea name="newDescription" [(ngModel)]="newDescription"></textarea>
+                </label>
+                <button type="button" class="fantasy-btn fantasy-blue" (click)="changeDescription()">Save</button>
+            </form>
+        }
 
-        @if (item()?.description !== '') {
+        @if (item()?.description !== '' && !editInPlace) {
             <p>{{ item()?.description }}</p>
+        }
+        @if (editInPlace) {
+            <div class="tiny-label">
+                <label for="description">Description</label>
+                <textarea type="text" name="description" [(ngModel)]="item()!.description" id="description" class="inline"></textarea>
+            </div>
+            <div class="tiny-label">
+                <label for="rarity">Rarity</label>
+                <select name="rarity" id="rarity" [(ngModel)]="item()!.rarity" class="inline">
+                    @for (rarity of rarityTypes; track rarity) {
+                        <option value="{{ rarity }}" [selected]="rarity === item()?.rarity">{{ rarity }}</option>
+                    }
+                </select>
+            </div>
         }
 
         @if (item()?.proficiency) {
             <div class="item-property"><strong>Proficiency:</strong> {{ item()?.proficiency }}</div>
         }
-        @if (item()?.weapon_props) {
+        @if (item()?.special_properties?.classes) {
+            <div class="item-property"><strong>Class Limits:</strong> {{ getClassList() }}</div>
+        }
+        @if (item()?.weapon_props?.damage?.amount) {
             <div class="item-property"><strong>Damage:</strong>
-                {{ item()?.weapon_props?.damage?.amount }}
-                {{ item()?.weapon_props?.damage?.type }}
+                @if (editInPlace) {
+                    <div class="tiny-label">
+                        <label for="damage">Damage</label>
+                        <input type="text" name="damage" [(ngModel)]="item()!.weapon_props!.damage!.amount" id="damage" class="inline inline-small"/>
+                    </div>
+                    <div class="tiny-label">
+                        <label for="damage_type">Damage Type</label>
+                        <select name="damage_type" id="damage_type" [(ngModel)]="item()!.weapon_props!.damage!.type" class="inline">
+                            @for (damageType of damageTypes; track damageType) {
+                                <option value="{{ damageType }}" [selected]="damageType === item()?.weapon_props?.damage?.type">{{ damageType }}</option>
+                            }
+                        </select>
+                    </div>
+                } @else {
+                    {{ item()?.weapon_props?.damage?.amount }}
+                    {{ item()?.weapon_props?.damage?.type }}
+
+                    @if (item()?.special_properties?.extra_damage && item()?.special_properties?.damage_type) {
+                        (+ {{ item()?.special_properties?.extra_damage }} {{ item()?.special_properties?.damage_type?.name }})
+                    }
+
+                    @if (item()?.special_properties?.slaying && item()?.special_properties?.creature) {
+                        ({{ item()?.special_properties?.slaying }} against {{ item()?.special_properties?.creature }}s, half on save)
+                    }
+                }
             </div>
             @if (item()?.weapon_props?.weapon_versatility) {
-                <div class="item-property"><strong>Versatile: </strong>strong>
+                <div class="item-property"><strong>Versatile: </strong>
                     {{ item()?.weapon_props?.weapon_versatility }}
                 </div>
             }
@@ -68,10 +127,69 @@
                 <div class="item-property"><strong>Range:</strong> {{ getItemRangeString() }}</div>
             }
         }
+        @if (item()?.armor_props) {
+            <div class="item-property"><strong>Armor Class:</strong>
+                {{ item()!.armor_props!.ac }}
+                @if (item()!.armor_props?.has_dex_modifier) {
+                    + Dex modifier
+                    @if (item()!.armor_props?.dex_modifier_limit) {
+                        (max {{ item()!.armor_props?.dex_modifier_limit }})
+                    }
+                }
+            </div>
+            <div class="item-property"><strong>Stealth Check Disadvantage:</strong> {{ item()!.armor_props!.stealth_disadvantage ? 'yes' : 'no' }}</div>
+            <div class="item-property"><strong>Required Strength:</strong> {{ item()!.armor_props!.required_strength }}</div>
+            <div class="item-property"><strong>Ignore Crits:</strong> {{ item()!.armor_props!.ignore_crits ? 'yes' : 'no' }}</div>
+            <div class="item-property"><strong>Initiative Advantage:</strong> {{ item()!.armor_props!.initiative_advantage ? 'yes' : 'no' }}</div>
+            <!-- TODO list resistances, bonuses, and any advantage on skills -->
+            @if (item()!.special_properties?.resistances?.length) {
+                <div class="item-property"><strong>Resistances:</strong> {{ getDamageList(item()?.special_properties?.resistances) }}</div>
+            }
+            @if (item()!.special_properties?.immunities?.length) {
+                <div class="item-property"><strong>Immunities:</strong> {{ getDamageList(item()?.special_properties?.immunities) }}</div>
+            }
+        }
         <div class="item-property"><strong>Cost:</strong> {{ getItemCost() }}</div>
 
         @if (item()?.weight) {
             <div class="item-property"><strong>Weight:</strong> {{ getItemWeight() }} lbs</div>
+        }
+
+        @if (itemHasExtraAbilities()) {
+            <div class="item-special-abilities"><strong>Special Abilities:</strong>
+                @if (item()!.special_properties!.spells) {
+                    <div class="item-property"><strong>Recharge Rate for Item Spells:</strong>
+                        {{ item()!.special_properties?.recharges ?? 1 }}
+                        @if (item()!.special_properties?.recharge_rate) {
+                            per {{ item()!.special_properties?.recharge_rate }}
+                        }
+                    </div>
+                    @for (ability of item()!.special_properties!.spells; track $index) {
+                        <details class="item-special-ability">
+                            <summary class="item-property">{{ ability.name }}</summary>
+                            <div class="item-property"><strong>Description:</strong> {{ ability.description }}</div>
+                            <div class="item-property"><strong>Range:</strong> {{ ability.range }}</div>
+                            <div class="item-property"><strong>Charges:</strong> {{ item()!.special_properties?.charges }}</div>
+                        </details>
+                    }
+                }
+                @if (item()!.special_properties?.ability) {
+                    <div class="item-property"><strong>Recharge Rate for Item Abilities:</strong>
+                        {{ item()!.special_properties?.recharges ?? 1 }}
+                        @if (item()!.special_properties?.recharge_rate) {
+                            per {{ item()!.special_properties?.recharge_rate }}
+                        }
+                    </div>
+                    <details class="item-special-ability">
+                        <summary class="item-property">Ability</summary>
+                        <div class="item-property"><strong>Type:</strong> {{ item()!.special_properties!.ability?.type }}</div>
+                        <div class="item-property"><strong>Amount:</strong> {{ item()!.special_properties!.ability?.amount }}</div>
+                        @if (item()!.special_properties!.ability?.damage_type?.name) {
+                            <div class="item-property"><strong>Amount:</strong> {{ item()!.special_properties!.ability?.damage_type?.name }}</div>
+                        }
+                    </details>
+                }
+            </div>
         }
 
         @if (item()?.items?.length) {
