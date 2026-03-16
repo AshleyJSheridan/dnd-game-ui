@@ -45,7 +45,7 @@
                 } @else {
                     <!--<button type="button" title="Save Changes" (click)="saveInPlaceEdits()"><app-save-icon/></button>-->
                 }
-                <button type="button" title="Add to Inventory" (click)="giveToCharacter()"><app-add-to-inventory-icon/></button>
+                <button type="button" title="Give to Character" (click)="giveToCharacter()"><app-give-icon/></button>
             }
         </form>
 
@@ -66,9 +66,8 @@
             </form>
         }
 
-        @if (item()?.description !== '' && !editInPlace) {
-            <p>{{ item()?.description }}</p>
-        }
+
+
         @if (editInPlace) {
             <div class="tiny-label">
                 <label for="description">Description</label>
@@ -82,6 +81,13 @@
                     }
                 </select>
             </div>
+        } @else {
+            @if (item()?.description !== '') {
+                <p>{{ item()?.description }}</p>
+            }
+            @if (item()?.rarity) {
+                <div class="item-property"><strong>Rarity:</strong> {{ item()?.rarity }}</div>
+            }
         }
 
         @if (item()?.proficiency) {
@@ -105,6 +111,23 @@
                             }
                         </select>
                     </div>
+
+                    @if (item()?.special_properties?.extra_damage && item()?.special_properties?.damage_type) {
+                        (+
+                            <div class="tiny-label">
+                                <label for="extra_damage">Extra Damage</label>
+                                <input type="text" name="damage" [(ngModel)]="item()!.special_properties!.extra_damage" id="extra_damage" class="inline inline-small"/>
+                            </div>
+                            <div class="tiny-label">
+                                <label for="extra_damage_type">Extra Damage Type</label>
+                                <select name="damage_type" id="extra_damage_type" [(ngModel)]="item()!.special_properties!.damage_type!.name" class="inline">
+                                    @for (damageType of damageTypes; track damageType) {
+                                        <option value="{{ damageType }}" [selected]="damageType === item()?.special_properties!.damage_type!.name">{{ damageType }}</option>
+                                    }
+                                </select>
+                            </div>
+                        )
+                    }
                 } @else {
                     {{ item()?.weapon_props?.damage?.amount }}
                     {{ item()?.weapon_props?.damage?.type }}
@@ -142,12 +165,16 @@
             <div class="item-property"><strong>Ignore Crits:</strong> {{ item()!.armor_props!.ignore_crits ? 'yes' : 'no' }}</div>
             <div class="item-property"><strong>Initiative Advantage:</strong> {{ item()!.armor_props!.initiative_advantage ? 'yes' : 'no' }}</div>
             <!-- TODO list resistances, bonuses, and any advantage on skills -->
-            @if (item()!.special_properties?.resistances?.length) {
-                <div class="item-property"><strong>Resistances:</strong> {{ getDamageList(item()?.special_properties?.resistances) }}</div>
-            }
+
             @if (item()!.special_properties?.immunities?.length) {
                 <div class="item-property"><strong>Immunities:</strong> {{ getDamageList(item()?.special_properties?.immunities) }}</div>
             }
+        }
+        @if (item()!.special_properties?.resistances?.length) {
+            <div class="item-property"><strong>Resistances:</strong> {{ getDamageList(item()?.special_properties?.resistances) }}</div>
+        }
+        @if (item()?.special_properties?.effects && item()!.special_properties!.effects === 'healing') {
+            <div class="item-property"><strong>Healing:</strong> {{ item()!.special_properties?.amount }} HP</div>
         }
         <div class="item-property"><strong>Cost:</strong> {{ getItemCost() }}</div>
 
@@ -157,13 +184,14 @@
 
         @if (itemHasExtraAbilities()) {
             <div class="item-special-abilities"><strong>Special Abilities:</strong>
-                @if (item()!.special_properties!.spells) {
+                @if (item()!.special_properties?.spells) {
                     <div class="item-property"><strong>Recharge Rate for Item Spells:</strong>
                         {{ item()!.special_properties?.recharges ?? 1 }}
                         @if (item()!.special_properties?.recharge_rate) {
                             per {{ item()!.special_properties?.recharge_rate }}
                         }
                     </div>
+
                     @for (ability of item()!.special_properties!.spells; track $index) {
                         <details class="item-special-ability">
                             <summary class="item-property">{{ ability.name }}</summary>
@@ -173,21 +201,42 @@
                         </details>
                     }
                 }
-                @if (item()!.special_properties?.ability) {
-                    <div class="item-property"><strong>Recharge Rate for Item Abilities:</strong>
-                        {{ item()!.special_properties?.recharges ?? 1 }}
-                        @if (item()!.special_properties?.recharge_rate) {
-                            per {{ item()!.special_properties?.recharge_rate }}
-                        }
-                    </div>
+                @if (item()!.special_properties?.spell) {
                     <details class="item-special-ability">
-                        <summary class="item-property">Ability</summary>
-                        <div class="item-property"><strong>Type:</strong> {{ item()!.special_properties!.ability?.type }}</div>
-                        <div class="item-property"><strong>Amount:</strong> {{ item()!.special_properties!.ability?.amount }}</div>
-                        @if (item()!.special_properties!.ability?.damage_type?.name) {
-                            <div class="item-property"><strong>Amount:</strong> {{ item()!.special_properties!.ability?.damage_type?.name }}</div>
+                        <summary class="item-property">{{ item()!.special_properties!.spell!.name }}</summary>
+                        <div class="item-property"><strong>Description:</strong> {{ item()!.special_properties!.spell!.description }}</div>
+                        <div class="item-property"><strong>Range:</strong> {{ item()!.special_properties!.spell!.range }}</div>
+                        @if (item()!.special_properties?.duration) {
+                            <div class="item-property"><strong>Duration:</strong> {{ item()!.special_properties!.duration }}</div>
                         }
                     </details>
+                }
+                @if (item()!.special_properties?.ability) {
+                    @if (item()!.special_properties?.recharges) {
+                        <div class="item-property"><strong>Recharge Rate for Item Abilities:</strong>
+                            {{ item()!.special_properties?.recharges ?? 1 }}
+                            @if (item()!.special_properties?.recharge_rate) {
+                                per {{ item()!.special_properties?.recharge_rate }}
+                            }
+                        </div>
+                    }
+                    @if (item()!.special_properties!.ability?.type) {
+                        <details class="item-special-ability">
+                            <summary class="item-property">Ability</summary>
+                            <div class="item-property"><strong>Type:</strong> {{ item()!.special_properties!.ability?.type }}</div>
+                            <div class="item-property"><strong>Amount:</strong> {{ item()!.special_properties!.ability?.amount }}</div>
+                            @if (item()!.special_properties!.ability?.damage_type?.name) {
+                                <div class="item-property"><strong>Amount:</strong> {{ item()!.special_properties!.ability?.damage_type?.name }}</div>
+                            }
+                        </details>
+                    }
+                    @if (item()!.special_properties!.ability?.name && item()!.special_properties?.amount) {
+                        <p>Increases {{ item()!.special_properties!.ability?.name }} to {{ item()!.special_properties?.amount }}
+                            @if (item()!.special_properties?.duration) {
+                                for {{ item()!.special_properties?.duration }}
+                            }
+                        </p>
+                    }
                 }
             </div>
         }

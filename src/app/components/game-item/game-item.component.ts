@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddToInventoryIconComponent } from '../icons/add-to-inventory-icon/add-to-inventory-icon.component';
 import { ItemTypeIconComponent } from '../icons/item-type-icon/item-type-icon.component';
 import {DamageType} from '../../entities/DamageType';
+import {GiveIconComponent} from '../icons/give-icon/give-icon.component';
 
 @Component({
     selector: 'app-game-item',
@@ -23,7 +24,8 @@ import {DamageType} from '../../entities/DamageType';
         FormsModule,
         ReactiveFormsModule,
         AddToInventoryIconComponent,
-        ItemTypeIconComponent
+        ItemTypeIconComponent,
+        GiveIconComponent
     ],
     templateUrl: './game-item.component.html'
 })
@@ -202,7 +204,7 @@ export class GameItemComponent {
     }
 
     itemHasExtraAbilities(): boolean {
-        return !!this.item()?.special_properties?.spells?.length || !!this.item()?.special_properties?.ability;
+        return !!this.item()?.special_properties?.spells || !!this.item()?.special_properties?.spell || !!this.item()?.special_properties?.ability;
     }
 
     editItemInPlace(): void {

@@ -55,18 +55,25 @@ export class Item {
         recharges?: string,
         recharge_rate?: string,
         spells?: Array<Spell>,
+        spell?: Spell,
         extra_damage?: string,
         damage_type?: DamageType,
         slaying?: number,
         creature?: string,
         ability?: {
+            id: number,
             type: string,
             damage_type: {
                 id: number,
                 name: string,
             },
             amount: string,
-        }
+            name: string,
+            short_name: string,
+        },
+        effects?: string,
+        amount?: string,
+        duration?: string,
     };
     proficiency: string = '';
     isContainer: boolean = false;
