@@ -34,4 +34,89 @@
         <app-game-item [item]="item" [openStatus]="true" [itemLocation]="'generated'" (moveUpdatedItem)="saveAndMoveItem($event)"/>
     }
 
+    @if (generatedItems) {
+        <h2>Your Own Generated Items</h2>
+        <ul class="generated-items-list">
+            @for (generatedItem of generatedItems; track generatedItem) {
+                <li>
+                    <app-game-item [item]="generatedItem" [openStatus]="false" [itemLocation]="'generated-own'" (moveUpdatedItem)="saveAndMoveItem($event)"/>
+                </li>
+            }
+        </ul>
+    }
+
+    <app-lightbox #giveLightbox [heading]="'Give ' + item?.name + ' to...'">
+        @if (giveItemErrorMessage) {
+            <div class="error">{{ giveItemErrorMessage }}</div>
+        }
+
+        <div class="tabs" id="giveItemTabs">
+            <div role="tablist" aria-label="Select characters or campaigns">
+                <button type="button" role="tab" aria-controls="characterPanel" id="give-tab-1" tabindex="-1" (click)="selectTab($event)" aria-selected="true">Your characters</button>
+                <button type="button" role="tab" aria-controls="campaignPanel" id="give-tab-2" tabindex="-1" (click)="selectTab($event)">Your campaigns characters</button>
+            </div>
+            <div id="characterPanel" role="tabpanel" tabindex="0" aria-labelledby="give-tab-1" class="tab-panel">
+                @if (characters.length > 0) {
+                    <ul class="character-list">
+                        @for (character of characters; track character) {
+                            <li class="char-panel">
+                                <span class="char-image">
+                                    <app-portrait [character]="character"/>
+                                </span>
+                                <span class="char-details">
+                                    <div class="char-name">{{ character.name }}</div>
+                                    <div>Level {{ character.level }} {{ character.charRace }} {{ character.charClass }}</div>
+
+                                    <div class="char-actions">
+                                        <button type="button" title="Give {{ character.name }} {{ item?.name }}" (click)="giveItemToCharacter(character)">
+                                            <app-give-icon/>
+                                        </button>
+                                    </div>
+                                </span>
+                            </li>
+                        }
+                    </ul>
+                } @else {
+                    <p>You have no characters.</p>
+                }
+            </div>
+            <div id="campaignPanel" role="tabpanel" tabindex="0" aria-labelledby="give-tab-2" class="tab-panel" hidden>
+                @if (getTotalCampaignsPlayerCount() > 0) {
+                    <ul class="campaign-list">
+                        @for (campaign of campaigns; track campaign) {
+                            @if (campaign.players.length > 0) {
+                                <li class="campaign-panel">
+                                    <details>
+                                        <summary>Campaign: {{ campaign.name }}</summary>
+                                        <ul class="character-list">
+                                            @for (character of campaign.players; track character) {
+                                                <li class="char-panel">
+                                                    <span class="char-image">
+                                                        <app-portrait [character]="character"/>
+                                                    </span>
+                                                    <span class="char-details">
+                                                        <div class="char-name">{{ character.name }}</div>
+                                                        <div>Level {{ character.level }} {{ character.charRace }} {{ character.charClass }}</div>
+
+                                                        <div class="char-actions">
+                                                            <button type="button" title="Give {{ character.name }} {{ item?.name }}" (click)="giveItemToCharacter(character)">
+                                                                <app-give-icon/>
+                                                            </button>
+                                                        </div>
+                                                    </span>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </details>
+                                </li>
+                            }
+                        }
+                    </ul>
+                } @else {
+                    <p>You have no campaigns with players.</p>
+                }
+            </div>
+        </div>
+    </app-lightbox>
+
 </div>

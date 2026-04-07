@@ -39,12 +39,10 @@
                 </label>
                 <button type="button" title="Add to Inventory" (click)="addToInventory()"><app-add-to-inventory-icon/></button>
             }
-            @if (itemLocation() === 'generated') {
-                @if (!editInPlace) {
-                    <button type="button" title="Edit Details" (click)="editItemInPlace()"><app-edit-icon/></button>
-                } @else {
-                    <!--<button type="button" title="Save Changes" (click)="saveInPlaceEdits()"><app-save-icon/></button>-->
-                }
+            @if (itemLocation() === 'generated' && !editInPlace) {
+                <button type="button" title="Edit Details" (click)="editItemInPlace()"><app-edit-icon/></button>
+            }
+            @if (itemLocation() === 'generated-own') {
                 <button type="button" title="Give to Character" (click)="giveToCharacter()"><app-give-icon/></button>
             }
         </form>
@@ -152,7 +150,14 @@
         }
         @if (item()?.armor_props) {
             <div class="item-property"><strong>Armor Class:</strong>
-                {{ item()!.armor_props!.ac }}
+                @if (editInPlace) {
+                    <div class="tiny-label">
+                        <label for="armor_class">Armor Class</label>
+                        <input type="text" name="armor_class" [(ngModel)]="item()!.armor_props!.ac" id="armor_class" class="inline inline-small"/>
+                    </div>
+                } @else {
+                    {{ item()!.armor_props!.ac }}
+                }
                 @if (item()!.armor_props?.has_dex_modifier) {
                     + Dex modifier
                     @if (item()!.armor_props?.dex_modifier_limit) {

@@ -78,4 +78,5 @@ export class Item {
     proficiency: string = '';
     isContainer: boolean = false;
     items: Array<Item> = [];
+    tainted: boolean = false;
 }

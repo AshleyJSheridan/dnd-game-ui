@@ -41,8 +41,7 @@ export class LightboxComponent {
         }
     }
 
-    showModal(focusReturnElement: EventTarget): void {
-        console.log('wtf')
+    showModal(focusReturnElement: EventTarget | null): void {
         this.focusReturnElement = focusReturnElement;
         this.canShowModal = true;
 
@@ -52,8 +51,10 @@ export class LightboxComponent {
     cancelModal(): void {
         this.canShowModal = false;
 
-        window.setTimeout(() => {
-            (<HTMLElement>this.focusReturnElement).focus();
-        }, 10);
+        if (this.focusReturnElement) {
+            window.setTimeout(() => {
+                (<HTMLElement>this.focusReturnElement).focus();
+            }, 10);
+        }
     }
 }

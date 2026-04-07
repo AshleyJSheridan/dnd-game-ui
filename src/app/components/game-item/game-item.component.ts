@@ -209,9 +209,11 @@ export class GameItemComponent {
 
     editItemInPlace(): void {
         this.editInPlace = true;
+        this.item()!.tainted = true;
     }
 
     giveToCharacter(): void {
+        this.editInPlace = false;
         this.moveUpdatedItem.emit(this.item());
     }
 }

@@ -48,4 +48,22 @@ export class ItemService {
             {headers: this.authService.getAuthHeader()}
         );
     }
+
+    public addItemToCharInventory(charGuid: string, item: Item): Observable<any> {
+        // reset the item id, as we have to assume the user has modified it, and we'll add it as a custom item.
+        item.id = 0;
+
+        return this.http.post(
+            `${this.apiUrl}/characters/${charGuid}/inventory/customItem`,
+            {item: item},
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
+
+    public getGeneratedItems(): Observable<Array<Item>> {
+        return this.http.get<Array<Item>>(
+            `${this.apiUrl}/game/items/generated`,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
 }
