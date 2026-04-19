@@ -218,3 +218,158 @@
         }
     }
 }
+
+.encounter-creator-container {
+    .tabs {
+        [role="tab"] {
+            margin-left: 0;
+            max-width: initial;
+            padding: .25rem;
+        }
+
+        [role="tabpanel"] {
+            p {
+                margin-bottom: 1rem;
+            }
+        }
+    }
+
+    .campaign-list {
+        display: flex;
+        gap: 1rem;
+        margin: 0;
+        padding: 0;
+
+        li {
+            list-style: none;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        label {
+            border: 1px solid colours.$grey;
+            border-radius: 1rem;
+            cursor: pointer;
+            font-size: 110%;
+            padding: 1rem;
+        }
+
+        input[type="radio"]:checked + label {
+            background-color: colours.$gold;
+        }
+    }
+
+    label {
+        display: block;
+    }
+
+    textarea {
+        margin-top: 1rem;
+    }
+
+    .previous-encounters {
+        .encounters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 0;
+            padding: 0;
+
+            li {
+                border: 1px solid colours.$grey;
+                border-radius: 1rem;
+                box-shadow: 2px 2px 7px colours.$medium-grey;
+                box-sizing: border-box;
+                list-style: none;
+                padding: .5rem;
+                width: 31%;
+            }
+
+            details {
+                summary {
+                    cursor: pointer;
+
+                    em {
+                        display: block;
+                    }
+                }
+            }
+        }
+
+        .encounter-creatures {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .5rem;
+            margin: 0;
+            padding: 0;
+
+            .dead {
+                background-color: colours.$error-background;
+            }
+
+            .creature {
+
+                img {
+                    width: 100%;
+                }
+            }
+
+            dt {
+                font-weight: bold;
+                margin-top: .5rem;
+            }
+
+            dd {
+                margin: 0;
+            }
+        }
+    }
+
+    .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .5rem;
+        margin-top: 1rem;
+
+        svg {
+            height: 1.5rem;
+            width: auto;
+        }
+    }
+
+    .encounter-name-edit {
+        background-color: colours.$light-grey;
+        border: 1px solid colours.$dark-grey;
+        border-radius: .5rem;
+        margin-top: 1rem;
+        padding: .5rem;
+
+        input {
+            padding: .25rem;
+            text-align: left;
+        }
+    }
+
+    .modal {
+        ul.creature-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .5rem;
+            padding: 0;
+
+            li {
+                box-sizing: border-box;
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                width: 5rem;
+
+                img {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

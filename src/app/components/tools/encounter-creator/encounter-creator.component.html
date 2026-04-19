@@ -1,1 +1,184 @@
-<p>encounter-creator works!</p>
+<app-header></app-header>
+
+<div class="encounter-creator-container">
+    <h2>Encounter Creator</h2>
+
+    <form (submit)="submitHandler($event)">
+
+        <div class="input-attached-button-aligned">
+            <label class="aligned">Environment Type
+                <select [(ngModel)]="environment" name="environment">
+                    @for (env of environments; track env) {
+                        <option value="{{ env }}" [selected]="env === environment">{{ env }}</option>
+                    }
+                </select>
+            </label>
+        </div>
+
+        <div class="input-attached-button-aligned">
+            <label class="aligned">Difficulty
+                <select [(ngModel)]="difficulty" name="difficulty">
+                    @for (diff of difficulties; track diff.id) {
+                        <option value="{{ diff.id }}" [selected]="diff.id === difficulty">{{ diff.name }}</option>
+                    }
+                </select>
+            </label>
+        </div>
+
+        <div class="tabs" id="encounterCharacterTabs">
+            <div role="tablist" aria-label="Select campaign or enter list of character levels">
+                <button type="button" role="tab" aria-controls="campaignPanel" id="char-tab-1" tabindex="-1" (click)="selectTab($event)" aria-selected="true">Your campaigns</button>
+                <button type="button" role="tab" aria-controls="levelPanel" id="char-tab-2" tabindex="-1" (click)="selectTab($event)">Character levels</button>
+            </div>
+            <div id="campaignPanel" role="tabpanel" tabindex="0" aria-labelledby="char-tab-1" class="tab-panel">
+                @if (getTotalCampaignsPlayerCount() > 0) {
+                    <p>Select a campaign, and all players from that campaign will be used to generate the encounter difficulty.</p>
+                    <ul class="campaign-list">
+                        @for (campaign of campaigns; track campaign) {
+                            @if (campaign.players.length > 0) {
+                                <li>
+                                    <input
+                                        type="radio"
+                                        name="campaign"
+                                        value="{{ campaign.guid }}"
+                                        [(ngModel)]="selectedCampaignId"
+                                        id="campaign-{{ campaign.guid }}"
+                                        (change)="clearCharLevels()"
+                                    />
+                                    <label for="campaign-{{ campaign.guid }}">
+                                        {{ campaign.name }}
+                                        <em>- {{ campaign.players.length }} player(s)</em>
+                                    </label>
+                                </li>
+                            }
+                        }
+                    </ul>
+                } @else {
+                    <p>You don't have any campaigns yet. Create a campaign and add characters to it to use this feature.</p>
+                }
+            </div>
+            <div id="levelPanel" role="tabpanel" tabindex="0" aria-labelledby="char-tab-2" class="tab-panel" hidden>
+                <label for="charLevels">Enter character levels, one per line, which will be used to generate the encounter difficulty.</label>
+                <textarea type="text" [(ngModel)]="characterLevels" name="characterLevels" id="charLevels" (change)="clearCampaignSelection()"></textarea>
+            </div>
+        </div>
+
+        <button type="submit" class="fantasy-btn fantasy-blue">Generate encounter</button>
+    </form>
+
+    <div class="previous-encounters">
+        <h2>All Generated Encounters</h2>
+
+        <p>Only encounters with <em>at least</em> one creature left alive will be shown here.</p>
+
+        <p>You currently have {{ encounters.length }} encounter(s).</p>
+
+        @if (encounters.length > 0) {
+            <ul class="encounters">
+                @for (encounter of encounters; track encounter) {
+                    <li>
+                        <details open>
+                            <summary>
+                                @if (encounter.description) {
+                                    {{ encounter.description }}
+                                } @else {
+                                    {{ encounter.creatures.length }} creature encounter in the {{ encounter.environment }}
+                                }
+                                <em>(created at {{ encounter.created_at | date: 'medium' }})</em>
+                            </summary>
+
+                            @if (editingEncounterGuid === encounter.guid) {
+                                <div class="tiny-label encounter-name-edit">
+                                    <label for="encounter_name">Encounter Name</label>
+                                    <input
+                                        type="text"
+                                        name="encounter_name"
+                                        [(ngModel)]="encounter.description"
+                                        id="encounter_name"
+                                        class="inline inline-small"
+                                        placeholder="some encounter name"
+                                        (blur)="updateEncounterName($event)"
+                                        (keydown)="updateEncounterName($event)"
+                                    />
+                                </div>
+                            }
+
+                            <div class="actions">
+                                <button (click)="deleteEncounter(encounter.guid)" title="Delete encounter">
+                                    <app-delete-icon/>
+                                </button>
+                                <button (click)="showAddCreatureLightbox(encounter.guid)" title="Add creature to encounter">
+                                    <app-monster-icon/>
+                                </button>
+                                <button (click)="showEditEncounterName(encounter.guid)" title="Edit encounter name">
+                                    <app-edit-icon/>
+                                </button>
+                            </div>
+
+                            <h3>Creatures</h3>
+                            <ul class="encounter-creatures">
+                                @for (creature of encounter.creatures; track creature) {
+                                    <li [class.dead]="creature.creature_details!.hit_points!.hp <= 0">
+                                        <app-creature
+                                            [creature]="creature.creature_details"
+                                            [showDetails]="true"
+                                            [showActions]="true"
+                                            (killCreatureEvent)="killCreature(encounter.guid, creature.guid, creature.creature_details)"
+                                            (updateCreatureEvent)="updateCreature(encounter.guid, creature.guid, creature.creature_details)"
+                                            (deleteCreatureEvent)="deleteCreature(encounter.guid, creature.guid)"
+                                        />
+                                    </li>
+                                }
+
+                            </ul>
+                        </details>
+                    </li>
+                }
+            </ul>
+        } @else {
+            <p>You have generated no encounters.</p>
+        }
+    </div>
+
+    <app-lightbox #addCreatureLightbox [heading]="'Add creature to encounter'">
+        @if (addCreatureErrorMessage) {
+            <div class="error">{{ addCreatureErrorMessage }}</div>
+        }
+
+        @if (creatures) {
+            <label>Type:
+                <select [(ngModel)]="creatureType" name="creatureType" (change)="clearCreatureSearch($event)">
+                    <option value="-">Select Creature Type</option>
+                    <option value="aberration">Aberration</option>
+                    <option value="beast">Beast</option>
+                    <option value="celestial">Celestial</option>
+                    <option value="construct">Construct</option>
+                    <option value="dragon">Dragon</option>
+                    <option value="elemental">Elemental</option>
+                    <option value="fey">Fey</option>
+                    <option value="fiend">Fiend</option>
+                    <option value="giant">Giant</option>
+                    <option value="humanoid">Humanoid</option>
+                    <option value="monstrosity">Monstrosity</option>
+                    <option value="ooze">Ooze</option>
+                    <option value="plant">Plant</option>
+                    <option value="undead">Undead</option>
+                </select>
+            </label>
+            <label>Search:
+                <input type="text" name="creatureSearch" [(ngModel)]="creatureSearch" (keyup)="clearCreatureType($event)"/>
+            </label>
+            <em>Search begins after second letter</em>
+            <ul class="creature-list">
+                @for (creature of getFilteredCreatures(); track $index) {
+                    <li>
+                        <button class="creature" (click)="addCreatureToEncounter(creature)">
+                            <app-creature [creature]="creature"/>
+                        </button>
+                    </li>
+                }
+            </ul>
+        }
+
+    </app-lightbox>
+</div>

@@ -1,4 +1,77 @@
 <div class="creature">
-    <img src="/images/creature-icons/{{ creature()?.name?.toLowerCase() }}.png" alt="" />
-    <div class="creature-name">{{ creature()?.name }}</div>
+    <img src="/images/creature-icons/{{ creature()?.name?.toLowerCase() }}.png" alt="{{ creature()?.name }}"/>
+    @if (editMode) {
+        <div class="tiny-label">
+            <label for="name">Name</label>
+            <input type="text" name="name" [(ngModel)]="creature()!.unique_name" id="name" class="inline inline-small"/>
+        </div>
+    } @else {
+        <div class="creature-name">
+            {{ (creature()?.unique_name !== '' && creature()?.unique_name !== undefined)
+            ? creature()?.unique_name
+            : creature()?.name }}
+        </div>
+    }
+
+    @if (showDetails()) {
+        <div class="creature-details">
+            <dl>
+                <dt>Type</dt>
+                <dd>{{ creature()?.type }}</dd>
+
+                <dt>Size</dt>
+                <dd>{{ creature()?.size }}</dd>
+
+                <dt>HP</dt>
+                @if (editMode) {
+                    <dd>
+                        <div class="tiny-label">
+                            <label for="hp"></label>
+                            <input
+                                type="number"
+                                name="hp"
+                                [(ngModel)]="creature()!.hit_points!.hp"
+                                id="hp"
+                                class="inline inline-small"
+                                [max]="creature()!.hit_points!.max_hp"/>
+                        </div>
+                        /
+                        <div class="tiny-label">
+                            <label for="max_hp"></label>
+                            <input
+                                type="number"
+                                name="max_hp"
+                                [(ngModel)]="creature()!.hit_points!.max_hp"
+                                id="max_hp"
+                                class="inline inline-small"/>
+                        </div>
+                    </dd>
+                } @else {
+                    <dd>{{ creature()?.hit_points?.hp }} / {{ creature()?.hit_points?.max_hp }}</dd>
+                }
+            </dl>
+        </div>
+    }
+
+    @if (showActions()) {
+        <div class="actions">
+            @if ((creature()?.hit_points?.hp ?? 0) > 0) {
+                <button (click)="killCreature()" title="Kill creature">
+                    <app-damage-icon [patternSymbol]="'necrotic'"/>
+                </button>
+            }
+            @if (!editMode) {
+                <button (click)="setEditMode()" title="Edit creature details">
+                    <app-edit-icon/>
+                </button>
+            } @else {
+                <button (click)="updateCreature()" title="Save creature">
+                    <app-up-icon/>
+                </button>
+            }
+            <button (click)="deleteCreature()" title="Remove creature from encounter">
+                <app-delete-icon/>
+            </button>
+        </div>
+    }
 </div>

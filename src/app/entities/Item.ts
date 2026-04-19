@@ -1,5 +1,5 @@
-import {DamageType} from './DamageType';
-import {Spell} from './Spell';
+import { DamageType } from './DamageType';
+import { Spell } from './Spell';
 
 export class Item {
     guid: string = '';

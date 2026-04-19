@@ -1,6 +1,7 @@
 export class Creature {
     id: number = 0;
     name: string = '';
+    unique_name: string = '';
     description: string = '';
     size: string = '';
     type: string = '';

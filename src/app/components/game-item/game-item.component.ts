@@ -10,8 +10,8 @@ import { UpIconComponent } from '../icons/up-icon/up-icon.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddToInventoryIconComponent } from '../icons/add-to-inventory-icon/add-to-inventory-icon.component';
 import { ItemTypeIconComponent } from '../icons/item-type-icon/item-type-icon.component';
-import {DamageType} from '../../entities/DamageType';
-import {GiveIconComponent} from '../icons/give-icon/give-icon.component';
+import { DamageType } from '../../entities/DamageType';
+import { GiveIconComponent } from '../icons/give-icon/give-icon.component';
 
 @Component({
     selector: 'app-game-item',
