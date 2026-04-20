@@ -3,11 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { Encounter } from '../entities/Encounter';
-import {Creature} from '../entities/Creature';
+import { Creature } from '../entities/Creature';
+import { environment } from '../../environments/environment';
 
 @Injectable({providedIn: 'root'})
 export class EncounterService {
-    public apiUrl = 'http://127.0.0.1:8000/api';
+    public apiUrl = environment.apiUrl;
 
     constructor(private http: HttpClient, private authService: AuthService) {}
 

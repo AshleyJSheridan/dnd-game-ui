@@ -3,10 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Item } from '../entities/Item';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({providedIn: 'root'})
 export class ItemService {
-    public apiUrl = 'http://127.0.0.1:8000/api';
+    public apiUrl = environment.apiUrl;
 
     constructor(private http: HttpClient, private authService: AuthService) {}
 

@@ -4,10 +4,11 @@ import { Observable } from 'rxjs';
 import { Token } from '../entities/Token';
 import { LocalStorageService } from './local-storage.service';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
-    private apiUrl = 'http://127.0.0.1:8000/api';
+    private apiUrl = environment.apiUrl;
 
     constructor(private http: HttpClient, private storageService: LocalStorageService, private router: Router) {}
 

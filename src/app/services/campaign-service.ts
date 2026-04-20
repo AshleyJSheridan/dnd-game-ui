@@ -7,10 +7,11 @@ import { Creature } from '../entities/Creature';
 import { AuthService } from './auth.service';
 import { CampaignLore } from '../entities/CampaignLore';
 import { CampaignInvite } from '../entities/CampaignInvite';
+import { environment } from '../../environments/environment';
 
 @Injectable({providedIn: 'root'})
 export class CampaignService {
-    readonly apiUrl = 'http://127.0.0.1:8000/api';
+    readonly apiUrl = environment.apiUrl;
     private campaignGuid: string = '';
 
     constructor(private http: HttpClient, private authService: AuthService) {}

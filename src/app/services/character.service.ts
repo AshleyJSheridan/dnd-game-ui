@@ -13,10 +13,11 @@ import { AvailableSpells } from '../entities/AvailableSpells';
 import { StartingEquipment } from '../entities/StartingEquipment';
 import { AuthService } from './auth.service';
 import { CreatureAlignment } from '../entities/CreatureAlignment';
+import { environment } from '../../environments/environment';
 
 @Injectable({providedIn: 'root'})
 export class CharacterService {
-    public apiUrl = 'http://127.0.0.1:8000/api';
+    public apiUrl = environment.apiUrl;
     private charGuid: string = '';
     public character: Character | undefined;
 
