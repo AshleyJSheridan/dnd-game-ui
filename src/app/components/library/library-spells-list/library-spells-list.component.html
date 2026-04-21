@@ -1,0 +1,64 @@
+<app-header></app-header>
+
+<div class="spells-list-container">
+
+    <form class="filter-form">
+        <fieldset>
+            <legend>Filter Spells</legend>
+
+            <label>School
+                <select [(ngModel)]="selectedSchool" name="school">
+                    <option value="">All</option>
+                    @for (school of spellSchools; track school) {
+                        <option value="{{ school }}">{{ school }}</option>
+                    }
+                </select>
+            </label>
+
+            <label>Class
+                <select [(ngModel)]="selectedClass" name="characterClass">
+                    <option value="">All</option>
+                    @for (className of characterClasses; track className) {
+                        <option value="{{ className }}">{{ className }}</option>
+                    }
+                </select>
+            </label>
+
+            <label>Level
+                <select [(ngModel)]="selectedSpellLevel" name="level">
+                    <option value="-1">All</option>
+                    @for (level of spellLevels; track level) {
+                        <option value="{{ level }}">{{ level === 0 ? 'Cantrip' : 'Level ' + level }}</option>
+                    }
+                </select>
+            </label>
+        </fieldset>
+    </form>
+
+    @for (level of spellLevels; track $index) {
+        @if (getAvailableSpellsByLevel(level).length > 0) {
+            <details open class="spell-level">
+                <summary>
+                    @if (level === 0) {
+                        Cantrips
+                    } @else {
+                        Spell Level {{ level }}
+                    }
+                </summary>
+
+                <ul class="spells-list">
+                    @for (spell of getAvailableSpellsByLevel(level); track spell.id) {
+                        <li class="spell">
+                            <app-edit-character-spell [spell]="spell" [showMaterialComponents]="true"/>
+                        </li>
+
+                        @if (selectedSchool == '' || (selectedSchool !== '' && spell.school.name === selectedSchool)) {
+
+                        }
+                    }
+                </ul>
+            </details>
+        }
+    }
+
+</div>

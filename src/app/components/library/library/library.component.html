@@ -1,0 +1,73 @@
+<app-header></app-header>
+
+<div class="library-list-container">
+    <ul class="library-list">
+        <li>
+            <a [routerLink]="['/library/spells/']">
+                <app-book-icon/>
+                <div class="library-name">Spells</div>
+            </a>
+        </li>
+        <li>
+            <a [routerLink]="['/library/monsters/']">
+                <app-monster-icon/>
+                <div class="library-name">Monsters</div>
+            </a>
+        </li>
+        <li>
+            <a [routerLink]="['/library/races/']">
+                <app-race-icon/>
+                <div class="library-name">Races</div>
+            </a>
+        </li>
+        <li>
+            <a [routerLink]="['/library/classes/']">
+                <app-class-icon/>
+                <div class="library-name">Classes</div>
+            </a>
+        </li>
+        <li>
+            <a [routerLink]="['/library/backgrounds/']">
+                <app-calendar-icon/>
+                <div class="library-name">Backgrounds</div>
+            </a>
+        </li>
+        <li>
+            <a [routerLink]="['/library/languages/']">
+                <app-language-icon/>
+                <div class="library-name">Languages</div>
+            </a>
+        </li>
+        <li>
+            <a [routerLink]="['/library/alignments/']">
+                <app-alignment-icon/>
+                <div class="library-name">Alignments</div>
+            </a>
+        </li>
+        <li>
+            <a [routerLink]="['/library/items/']">
+                <app-item-type-icon [itemType]="'weapon'" [itemBaseName]="'battleaxe'"/>
+                <div class="library-name">Items</div>
+            </a>
+        </li>
+        <li>
+            <a [routerLink]="['/library/deities/']">
+                <app-deity-icon/>
+                <div class="library-name">Deities</div>
+            </a>
+        </li>
+        <li>
+            <a [routerLink]="['/library/conditions/']">
+                <app-conditions-icon/>
+                <div class="library-name">Conditions</div>
+            </a>
+        </li>
+        <li>
+            <a [routerLink]="['/library/damage-types/']">
+                <app-damage-icon [patternSymbol]="'necrotic'"/>
+                <div class="library-name">Damage Types</div>
+            </a>
+        </li>
+    </ul>
+</div>
+

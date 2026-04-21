@@ -10,6 +10,7 @@ export class Spell {
         name: '',
         description: '',
     };
+    classes: Array<string> = [];
     cast_time: {
         value: number;
         unit: string;
@@ -25,6 +26,15 @@ export class Spell {
         unit: '',
     };
     components: Array<string> = [];
+    component_materials: Array<{
+        component: string;
+        consume_on_use: boolean;
+        'cost': {
+            'at_least': number,
+            'unit': string,
+            'cost_per_target': boolean,
+        },
+    }> = [];
     concentration: number = 0;
     ritual: number = 0;
     range: string = '';

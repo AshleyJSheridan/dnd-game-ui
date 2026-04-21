@@ -1,0 +1,189 @@
+@use "../colours";
+
+.library-list-container,
+.spells-list-container {
+    padding: 1rem;
+}
+
+.library-list-container {
+    .library-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin: 0;
+        padding: 0;
+
+        li {
+            border: 1px solid colours.$dark-grey;
+            border-radius: 1rem;
+            box-shadow: 2px 2px 7px colours.$medium-grey;
+            list-style: none;
+            text-align: center;
+            width: 20rem;
+
+            a {
+                color: colours.$black;
+                display: block;
+                margin: 1rem;
+            }
+
+            svg {
+                height: 5rem;
+                margin-bottom: 1rem;
+                width: auto;
+            }
+        }
+    }
+}
+
+.spells-list-container {
+    form {
+        margin-bottom: 1rem;
+
+        fieldset {
+            display: flex;
+            gap: 1rem;
+        }
+    }
+
+    .spells-list {
+        margin: 0;
+        padding: 0;
+    }
+
+    summary {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+
+    .spell {
+        border: 1px solid #333;
+        list-style: none;
+        margin: 0 0 0.5rem 0;
+        padding: 0;
+
+        table {
+            border-collapse: collapse;
+            display: table;
+            margin-top: 0.5rem;
+            width: 100%;
+
+            td,
+            th {
+                border: 1px solid colours.$dark-grey;
+                padding: .25rem;
+            }
+
+            .name,
+            .range,
+            .cast-time,
+            .duration {
+                width: 10%;
+            }
+
+            .components,
+            .classes {
+                width: 20%;
+            }
+        }
+
+        .spell-component {
+            align-items: start;
+            display: inline-flex;
+            margin-right: .5rem;
+
+            svg {
+                height: 1.25rem;
+                margin-right: .25rem;
+                width: 1.25rem;
+            }
+        }
+
+        .spell-component-material-list {
+            display: block;
+            padding-left: 1rem;
+        }
+    }
+
+    .spell-container {
+        display: flex;
+        gap: 0.5rem;
+        padding: 0.5rem;
+    }
+
+    .spell-school-icon {
+        align-items: center;
+        background-color: #333;
+        display: flex;
+        height: 5rem;
+        padding: 0.25rem;
+        width: 5rem;
+
+        svg {
+            fill: colours.$white;
+            height: 5rem;
+            width: 5rem;
+        }
+
+        &.spell-school-abjuration svg {
+            filter: drop-shadow(colours.$white 0 0 2px)
+            drop-shadow(colours.$spell-school-abjuration 0 0 4px)
+            drop-shadow(colours.$spell-school-abjuration 0 0 5px);
+        }
+
+        &.spell-school-conjuration svg {
+            filter: drop-shadow(colours.$white 0 0 2px)
+            drop-shadow(colours.$spell-school-conjuration 0 0 4px)
+            drop-shadow(colours.$spell-school-conjuration 0 0 5px);
+        }
+
+        &.spell-school-divination svg {
+            filter: drop-shadow(colours.$white 0 0 2px)
+            drop-shadow(colours.$spell-school-divination 0 0 4px)
+            drop-shadow(colours.$spell-school-divination 0 0 5px);
+        }
+
+        &.spell-school-enchantment svg {
+            filter: drop-shadow(colours.$white 0 0 2px)
+            drop-shadow(colours.$spell-school-enchantment 0 0 4px)
+            drop-shadow(colours.$spell-school-enchantment 0 0 5px);
+        }
+
+        &.spell-school-evocation svg {
+            filter: drop-shadow(colours.$white 0 0 2px)
+            drop-shadow(colours.$spell-school-evocation 0 0 4px)
+            drop-shadow(colours.$spell-school-evocation 0 0 5px);
+        }
+
+        &.spell-school-illusion svg {
+            filter: drop-shadow(colours.$white 0 0 2px)
+            drop-shadow(colours.$spell-school-illusion 0 0 4px)
+            drop-shadow(colours.$spell-school-illusion 0 0 5px);
+        }
+
+        &.spell-school-necromancy svg {
+            filter: drop-shadow(colours.$white 0 0 2px)
+            drop-shadow(colours.$spell-school-necromancy 0 0 4px)
+            drop-shadow(colours.$spell-school-necromancy 0 0 5px);
+        }
+
+        &.spell-school-transmutation svg {
+            filter: drop-shadow(colours.$white 0 0 2px)
+            drop-shadow(colours.$spell-school-transmutation 0 0 4px)
+            drop-shadow(colours.$spell-school-transmutation 0 0 5px);
+        }
+    }
+
+    .spell-details {
+        flex-grow: 1;
+    }
+
+    .spell-name {
+        font-size: 1.25rem;
+        font-weight: bold;
+    }
+
+}
+
+

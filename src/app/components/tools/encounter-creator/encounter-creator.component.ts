@@ -7,11 +7,11 @@ import { EncounterService } from '../../../services/encounter-service';
 import { Encounter } from '../../../entities/Encounter';
 import { CreatureComponent } from '../../creatures/creature/creature.component';
 import { DatePipe } from '@angular/common';
-import {Creature} from '../../../entities/Creature';
-import {DeleteIconComponent} from '../../icons/delete-icon/delete-icon.component';
-import {MonsterIconComponent} from '../../icons/monster-icon/monster-icon.component';
-import {LightboxComponent} from '../../dialogs/lightbox/lightbox.component';
-import {EditIconComponent} from '../../icons/edit-icon/edit-icon.component';
+import { Creature } from '../../../entities/Creature';
+import { DeleteIconComponent } from '../../icons/delete-icon/delete-icon.component';
+import { MonsterIconComponent } from '../../icons/monster-icon/monster-icon.component';
+import { LightboxComponent } from '../../dialogs/lightbox/lightbox.component';
+import { EditIconComponent } from '../../icons/edit-icon/edit-icon.component';
 
 @Component({
     selector: 'app-encounter-creator',

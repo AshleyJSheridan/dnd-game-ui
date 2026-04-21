@@ -12,6 +12,7 @@
                 <th>Casting time</th>
                 <th>Duration</th>
                 <th>Components</th>
+                <th>Classes</th>
             </tr>
             <tr>
                 <td class="name">{{ spell()?.school?.name }}</td>
@@ -26,7 +27,27 @@
                             {{ component }}
                         </span>
                     }
+
+                    @if (showMaterialComponents() && spell()?.component_materials?.length) {
+                        <p>Material Components:</p>
+                        <ul class="spell-component-material-list">
+                            @for (material of spell()?.component_materials; track material) {
+                                <li>{{ material.component }}
+                                    @if (material.cost.at_least) {
+                                        that's worth at least {{ material.cost.at_least }}{{ material.cost.unit }}
+                                    }
+                                    @if (material.cost.cost_per_target) {
+                                        (per target)
+                                    }
+                                    @if (material.consume_on_use) {
+                                        <em>(consumed on use)</em>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    }
                 </td>
+                <td class="classes">{{ spell()!.classes.join(', ') }}</td>
             </tr>
         </table>
     </div>

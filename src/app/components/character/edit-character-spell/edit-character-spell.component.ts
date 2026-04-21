@@ -13,6 +13,7 @@ import {SpellComponentIconComponent} from '../../icons/spell-component-icon/spel
 })
 export class EditCharacterSpellComponent {
     readonly spell: InputSignal<Spell|undefined> = input<Spell>();
+    readonly showMaterialComponents: InputSignal<boolean> = input(false);
 
     public getFormattedRange(range: string|undefined): string {
         if (range === undefined)
