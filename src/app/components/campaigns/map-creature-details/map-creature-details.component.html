@@ -2,8 +2,10 @@
     <dl>
         <dt>Name</dt>
             <dd>{{ creature()?.entity_name }}</dd>
-        <dt>Creature</dt>
-            <dd>{{ creature()?.entity?.name }}</dd>
+        @if (creature()?.entity_name !== creature()?.entity?.name) {
+            <dt>Creature</dt>
+                <dd>{{ creature()?.entity?.name }}</dd>
+        }
         <dt>Type</dt>
             <dd>{{ creature()?.entity?.type }}</dd>
         <dt>Size</dt>

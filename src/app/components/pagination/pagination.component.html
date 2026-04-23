@@ -1,0 +1,7 @@
+<ul class="pagination">
+    @for (page of getTotalPages(); track page) {
+        <li class="page-item" [class.current]="page === paginationConfig()?.currentPage">
+            <button (click)="goToPage(page)">{{ page }}</button>
+        </li>
+    }
+</ul>

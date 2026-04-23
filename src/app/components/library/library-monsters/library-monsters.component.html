@@ -1,0 +1,56 @@
+<app-header></app-header>
+
+<div class="monsters-list-container">
+    <form class="filter-form">
+        <fieldset>
+            <legend>Filter Monsters</legend>
+
+            <label>Type
+                <select [(ngModel)]="selectedCreatureType" name="type">
+                    <option value="">All</option>
+                    @for (type of creatureTypes; track type) {
+                        <option value="{{ type }}">{{ type }}</option>
+                    }
+                </select>
+            </label>
+
+            <label>Environment
+                <select [(ngModel)]="selectedEnvironment" name="environment">
+                    <option value="">All</option>
+                    @for (environment of environments; track environment) {
+                        <option value="{{ environment }}">{{ environment }}</option>
+                    }
+                </select>
+            </label>
+
+            <label>Size
+                <select [(ngModel)]="selectedSize" name="size">
+                    <option value="">All</option>
+                    @for (size of sizes; track size) {
+                        <option value="{{ size }}">{{ size }}</option>
+                    }
+                </select>
+            </label>
+        </fieldset>
+
+    </form>
+
+    <ul class="creature-list">
+        @for (creature of getFilteredMonsters(); track creature.id) {
+            <li class="creature">
+                <button (click)="showCreatureDetails(creature)">
+                    <app-creature [creature]="creature"/>
+                </button>
+            </li>
+        }
+    </ul>
+    @if (monsters.length) {
+        <app-pagination [paginationConfig]="paginationConfig"/>
+    }
+
+    <app-lightbox #creatureDetailsLightbox [heading]="selectedCreature?.name ?? ''">
+        @if (selectedCreature) {
+            <app-creature-details [creature]="selectedCreature"/>
+        }
+    </app-lightbox>
+</div>

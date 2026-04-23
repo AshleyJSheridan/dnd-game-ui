@@ -1,7 +1,8 @@
 @use "../colours";
 
 .library-list-container,
-.spells-list-container {
+.spells-list-container,
+.monsters-list-container {
     padding: 1rem;
 }
 
@@ -186,4 +187,94 @@
 
 }
 
+.monsters-list-container {
+    .creature-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 0;
 
+        li {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        img {
+            height: 6rem;
+            width: auto;
+        }
+
+        .creature-name {
+            text-overflow: ellipsis;
+            width: 8rem;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+    }
+
+    .modal {
+        .creature-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        app-creature-icon {
+            width: 25%;
+        }
+
+        .creature-icon {
+            height: auto;
+            width: 100%;
+        }
+
+        .creature-basics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .5rem;
+            width: 70%;
+
+            dt {
+                width: 30%;
+            }
+            dd {
+                margin: 0;
+                padding: 0;
+                width: 65%;
+            }
+        }
+
+        fieldset {
+            width: 26%;
+
+            ul {
+                display: table;
+                margin: .5rem 0;
+                padding: 0;
+            }
+
+            li {
+                display: table-row;
+
+                strong,
+                div {
+                    display: table-cell;
+                    padding: .125rem .25rem;
+                }
+            }
+
+            &.creature-senses {
+                dl {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: .5rem;
+                    margin: .5rem 0;
+
+
+                }
+            }
+
+        }
+    }
+}

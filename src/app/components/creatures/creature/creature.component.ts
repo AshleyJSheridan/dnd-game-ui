@@ -5,6 +5,7 @@ import { EditIconComponent } from '../../icons/edit-icon/edit-icon.component';
 import { UpIconComponent } from '../../icons/up-icon/up-icon.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DeleteIconComponent } from '../../icons/delete-icon/delete-icon.component';
+import {CreatureDetailsComponent} from '../creature-details/creature-details.component';
 
 @Component({
     selector: 'app-creature',
@@ -14,7 +15,8 @@ import { DeleteIconComponent } from '../../icons/delete-icon/delete-icon.compone
         UpIconComponent,
         ReactiveFormsModule,
         FormsModule,
-        DeleteIconComponent
+        DeleteIconComponent,
+        CreatureDetailsComponent
     ],
     templateUrl: './creature.component.html'
 })
@@ -22,6 +24,7 @@ export class CreatureComponent {
     readonly creature: InputSignal<Creature|undefined> = input();
     readonly showDetails: InputSignal<boolean> = input(false);
     readonly showActions: InputSignal<boolean> = input(false);
+    readonly detailLevel: InputSignal<string> = input('basic');
 
     editMode: boolean = false;
 

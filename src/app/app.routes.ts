@@ -26,6 +26,7 @@ import { ItemGeneratorComponent } from './components/tools/item-generator/item-g
 import { EncounterCreatorComponent } from './components/tools/encounter-creator/encounter-creator.component';
 import { LibraryComponent } from './components/library/library/library.component';
 import { LibrarySpellsListComponent } from './components/library/library-spells-list/library-spells-list.component';
+import { LibraryMonstersComponent } from './components/library/library-monsters/library-monsters.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -63,6 +64,7 @@ export const routes: Routes = [
 
     { path: 'library', component: LibraryComponent },
     { path: 'library/spells', component: LibrarySpellsListComponent },
+    { path: 'library/monsters', component: LibraryMonstersComponent },
 
 ];
 

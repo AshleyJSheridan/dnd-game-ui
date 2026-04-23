@@ -51,10 +51,6 @@
                         <li class="spell">
                             <app-edit-character-spell [spell]="spell" [showMaterialComponents]="true"/>
                         </li>
-
-                        @if (selectedSchool == '' || (selectedSchool !== '' && spell.school.name === selectedSchool)) {
-
-                        }
                     }
                 </ul>
             </details>

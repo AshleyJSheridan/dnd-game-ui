@@ -1,0 +1,281 @@
+<div class="creature-details">
+    <app-creature-icon [creature]="creature()"/>
+
+    <dl class="creature-basics">
+        <dt>Name</dt>
+            <dd>{{ creature()?.name }}</dd>
+        <dt>Type</dt>
+            <dd>{{ creature()?.type }}</dd>
+        <dt>Size</dt>
+            <dd>{{ creature()?.size }}</dd>
+        <dt>Speed</dt>
+            <dd>{{ getCreatureSpeeds() }}</dd>
+        <dt title="Armor Class">AC</dt>
+            <dd>{{ creature()?.armor?.armor_class }}
+                @if (creature()?.armor?.wears_armor === false) {
+                    <em>(no armor)</em>
+                }
+            </dd>
+        <dt>Hit Points</dt>
+            <dd>{{ creature()?.hit_points?.max_hp }}</dd>
+        <dt title="Challenge Rating">CR</dt>
+            <dd>{{ creature()?.challenge_rating }}</dd>
+    </dl>
+
+    <fieldset class="creature-abilities">
+        <legend>Stats</legend>
+
+        <ul>
+            <li>
+                <strong title="Charisma">Cha</strong>
+                <div>{{ creature()?.abilities?.cha?.base }} ({{ creature()?.abilities?.cha?.modifier }})</div>
+            </li>
+            <li>
+                <strong title="Constitution">Con</strong>
+                <div>{{ creature()?.abilities?.con?.base }} ({{ creature()?.abilities?.con?.modifier }})</div>
+            </li>
+            <li>
+                <strong title="Dexterity">Dex</strong>
+                <div>{{ creature()?.abilities?.dex?.base }} ({{ creature()?.abilities?.dex?.modifier }})</div>
+            </li>
+            <li>
+                <strong title="Intelligence">Int</strong>
+                <div>{{ creature()?.abilities?.int?.base }} ({{ creature()?.abilities?.int?.modifier }})</div>
+            </li>
+            <li>
+                <strong title="Strength">Str</strong>
+                <div>{{ creature()?.abilities?.str?.base }} ({{ creature()?.abilities?.str?.modifier }})</div>
+            </li>
+            <li>
+                <strong title="Wisdom">Wis</strong>
+                <div>{{ creature()?.abilities?.wis?.base }} ({{ creature()?.abilities?.wis?.modifier }})</div>
+            </li>
+        </ul>
+    </fieldset>
+
+    @if (creatureHasSavingThrows()) {
+        <fieldset class="creature-saving-throws">
+            <legend>Saving Throws</legend>
+
+            <ul>
+                @if (creature()?.saving_throws?.cha) {
+                    <li>
+                        <strong title="Charisma">Cha</strong>
+                        <div>{{ creature()?.saving_throws?.cha?.base }} ({{ creature()?.saving_throws?.cha?.modifier }})</div>
+                    </li>
+                }
+                @if (creature()?.saving_throws?.con) {
+                    <li>
+                        <strong title="Constitution">Con</strong>
+                        <div>{{ creature()?.saving_throws?.con?.base }} ({{ creature()?.saving_throws?.con?.modifier }})</div>
+                    </li>
+                }
+                @if (creature()?.saving_throws?.dex) {
+                    <li>
+                        <strong title="Dexterity">Dex</strong>
+                        <div>{{ creature()?.saving_throws?.dex?.base }} ({{ creature()?.saving_throws?.dex?.modifier }})</div>
+                    </li>
+                }
+                @if (creature()?.saving_throws?.int) {
+                    <li>
+                        <strong title="Intelligence">Int</strong>
+                        <div>{{ creature()?.saving_throws?.int?.base }} ({{ creature()?.saving_throws?.int?.modifier }})</div>
+                    </li>
+                }
+                @if (creature()?.saving_throws?.str) {
+                    <li>
+                        <strong title="Strength">Str</strong>
+                        <div>{{ creature()?.saving_throws?.str?.base }} ({{ creature()?.saving_throws?.str?.modifier }})</div>
+                    </li>
+                }
+                @if (creature()?.saving_throws?.wis) {
+                    <li>
+                        <strong title="Wisdom">Wis</strong>
+                        <div>{{ creature()?.saving_throws?.wis?.base }} ({{ creature()?.saving_throws?.wis?.modifier }})</div>
+                    </li>
+                }
+            </ul>
+        </fieldset>
+    }
+
+    @if (creatureHasResistances()) {
+        <fieldset class="creature-resistances">
+            <legend>Resistances &amp; Immunities</legend>
+
+            @if (creature()?.resistances?.vulnerabilities) {
+                <strong>Vulnerabilities</strong>
+                <ul>
+                    @for (vulnerability of creature()?.resistances?.vulnerabilities; track vulnerability) {
+                        <li>{{ vulnerability }}</li>
+                    }
+                </ul>
+            }
+            @if (creature()?.resistances?.immunities) {
+                <strong>Immunities</strong>
+                <ul>
+                    @for (immunity of creature()?.resistances?.immunities; track immunity) {
+                        <li>{{ immunity }}</li>
+                    }
+                </ul>
+            }
+            @if (creature()?.resistances?.resistances) {
+                <strong>Resistances</strong>
+                <ul>
+                    @for (resistance of creature()?.resistances?.resistances; track resistance) {
+                        <li>{{ resistance }}</li>
+                    }
+                </ul>
+            }
+        </fieldset>
+    }
+
+    @if (creatureHasSenses()) {
+        <fieldset class="creature-senses">
+            <legend>Senses</legend>
+
+            <dl>
+                @if (creature()?.senses?.Blindsight) {
+                    <dt>Blindsight</dt><dd>{{ creature()?.senses?.Blindsight }}ft</dd>
+                }
+                @if (creature()?.senses?.Darkvision) {
+                    <dt>Darkvision</dt><dd>{{ creature()?.senses?.Darkvision }}ft</dd>
+                }
+                @if (creature()?.senses?.Tremorsense) {
+                    <dt>Tremorsense</dt><dd>{{ creature()?.senses?.Tremorsense }}ft</dd>
+                }
+                @if (creature()?.senses?.Truesight) {
+                    <dt>Truesight</dt><dd>{{ creature()?.senses?.Truesight }}ft</dd>
+                }
+            </dl>
+        </fieldset>
+    }
+
+    @if (creatureHasLanguages()) {
+        <fieldset class="creature-languages">
+            <legend>Languages</legend>
+
+            <ul>
+                @for (language of creature()?.languages; track language) {
+                    <li>{{ language.name }}</li>
+                }
+            </ul>
+        </fieldset>
+    }
+
+    @if (creatureHasSkillProficiencies()) {
+        <fieldset class="creature-skill-proficiencies">
+            <legend>Skill Proficiencies</legend>
+
+            <ul>
+                @if (creature()?.skill_modifiers?.Acrobatics) {
+                    <li>
+                        <strong>Acrobatics</strong>
+                        <div>{{ creature()?.skill_modifiers?.Acrobatics }}</div>
+                    </li>
+                }
+                @if (creature()?.skill_modifiers?.Animal_handling) {
+                    <li>
+                        <strong>Animal handling</strong>
+                        <div>{{ creature()?.skill_modifiers?.Animal_handling }}</div>
+                    </li>
+                }
+                @if (creature()?.skill_modifiers?.Arcana) {
+                    <li>
+                        <strong>Arcana</strong>
+                        <div>{{ creature()?.skill_modifiers?.Arcana }}</div>
+                    </li>
+                }
+                @if (creature()?.skill_modifiers?.Athletics) {
+                    <li>
+                        <strong>Athletics</strong>
+                        <div>{{ creature()?.skill_modifiers?.Athletics }}</div>
+                    </li>
+                }
+                @if (creature()?.skill_modifiers?.Deception) {
+                    <li>
+                        <strong>Deception</strong>
+                        <div>{{ creature()?.skill_modifiers?.Deception }}</div>
+                    </li>
+                }
+                @if (creature()?.skill_modifiers?.History) {
+                    <li>
+                        <strong>History</strong>
+                        <div>{{ creature()?.skill_modifiers?.History }}</div>
+                    </li>
+                }
+                @if (creature()?.skill_modifiers?.Insight) {
+                    <li>
+                        <strong>Insight</strong>
+                        <div>{{ creature()?.skill_modifiers?.Insight }}</div>
+                    </li>
+                }
+                @if (creature()?.skill_modifiers?.Intimidation) {
+                    <li>
+                        <strong>Intimidation</strong>
+                        <div>{{ creature()?.skill_modifiers?.Intimidation }}</div>
+                    </li>
+                }
+                @if (creature()?.skill_modifiers?.Investigation) {
+                    <li>
+                        <strong>Investigation</strong>
+                        <div>{{ creature()?.skill_modifiers?.Investigation }}</div>
+                    </li>
+                }
+                @if (creature()?.skill_modifiers?.Medicine) {
+                    <li>
+                        <strong>Medicine</strong>
+                        <div>{{ creature()?.skill_modifiers?.Medicine }}</div>
+                    </li>
+                }
+                @if (creature()?.skill_modifiers?.Nature) {
+                    <li>
+                        <strong>Nature</strong>
+                        <div>{{ creature()?.skill_modifiers?.Nature }}</div>
+                    </li>
+                }
+                @if (creature()?.skill_modifiers?.Perception) {
+                    <li>
+                        <strong>Perception</strong>
+                        <div>{{ creature()?.skill_modifiers?.Perception }}</div>
+                    </li>
+                }
+                @if (creature()?.skill_modifiers?.Performance) {
+                    <li>
+                        <strong>Performance</strong>
+                        <div>{{ creature()?.skill_modifiers?.Performance }}</div>
+                    </li>
+                }
+                @if (creature()?.skill_modifiers?.Persuasion) {
+                    <li>
+                        <strong>Persuasion</strong>
+                        <div>{{ creature()?.skill_modifiers?.Persuasion }}</div>
+                    </li>
+                }
+                @if (creature()?.skill_modifiers?.Religion) {
+                    <li>
+                        <strong>Religion</strong>
+                        <div>{{ creature()?.skill_modifiers?.Religion }}</div>
+                    </li>
+                }
+                @if (creature()?.skill_modifiers?.Sleight_of_hand) {
+                    <li>
+                        <strong>Sleight of Hand</strong>
+                        <div>{{ creature()?.skill_modifiers?.Sleight_of_hand }}</div>
+                    </li>
+                }
+                @if (creature()?.skill_modifiers?.Stealth) {
+                    <li>
+                        <strong>Stealth</strong>
+                        <div>{{ creature()?.skill_modifiers?.Stealth }}</div>
+                    </li>
+                }
+                @if (creature()?.skill_modifiers?.Survival) {
+                    <li>
+                        <strong>Survival</strong>
+                        <div>{{ creature()?.skill_modifiers?.Survival }}</div>
+                    </li>
+                }
+            </ul>
+        </fieldset>
+    }
+</div>

@@ -132,3 +132,29 @@ label.grid-col-2 {
         margin: 0;
     }
 }
+
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem;
+    padding: 0;
+
+    li {
+        list-style: none;
+    }
+
+    button {
+        appearance: none;
+        background-color: colours.$light-grey;
+        border: 1px solid colours.$dark-grey;
+        border-radius: .25rem;
+        cursor: pointer;
+        height: 2rem;
+        width: 2rem;
+    }
+
+    li.current button {
+        background-color: colours.$gold;
+        font-weight: bold;
+    }
+}

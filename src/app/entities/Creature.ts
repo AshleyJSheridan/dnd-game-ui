@@ -99,5 +99,6 @@ export class Creature {
         name: string;
         script: string;
     }> = [];
+    environments: Array<string> = [];
 
 }
