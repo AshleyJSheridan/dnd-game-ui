@@ -188,6 +188,11 @@
 }
 
 .monsters-list-container {
+    .filter-form > fieldset {
+        display: flex;
+        gap: 1rem;
+    }
+
     .creature-list {
         display: flex;
         flex-wrap: wrap;
