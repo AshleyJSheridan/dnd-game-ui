@@ -67,6 +67,7 @@ export class LibraryMonstersComponent {
         'Huge',
         'Gargantuan',
     ];
+    public creatureName: string = '';
 
     @ViewChild('creatureDetailsLightbox') creatureDetailsLightbox: LightboxComponent | undefined;
 
@@ -92,8 +93,9 @@ export class LibraryMonstersComponent {
             const typeMatch = this.selectedCreatureType === '' || this.selectedCreatureType.toLowerCase() === monster.type;
             const environmentMatch = this.selectedEnvironment === '' || monster.environments.includes(this.selectedEnvironment.toLowerCase());
             const sizeMatch = this.selectedSize === '' || this.selectedSize.toLowerCase() === monster.size;
+            const nameMatch = this.creatureName === '' || monster.name.toLowerCase().includes(this.creatureName.toLowerCase());
 
-            return typeMatch && environmentMatch && sizeMatch;
+            return typeMatch && environmentMatch && sizeMatch && nameMatch;
         }) ?? [];
 
         this.paginationConfig.totalItems = monsters.length;
