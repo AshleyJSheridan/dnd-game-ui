@@ -1,6 +1,7 @@
 @use "../colours";
 
-.char-edit-race-list ul {
+.char-edit-race-list ul,
+.race-list-container ul {
     padding: 0;
 
     li {

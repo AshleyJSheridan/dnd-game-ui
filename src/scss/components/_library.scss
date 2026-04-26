@@ -2,7 +2,8 @@
 
 .library-list-container,
 .spells-list-container,
-.monsters-list-container {
+.monsters-list-container,
+.race-list-container {
     padding: 1rem;
 }
 
@@ -280,6 +281,24 @@
                 }
             }
 
+        }
+    }
+}
+
+.race-list-container {
+    // see _char-edit-race.scss
+
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+
+        li {
+            width: 49%;
+        }
+
+        li:has(details[open]) {
+            width: 100%;
         }
     }
 }

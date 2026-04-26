@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 import { Spell } from '../entities/Spell';
 import { Creature } from '../entities/Creature';
+import { CharacterRace } from '../entities/CharacterRace';
 
 @Injectable({providedIn: 'root'})
 export class LibraryService {
@@ -22,6 +23,13 @@ export class LibraryService {
     public getAllMonsters(): Observable<Array<Creature>> {
         return this.http.get<Array<Creature>>(
             `${this.apiUrl}/creatures`,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
+
+    public getCharacterRaces(): Observable<Array<CharacterRace>> {
+        return this.http.get<Array<CharacterRace>>(
+            `${this.apiUrl}/characters/races`,
             {headers: this.authService.getAuthHeader()}
         );
     }
