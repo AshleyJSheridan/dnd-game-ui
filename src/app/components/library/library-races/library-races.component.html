@@ -1,0 +1,51 @@
+<app-header></app-header>
+
+<div class="race-list-container">
+    <h2>Library - Races</h2>
+
+    <ul class="races">
+        @for (charRace of races; track charRace.id) {
+            <li>
+                <details class="char-race">
+                    <summary>
+                        <img
+                            class="char-race-portrait"
+                            src="/images/default-race-portraits/thumbs-200/{{ getPortraitImage(charRace) }}-portrait.jpg"/>
+                        <span class="char-race-name">{{ charRace.name }}</span>
+                        @if (hasSubRaces(charRace)) {
+                            <span class="char-race-has-subs">({{ getSubRaceCount(charRace) }} variations)</span>
+                        }
+                    </summary>
+
+                    <div class="char-race-details">
+                        <div [innerHTML]="charRace.description"></div>
+
+                        @if (hasSubRaces(charRace)) {
+                            <ul class="sub-races">
+                                @for (subRace of charRace.sub_races; track subRace.id) {
+                                    <li>
+                                        <details class="char-race">
+                                            <summary>
+                                                <img
+                                                    class="char-race-portrait"
+                                                    src="/images/default-race-portraits/thumbs-200/{{ getPortraitImage(subRace) }}-portrait.jpg"/>
+                                                <span class="char-race-name">{{ subRace.name }}</span>
+                                            </summary>
+                                            <div class="char-race-details">
+                                                <div [innerHTML]="subRace.description"></div>
+
+                                                <app-edit-character-race-details [race]="subRace"></app-edit-character-race-details>
+                                            </div>
+                                        </details>
+                                    </li>
+                                }
+                            </ul>
+                        } @else {
+                            <app-edit-character-race-details [race]="charRace"></app-edit-character-race-details>
+                        }
+                    </div>
+                </details>
+            </li>
+        }
+    </ul>
+</div>
