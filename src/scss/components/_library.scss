@@ -3,7 +3,8 @@
 .library-list-container,
 .spells-list-container,
 .monsters-list-container,
-.race-list-container {
+.race-list-container,
+.class-list-container {
     padding: 1rem;
 }
 
@@ -301,4 +302,8 @@
             width: 100%;
         }
     }
+}
+
+.class-list-container {
+    // see _char-edit-class.scss
 }

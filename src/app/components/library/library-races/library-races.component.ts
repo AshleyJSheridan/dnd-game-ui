@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
-import {HeaderComponent} from '../../header/header.component';
-import {LibraryService} from '../../../services/library.service';
-import {Router} from '@angular/router';
-import {CharacterRace} from '../../../entities/CharacterRace';
-import {
-    EditCharacterRaceDetailsComponent
-} from '../../character/edit-character-race-details/edit-character-race-details.component';
+import { HeaderComponent } from '../../header/header.component';
+import { LibraryService } from '../../../services/library.service';
+import { Router } from '@angular/router';
+import { CharacterRace } from '../../../entities/CharacterRace';
+import { EditCharacterRaceDetailsComponent } from '../../character/edit-character-race-details/edit-character-race-details.component';
 
 @Component({
     selector: 'app-library-races',

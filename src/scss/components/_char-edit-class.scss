@@ -1,7 +1,8 @@
 @use "sass:color";
 @use "../colours";
 
-.char-edit-class-list ul {
+.char-edit-class-list ul,
+.class-list-container ul {
     display: flex;
     flex-wrap: wrap;
     gap: 2em;
