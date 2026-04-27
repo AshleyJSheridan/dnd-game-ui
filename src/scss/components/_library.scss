@@ -4,7 +4,8 @@
 .spells-list-container,
 .monsters-list-container,
 .race-list-container,
-.class-list-container {
+.class-list-container,
+.background-list-container{
     padding: 1rem;
 }
 
@@ -306,4 +307,27 @@
 
 .class-list-container {
     // see _char-edit-class.scss
+}
+
+.background-list-container {
+    // see _char-edit-background.scss
+
+    .char-edit-background-characteristic {
+        display: block;
+
+        p {
+            font-weight: bold;
+            margin: 1rem 0 0 1rem;
+        }
+    }
+
+    .characteristics-list {
+        display: block;
+        margin: .5rem 0 1rem 2rem;
+
+        li {
+            border: none;
+            list-style: initial;
+        }
+    }
 }

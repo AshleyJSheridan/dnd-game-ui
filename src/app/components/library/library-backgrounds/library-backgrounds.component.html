@@ -1,0 +1,55 @@
+<app-header></app-header>
+
+<div class="background-list-container">
+    <h2>Library - Backgrounds</h2>
+
+    <ul>
+        @for (charBackground of backgrounds; track charBackground.id) {
+            <li>
+                <button class="char-background" (click)="selectCharBackground(charBackground, $event)">
+                    <span
+                        class="char-background-icon
+                            char-background-{{ charBackground.name.toLowerCase().replace(' ', '-') }}"
+                    >
+                        <app-char-background-icon charBackgroundName="{{ charBackground.name.toLowerCase() }}"/>
+                    </span>
+                    <span class="char-background-name">{{ charBackground.name }}</span>
+                </button>
+            </li>
+        }
+    </ul>
+
+    @if (selectedCharBackground) {
+        <section class="char-background-details">
+            <h3>{{ selectedCharBackground.name }}</h3>
+
+            <div class="char-background-details-content">
+                <p>{{ selectedCharBackground.description }}</p>
+                @if (selectedCharBackground.extra_languages) {
+                    <p><strong>Extra languages:</strong> {{ selectedCharBackground.extra_languages }}</p>
+                }
+                <p><strong>Starting gold:</strong> {{ selectedCharBackground.gold }}</p>
+
+                <h4>Proficiencies</h4>
+                <dl class="char-background-proficiencies-list">
+                    <dt>{{ selectedCharBackground.proficiencies[0].name }}</dt>
+                    <dd>{{ selectedCharBackground.proficiencies[0].description }}</dd>
+                    <dt>{{ selectedCharBackground.proficiencies[1].name }}</dt>
+                    <dd>{{ selectedCharBackground.proficiencies[1].description }}</dd>
+                </dl>
+
+                <h4>Characteristics</h4>
+                @for (characteristic of getCharacteristicsKeys(); track characteristic) {
+                    <div class="char-edit-background-characteristic">
+                        <p>{{ characteristic }}</p>
+                        <ul class="characteristics-list">
+                            @for (option of selectedCharBackground.characteristics[characteristic]; track option.id) {
+                                <li>{{ option.characteristic }}</li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+        </section>
+    }
+</div>

@@ -1,6 +1,7 @@
 @use "../colours";
 
-.char-edit-background-list ul {
+.char-edit-background-list ul,
+.background-list-container ul {
     display: flex;
     flex-wrap: wrap;
     gap: 2em;

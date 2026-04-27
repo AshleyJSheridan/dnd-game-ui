@@ -29,6 +29,7 @@ import { LibrarySpellsListComponent } from './components/library/library-spells-
 import { LibraryMonstersComponent } from './components/library/library-monsters/library-monsters.component';
 import { LibraryRacesComponent } from './components/library/library-races/library-races.component';
 import { LibraryClassesComponent } from './components/library/library-classes/library-classes.component';
+import { LibraryBackgroundsComponent } from './components/library/library-backgrounds/library-backgrounds.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -69,6 +70,7 @@ export const routes: Routes = [
     { path: 'library/monsters', component: LibraryMonstersComponent },
     { path: 'library/races', component: LibraryRacesComponent },
     { path: 'library/classes', component: LibraryClassesComponent },
+    { path: 'library/backgrounds', component: LibraryBackgroundsComponent },
 
 ];
 

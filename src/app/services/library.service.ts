@@ -7,6 +7,7 @@ import { Spell } from '../entities/Spell';
 import { Creature } from '../entities/Creature';
 import { CharacterRace } from '../entities/CharacterRace';
 import { CharacterClass } from '../entities/CharacterClass';
+import { CharacterBackground } from '../entities/CharacterBackground';
 
 @Injectable({providedIn: 'root'})
 export class LibraryService {
@@ -38,6 +39,13 @@ export class LibraryService {
     public getCharacterClasses(): Observable<Array<CharacterClass>> {
         return this.http.get<Array<CharacterClass>>(
             `${this.apiUrl}/characters/classes`,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
+
+    public getCharacterBackgrounds(): Observable<Array<CharacterBackground>> {
+        return this.http.get<Array<CharacterBackground>>(
+            `${this.apiUrl}/characters/backgrounds`,
             {headers: this.authService.getAuthHeader()}
         );
     }
