@@ -1,0 +1,24 @@
+<app-header></app-header>
+
+<div class="language-list-container">
+    <h2>Library - Languages</h2>
+
+    <ul class="char-language-list">
+        @for (language of languages; track language.id) {
+            <li class="language" >
+                {{ language.name }}
+                <div class="language-sample">
+                    @if (language.script !== 'none') {
+                        <app-language-script scriptName="{{ language.script.toLowerCase() }}"/>
+                    }
+                </div>
+                <dl>
+                    <dt>Script</dt>
+                        <dd>{{ language.script }}</dd>
+                    <dt>Typical speakers</dt>
+                        <dd>{{ language.typical_speakers }}</dd>
+                </dl>
+            </li>
+        }
+    </ul>
+</div>

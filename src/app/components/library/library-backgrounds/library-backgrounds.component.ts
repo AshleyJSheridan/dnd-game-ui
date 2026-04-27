@@ -1,17 +1,15 @@
 import { Component } from '@angular/core';
-import {HeaderComponent} from '../../header/header.component';
-import {CharBackgroundIconComponent} from '../../icons/char-background-icon/char-background-icon.component';
-import {CharacterBackground} from '../../../entities/CharacterBackground';
-import {LibraryService} from '../../../services/library.service';
-import {Router} from '@angular/router';
-import {DiceComponent} from '../../dice/dice.component';
+import { HeaderComponent } from '../../header/header.component';
+import { CharBackgroundIconComponent } from '../../icons/char-background-icon/char-background-icon.component';
+import { CharacterBackground } from '../../../entities/CharacterBackground';
+import { LibraryService } from '../../../services/library.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-library-backgrounds',
     imports: [
         HeaderComponent,
         CharBackgroundIconComponent,
-        DiceComponent
     ],
     templateUrl: './library-backgrounds.component.html',
 })
