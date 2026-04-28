@@ -1,0 +1,35 @@
+<app-header></app-header>
+
+<div class="deity-list-container">
+    <h2>Library - Deities</h2>
+
+    <ul class="deity-list">
+        @for (deity of deities; track deity) {
+            <li class="deity">
+                <strong>{{ deity.name }}</strong>
+
+                <img src="/images/deities/thumbs/{{ deity.name.toLowerCase() }}.jpg" alt="" role="presentation"/>
+
+                <dl>
+                    <dt>God/goddess of</dt>
+                    <dd>{{ deity.god_of }}</dd>
+
+                    <dt>Alignment</dt>
+                    <dd>{{ deity.alignment }}</dd>
+
+                    <dt>Domain(s)</dt>
+                    <dd>
+                        <ul>
+                            @for (domain of deity.domains; track domain) {
+                                <li>{{ domain }}</li>
+                            }
+                        </ul>
+                    </dd>
+
+                    <dt>Symbol</dt>
+                    <dd>{{ deity.symbol }}</dd>
+                </dl>
+            </li>
+        }
+    </ul>
+</div>

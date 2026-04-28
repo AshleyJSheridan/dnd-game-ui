@@ -8,7 +8,8 @@ import { Creature } from '../entities/Creature';
 import { CharacterRace } from '../entities/CharacterRace';
 import { CharacterClass } from '../entities/CharacterClass';
 import { CharacterBackground } from '../entities/CharacterBackground';
-import {Language} from '../entities/Language';
+import { Language } from '../entities/Language';
+import { Deity } from '../entities/Deity';
 
 @Injectable({providedIn: 'root'})
 export class LibraryService {
@@ -54,6 +55,13 @@ export class LibraryService {
     public getCharacterLanguages(): Observable<Array<Language>> {
         return this.http.get<Array<Language>>(
             `${this.apiUrl}/game/languages`,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
+
+    public getDeities(): Observable<Array<Deity>> {
+        return this.http.get<Array<Deity>>(
+            `${this.apiUrl}/game/deities`,
             {headers: this.authService.getAuthHeader()}
         );
     }

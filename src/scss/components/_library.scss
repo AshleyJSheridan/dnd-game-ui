@@ -6,7 +6,8 @@
 .race-list-container,
 .class-list-container,
 .background-list-container,
-.language-list-container {
+.language-list-container,
+.deity-list-container {
     padding: 1rem;
 }
 
@@ -356,6 +357,45 @@
 
         dl {
             font-weight: normal;
+        }
+    }
+}
+
+.deity-list-container {
+    .deity-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 0;
+
+        .deity {
+            border: 1px solid colours.$dark-grey;
+            border-radius: 1rem;
+            box-shadow: 2px 2px 7px colours.$medium-grey;
+            list-style: none;
+            padding: .5rem;
+            width: 15rem;
+
+            img {
+                border-radius: 1rem;
+                height: auto;
+                width: 100%;
+            }
+
+            strong {
+                display: block;
+                margin-bottom: .5rem;
+                text-align: center;
+            }
+
+            dt {
+                font-weight: bold;
+            }
+
+            dl ul {
+                padding: 0;
+                list-style: square;
+            }
         }
     }
 }
