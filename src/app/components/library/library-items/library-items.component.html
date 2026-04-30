@@ -1,0 +1,48 @@
+<app-header></app-header>
+
+<div class="item-list-container">
+    <h2>Library - Items</h2>
+
+    <form class="filter-form">
+        <fieldset>
+            <legend>Filter Items</legend>
+
+            <label>Type
+                <select [(ngModel)]="itemType" name="type">
+                    <option value="">All</option>
+                    @for (type of itemTypes; track type) {
+                        <option value="{{ type }}">{{ type }}</option>
+                    }
+                </select>
+            </label>
+
+            <label>Rarity
+                <select [(ngModel)]="itemRarity" name="rarity">
+                    <option value="">All</option>
+                    @for (rarity of rarities; track rarity) {
+                        <option value="{{ rarity }}">{{ rarity }}</option>
+                    }
+                </select>
+            </label>
+
+            <label>Name
+                <input type="text" [(ngModel)]="itemName" name="itemName" placeholder="Leather"/>
+            </label>
+        </fieldset>
+    </form>
+
+    <h2>Base Items</h2>
+    <p>These are the items that weren't created using the <a routerLink="/tools/item-generator">item generator</a>.</p>
+    <p>To give an item to a character, you will either need to use the <a routerLink="/tools/item-generator">item generator</a>
+        to create a new item, or add it to the inventory via a characters equipment edit section.</p>
+    <ul class="item-list">
+        @for (item of getFilteredItems(); track item) {
+            <li>
+                <app-game-item [item]="item" [itemLocation]="'library'" [openStatus]="true"/>
+            </li>
+        }
+    </ul>
+    @if (items.length) {
+        <app-pagination [paginationConfig]="paginationConfig"/>
+    }
+</div>

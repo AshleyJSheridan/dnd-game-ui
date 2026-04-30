@@ -7,8 +7,14 @@
 .class-list-container,
 .background-list-container,
 .language-list-container,
-.deity-list-container {
+.deity-list-container,
+.item-list-container {
     padding: 1rem;
+
+    .filter-form > fieldset {
+        display: flex;
+        gap: 1rem;
+    }
 }
 
 .library-list-container {
@@ -43,15 +49,6 @@
 }
 
 .spells-list-container {
-    form {
-        margin-bottom: 1rem;
-
-        fieldset {
-            display: flex;
-            gap: 1rem;
-        }
-    }
-
     .spells-list {
         margin: 0;
         padding: 0;
@@ -193,11 +190,6 @@
 }
 
 .monsters-list-container {
-    .filter-form > fieldset {
-        display: flex;
-        gap: 1rem;
-    }
-
     .creature-list {
         display: flex;
         flex-wrap: wrap;
@@ -396,6 +388,19 @@
                 padding: 0;
                 list-style: square;
             }
+        }
+    }
+}
+
+.item-list-container {
+    .item-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+
+        > li {
+            display: block;
+            width: 20rem;
         }
     }
 }

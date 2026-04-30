@@ -10,6 +10,7 @@ import { CharacterClass } from '../entities/CharacterClass';
 import { CharacterBackground } from '../entities/CharacterBackground';
 import { Language } from '../entities/Language';
 import { Deity } from '../entities/Deity';
+import {Item} from '../entities/Item';
 
 @Injectable({providedIn: 'root'})
 export class LibraryService {
@@ -62,6 +63,20 @@ export class LibraryService {
     public getDeities(): Observable<Array<Deity>> {
         return this.http.get<Array<Deity>>(
             `${this.apiUrl}/game/deities`,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
+
+    public getItems(): Observable<Array<Item>> {
+        return this.http.get<Array<Item>>(
+            `${this.apiUrl}/game/items`,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
+
+    public getGeneratedItems(): Observable<Array<Item>> {
+        return this.http.get<Array<Item>>(
+            `${this.apiUrl}/game/items/generated`,
             {headers: this.authService.getAuthHeader()}
         );
     }

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import {Deity} from '../../../entities/Deity';
-import {LibraryService} from '../../../services/library.service';
-import {Router} from '@angular/router';
-import {HeaderComponent} from '../../header/header.component';
+import { Deity } from '../../../entities/Deity';
+import { LibraryService } from '../../../services/library.service';
+import { Router } from '@angular/router';
+import { HeaderComponent } from '../../header/header.component';
 
 @Component({
     selector: 'app-library-deities',
