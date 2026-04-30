@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import {Item} from '../../../entities/Item';
-import {LibraryService} from '../../../services/library.service';
-import {Router, RouterLink} from '@angular/router';
-import {HeaderComponent} from '../../header/header.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {GameItemComponent} from '../../game-item/game-item.component';
-import {PaginationComponent} from '../../pagination/pagination.component';
-import {PaginationConfig} from '../../../entities/PaginationConfig';
+import { Item } from '../../../entities/Item';
+import { LibraryService } from '../../../services/library.service';
+import { Router, RouterLink } from '@angular/router';
+import { HeaderComponent } from '../../header/header.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { GameItemComponent } from '../../game-item/game-item.component';
+import { PaginationComponent } from '../../pagination/pagination.component';
+import { PaginationConfig } from '../../../entities/PaginationConfig';
 
 @Component({
     selector: 'app-library-items',

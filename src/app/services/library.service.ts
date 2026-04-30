@@ -10,7 +10,8 @@ import { CharacterClass } from '../entities/CharacterClass';
 import { CharacterBackground } from '../entities/CharacterBackground';
 import { Language } from '../entities/Language';
 import { Deity } from '../entities/Deity';
-import {Item} from '../entities/Item';
+import { Item } from '../entities/Item';
+import { Condition } from '../entities/Condition';
 
 @Injectable({providedIn: 'root'})
 export class LibraryService {
@@ -74,9 +75,9 @@ export class LibraryService {
         );
     }
 
-    public getGeneratedItems(): Observable<Array<Item>> {
-        return this.http.get<Array<Item>>(
-            `${this.apiUrl}/game/items/generated`,
+    public getConditions(): Observable<Array<Condition>> {
+        return this.http.get<Array<Condition>>(
+            `${this.apiUrl}/game/conditions`,
             {headers: this.authService.getAuthHeader()}
         );
     }

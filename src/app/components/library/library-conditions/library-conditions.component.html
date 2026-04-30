@@ -1,0 +1,20 @@
+<app-header></app-header>
+
+<div class="conditions-container">
+    <h2>Library - Conditions</h2>
+
+    <ul class="conditions-list">
+        @for (condition of conditions; track condition) {
+            <li>
+                <strong>{{ condition.name }}</strong>
+
+                <p>Details:</p>
+                <ul class="flavour-text">
+                    @for (flavour_text of condition.flavour_text; track flavour_text) {
+                        <li>{{ flavour_text }}</li>
+                    }
+                </ul>
+            </li>
+        }
+    </ul>
+</div>

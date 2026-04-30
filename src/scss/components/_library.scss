@@ -8,7 +8,8 @@
 .background-list-container,
 .language-list-container,
 .deity-list-container,
-.item-list-container {
+.item-list-container,
+.conditions-container {
     padding: 1rem;
 
     .filter-form > fieldset {
@@ -400,6 +401,23 @@
 
         > li {
             display: block;
+            width: 20rem;
+        }
+    }
+}
+
+.conditions-container {
+    .conditions-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+
+        > li {
+            border: 1px solid colours.$dark-grey;
+            border-radius: 1rem;
+            box-shadow: 2px 2px 7px colours.$medium-grey;
+            display: block;
+            padding: 1rem;
             width: 20rem;
         }
     }
