@@ -421,4 +421,16 @@
             width: 20rem;
         }
     }
+
+    .condition-icon {
+        position: relative;
+
+        svg {
+            height: auto;
+            position: absolute;
+            right: 0;
+            top: -1rem;
+            width: 3rem;
+        }
+    }
 }

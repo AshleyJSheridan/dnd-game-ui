@@ -7,6 +7,9 @@
         @for (condition of conditions; track condition) {
             <li>
                 <strong>{{ condition.name }}</strong>
+                <div class="condition-icon">
+                    <app-condition-icon [condition]="condition.name.toLowerCase()"/>
+                </div>
 
                 <p>Details:</p>
                 <ul class="flavour-text">
