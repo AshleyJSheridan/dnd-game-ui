@@ -34,6 +34,7 @@ import { LibraryLanguagesComponent } from './components/library/library-language
 import { LibraryDeitiesComponent } from './components/library/library-deities/library-deities.component';
 import { LibraryItemsComponent } from './components/library/library-items/library-items.component';
 import { LibraryConditionsComponent } from './components/library/library-conditions/library-conditions.component';
+import { LibraryDamageTypesComponent } from './components/library/library-damage-types/library-damage-types.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -78,7 +79,8 @@ export const routes: Routes = [
     { path: 'library/languages', component: LibraryLanguagesComponent },
     { path: 'library/deities', component: LibraryDeitiesComponent },
     { path: 'library/items', component: LibraryItemsComponent },
-    { path: 'library/conditions', component: LibraryConditionsComponent }
+    { path: 'library/conditions', component: LibraryConditionsComponent },
+    { path: 'library/damage-types', component: LibraryDamageTypesComponent },
 
 ];
 

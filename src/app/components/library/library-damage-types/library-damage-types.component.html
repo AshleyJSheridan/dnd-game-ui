@@ -1,0 +1,14 @@
+<app-header></app-header>
+
+<div class="damage-types-container">
+    <h2>Library - Damage Types</h2>
+
+    <ul class="damage-types-list">
+        @for (damageType of damageTypes; track damageType) {
+            <li>
+                <strong>{{ damageType.name }}</strong>
+                <p>{{ damageType.description }}</p>
+            </li>
+        }
+    </ul>
+</div>

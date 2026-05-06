@@ -9,7 +9,8 @@
 .language-list-container,
 .deity-list-container,
 .item-list-container,
-.conditions-container {
+.conditions-container,
+.damage-types-container {
     padding: 1rem;
 
     .filter-form > fieldset {
@@ -431,6 +432,23 @@
             right: 0;
             top: -1rem;
             width: 3rem;
+        }
+    }
+}
+
+.damage-types-container {
+    .damage-types-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+
+        > li {
+            border: 1px solid colours.$dark-grey;
+            border-radius: 1rem;
+            box-shadow: 2px 2px 7px colours.$medium-grey;
+            display: block;
+            padding: 1rem;
+            width: 20rem;
         }
     }
 }

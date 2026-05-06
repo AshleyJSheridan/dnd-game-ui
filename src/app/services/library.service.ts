@@ -12,6 +12,7 @@ import { Language } from '../entities/Language';
 import { Deity } from '../entities/Deity';
 import { Item } from '../entities/Item';
 import { Condition } from '../entities/Condition';
+import {DamageType} from '../entities/DamageType';
 
 @Injectable({providedIn: 'root'})
 export class LibraryService {
@@ -78,6 +79,13 @@ export class LibraryService {
     public getConditions(): Observable<Array<Condition>> {
         return this.http.get<Array<Condition>>(
             `${this.apiUrl}/game/conditions`,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
+
+    public getDamageTypes(): Observable<Array<DamageType>> {
+        return this.http.get<Array<DamageType>>(
+            `${this.apiUrl}/game/damage-types`,
             {headers: this.authService.getAuthHeader()}
         );
     }
