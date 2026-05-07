@@ -1,5 +1,6 @@
 @use "sass:color";
 @use "../colours";
+@use "../variables";
 
 .char-edit-class-list ul,
 .class-list-container ul {
@@ -112,6 +113,10 @@
         padding: .5rem;
         width: 20em;
 
+        @media (max-width: variables.$mobile-width) {
+            width: 11rem;
+        }
+
         &:focus {
             outline: 2px solid colours.$focus;
         }
@@ -207,6 +212,10 @@
         details {
             min-width: 35rem;
             padding: 0;
+
+            @media (max-width: variables.$mobile-width) {
+                min-width: 100%;
+            }
         }
 
         details summary::-webkit-details-marker,

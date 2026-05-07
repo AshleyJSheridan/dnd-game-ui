@@ -1,4 +1,5 @@
 @use "colours";
+@use "variables";
 
 html,
 body {
@@ -14,8 +15,17 @@ body {
     display: grid;
     grid-template-columns: 10rem auto;
 
+    @media (max-width: variables.$mobile-width) {
+        display: block;
+    }
+
     .side-nav {
         border-right: 2px solid colours.$dark-grey;
+
+        @media (max-width: variables.$mobile-width) {
+            border-bottom: 2px solid colours.$dark-grey;
+            border-right: none;
+        }
     }
 }
 

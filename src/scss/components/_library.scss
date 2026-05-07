@@ -1,4 +1,5 @@
 @use "../colours";
+@use "../variables";
 
 .library-list-container,
 .spells-list-container,
@@ -47,6 +48,10 @@
     list-style: none;
     padding: 1rem;
     width: 15rem;
+
+    @media (max-width: variables.$mobile-width) {
+        width: 46%;
+    }
 }
 
 .library-list-container {
@@ -211,6 +216,10 @@
 }
 
 .monsters-list-container {
+    form {
+        margin-bottom: 1rem;
+    }
+
     li {
         list-style: none;
         margin: 0;
@@ -220,13 +229,21 @@
     img {
         height: 6rem;
         width: auto;
+
+        @media (max-width: variables.$mobile-width) {
+            height: 5rem;
+        }
     }
 
     .creature-name {
+        overflow: hidden;
         text-overflow: ellipsis;
         width: 8rem;
-        overflow: hidden;
         white-space: nowrap;
+
+        @media (max-width: variables.$mobile-width) {
+            width: 7rem;
+        }
     }
 
     .modal {
@@ -305,6 +322,10 @@
 
         li {
             width: 49%;
+
+            @media (max-width: variables.$mobile-width) {
+                width: 100%;
+            }
         }
 
         li:has(details[open]) {

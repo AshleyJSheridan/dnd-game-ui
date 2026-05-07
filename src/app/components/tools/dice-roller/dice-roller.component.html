@@ -4,12 +4,11 @@
     <h2>Dice Roller</h2>
 
     <form (submit)="submitHandler($event)">
-        <div class="input-attached-button-aligned">
             <label class="aligned">Number of dice:
                 <input type="number" name="quantity" [(ngModel)]="quantity" min="1" />
             </label>
 
-            <label class="aligned">Dice:
+            <label class="aligned">Dice sides:
                 <select [(ngModel)]="sides" name="sides">
                     @for (availableSide of availableSides; track availableSide) {
                         <option value="{{ availableSide }}" [selected]="availableSide === sides">{{ availableSide }}</option>
@@ -20,7 +19,6 @@
             <label class="aligned">Modifier (optional):
                 <input type="number" name="modifier" [(ngModel)]="modifier" placeholder="2 or -1" />
             </label>
-        </div>
 
         <button type="submit" class="fantasy-btn fantasy-blue">Roll</button>
 

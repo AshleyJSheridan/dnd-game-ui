@@ -10,14 +10,20 @@
                 <th>School</th>
                 <th>Range</th>
                 <th>Casting time</th>
-                <th>Duration</th>
-                <th>Components</th>
-                <th>Classes</th>
             </tr>
             <tr>
                 <td class="name">{{ spell()?.school?.name }}</td>
                 <td class="range">{{ getFormattedRange(spell()?.range) }}</td>
                 <td class="cast-time">{{ spell()?.cast_time?.value }} {{ spell()?.cast_time?.unit }}</td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <th>Duration</th>
+                <th>Components</th>
+                <th>Classes</th>
+            </tr>
+            <tr>
                 <td class="duration">{{ (spell()?.duration?.value === 0) ? '' : spell()?.duration?.value }}
                     {{ spell()?.duration?.unit }}</td>
                 <td class="components">

@@ -1,4 +1,5 @@
 @use "../colours";
+@use "../variables";
 
 .modal-container {
     align-items: center;
@@ -28,6 +29,11 @@
     padding: .75rem;
     position: relative;
     width: 40rem;
+
+    @media (max-width: variables.$mobile-width) {
+        max-width: inherit;
+        width: 85%;
+    }
 
     &:after {
         background-image: url('/images/wyvern-corner.svg');

@@ -1,11 +1,21 @@
 @use "../colours";
+@use "../variables";
 
 nav.char-create-nav ul {
     margin: 0;
     padding: 0;
 
+    @media (max-width: variables.$mobile-width) {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
     li {
         list-style: none;
+
+        @media (max-width: variables.$mobile-width) {
+            width: 33%;
+        }
 
         a {
             color: colours.$black;
@@ -76,6 +86,10 @@ nav.char-create-nav ul {
 .char-edit-alignment-panel {
     display: flex;
 
+    @media (max-width: variables.$mobile-width) {
+        flex-wrap: wrap;
+    }
+
     form.alignments {
         background-image: url("/images/alignments.png");
         background-size: contain;
@@ -88,6 +102,13 @@ nav.char-create-nav ul {
         min-width: 40rem;
         padding: 0;
         width: 40rem;
+
+        @media (max-width: variables.$mobile-width) {
+            aspect-ratio: 1/1;
+            height: inherit;
+            width: 95%;
+            min-width: inherit;
+        }
 
         button {
             appearance: none;
@@ -124,5 +145,9 @@ nav.char-create-nav ul {
     .alignment-description {
         padding: 0 1rem;
         width: 20rem;
+
+        @media (max-width: variables.$mobile-width) {
+            margin-bottom: 1rem;
+        }
     }
 }
