@@ -147,7 +147,7 @@ export class EditCharacterClassComponent {
         const level = this.characterService.character?.level ?? 0;
 
         for (let i = 0; i < this.getClassBySelectionId()?.class_features.length; i ++) {
-            if (( + 1) > level)
+            if ((i + 1) > level)
                 break;
 
             if (this.getClassBySelectionId()?.class_features[i].type === 'path')
