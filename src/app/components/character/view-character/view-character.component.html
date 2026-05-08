@@ -19,6 +19,7 @@
                     <div class="col ability-scores">
                         @for (ability of abilityNames; track ability) {
                             <app-ability-score
+                                [abilityShortName]="ability"
                                 [abilityName]="getAbilityDetails(ability).name"
                                 [abilityBase]="getAbilityDetails(ability).base"
                                 [abilityModifier]="getAbilityDetails(ability).modifier"
@@ -27,14 +28,16 @@
                     </div>
 
                     <div class="col">
-                        <div class="simple-score-standalone">
-                            <!-- TODO add inspiration to character response -->
-                            <div class="simple-score-value">0</div>
-                            <div class="simple-score-name">Inspiration</div>
-                        </div>
-                        <div class="simple-score-standalone">
-                            <div class="simple-score-value">{{ character?.proficiency_bonus }}</div>
-                            <div class="simple-score-name">Proficiency Bonus</div>
+                        <div class="simple-scores">
+                            <div class="simple-score-standalone">
+                                <!-- TODO add inspiration to character response -->
+                                <div class="simple-score-value">0</div>
+                                <div class="simple-score-name">Inspiration</div>
+                            </div>
+                            <div class="simple-score-standalone">
+                                <div class="simple-score-value">{{ character?.proficiency_bonus }}</div>
+                                <div class="simple-score-name">Proficiency Bonus</div>
+                            </div>
                         </div>
 
                         <div class="saving-throws">
@@ -65,7 +68,7 @@
 
             <div class="col col-3-2">
                 <div class="columns">
-                    <div class="col col-2-1">
+                    <div class="col col-2-1 ac-init-speed-hp">
                         <div class="ac-init-speed">
                             <div class="simple-score ac">
                                 <!-- todo once equipment is added -->

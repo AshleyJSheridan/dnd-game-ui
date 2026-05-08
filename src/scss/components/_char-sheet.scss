@@ -1,4 +1,5 @@
 @use "../colours";
+@use "../variables";
 
 .char-sheet {
     background-attachment: fixed;
@@ -7,11 +8,30 @@
     background-repeat: no-repeat;
     padding-top: 2rem;
 
+    @media (max-width: variables.$mobile-width) {
+        background-image: none;
+        padding-top: 0;
+    }
+
     .char-sheet-content {
         background-color: rgba(colours.$white, 85%);
         margin: 0 auto;
         max-width: 50rem;
         padding: 1rem;
+
+        @media (max-width: variables.$mobile-width) {
+            padding: .5rem;
+
+            .columns {
+                display: block;
+            }
+
+            .col-3-1,
+            .col-3-2,
+            .col-2-1 {
+                width: inherit;
+            }
+        }
     }
 
     .sheet-header {
@@ -19,6 +39,10 @@
         gap: 1rem;
         justify-content: space-between;
         margin-bottom: 1rem;
+
+        @media (max-width: variables.$mobile-width) {
+            gap: .5rem;
+        }
 
         .portrait {
             background-color: #fff;
@@ -42,6 +66,10 @@
         .name {
             padding: 1rem;
             width: 35%;
+
+            @media (max-width: variables.$mobile-width) {
+                padding: .5rem;
+            }
         }
 
         .main-details {
@@ -49,6 +77,10 @@
             grid-template-columns: 1fr 1fr;
             padding: .5rem;
             width: 60%;
+
+            @media (max-width: variables.$mobile-width) {
+                display: block;
+            }
         }
     }
 
@@ -91,6 +123,13 @@
     .ability-scores {
         width: 33%;
 
+        @media (max-width: variables.$mobile-width) {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            width: 100%;
+        }
+
         .ability {
             background-color: colours.$white;
             border: 3px double colours.$black;
@@ -102,6 +141,22 @@
 
             .ability-name {
                 font-size: .8rem;
+
+                .ability-short-name {
+                    display: none;
+                }
+
+                @media (max-width: variables.$mobile-width) {
+                    .ability-long-name {
+                        display: none;
+                    }
+
+                    .ability-short-name {
+                        display: inline;
+                        text-transform: capitalize;
+                    }
+
+                }
             }
 
             .ability-score {
@@ -122,6 +177,20 @@
                 width: 2.5rem;
             }
         }
+    }
+
+    @media (max-width: variables.$mobile-width) {
+        .simple-scores {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            padding-left: .75rem;
+
+            .simple-score-standalone {
+                width: 45%;
+            }
+        }
+
     }
 
     .saving-throws,
@@ -157,6 +226,14 @@
 
             }
         }
+    }
+
+    @media (max-width: variables.$mobile-width) {
+        .ac-init-speed-hp {
+            display: flex;
+            gap: .5rem;
+        }
+
     }
 
     .ac-init-speed {
@@ -228,6 +305,14 @@
         padding: .5rem;
         position: relative;
         text-align: center;
+
+        @media (max-width: variables.$mobile-width) {
+            display: block;
+
+            div {
+                display: block;
+            }
+        }
 
         .adjustment {
             font-style: italic;

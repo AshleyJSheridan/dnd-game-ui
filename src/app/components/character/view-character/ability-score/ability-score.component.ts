@@ -6,6 +6,7 @@ import {Component, input, InputSignal} from '@angular/core';
     templateUrl: './ability-score.component.html'
 })
 export class AbilityScoreComponent {
+    readonly abilityShortName: InputSignal<string> = input('');
     readonly abilityName: InputSignal<string> = input('');
     readonly abilityBase: InputSignal<number> = input(0);
     readonly abilityModifier: InputSignal<number> = input(0);
