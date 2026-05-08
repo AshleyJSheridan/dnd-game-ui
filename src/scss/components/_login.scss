@@ -1,4 +1,5 @@
 @use "../colours";
+@use "../variables";
 
 .login-block {
     background-image: url("/images/login-background.jpeg");
@@ -6,6 +7,13 @@
 
 .register-block {
     background-image: url("/images/register-background.jpeg");
+}
+
+@media (max-width: variables.$mobile-width) {
+    .login-block,
+    .register-block {
+        background-position: center;
+    }
 }
 
 .login-block,
@@ -25,6 +33,10 @@
         flex-direction: column;
         margin: 0 auto;
         width: 50%;
+
+        @media (max-width: variables.$mobile-width) {
+            width: 90%;
+        }
 
         h1 {
             margin-bottom: 0;
