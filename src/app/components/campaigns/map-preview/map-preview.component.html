@@ -20,8 +20,36 @@
             <summary>Details</summary>
 
             <dl>
-                <dt>Description:</dt>
-                <dd>{{ campaignMap()?.description }}</dd>
+                <dt id="campaign_{{ campaignGuid() }}_name">Name</dt>
+                <dd (dblclick)="setEditName()">
+                    @if (editName) {
+                        <textarea
+                            [attr.aria-labelledby]="'campaign_' + campaignGuid() + '_name'"
+                            type="text"
+                            name="campaignMapName"
+                            (blur)="updateName()"
+                            #campaignMapName
+                        >{{ campaignMap()?.name }}</textarea>
+                    } @else {
+                        {{ campaignMap()?.name }}
+                    }
+
+                </dd>
+
+                <dt id="campaign_{{ campaignGuid() }}_description">Description:</dt>
+                <dd (dblclick)="setEditDescription()">
+                    @if (editDescription) {
+                        <textarea
+                            [attr.aria-labelledby]="'campaign_' + campaignGuid() + '_description'"
+                            type="text"
+                            name="campaignMapDescription"
+                            (blur)="updateDescription()"
+                            #campaignMapDescription
+                        >{{ campaignMap()?.description }}</textarea>
+                    } @else {
+                        {{ campaignMap()?.description }}
+                    }
+                </dd>
 
                 <dt>Size:</dt>
                 <dd>{{ campaignMap()?.width }} &times; {{ campaignMap()?.height }}</dd>

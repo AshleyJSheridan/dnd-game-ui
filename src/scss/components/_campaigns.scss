@@ -122,6 +122,18 @@
             justify-content: space-between;
         }
 
+        .campaign-details-edit {
+            span {
+                display: block;
+                font-weight: normal;
+                font-size: 1rem;
+            }
+
+            input {
+                font-size: 1rem;
+            }
+        }
+
         .copy-campaign-link {
             position: relative;
 
@@ -234,6 +246,11 @@
 
                 dd {
                     margin: 0 .5rem;
+
+                    textarea {
+                        box-sizing: border-box;
+                        max-width: 100%;
+                    }
                 }
 
                 .map-name {

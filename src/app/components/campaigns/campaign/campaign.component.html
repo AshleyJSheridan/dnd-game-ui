@@ -9,8 +9,8 @@
                 <form name="manage-campaign">
                     <h3>
                         @if (editingCampaignName) {
-                            <label>
-                                <span class="accessible-hidden">New campaign name: </span>
+                            <label class="campaign-details-edit">
+                                <span>Campaign name: </span>
                                 <input type="text" name="edit-name" #campaignName value="{{ campaign.name }}" (blur)="updateCampaignName()"/>
                             </label>
                         } @else {
@@ -51,7 +51,10 @@
                     </h3>
 
                     @if (editingCampaignDescription) {
-                        <textarea name="campaignDescription" #campaignDescription (blur)="updateCampaignDescription()">{{ campaign.description }}</textarea>
+                        <label class="campaign-details-edit">
+                            <span>Campaign description:</span>
+                            <textarea name="campaignDescription" #campaignDescription (blur)="updateCampaignDescription()">{{ campaign.description }}</textarea>
+                        </label>
                     } @else {
                         <p (dblclick)="editCampaignDescription()">{{ campaign.description }}</p>
                     }
@@ -99,6 +102,7 @@
                                 @for (map of campaign.maps; track map.guid) {
                                     <li class="map">
                                         <app-map-preview
+                                            [showFullDetails]="true"
                                             [campaignMap]="map"
                                             [campaignGuid]="campaign.guid"
                                             (updateMapEvent)="updateMap($event)"

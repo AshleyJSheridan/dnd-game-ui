@@ -206,4 +206,12 @@ export class CampaignService {
             {headers: this.authService.getAuthHeader()}
         );
     }
+
+    public updateCampaignMap(data: any, campaignGuid: string = '', mapGuid: string): Observable<CampaignMap> {
+        return this.http.patch<CampaignMap>(
+            `${this.apiUrl}/campaigns/${campaignGuid}/maps/${mapGuid}`,
+            data,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
 }

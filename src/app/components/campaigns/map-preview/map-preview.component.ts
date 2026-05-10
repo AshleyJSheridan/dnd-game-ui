@@ -1,4 +1,4 @@
-import {Component, EventEmitter, input, InputSignal, Output} from '@angular/core';
+import {Component, EventEmitter, input, InputSignal, Output, ViewChild} from '@angular/core';
 import { CampaignMap } from '../../../entities/CampaignMap';
 import {CampaignService} from '../../../services/campaign-service';
 import {RouterLink} from '@angular/router';
@@ -19,7 +19,8 @@ import {CrownIconComponent} from '../../icons/crown-icon/crown-icon.component';
     templateUrl: './map-preview.component.html'
 })
 export class MapPreviewComponent {
-    constructor(private campaignService: CampaignService){};
+    public editName: boolean = false;
+    public editDescription: boolean = false;
 
     readonly campaignMap: InputSignal<CampaignMap|undefined> = input();
     readonly campaignGuid: InputSignal<string> = input('');
@@ -27,6 +28,11 @@ export class MapPreviewComponent {
 
     @Output() updateMapEvent = new EventEmitter();
     @Output() deleteMapEvent = new EventEmitter();
+
+    @ViewChild('campaignMapName') campaignMapName: any | undefined;
+    @ViewChild('campaignMapDescription') campaignMapDescription: any | undefined;
+
+    constructor(private campaignService: CampaignService){};
 
     getThumbUrl(): string {
         return `${this.campaignService.apiUrl}/campaigns/maps/${this.campaignMap()?.guid}/thumb`;
@@ -58,5 +64,41 @@ export class MapPreviewComponent {
                 console.log(error);
             }
         });
+    }
+
+    setEditName(): void {
+        this.editName = true;
+    }
+
+    updateName(): void {
+        this.editName = false;
+
+        this.updateCampaignMap({name: this.campaignMapName.nativeElement.value})
+    }
+
+    setEditDescription(): void {
+        this.editDescription = true;
+    }
+
+    updateDescription(): void {
+        this.editDescription = false;
+
+        this.updateCampaignMap({description: this.campaignMapDescription.nativeElement.value})
+    }
+
+    updateCampaignMap(data: any): void {
+        console.log('wtf', data);
+        if (!this.campaignMap)
+            return;
+
+        this.campaignService.updateCampaignMap(data, this.campaignGuid(), this.campaignMap()!.guid).subscribe({
+            next: (campaignMap) => {
+                this.campaignMap()!.name = campaignMap.name;
+                this.campaignMap()!.description = campaignMap.description;
+            },
+            error: (error) => {
+
+            }
+        })
     }
 }
