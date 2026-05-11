@@ -21,7 +21,6 @@ app-campaign-map {
         flex-direction: column;
         gap: .5rem;
         grid-area: sidebar;
-        width: 4rem;
 
         button {
             align-items: center;
@@ -95,6 +94,7 @@ app-campaign-map {
                     }
 
                     text {
+                        alignment-baseline: inherit;
                         font-size: 1rem;
                     }
                 }
