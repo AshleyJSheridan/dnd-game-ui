@@ -12,7 +12,6 @@ import { Creature } from '../../../entities/Creature';
 import { CreatureComponent } from '../../creatures/creature/creature.component';
 import { CampaignMapPlayer } from '../../../entities/CampaignMapPlayer';
 import { CampaignMapCreature } from '../../../entities/CampaignMapCreature';
-import { MapPatternComponent } from '../map-pattern/map-pattern.component';
 import { CampaignMapDrawing } from '../../../entities/CampaignMapDrawing';
 import { DamageIconComponent } from '../../icons/damage-icon/damage-icon.component';
 import { DrawingObject } from '../../../entities/DrawingObject';
@@ -21,8 +20,8 @@ import { SvgDragDropEvent, SvgDraggableDirective } from '../../../directives/svg
 import { DeleteIconComponent } from '../../icons/delete-icon/delete-icon.component';
 import { MapCreatureDetailsComponent } from '../map-creature-details/map-creature-details.component';
 import { ToastComponent } from '../../dialogs/toast/toast.component';
-import {EyeOnIconComponent} from '../../icons/eye-on-icon/eye-on-icon.component';
-import {EyeOffIconComponent} from '../../icons/eye-off-icon/eye-off-icon.component';
+import { EyeOnIconComponent } from '../../icons/eye-on-icon/eye-on-icon.component';
+import { EyeOffIconComponent } from '../../icons/eye-off-icon/eye-off-icon.component';
 
 @Component({
     selector: 'app-campaign-map',
@@ -30,7 +29,6 @@ import {EyeOffIconComponent} from '../../icons/eye-off-icon/eye-off-icon.compone
         HeaderSlimComponent,
         MapActionIconComponent,
         FormsModule,
-        MapPatternComponent,
         CreatureComponent,
         PortraitComponent,
         SvgDraggableDirective,
