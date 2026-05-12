@@ -79,6 +79,10 @@ app-campaign-map {
                     animation-name: creature-glow;
                 }
 
+                g.editable {
+                    cursor: move;
+                }
+
                 @keyframes creature-glow {
                     from {
                         filter: drop-shadow(0 0 0 colours.$glow-off);

@@ -9,4 +9,5 @@ export class CampaignMapPlayer {
     highlight_colour: string = '#000000';
     visible: boolean = true;
     entity: Character | undefined;
+    editable: boolean = false;
 }

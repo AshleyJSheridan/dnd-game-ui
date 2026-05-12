@@ -15,4 +15,5 @@ export class CampaignMapDrawing {
         length?: number;
         angle?: number;
     } = {};
+    editable: boolean = false;
 }

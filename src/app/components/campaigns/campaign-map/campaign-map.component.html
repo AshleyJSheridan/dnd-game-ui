@@ -347,6 +347,7 @@
                             <g
                                 class="drawing"
                                 [class.selected]="drawing.guid === selectedEntity?.guid"
+                                [class.editable]="canUpdateEntity(drawing)"
                                 data-type="drawing"
                                 [attr.transform]="'translate(' + drawing.x + ', ' + drawing.y + ')'"
                                 [attr.data-x]="drawing.x"
@@ -356,7 +357,7 @@
 
                                 svgDraggable
                                 [dragId]="drawing.guid"
-                                [enabled]="this.mapMode === 'Pointer'"
+                                [enabled]="this.mapMode === 'Pointer' && canUpdateEntity(drawing)"
                                 (dragDrop)="onTokenDropped($event, 'drawing')"
                             >
                                 @switch (drawing.stats.type ?? '') {
@@ -445,6 +446,7 @@
                             <g
                                 class="character"
                                 [class.selected]="player.guid === selectedEntity?.guid"
+                                [class.editable]="canUpdateEntity(player)"
                                 data-type="character"
                                 [attr.data-x]="player.x"
                                 [attr.data-y]="player.y"
@@ -454,7 +456,7 @@
 
                                 svgDraggable
                                 [dragId]="player.guid"
-                                [enabled]="this.mapMode === 'Pointer'"
+                                [enabled]="this.mapMode === 'Pointer' && canUpdateEntity(player)"
                                 (dragDrop)="onTokenDropped($event, 'character')"
                             >
                                 <circle
@@ -489,6 +491,7 @@
                             <g
                                 class="creature"
                                 [class.selected]="creature.guid === selectedEntity?.guid"
+                                [class.editable]="canUpdateEntity(creature)"
                                 data-type="creature"
                                 [attr.data-x]="creature.x"
                                 [attr.data-y]="creature.y"
@@ -498,7 +501,7 @@
 
                                 svgDraggable
                                 [dragId]="creature.guid"
-                                [enabled]="this.mapMode === 'Pointer'"
+                                [enabled]="this.mapMode === 'Pointer' && canUpdateEntity(creature)"
                                 (dragDrop)="onTokenDropped($event, 'creature')"
                             >
                                 <circle
@@ -720,70 +723,72 @@
 
             @if (mapMode === 'Pointer' && selectedEntity !== null) {
                 <form class="selected-entity-form">
-                    <details open>
-                        <summary>Map Entity Details</summary>
+                    @if (canUpdateEntity(selectedEntity)) {
+                        <details open>
+                            <summary>Map Entity Details</summary>
 
-                        <div class="selected-entity-details-content">
-                            @if (selectedEntity.type === 'drawing') {
-                                <fieldset>
-                                    <legend>Symbol</legend>
+                            <div class="selected-entity-details-content">
+                                @if (selectedEntity.type === 'drawing') {
+                                    <fieldset>
+                                        <legend>Symbol</legend>
 
-                                    <div class="radio-collection">
-                                        @for (damageType of damageTypeIcons; track damageType) {
-                                            <label class="radio-label" title="{{ damageType }}">
-                                                <span class="accessible-hidden">{{ damageType }}</span>
-                                                <input type="radio" name="patternSymbol" value="{{ damageType.toLowerCase() }}"
-                                                       (change)="changeSelectedEntitySymbol(damageType.toLowerCase())" [checked]="selectedEntitySymbolMatches(damageType.toLowerCase())"/>
-                                                <app-damage-icon [patternSymbol]="damageType"/>
-                                            </label>
-                                        }
-                                    </div>
-                                </fieldset>
-                            }
-
-                            @if (selectedEntity.type === 'creature') {
-                                <fieldset>
-                                    <legend>Label</legend>
-
-                                    <label>
-                                        Name:
-                                        <input type="text" [value]="selectedEntity.entity_name" (change)="changeSelectedEntityName($event)"/>
-                                    </label>
-                                    <!-- fake button - the change handler on the text field triggers the update, this just triggers the change event by input losing focus -->
-                                    <button type="button">Change label</button>
-                                </fieldset>
-                            }
-
-                            <fieldset>
-                                <legend>Ring Colour</legend>
-
-                                <label>
-                                    <span class="accessible-hidden">Colour</span>
-                                    <input type="color" [value]="selectedEntity.highlight_colour" (change)="changeSelectedEntityColour($event)"/>
-                                </label>
-                            </fieldset>
-
-                            <fieldset class="selected-entity-actions">
-                                <legend>Actions</legend>
-
-                                <button type="button" title="Delete {{ selectedEntity.type }}" (click)="deleteSelectedEntity()">
-                                    <app-delete-icon/>
-                                </button>
+                                        <div class="radio-collection">
+                                            @for (damageType of damageTypeIcons; track damageType) {
+                                                <label class="radio-label" title="{{ damageType }}">
+                                                    <span class="accessible-hidden">{{ damageType }}</span>
+                                                    <input type="radio" name="patternSymbol" value="{{ damageType.toLowerCase() }}"
+                                                           (change)="changeSelectedEntitySymbol(damageType.toLowerCase())" [checked]="selectedEntitySymbolMatches(damageType.toLowerCase())"/>
+                                                    <app-damage-icon [patternSymbol]="damageType"/>
+                                                </label>
+                                            }
+                                        </div>
+                                    </fieldset>
+                                }
 
                                 @if (selectedEntity.type === 'creature') {
-                                    @if (getSelectedCreatureEntity()?.visible ) {
-                                        <button type="button" title="Hide from players" (click)="toggleSelectedEntityVisibility()">
-                                            <app-eye-on-icon/>
-                                        </button>
-                                    } @else {
-                                        <button type="button" title="Hide from players" (click)="toggleSelectedEntityVisibility()">
-                                            <app-eye-off-icon/>
-                                        </button>
-                                    }
+                                    <fieldset>
+                                        <legend>Label</legend>
+
+                                        <label>
+                                            Name:
+                                            <input type="text" [value]="selectedEntity.entity_name" (change)="changeSelectedEntityName($event)"/>
+                                        </label>
+                                        <!-- fake button - the change handler on the text field triggers the update, this just triggers the change event by input losing focus -->
+                                        <button type="button">Change label</button>
+                                    </fieldset>
                                 }
-                            </fieldset>
-                        </div>
-                    </details>
+
+                                <fieldset>
+                                    <legend>Ring Colour</legend>
+
+                                    <label>
+                                        <span class="accessible-hidden">Colour</span>
+                                        <input type="color" [value]="selectedEntity.highlight_colour" (change)="changeSelectedEntityColour($event)"/>
+                                    </label>
+                                </fieldset>
+
+                                <fieldset class="selected-entity-actions">
+                                    <legend>Actions</legend>
+
+                                    <button type="button" title="Delete {{ selectedEntity.type }}" (click)="deleteSelectedEntity()">
+                                        <app-delete-icon/>
+                                    </button>
+
+                                    @if (selectedEntity.type === 'creature') {
+                                        @if (getSelectedCreatureEntity()?.visible ) {
+                                            <button type="button" title="Hide from players" (click)="toggleSelectedEntityVisibility()">
+                                                <app-eye-on-icon/>
+                                            </button>
+                                        } @else {
+                                            <button type="button" title="Hide from players" (click)="toggleSelectedEntityVisibility()">
+                                                <app-eye-off-icon/>
+                                            </button>
+                                        }
+                                    }
+                                </fieldset>
+                            </div>
+                        </details>
+                    }
 
                     @if (selectedEntity.type === 'creature') {
                         <details open>

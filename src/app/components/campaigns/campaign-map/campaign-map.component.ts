@@ -618,4 +618,8 @@ export class CampaignMapComponent implements AfterViewInit {
 
         this.toast?.showToast();
     }
+
+    canUpdateEntity(entity: CampaignMapCreature | CampaignMapPlayer | CampaignMapDrawing): boolean {
+        return this.campaign?.owner || entity.editable;
+    }
 }

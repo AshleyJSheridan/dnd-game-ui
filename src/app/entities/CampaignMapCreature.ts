@@ -9,4 +9,5 @@ export class CampaignMapCreature {
     highlight_colour: string = '#000000';
     visible: boolean = true;
     entity: Creature | undefined;
+    editable: boolean = false;
 }
