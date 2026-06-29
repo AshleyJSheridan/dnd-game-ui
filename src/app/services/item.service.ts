@@ -67,4 +67,12 @@ export class ItemService {
             {headers: this.authService.getAuthHeader()}
         );
     }
+
+    public addGeneratedItem(item: Item): Observable<Array<Item>> {
+        return this.http.post<Array<Item>>(
+            `${this.apiUrl}/game/items/generated`,
+            {item: item},
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
 }

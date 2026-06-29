@@ -39,8 +39,13 @@
                 </label>
                 <button type="button" title="Add to Inventory" (click)="addToInventory()"><app-add-to-inventory-icon/></button>
             }
-            @if (itemLocation() === 'generated' && !editInPlace) {
-                <button type="button" title="Edit Details" (click)="editItemInPlace()"><app-edit-icon/></button>
+            @if (itemLocation() === 'generated') {
+                @if (!editInPlace) {
+                    <button type="button" title="Edit Details" (click)="editItemInPlace()"><app-edit-icon/></button>
+                } @else {
+                    <button type="button" title="Save to generated items list" (click)="addToGeneratedList()"><app-add-to-inventory-icon/></button>
+                }
+
             }
             @if (itemLocation() === 'generated-own') {
                 <button type="button" title="Give to Character" (click)="giveToCharacter()"><app-give-icon/></button>

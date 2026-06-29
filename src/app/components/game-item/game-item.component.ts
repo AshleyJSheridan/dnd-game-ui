@@ -12,6 +12,7 @@ import { AddToInventoryIconComponent } from '../icons/add-to-inventory-icon/add-
 import { ItemTypeIconComponent } from '../icons/item-type-icon/item-type-icon.component';
 import { DamageType } from '../../entities/DamageType';
 import { GiveIconComponent } from '../icons/give-icon/give-icon.component';
+import { ItemMoveDestination, ItemMoveEvent } from '../../entities/ItemMoveEvent';
 
 @Component({
     selector: 'app-game-item',
@@ -214,6 +215,15 @@ export class GameItemComponent {
 
     giveToCharacter(): void {
         this.editInPlace = false;
-        this.moveUpdatedItem.emit(this.item());
+
+        const moveItemEvent = new ItemMoveEvent(<Item>this.item());
+        this.moveUpdatedItem.emit(moveItemEvent);
+    }
+
+    addToGeneratedList(): void {
+        this.editInPlace = false;
+
+        const moveItemEvent = new ItemMoveEvent(<Item>this.item(), ItemMoveDestination.GENERATED_LIST);
+        this.moveUpdatedItem.emit(moveItemEvent);
     }
 }

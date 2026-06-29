@@ -1,18 +1,19 @@
-import { Component, ViewChild } from '@angular/core';
-import { HttpStatusCode } from '@angular/common/http';
-import { HeaderComponent } from '../../header/header.component';
-import { FormsModule } from '@angular/forms';
-import { ItemService } from '../../../services/item.service';
-import { Item } from '../../../entities/Item';
-import { GameItemComponent } from '../../game-item/game-item.component';
-import { Character } from '../../../entities/Character';
-import { CharacterService } from '../../../services/character.service';
-import { CampaignService } from '../../../services/campaign-service';
-import { Campaign } from '../../../entities/Campaign';
-import { LightboxComponent } from '../../dialogs/lightbox/lightbox.component';
-import { PortraitComponent } from '../../character/portrait/portrait.component';
-import { GiveIconComponent } from '../../icons/give-icon/give-icon.component';
-import { ToastComponent } from '../../dialogs/toast/toast.component';
+import {Component, ViewChild} from '@angular/core';
+import {HttpStatusCode} from '@angular/common/http';
+import {HeaderComponent} from '../../header/header.component';
+import {FormsModule} from '@angular/forms';
+import {ItemService} from '../../../services/item.service';
+import {Item} from '../../../entities/Item';
+import {GameItemComponent} from '../../game-item/game-item.component';
+import {Character} from '../../../entities/Character';
+import {CharacterService} from '../../../services/character.service';
+import {CampaignService} from '../../../services/campaign-service';
+import {Campaign} from '../../../entities/Campaign';
+import {LightboxComponent} from '../../dialogs/lightbox/lightbox.component';
+import {PortraitComponent} from '../../character/portrait/portrait.component';
+import {GiveIconComponent} from '../../icons/give-icon/give-icon.component';
+import {ToastComponent} from '../../dialogs/toast/toast.component';
+import {ItemMoveDestination, ItemMoveEvent} from '../../../entities/ItemMoveEvent';
 
 @Component({
     selector: 'app-item-generator',
@@ -23,7 +24,6 @@ import { ToastComponent } from '../../dialogs/toast/toast.component';
         LightboxComponent,
         PortraitComponent,
         GiveIconComponent,
-        ToastComponent
     ],
     templateUrl: './item-generator.component.html'
 })
@@ -50,6 +50,7 @@ export class ItemGeneratorComponent {
         'very rare',
     ];
     public item: Item | undefined = undefined;
+    public selectedItem: Item | undefined = undefined;
     public generatedItems: Array<Item> = [];
     public characters: Array<Character> = [];
     public campaigns: Array<Campaign> = [];
@@ -81,38 +82,60 @@ export class ItemGeneratorComponent {
         });
     }
 
-    saveAndMoveItem(item: Item): void {
-        // Get own list of characters, plus own list of campaigns (along with their characters).
-        this.characterService.getCharacters().subscribe({
-            next: (characters: Character[]) => {
-                this.characters = characters;
-            },
-            error: (error => {
+    saveAndMoveItem(itemMoveEvent: ItemMoveEvent): void {
+        if (!itemMoveEvent.item)
+            return;
 
-            })
-        });
-        this.campaignService.getOwnCampaigns().subscribe({
-            next: (campaigns) => {
-                this.campaigns = campaigns;
-            },
-            error: (error) => {
+        this.selectedItem = itemMoveEvent.item;
 
-            }
-        });
+        if (itemMoveEvent.destination === ItemMoveDestination.CHARACTER) {
+            // Get own list of characters, plus own list of campaigns (along with their characters).
+            this.characterService.getCharacters().subscribe({
+                next: (characters: Character[]) => {
+                    this.characters = characters;
+                },
+                error: (error => {
 
-        // TODO this should really have a reference to some kind of element to focus back on once the lightbox closes.
-        this.giveLightbox?.showModal(null)
+                })
+            });
+            this.campaignService.getOwnCampaigns().subscribe({
+                next: (campaigns) => {
+                    this.campaigns = campaigns;
+                },
+                error: (error) => {
+
+                }
+            });
+
+            // TODO this should really have a reference to some kind of element to focus back on once the lightbox closes.
+            this.giveLightbox?.showModal(null)
+        }
+
+        if (itemMoveEvent.destination === ItemMoveDestination.GENERATED_LIST) {
+            this.itemService.addGeneratedItem(<Item>itemMoveEvent.item).subscribe({
+                next: (generatedItems) => {
+                    this.giveLightbox?.cancelModal();
+                    this.giveItemSuccessMessage = `${itemMoveEvent.item.name} has been added to the generated items list!`;
+                    this.giveItemSuccessToast?.showToast();
+                    this.item = undefined;
+                },
+                error: (error) => {
+                    this.giveItemErrorMessage = error.error.error;
+                }
+            });
+        }
     }
 
     giveItemToCharacter(character: Character): void {
-        if (!this.item)
+        if (!this.selectedItem)
             return;
 
-        this.itemService.addItemToCharInventory(character.guid, this.item).subscribe({
+        this.itemService.addItemToCharInventory(character.guid, <Item>this.selectedItem).subscribe({
             next: (response) => {
                 this.giveLightbox?.cancelModal();
-                this.giveItemSuccessMessage = `${this.item?.name} has been given to ${character.name}!`;
+                this.giveItemSuccessMessage = `${this.selectedItem?.name} has been given to ${character.name}!`;
                 this.giveItemSuccessToast?.showToast();
+                this.selectedItem = undefined;
             },
             error: (error) => {
                 switch (error.status) {

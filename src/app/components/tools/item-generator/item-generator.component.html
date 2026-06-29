@@ -31,6 +31,9 @@
 
     @if (item) {
         <h2>Item</h2>
+        @if (giveItemErrorMessage) {
+            <div class="error">{{ giveItemErrorMessage }}</div>
+        }
         <app-game-item [item]="item" [openStatus]="true" [itemLocation]="'generated'" (moveUpdatedItem)="saveAndMoveItem($event)"/>
     }
 
@@ -45,7 +48,7 @@
         </ul>
     }
 
-    <app-lightbox #giveLightbox [heading]="'Give ' + item?.name + ' to...'">
+    <app-lightbox #giveLightbox [heading]="'Give ' + selectedItem?.name + ' to...'">
         @if (giveItemErrorMessage) {
             <div class="error">{{ giveItemErrorMessage }}</div>
         }
@@ -68,7 +71,7 @@
                                     <div>Level {{ character.level }} {{ character.charRace }} {{ character.charClass }}</div>
 
                                     <div class="char-actions">
-                                        <button type="button" title="Give {{ character.name }} {{ item?.name }}" (click)="giveItemToCharacter(character)">
+                                        <button type="button" title="Give {{ character.name }} {{ selectedItem?.name }}" (click)="giveItemToCharacter(character)">
                                             <app-give-icon/>
                                         </button>
                                     </div>
