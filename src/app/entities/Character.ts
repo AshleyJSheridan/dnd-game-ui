@@ -54,7 +54,7 @@ export class Character {
         id: number;
         name: string;
         short_name: string;
-        description: number;
+        description: string;
         base: number;
         modifier: number;
         racialModifier: number;

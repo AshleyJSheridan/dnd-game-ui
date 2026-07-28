@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { LocalStorageService } from '../../../services/local-storage.service';
 
 @Component({
   selector: 'app-characters-nav',
-  imports: [RouterLink],
+    imports: [RouterLink, RouterLinkActive],
   templateUrl: './characters-nav.component.html'
 })
 export class CharactersNavComponent {

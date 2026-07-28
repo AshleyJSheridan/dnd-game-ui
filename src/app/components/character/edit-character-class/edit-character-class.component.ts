@@ -146,12 +146,14 @@ export class EditCharacterClassComponent {
     hasPathSelection(): boolean {
         const level = this.characterService.character?.level ?? 0;
 
-        for (let i = 0; i < this.getClassBySelectionId()?.class_features.length; i ++) {
-            if ((i + 1) > level)
-                break;
-
-            if (this.getClassBySelectionId()?.class_features[i].type === 'path')
-                return true;
+        if (this.getClassBySelectionId()?.class_features.length > 0) {
+            for (let i = 0; i < this.getClassBySelectionId()?.class_features.length; i++) {
+                if (
+                    this.getClassBySelectionId()?.class_features[i].type === 'path'
+                    && this.getClassBySelectionId()?.class_features[i].level <= level
+                )
+                    return true;
+            }
         }
 
         return false;

@@ -209,4 +209,12 @@ export class CharacterService {
             {headers: this.authService.getAuthHeader()}
         );
     }
+
+    public updateCharacterProperty(property: string, value: any): Observable<Character> {
+        return this.http.patch<Character>(
+            `${this.apiUrl}/characters/${this.charGuid}`,
+            {updateType: 'property', property: property, value: value},
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
 }

@@ -1,8 +1,12 @@
-<div class="ability">
+<div class="ability" title="{{ abilityDescription() }}">
     <div class="ability-name">
         <span class="ability-short-name">{{ abilityShortName() }}</span>
         <span class="ability-long-name">{{ abilityName() }}</span>
     </div>
-    <div class="ability-score">{{ abilityBase() }}</div>
+    @if (editMode) {
+        <input type="text" class="inline adjustment ability-score" value="{{ abilityBase() }}" (blur)="updateAbilityValue($event)"/>
+    } @else {
+        <div class="ability-score" (dblclick)="setEditAbility($event)">{{ abilityBase() }}</div>
+    }
     <div class="ability-modifier">{{ abilityModifier() }}</div>
 </div>

@@ -303,6 +303,51 @@ button .dice-d6-icon {
             );
     }
 
+    .fantasy-red {
+        --text-color: #ddd;
+        --text-shadow: calc(1.5px * var(--scale) / 4.5)
+        calc(-1.5px * var(--scale) / 4.5)
+        calc(1.5px * var(--scale) / 4.5)
+        #fffcf2,
+        calc(-1.5px * var(--scale) / 4.5)
+        calc(1.5px * var(--scale) / 4.5)
+        calc(1.5px * var(--scale) / 4.5)
+        #160500;
+
+        --border-bg: linear-gradient(
+                to bottom,
+                #666,
+                #333 49%,
+                #000 51%,
+                #333
+        );
+
+        --inlay-hover-opacity: 0.75;
+        --border-hover-opacity: 0.75;
+        --border-focus-bg: repeating-conic-gradient(
+                #bdab8c 0deg 30deg,
+                #766652 30deg 60deg
+        );
+
+        --inlay-bg: radial-gradient(
+                at center 150%,
+                #fffcf2, transparent 35%
+        ) 50% 0% / 150% 25% no-repeat,
+        radial-gradient(
+                at center -25%,
+                #501608, transparent 35%
+        ) 50% 100% / 150% 25% no-repeat,
+        linear-gradient(
+                to bottom,
+                #2c201b,
+                #f88 24%,
+                #b00 26% 49%,
+                #900 49% 74%,
+                #600 76%,
+                #300
+        );
+    }
+
     .fantasy-blue {
         --text-color: #ddd;
         --text-shadow: calc(1.5px * var(--scale) / 4.5)

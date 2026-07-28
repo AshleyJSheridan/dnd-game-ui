@@ -163,6 +163,10 @@
                 font-size: 1.5rem;
                 font-weight: bold;
                 padding-bottom: .5rem;
+
+                &.adjustment {
+                    font-weight: normal;
+                }
             }
 
             .ability-modifier {
@@ -170,11 +174,16 @@
                 border: 3px double colours.$black;
                 border-radius: 1rem;
                 box-sizing: border-box;
+                cursor: url("/images/dice/dice-cursor.png"), pointer;
                 left: 50%;
                 margin-left: -1.25rem;
                 position: absolute;
                 bottom: -1rem;
                 width: 2.5rem;
+
+                &:hover {
+                    background-color: colours.$gold;
+                }
             }
         }
     }
@@ -203,12 +212,22 @@
 
         .simple-score {
             align-items: center;
+            cursor: url("/images/dice/dice-cursor.png"), pointer;
             display: flex;
             font-size: .8rem;
             padding: .125rem;
 
+            &:hover {
+                background-color: colours.$light-grey;
+            }
+
             &.proficient {
                 background-color: colours.$gold;
+
+                &:hover {
+                    background-color: colours.$grey;
+                    color: colours.$white;
+                }
             }
 
             .simple-score-value {

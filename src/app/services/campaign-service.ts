@@ -177,6 +177,15 @@ export class CampaignService {
         );
     }
 
+    public deleteCampaign(guid: string = ''): Observable<Array<Campaign>> {
+        const campaignGuid = !this.campaignGuid ? guid : this.campaignGuid;
+
+        return this.http.delete<Array<Campaign>>(
+            `${this.apiUrl}/campaigns/${campaignGuid}`,
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
+
     public invitePlayerByEmail(email: string): Observable<any> {
         return this.http.post<any>(
             `${this.apiUrl}/campaigns/${this.campaignGuid}/invite`,

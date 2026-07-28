@@ -43,6 +43,11 @@
                 <span class="accessible-hidden">End Campaign</span>
             </button>
         }
+
+        <button type="button" (click)="deleteCampaign()" title="Delete campaign">
+            <app-delete-icon/>
+            <span class="accessible-hidden">Delete</span>
+        </button>
     }
 
     <a [routerLink]="['/campaigns/', campaign()?.guid]" title="View Campaign">

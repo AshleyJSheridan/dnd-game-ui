@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CharacterService } from '../../../services/character.service';
-import {Character} from '../../../entities/Character';
-import {PortraitComponent} from '../portrait/portrait.component';
+import { Character } from '../../../entities/Character';
+import { PortraitComponent } from '../portrait/portrait.component';
 
 @Component({
     selector: 'app-edit-portrait',
@@ -21,8 +21,7 @@ export class EditPortraitComponent {
     onFileSelected(event: Event): void {
         this.fileError = '';
 
-        // @ts-ignore
-        this.file = event.target?.files[0] as File;
+        this.file = (event.target as HTMLInputElement)?.files?.[0] as File;
         this.fileName = this.file.name;
     }
 

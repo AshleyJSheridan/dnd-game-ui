@@ -23,6 +23,8 @@
                                 [abilityName]="getAbilityDetails(ability).name"
                                 [abilityBase]="getAbilityDetails(ability).base"
                                 [abilityModifier]="getAbilityDetails(ability).modifier"
+                                [abilityDescription]="getAbilityDetails(ability).description"
+                                (updateAbility)="updateAbilityScore($event)"
                             />
                         }
                     </div>
@@ -77,7 +79,7 @@
                             </div>
                             <div class="simple-score initative">
                                 <div class="simple-score-name">Initiative</div>
-                                <div class="simple-score-value">{{ 10 + getAbilityDetails('dex').modifier }}</div>
+                                <div class="simple-score-value">+{{ getAbilityDetails('dex').modifier }}</div>
                             </div>
                             <div class="simple-score speed">
                                 <div class="simple-score-name">Speed</div>
@@ -90,19 +92,33 @@
                             <div>♥ Hit Points</div>
                             <div>
                                 @if (editMode.hitPoints) {
-                                    <input type="text" class="inline adjustment" [value]="character?.hit_points!.current"
-                                        />
+                                    <input type="text" class="inline adjustment"
+                                        (blur)="updateChar($event)"
+                                        [(ngModel)]="character!.hit_points!.current"
+                                        name="hit_points"
+                                    />
                                 } @else {
-                                    <span class="current" (dblclick)="editMode.hitPoints = true">{{ character?.hit_points!.current }}</span>
+                                    <span
+                                        class="current"
+                                        (dblclick)="editMode.hitPoints = true"
+                                        title="Current hit points"
+                                    >{{ character?.hit_points!.current }}</span>
                                 }
                                 /
-                                <span class="max">{{ character?.hit_points!.max }}</span>
+                                <span class="max" title="Max hit points">{{ character?.hit_points!.max }}</span>
                                 (
                                     @if (editMode.hitPointsModifier) {
-                                        <input type="text" class="inline adjustment" [value]="character?.hit_points!.hit_points_temp"
-                                            (blur)="updateCharHitPointsModifier($event)"/>
+                                        <input type="text" class="inline adjustment"
+                                            [(ngModel)]="character!.hit_points!.hit_points_temp"
+                                            (blur)="updateChar($event)"
+                                            name="hit_points_temp"
+                                        />
                                     } @else {
-                                        <span class="adjustment" (dblclick)="editMode.hitPointsModifier = true">{{ character?.hit_points!.hit_points_temp }}</span>
+                                        <span
+                                            class="adjustment"
+                                            (dblclick)="editMode.hitPointsModifier = true"
+                                            title="Temporary hit points"
+                                        >{{ character?.hit_points!.hit_points_temp }}</span>
                                     }
                                 )
                             </div>
@@ -170,11 +186,13 @@
                                         <th>Level Acquired</th>
                                     </tr>
                                     @for (ability of getCharacterClassAbilities(); track ability.id) {
-                                        <tr>
-                                            <td>{{ ability.name }}</td>
-                                            <td><div class="class-ability-description" [innerHTML]="ability.description"></div></td>
-                                            <td>{{ ability.level }}</td>
-                                        </tr>
+                                        @if (ability.level <= character!.level) {
+                                            <tr>
+                                                <td>{{ ability.name }}</td>
+                                                <td><div class="class-ability-description" [innerHTML]="ability.description"></div></td>
+                                                <td>{{ ability.level }}</td>
+                                            </tr>
+                                        }
                                     }
                                 </table>
                             }

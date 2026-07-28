@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://dndapi.ashleysheridan.co.uk/api',
+    apiUrl: 'https://dndapi2.ashleysheridan.co.uk/api',
 };

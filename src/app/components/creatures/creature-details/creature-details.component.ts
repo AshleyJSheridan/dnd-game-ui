@@ -1,12 +1,10 @@
 import { Component, input, InputSignal } from '@angular/core';
 import { Creature } from '../../../entities/Creature';
-import {DiceComponent} from '../../dice/dice.component';
-import {CreatureIconComponent} from '../creature-icon/creature-icon.component';
+import { CreatureIconComponent } from '../creature-icon/creature-icon.component';
 
 @Component({
     selector: 'app-creature-details',
     imports: [
-        DiceComponent,
         CreatureIconComponent
     ],
     templateUrl: './creature-details.component.html',

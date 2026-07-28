@@ -33,12 +33,14 @@
                     @for (campaign of ownCampaigns; track campaign.guid) {
                         <li class="campaigns">
                             <div class="campaign">
-                                <app-campaign-state [campaign]="campaign"></app-campaign-state>
+                                <app-campaign-state [campaign]="campaign" (deleteCampaignEvent)="deleteCampaign($event)"></app-campaign-state>
                             </div>
                         </li>
                     }
                 </ul>
             }
+
+            <button type="button" (click)="showCreateCampaignForm($event)" class="fantasy-btn fantasy-blue">Create New Campaign</button>
         </div>
 
         <h2>Joined Campaigns</h2>
@@ -80,5 +82,20 @@
                 <p>You don't have any characters to use for this campaign. Please create a character first.</p>
             }
         </div>
+    </app-confirm>
+
+    <app-confirm #createCampaignLightbox heading="Create campaign" cancelLabel="Cancel" confirmLabel="Create" (confirmClass)="confirmCreateCampaign()">
+        <form class="create-campaign-form">
+            <label>Campaign Name:
+                <input type="text" name="name" required #newCampaignName />
+            </label>
+            <label>
+                Campaign Description:
+                <textarea name="description" placeholder="Campaign Description" #newCampaignDescription>
+
+                </textarea>
+            </label>
+
+        </form>
     </app-confirm>
 </div>

@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { HeaderComponent } from '../../header/header.component';
 import { Router } from '@angular/router';
 import { CampaignService } from '../../../services/campaign-service';
-import { Campaign, CampaignState } from '../../../entities/Campaign';
+import { Campaign } from '../../../entities/Campaign';
 import { DatePipe } from '@angular/common';
 import { CampaignInvite } from '../../../entities/CampaignInvite';
 import { LightboxComponent } from '../../dialogs/lightbox/lightbox.component';
@@ -31,7 +31,11 @@ export class CampaignListComponent {
     public characters: Array<Character> = [];
     private activeInvite: CampaignInvite | null = null;
 
+
     @ViewChild('acceptInviteLightbox') acceptInviteLightbox: LightboxComponent | undefined;
+    @ViewChild('createCampaignLightbox') createCampaignLightbox: LightboxComponent | undefined;
+    @ViewChild('newCampaignName') newCampaignName: any;
+    @ViewChild('newCampaignDescription') newCampaignDescription: any;
 
     constructor(private campaignService: CampaignService, private characterService: CharacterService, private router: Router) {}
 
@@ -118,5 +122,35 @@ export class CampaignListComponent {
                 console.log(error)
             }
         })
+    }
+
+    showCreateCampaignForm(event: MouseEvent): void {
+        if (event.currentTarget !== null) {
+            this.createCampaignLightbox?.showModal(event.currentTarget);
+        }
+    }
+
+    confirmCreateCampaign(): void {
+        const campaignName = this.newCampaignName!.nativeElement.value;
+        const campaignDescription = this.newCampaignDescription!.nativeElement.value;
+        const campaignData = {
+            name: campaignName,
+            description: campaignDescription
+        }
+
+        this.campaignService.createCampaign(campaignData).subscribe({
+            next: (campaign) => {
+                this.ownCampaigns.push(campaign);
+            },
+            error: (error) => {
+                console.log(error)
+            }
+        })
+    }
+
+    deleteCampaign(campaignGuid: string): void {
+        // Filter the list of campaigns to remove the deleted campaign.
+        this.ownCampaigns = this.ownCampaigns.filter(campaign => campaign.guid !== campaignGuid);
+        this.joinedCampaigns = this.joinedCampaigns.filter(campaign => campaign.guid !== campaignGuid);
     }
 }

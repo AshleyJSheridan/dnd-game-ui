@@ -255,7 +255,9 @@
                         </ul>
 
                         <div class="char-list-panel">
-                            <h4>Add New Character to Campaign</h4>
+                            @if (campaign.owner) {
+                                <h4>Add New Character to Campaign</h4>
+                            }
 
                             <ul>
                                 @for (character of characters; track character.guid) {
@@ -288,13 +290,15 @@
                                 }
                             </ul>
 
-                            <form>
-                                <label>Invite player by email:
-                                    <input type="email" name="inviteEmail" #inviteEmail placeholder="player@example.co.uk"/>
-                                </label>
-                                <button type="button" class="fantasy-btn fantasy-brown" (click)="invitePlayerByEmail()">Send Invite</button>
-                                <app-toast #inviteToast>{{ inviteToastMessage }}</app-toast>
-                            </form>
+                            @if (campaign.owner) {
+                                <form>
+                                    <label>Invite player by email:
+                                        <input type="email" name="inviteEmail" #inviteEmail placeholder="player@example.co.uk"/>
+                                    </label>
+                                    <button type="button" class="fantasy-btn fantasy-brown" (click)="invitePlayerByEmail()">Send Invite</button>
+                                    <app-toast #inviteToast>{{ inviteToastMessage }}</app-toast>
+                                </form>
+                            }
                         </div>
                     </div>
                 </details>

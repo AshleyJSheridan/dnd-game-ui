@@ -1,0 +1,49 @@
+<app-header></app-header>
+
+<div class="profile-content-container">
+    <main>
+        <h2>Your Profile</h2>
+
+        <fieldset>
+            <legend>Profile Details</legend>
+
+            @if (!editProfile) {
+                <div class="profile-details">
+                    <p><strong>Name:</strong> {{ user?.name }}</p>
+                    <p><strong>Email:</strong> {{ user?.email }}</p>
+                    <p><strong>Joined:</strong> {{ user?.created_at | date: 'medium' }}</p>
+
+                    <button type="button" (click)="setEditProfile()" class="fantasy-btn fantasy-blue">Edit Profile</button>
+                </div>
+            } @else if (user) {
+                <form (ngSubmit)="saveProfile(profileForm)" #profileForm>
+                    <label>Name: <input id="name" type="text" name="name" required [(ngModel)]="user.name"></label>
+                    <label>Email: <input id="email" type="email" name="email" required [(ngModel)]="user.email"></label>
+
+                    <p>Only enter a new password if you wish to change your existing password.</p>
+                    <label>New Password: <input id="password" type="password" name="password" minlength="8" #newPassword></label>
+                    <label>Password Confirm: <input id="password_confirm" type="password" minlength="8" name="password_confirm" #passwordConfirm></label>
+
+                    <button type="submit" class="fantasy-btn fantasy-blue">Save</button>
+                    <button type="button" (click)="setCancelEdit()" class="fantasy-btn fantasy-brown">Cancel</button>
+                </form>
+            }
+        </fieldset>
+
+        <fieldset>
+            <legend>Delete Account</legend>
+
+            <button type="button" (click)="deleteProfile($event)" class="fantasy-btn fantasy-red">Delete Profile</button>
+        </fieldset>
+    </main>
+
+    <app-confirm heading="'Really delete your profile?'" (confirmClass)="confirmDeleteProfile()" #profileDeleteConfirm>
+        <p>If you delete your profile, you will no longer be able to play D&amp;D Yonder!</p>
+
+        <p>By confirming, your account will be deactivated and the email on the account will be hashed to make it unusable.
+            Characters created on the account will still exist, but will be unusable in all forms. If you wish to re-activate
+            your account at a later date, you may do so by sending an email to <a href="mailto:ash@ashleysheridan.co.uk">ash&#64;ashleysheridan.co.uk</a>
+            from the email address you created the account with.</p>
+    </app-confirm>
+
+</div>

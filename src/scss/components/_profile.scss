@@ -1,0 +1,39 @@
+@use "../colours";
+@use "../variables";
+
+.profile-content-container {
+    padding: 1rem;
+
+    fieldset {
+        margin-bottom: 2rem;
+    }
+
+    label {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: .5rem;
+        max-width: 100%;
+        width: 30rem;
+
+        @media (max-width: variables.$mobile-width) {
+            display: block;
+        }
+
+        input {
+            box-sizing: border-box;
+            width: 20rem;
+
+            @media (max-width: variables.$mobile-width) {
+                display: block;
+                margin: .5rem 0 1.5rem;
+                max-width: 100%;
+                width: 100%;
+            }
+        }
+    }
+
+    button {
+        margin-right: 1rem;
+    }
+}

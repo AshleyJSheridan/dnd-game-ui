@@ -12,6 +12,7 @@ import { Spell } from '../../../entities/Spell';
 import {EditCharacterSpellComponent} from '../edit-character-spell/edit-character-spell.component';
 import {CharacterClassFeature} from '../../../entities/CharacterClassFeature';
 import {PortraitComponent} from '../portrait/portrait.component';
+import {FormsModule} from '@angular/forms';
 
 @Component({
     selector: 'app-view-character',
@@ -22,7 +23,8 @@ import {PortraitComponent} from '../portrait/portrait.component';
         MoneyComponent,
         InventoryListComponent,
         EditCharacterSpellComponent,
-        PortraitComponent
+        PortraitComponent,
+        FormsModule
     ],
     templateUrl: './view-character.component.html'
 })
@@ -68,7 +70,7 @@ export class ViewCharacterComponent {
             return ability.short_name === abilityShortName;
         });
 
-        return abilities ? abilities[0] : {name: '', base: 0, modifier: 0};
+        return abilities ? abilities[0] : {name: '', base: 0, modifier: 0, description: ''};
     }
 
     hasAbilityProficiency(abilityShortName: string): boolean
@@ -139,8 +141,42 @@ export class ViewCharacterComponent {
     }
 
     // Methods for updating the character stats.
-    updateCharHitPointsModifier(event: FocusEvent): void {
-        const newValue = parseInt((<HTMLInputElement>event.target).value);
-        console.log(newValue);
+    updateChar(event: FocusEvent): void {
+        type EditModeKey = keyof typeof this.editMode;
+
+        for (const editModeKey in this.editMode) {
+
+            const keyStr = editModeKey as EditModeKey;
+
+            this.editMode[keyStr as EditModeKey] = false;
+        }
+
+        this.applyUpdateAndRefreshCharacter((event.target as HTMLInputElement).name, parseInt((event.target as HTMLInputElement).value, 10));
     }
+
+    updateAbilityScore(ability: {name: string, value: number}): void {
+        if (!this.character) return;
+
+        const abilityToUpdate = this.character.abilities.find(a => a.short_name === ability.name);
+
+        if (abilityToUpdate) {
+            abilityToUpdate.base = ability.value;
+
+            this.applyUpdateAndRefreshCharacter(ability.name, ability.value);
+        }
+    }
+
+    applyUpdateAndRefreshCharacter(property: string, value: any): void {
+        this.characterService.updateCharacterProperty(property, value).subscribe(
+            {
+                next: (character) => {
+                    this.character = character;
+                },
+                error: (error => {
+
+                })
+            }
+        );
+    }
+
 }

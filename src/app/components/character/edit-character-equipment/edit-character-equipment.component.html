@@ -90,7 +90,7 @@
     <h3>Inventory</h3>
 
     <div class="inventory-list">
-        @for (item of characterService?.character?.inventory?.items; track $index) {
+        @for (item of characterService!.character?.inventory?.items; track $index) {
             @if (item.parent_id === 0) {
                 <app-game-item [item]="item"/>
             }

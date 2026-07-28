@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
-import {HeaderComponent} from '../../header/header.component';
-import {LibraryService} from '../../../services/library.service';
-import {Router} from '@angular/router';
-import {DamageType} from '../../../entities/DamageType';
-import {ConditionIconComponent} from '../../icons/condition-icon/condition-icon.component';
+import { HeaderComponent } from '../../header/header.component';
+import { LibraryService } from '../../../services/library.service';
+import { Router } from '@angular/router';
+import { DamageType } from '../../../entities/DamageType';
 
 @Component({
     selector: 'app-library-damage-types',
     imports: [
         HeaderComponent,
-        ConditionIconComponent
     ],
     templateUrl: './library-damage-types.component.html',
 })

@@ -1,7 +1,7 @@
 <h2>Character Creation - Portrait</h2>
 
 <div class="char-edit-portrait-panel">
-    @if (characterService?.character?.custom_portrait) {
+    @if (characterService!.character?.custom_portrait) {
         <h3>Current Portrait</h3>
         <app-portrait [character]="characterService.character"/>
     }

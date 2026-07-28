@@ -35,6 +35,7 @@ import { LibraryDeitiesComponent } from './components/library/library-deities/li
 import { LibraryItemsComponent } from './components/library/library-items/library-items.component';
 import { LibraryConditionsComponent } from './components/library/library-conditions/library-conditions.component';
 import { LibraryDamageTypesComponent } from './components/library/library-damage-types/library-damage-types.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -82,6 +83,7 @@ export const routes: Routes = [
     { path: 'library/conditions', component: LibraryConditionsComponent },
     { path: 'library/damage-types', component: LibraryDamageTypesComponent },
 
+    { path: 'profile', component: ProfileComponent},
 ];
 
 export const appConfig: ApplicationConfig = {
