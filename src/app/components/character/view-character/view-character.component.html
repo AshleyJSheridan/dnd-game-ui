@@ -117,7 +117,7 @@
                                         <span
                                             class="adjustment"
                                             (dblclick)="editMode.hitPointsModifier = true"
-                                            title="Temporary hit points"
+                                            title="Additional temporary hit points"
                                         >{{ character?.hit_points!.hit_points_temp }}</span>
                                     }
                                 )
@@ -190,7 +190,7 @@
                                             <tr>
                                                 <td>{{ ability.name }}</td>
                                                 <td><div class="class-ability-description" [innerHTML]="ability.description"></div></td>
-                                                <td>{{ ability.level }}</td>
+                                                <td class="ability-level">{{ ability.level }}</td>
                                             </tr>
                                         }
                                     }
