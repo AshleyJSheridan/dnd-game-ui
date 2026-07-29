@@ -13,6 +13,7 @@ import {EditCharacterSpellComponent} from '../edit-character-spell/edit-characte
 import {CharacterClassFeature} from '../../../entities/CharacterClassFeature';
 import {PortraitComponent} from '../portrait/portrait.component';
 import {FormsModule} from '@angular/forms';
+import {RolledDiceComponent} from '../../dice/rolled-dice/rolled-dice.component';
 
 @Component({
     selector: 'app-view-character',
@@ -24,7 +25,8 @@ import {FormsModule} from '@angular/forms';
         InventoryListComponent,
         EditCharacterSpellComponent,
         PortraitComponent,
-        FormsModule
+        FormsModule,
+        RolledDiceComponent
     ],
     templateUrl: './view-character.component.html'
 })
@@ -138,6 +140,10 @@ export class ViewCharacterComponent {
             .concat(this.character?.selected_class_path.features ?? [])
             .filter((feature, index, self) => self.findIndex(l => l.name === feature.name) === index)
             .sort((a, b) => a.level - b.level);
+    }
+
+    rollAbility(roll: {modifier: number}): void {
+
     }
 
     // Methods for updating the character stats.

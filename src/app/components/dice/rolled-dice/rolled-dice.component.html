@@ -1,0 +1,17 @@
+<div class="dice-container">
+    <canvas #diceCanvas></canvas>
+
+    <button
+        type="button"
+        (click)="roll()"
+        [disabled]="rolling"
+    >
+        {{ rolling ? 'Rolling...' : 'Roll D20' }}
+    </button>
+
+    @if (result !== null && !rolling) {
+        <div class="result">
+            {{ result }}
+        </div>
+    }
+</div>

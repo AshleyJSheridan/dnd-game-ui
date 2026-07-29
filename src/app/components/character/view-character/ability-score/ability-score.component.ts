@@ -16,6 +16,7 @@ export class AbilityScoreComponent {
     readonly abilityModifier: InputSignal<number> = input(0);
 
     @Output() updateAbility = new EventEmitter();
+    @Output() rollAbilityEvent = new EventEmitter();
 
     public editMode: boolean = false;
 
@@ -30,5 +31,9 @@ export class AbilityScoreComponent {
         this.updateAbility.emit(updatedAbility);
 
         this.editMode = false;
+    }
+
+    public rollAbility(): void {
+        this.rollAbilityEvent.emit({modifier: this.abilityModifier()});
     }
 }
