@@ -288,7 +288,7 @@
             }
         }
 
-        .initative,
+        .initiative,
         .speed {
             background-color: colours.$white;
             border: 3px double colours.$black;
@@ -320,6 +320,14 @@
                 position: absolute;
                 bottom: -1rem;
                 width: 2.5rem;
+            }
+        }
+
+        .initiative .simple-score-value {
+            cursor: url("/images/dice/dice-cursor.png"), pointer;
+            
+            &:hover {
+                background-color: colours.$gold;
             }
         }
     }

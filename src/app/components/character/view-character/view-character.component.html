@@ -49,7 +49,9 @@
                             Saving Throws
 
                             @for (ability of abilityNames; track ability) {
-                                <div class="simple-score" [class.proficient]="hasAbilityProficiency(ability)" role="button" (click)="rollAbility({modifier: getAbilitySavingThrow(ability)})">
+                                <div class="simple-score" [class.proficient]="hasAbilityProficiency(ability)" role="button"
+                                     (click)="rollAbility({modifier: getAbilitySavingThrow(ability)})"
+                                >
                                     <div class="simple-score-value">{{ getAbilitySavingThrow(ability) }}</div>
                                     <div class="simple-score-name">{{ getAbilityDetails(ability).name }}</div>
                                 </div>
@@ -60,7 +62,9 @@
                             Skills
 
                             @for (skill of skillNames; track skill) {
-                                <div class="simple-score" [class.proficient]="hasSkillProficiency(skill.name)" role="button" (click)="rollAbility({modifier: getSkillProficiencyBonus(skill)})">
+                                <div class="simple-score" [class.proficient]="hasSkillProficiency(skill.name)" role="button"
+                                     (click)="rollAbility({modifier: getSkillProficiencyBonus(skill)})"
+                                >
                                     <div class="simple-score-value">{{ getSkillProficiencyBonus(skill) }}</div>
                                     <div class="simple-score-ability">({{ skill.ability }})</div>
                                     <div class="simple-score-name">{{ skill.name }}</div>
@@ -80,9 +84,11 @@
                                 <div class="simple-score-name">Armor Class</div>
                                 <div class="simple-score-value">0</div>
                             </div>
-                            <div class="simple-score initative">
+                            <div class="simple-score initiative">
                                 <div class="simple-score-name">Initiative</div>
-                                <div class="simple-score-value">+{{ getAbilityDetails('dex').modifier }}</div>
+                                <div class="simple-score-value" role="button"
+                                     (click)="rollAbility({modifier: getAbilityDetails('dex').modifier})"
+                                >+{{ getAbilityDetails('dex').modifier }}</div>
                             </div>
                             <div class="simple-score speed">
                                 <div class="simple-score-name">Speed</div>
