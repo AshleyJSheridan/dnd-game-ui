@@ -1,6 +1,8 @@
 <app-header-slim></app-header-slim>
 
 <div class="char-sheet">
+    <app-toast #d20ResultToast>{{ diceRollResult }}</app-toast>
+
     <div class="char-sheet-content">
         <div class="sheet-header">
             <div class="portrait"><app-portrait [character]="character"/></div>
@@ -264,5 +266,5 @@
         </div>
     </div>
 
-    <app-rolled-dice/>
+    <app-rolled-dice #d20/>
 </div>

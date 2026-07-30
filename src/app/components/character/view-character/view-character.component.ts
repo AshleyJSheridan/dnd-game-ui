@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { CharacterService } from '../../../services/character.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Character } from '../../../entities/Character';
@@ -9,11 +9,12 @@ import { LanguageScriptComponent } from '../../icons/language-script/language-sc
 import { MoneyComponent } from '../money/money.component';
 import { InventoryListComponent } from '../inventory-list/inventory-list.component';
 import { Spell } from '../../../entities/Spell';
-import {EditCharacterSpellComponent} from '../edit-character-spell/edit-character-spell.component';
-import {CharacterClassFeature} from '../../../entities/CharacterClassFeature';
-import {PortraitComponent} from '../portrait/portrait.component';
-import {FormsModule} from '@angular/forms';
-import {RolledDiceComponent} from '../../dice/rolled-dice/rolled-dice.component';
+import { EditCharacterSpellComponent } from '../edit-character-spell/edit-character-spell.component';
+import { CharacterClassFeature } from '../../../entities/CharacterClassFeature';
+import { PortraitComponent } from '../portrait/portrait.component';
+import { FormsModule } from '@angular/forms';
+import { RolledDiceComponent } from '../../dice/rolled-dice/rolled-dice.component';
+import { ToastComponent } from '../../dialogs/toast/toast.component';
 
 @Component({
     selector: 'app-view-character',
@@ -26,7 +27,8 @@ import {RolledDiceComponent} from '../../dice/rolled-dice/rolled-dice.component'
         EditCharacterSpellComponent,
         PortraitComponent,
         FormsModule,
-        RolledDiceComponent
+        RolledDiceComponent,
+        ToastComponent
     ],
     templateUrl: './view-character.component.html'
 })
@@ -48,6 +50,10 @@ export class ViewCharacterComponent {
         hitPoints: false,
         hitPointsModifier: false,
     };
+    public diceRollResult: string = '';
+
+    @ViewChild('d20') d20!: RolledDiceComponent | undefined;
+    @ViewChild('d20ResultToast') d20ResultToast!: ToastComponent | undefined;
 
     constructor(private characterService: CharacterService, private router: Router) {}
 
@@ -143,7 +149,16 @@ export class ViewCharacterComponent {
     }
 
     rollAbility(roll: {modifier: number}): void {
+        const diceRoll = Math.floor(Math.random() * 20) + 1;
 
+        console.log(`${diceRoll} + ${roll.modifier}`);
+
+        if (this.d20) {
+            this.d20.roll(diceRoll);
+
+            this.diceRollResult = `${diceRoll} + ${roll.modifier} = ${diceRoll + roll.modifier}`;
+            this.d20ResultToast?.showToast();
+        }
     }
 
     // Methods for updating the character stats.

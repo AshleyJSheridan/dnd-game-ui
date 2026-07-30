@@ -9,14 +9,11 @@ import {
     AmbientLight,
     DirectionalLight,
     MathUtils,
-    Euler,
     Group,
     Vector3,
     BufferGeometry,
-    Sprite,
     CanvasTexture,
     SRGBColorSpace,
-    SpriteMaterial,
     Quaternion,
     MeshBasicMaterial,
     DoubleSide,
@@ -30,16 +27,16 @@ import {
     templateUrl: './rolled-dice.component.html',
 })
 export class RolledDiceComponent implements AfterViewInit, OnDestroy {
-    //private canvasRef!: ElementRef<HTMLCanvasElement>;
     private renderer!: WebGLRenderer;
     private scene!: Scene;
     private camera!: PerspectiveCamera;
-    private dice!: Mesh;
     private animationFrame: number | null = null;
     public result: number | null = null;
     public rolling = false;
     private diceGroup!: Group;
     private diceMesh!: Mesh;
+    public showDice: boolean = false;
+    private timeoutId: number | null = null;
 
     private readonly faces: {
         number: number;
@@ -76,8 +73,7 @@ export class RolledDiceComponent implements AfterViewInit, OnDestroy {
             100
         );
 
-        //this.camera.position.set(0, 0, 5);
-        this.camera.position.set(0, 3.5, 5);
+        this.camera.position.set(0, 0, 8);
         this.camera.lookAt(0, 0, 0);
 
         this.renderer = new WebGLRenderer({
@@ -96,7 +92,7 @@ export class RolledDiceComponent implements AfterViewInit, OnDestroy {
 
         this.createDice();
 
-        const ambientLight = new AmbientLight(0xffffff, 2);
+        const ambientLight = new AmbientLight(0xff0000, 2);
         this.scene.add(ambientLight);
 
         const directionalLight = new DirectionalLight(0xffffff, 4);
@@ -108,7 +104,7 @@ export class RolledDiceComponent implements AfterViewInit, OnDestroy {
     private createDice(): void {
         this.diceGroup = new Group();
 
-        this.diceGroup.scale.setScalar(.5)
+        this.diceGroup.scale.setScalar(.25)
 
         /*
          * detail must remain 0 so that the geometry has exactly 20 faces.
@@ -123,7 +119,7 @@ export class RolledDiceComponent implements AfterViewInit, OnDestroy {
             : geometry;
 
         const material = new MeshStandardMaterial({
-            color: 0x7c3aed,
+            color: 0x333333,
             roughness: 0.35,
             metalness: 0.15,
             flatShading: true,
@@ -190,11 +186,6 @@ export class RolledDiceComponent implements AfterViewInit, OnDestroy {
 
             const number = faceIndex + 1;
 
-            /*this.faces.push({
-                number,
-                normal: normal.clone(),
-                centre: centre.clone(),
-            });*/
             this.faces.push({
                 number,
                 normal: normal.clone(),
@@ -202,7 +193,6 @@ export class RolledDiceComponent implements AfterViewInit, OnDestroy {
                 up: faceUp.clone(),
             });
 
-            //const numberSprite = this.createNumberSprite(number);
             const numberMesh = this.createNumberMesh(number, normal);
 
             numberMesh.position.copy(centre.clone().addScaledVector(normal, 0.015));
@@ -266,42 +256,109 @@ export class RolledDiceComponent implements AfterViewInit, OnDestroy {
         return mesh;
     }
 
-    public roll(): void {
+    public roll(rollValue: number): void {
         if (this.rolling) {
             return;
         }
 
+        if (this.timeoutId) {
+            window.clearTimeout(this.timeoutId);
+            this.timeoutId = null;
+        }
+
         this.rolling = true;
-        this.result = Math.floor(Math.random() * 20) + 1; // TODO replace this with input value.
-        console.log(this.result);
+        this.showDice = true;
+        if (this.timeoutId === null) {
+            this.timeoutId = window.setTimeout(() => {
+                this.showDice = false;
+                this.timeoutId = null;
+            }, 5000);
+        }
+        this.result = rollValue;
 
         const face = this.faces.find(currentFace => currentFace.number === this.result);
 
         if (!face) {
+            this.rolling = false;
+
             throw new Error(`No D20 face found for number ${this.result}.`);
         }
 
-        const cameraPosition = new Vector3();
-        const dicePosition = new Vector3();
+        /*
+         * Reset the die to the beginning of its movement.
+         */
+        const startPosition = new Vector3(-2.5, 0, 0);
+        const endPosition = new Vector3(2.5, 0, 0);
 
+        this.diceGroup.position.copy(startPosition);
+
+        /*
+         * Work out the direction from the die towards the camera.
+         */
+        const cameraPosition = new Vector3();
         this.camera.getWorldPosition(cameraPosition);
-        this.diceGroup.getWorldPosition(dicePosition);
 
         const cameraDirection = cameraPosition
-            .sub(dicePosition)
+            .sub(endPosition)
             .normalize();
 
+        /*
+         * Rotate the selected face so it points towards the camera.
+         */
         const landingQuaternion = new Quaternion()
             .setFromUnitVectors(
                 face.normal.clone().normalize(),
                 cameraDirection
             );
 
+        /*
+         * Keep the number upright relative to the screen.
+         */
+        const rotatedFaceUp = face.up
+            .clone()
+            .applyQuaternion(landingQuaternion);
+
+        const desiredUp = this.camera.up
+            .clone()
+            .applyQuaternion(this.camera.quaternion)
+            .projectOnPlane(cameraDirection)
+            .normalize();
+
+        const currentUp = rotatedFaceUp
+            .projectOnPlane(cameraDirection)
+            .normalize();
+
+        let twistAngle = currentUp.angleTo(desiredUp);
+
+        const cross = new Vector3()
+            .crossVectors(currentUp, desiredUp);
+
+        if (cross.dot(cameraDirection) < 0) {
+            twistAngle = -twistAngle;
+        }
+
+        const twistQuaternion = new Quaternion()
+            .setFromAxisAngle(
+                cameraDirection,
+                twistAngle
+            );
+
+        landingQuaternion.premultiply(twistQuaternion);
+
+        /*
+         * Random tumbling axis.
+         */
         const angularAxis = new Vector3(
-            0.7 + Math.random(),
-            0.7 + Math.random(),
-            0.7 + Math.random()
-        ).normalize();
+            Math.random() - 0.5,
+            Math.random() - 0.5,
+            Math.random() - 0.5
+        );
+
+        if (angularAxis.lengthSq() === 0) {
+            angularAxis.set(1, 1, 1);
+        }
+
+        angularAxis.normalize();
 
         const startTime = performance.now();
         let previousTime = startTime;
@@ -323,8 +380,37 @@ export class RolledDiceComponent implements AfterViewInit, OnDestroy {
                 1
             );
 
+            /*
+             * Move the die from its start position to its end position.
+             */
+            const movementProgress = this.easeOutCubic(progress);
+
+            this.diceGroup.position.lerpVectors(
+                startPosition,
+                endPosition,
+                movementProgress
+            );
+
+            /*
+             * Add a small vertical bounce while it moves.
+             *
+             * The bounce fades out as the die reaches the end.
+             */
+            const bounceHeight = 0.35;
+            const bounceCount = 4;
+
+            this.diceGroup.position.y =
+                Math.abs(
+                    Math.sin(progress * Math.PI * bounceCount)
+                ) *
+                bounceHeight *
+                (1 - progress);
+
+            /*
+             * Spin quickly at first and gradually slow down.
+             */
             const spinSpeed = MathUtils.lerp(
-                18,
+                22,
                 0,
                 this.easeOutCubic(progress)
             );
@@ -339,16 +425,21 @@ export class RolledDiceComponent implements AfterViewInit, OnDestroy {
                 incrementalRotation
             );
 
-            const steeringStart = 0.45;
+            /*
+             * Gradually steer towards the selected face.
+             */
+            const steeringStart = 0.35;
 
             if (progress > steeringStart) {
                 const steeringProgress =
                     (progress - steeringStart) /
                     (1 - steeringStart);
 
-                const steeringStrength =
-                    0.015 +
-                    this.easeOutCubic(steeringProgress) * 0.18;
+                const steeringStrength = MathUtils.lerp(
+                    0.01,
+                    0.35,
+                    this.easeOutCubic(steeringProgress)
+                );
 
                 this.diceGroup.quaternion.slerp(
                     landingQuaternion,
@@ -361,10 +452,8 @@ export class RolledDiceComponent implements AfterViewInit, OnDestroy {
                 return;
             }
 
-            this.diceGroup.quaternion.copy(
-                landingQuaternion
-            );
-
+            this.diceGroup.position.copy(endPosition);
+            this.diceGroup.quaternion.copy(landingQuaternion);
             this.rolling = false;
         };
 
