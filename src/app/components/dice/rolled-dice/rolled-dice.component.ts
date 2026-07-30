@@ -287,8 +287,16 @@ export class RolledDiceComponent implements AfterViewInit, OnDestroy {
         /*
          * Reset the die to the beginning of its movement.
          */
-        const startPosition = new Vector3(-2.5, 0, 0);
-        const endPosition = new Vector3(2.5, 0, 0);
+        const visible = this.getVisibleSizeAtZ(0);
+
+        const diceRadius = 1.5 * 0.7; // geometry radius × diceGroup scale
+        const padding = 0.2;
+
+        const maxX = visible.width / 2 - diceRadius - padding;
+        const maxY = visible.height / 2 - diceRadius - padding;
+
+        const startPosition = new Vector3(-maxX, MathUtils.randFloat(-maxY, maxY), 0);
+        const endPosition = new Vector3(maxX, MathUtils.randFloat(-maxY, maxY), 0);
 
         this.diceGroup.position.copy(startPosition);
 
@@ -452,7 +460,6 @@ export class RolledDiceComponent implements AfterViewInit, OnDestroy {
                 return;
             }
 
-            this.diceGroup.position.copy(endPosition);
             this.diceGroup.quaternion.copy(landingQuaternion);
             this.rolling = false;
         };
@@ -542,5 +549,27 @@ export class RolledDiceComponent implements AfterViewInit, OnDestroy {
         this.animationFrame = requestAnimationFrame(() => {
             this.render();
         });
+    }
+
+    private getVisibleSizeAtZ(z: number): {
+        width: number;
+        height: number;
+    } {
+        const cameraZ = this.camera.position.z;
+        const distance = Math.abs(cameraZ - z);
+
+        const verticalFov = MathUtils.degToRad(
+            this.camera.fov
+        );
+
+        const height =
+            2 * Math.tan(verticalFov / 2) * distance;
+
+        const width = height * this.camera.aspect;
+
+        return {
+            width,
+            height
+        };
     }
 }

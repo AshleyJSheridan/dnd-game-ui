@@ -28,7 +28,7 @@ import { ToastComponent } from '../../dialogs/toast/toast.component';
         PortraitComponent,
         FormsModule,
         RolledDiceComponent,
-        ToastComponent
+        ToastComponent,
     ],
     templateUrl: './view-character.component.html'
 })
