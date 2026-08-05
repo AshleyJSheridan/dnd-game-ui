@@ -7,15 +7,14 @@
     background-position-x: center;
     background-repeat: no-repeat;
     padding-top: 2rem;
-    position: relative;
 
-    .toast-content {
-        left: 50%;
-        margin-left: -3.5rem;
-        padding: .5rem;
-        text-align: center;
+    .toast-container {
+        position: fixed;
         top: 0;
-        width: 7rem;
+
+        .toast-content {
+            text-transform: capitalize;
+        }
     }
 
     @media (max-width: variables.$mobile-width) {
@@ -325,7 +324,7 @@
 
         .initiative .simple-score-value {
             cursor: url("/images/dice/dice-cursor.png"), pointer;
-            
+
             &:hover {
                 background-color: colours.$gold;
             }
@@ -450,6 +449,10 @@
         }
     }
 
+    .update-money {
+        margin-top: .5rem;
+    }
+
     .inventory {
         margin: 1rem 0;
 
@@ -457,6 +460,11 @@
             border-collapse: collapse;
             margin: 1rem 0;
             width: 100%;
+        }
+
+        th {
+            font-weight: normal;
+            padding: .25rem;
         }
 
         tr:nth-child(even) {
@@ -469,6 +477,10 @@
 
         td {
             padding: .25rem;
+        }
+
+        .rollable {
+            cursor: url("/images/dice/dice-cursor.png"), pointer;
         }
 
         .item-rarity-indicator {
@@ -497,6 +509,21 @@
             &[data-rarity="legendary"] {
                 background-color: colours.$item-rarity-legendary;
             }
+        }
+
+        .item-name {
+            cursor: pointer;
+        }
+
+        .item-quantity,
+        .item-weight {
+            text-align: center;
+        }
+
+        .item-type svg {
+            height: 1rem;
+            margin-right: .25rem;
+            width: auto;
         }
     }
 
@@ -706,6 +733,42 @@
         .result {
             font-size: 2rem;
             font-weight: bold;
+        }
+    }
+
+    .selected-item-container {
+        details.item {
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            padding: .5rem 0;
+
+            summary {
+                pointer-events: none;
+
+                &::marker {
+                    content: "";
+                    display: none;
+                }
+            }
+        }
+
+        .item-actions {
+            button {
+                align-items: center;
+                display: flex;
+                justify-content: center;
+            }
+
+            button + button {
+                margin-left: 0;
+            }
+        }
+
+        svg {
+            height: 1.25rem;
+            margin-right: .25rem;
+            width: auto;
         }
     }
 }

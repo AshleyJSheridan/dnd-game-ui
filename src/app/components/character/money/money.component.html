@@ -1,7 +1,18 @@
-<ul class="money">
-    <li title="Copper"><app-copper/> {{ money()?.copper ?? 0 }}</li>
-    <li title="Silver"><app-silver/> {{ money()?.silver ?? 0 }}</li>
-    <li title="Electrum"><app-electrum/> {{ money()?.electrum ?? 0 }}</li>
-    <li title="Gold"><app-gold/> {{ money()?.gold ?? 0 }}</li>
-    <li title="Platinum"><app-platinum/> {{ money()?.platinum ?? 0 }}</li>
+<ul class="money" (dblclick)="setMoneyEditMode()">
+    @if (!editMode) {
+        <li title="Copper"><app-copper/> {{ money()?.copper ?? 0 }}</li>
+        <li title="Silver"><app-silver/> {{ money()?.silver ?? 0 }}</li>
+        <li title="Electrum"><app-electrum/> {{ money()?.electrum ?? 0 }}</li>
+        <li title="Gold"><app-gold/> {{ money()?.gold ?? 0 }}</li>
+        <li title="Platinum"><app-platinum/> {{ money()?.platinum ?? 0 }}</li>
+    } @else {
+        <li title="Copper"><app-copper/> <input type="number" name="copper" [(ngModel)]="money()!.copper"/></li>
+        <li title="Silver"><app-silver/> <input type="number" name="silver" [(ngModel)]="money()!.silver"/></li>
+        <li title="Electrum"><app-electrum/> <input type="number" name="electrum" [(ngModel)]="money()!.electrum"/></li>
+        <li title="Gold"><app-gold/> <input type="number" name="gold" [(ngModel)]="money()!.gold"/></li>
+        <li title="Platinum"><app-platinum/> <input type="number" name="platinum" [(ngModel)]="money()!.platinum"/></li>
+    }
 </ul>
+@if (editMode) {
+    <button type="button" class="fantasy-btn fantasy-blue update-money" (click)="setMoneyValues()">Update Money</button>
+}

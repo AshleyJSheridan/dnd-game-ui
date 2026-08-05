@@ -50,6 +50,15 @@
             @if (itemLocation() === 'generated-own') {
                 <button type="button" title="Give to Character" (click)="giveToCharacter()"><app-give-icon/></button>
             }
+
+            @if (itemLocation() === 'character-sheet') {
+                <button type="button" title="Roll attack" (click)="triggerOutputEvent('rollAttack')">
+                    <app-item-type-icon [itemType]="'weapon'" [itemBaseName]="'Greatsword'"/>
+                </button>
+                <button type="button" title="Roll damage" (click)="triggerOutputEvent('rollDamage')">
+                    <app-condition-icon [condition]="'grappled'"/>
+                </button>
+            }
         </form>
 
         @if (editingName) {
@@ -94,7 +103,7 @@
         }
 
         @if (item()?.proficiency) {
-            <div class="item-property"><strong>Proficiency:</strong> {{ item()?.proficiency }}</div>
+            <div class="item-property"><strong>Proficiency:</strong> {{ item()?.proficiency?.name }}, {{ item()?.proficiency?.type }}</div>
         }
         @if (item()?.special_properties?.classes) {
             <div class="item-property"><strong>Class Limits:</strong> {{ getClassList() }}</div>

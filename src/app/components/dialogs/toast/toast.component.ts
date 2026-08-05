@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, input, InputSignal} from '@angular/core';
+import {Item} from '../../../entities/Item';
 
 @Component({
     selector: 'app-toast',
@@ -8,9 +9,11 @@ import { Component } from '@angular/core';
 export class ToastComponent {
     canShowToast: boolean = false;
 
+    readonly timeout: InputSignal<number> = input(3000);
+
     showToast(): void {
         this.canShowToast = true;
 
-        window.setTimeout(() => {this.canShowToast = false}, 3000);
+        window.setTimeout(() => {this.canShowToast = false}, this.timeout());
     }
 }

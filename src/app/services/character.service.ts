@@ -217,4 +217,12 @@ export class CharacterService {
             {headers: this.authService.getAuthHeader()}
         );
     }
+
+    public updateCharacterEquippedItem(itemGuid: string, equipped: boolean): Observable<Character> {
+        return this.http.post<Character>(
+            `${this.apiUrl}/characters/${this.charGuid}/inventory/${itemGuid}`,
+            {equipped: equipped},
+            {headers: this.authService.getAuthHeader()}
+        );
+    }
 }

@@ -16,18 +16,29 @@
             <th>Quantity</th>
             <th>Weight</th>
             <th>Type</th>
+            <th>Equipped?</th>
         </tr>
 
         @for (item of getAllItems(this.items()); track item.id) {
             @if (selectedItemFilter === '' || item.type === selectedItemFilter) {
                 <tr class="inventory-item">
-                    <td class="item-name">
+                    <td class="item-name" role="button" (click)="selectItem(item)">
                         <span class="item-rarity-indicator" [attr.data-rarity]="item.rarity"></span>
                         {{ item.name }}
                     </td>
                     <td class="item-quantity">&times;{{ item.quantity }}</td>
                     <td class="item-weight">{{ item.weight }}</td>
-                    <td class="item-type">{{ item.type }}</td>
+                    <td class="item-type">{{ item.type }}
+                        @if (item.type === 'weapon' && item.weapon_props?.finesse) {
+                            <app-item-type-icon [itemType]="'weapon'" [itemBaseName]="'Dagger'" title="Finesse weapon"/>
+                        }
+                    </td>
+                    <td>
+                        <label>
+                            <span class="accessible-hidden">{{ item.name }} equipped?</span>
+                            <input type="checkbox" name="equipped" [(ngModel)]="item.equipped" (change)="updateEqippedState(item, $event)"/>
+                        </label>
+                    </td>
                 </tr>
             }
         }

@@ -1,5 +1,5 @@
-import {Component, EventEmitter, input, InputSignal, Output} from '@angular/core';
-import {ReactiveFormsModule} from '@angular/forms';
+import { Component, EventEmitter, input, InputSignal, Output } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-ability-score',
@@ -34,6 +34,6 @@ export class AbilityScoreComponent {
     }
 
     public rollAbility(): void {
-        this.rollAbilityEvent.emit({modifier: this.abilityModifier()});
+        this.rollAbilityEvent.emit({modifier: this.abilityModifier(), ability: this.abilityName()});
     }
 }

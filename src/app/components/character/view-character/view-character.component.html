@@ -1,8 +1,6 @@
 <app-header-slim></app-header-slim>
 
 <div class="char-sheet">
-    <app-toast #d20ResultToast>{{ diceRollResult }}</app-toast>
-
     <div class="char-sheet-content">
         <div class="sheet-header">
             <div class="portrait"><app-portrait [character]="character"/></div>
@@ -50,7 +48,7 @@
 
                             @for (ability of abilityNames; track ability) {
                                 <div class="simple-score" [class.proficient]="hasAbilityProficiency(ability)" role="button"
-                                     (click)="rollAbility({modifier: getAbilitySavingThrow(ability)})"
+                                     (click)="rollAbility({modifier: getAbilitySavingThrow(ability), ability: ability})"
                                 >
                                     <div class="simple-score-value">{{ getAbilitySavingThrow(ability) }}</div>
                                     <div class="simple-score-name">{{ getAbilityDetails(ability).name }}</div>
@@ -63,7 +61,7 @@
 
                             @for (skill of skillNames; track skill) {
                                 <div class="simple-score" [class.proficient]="hasSkillProficiency(skill.name)" role="button"
-                                     (click)="rollAbility({modifier: getSkillProficiencyBonus(skill)})"
+                                     (click)="rollAbility({modifier: getSkillProficiencyBonus(skill), ability: skill.name})"
                                 >
                                     <div class="simple-score-value">{{ getSkillProficiencyBonus(skill) }}</div>
                                     <div class="simple-score-ability">({{ skill.ability }})</div>
@@ -80,15 +78,15 @@
                     <div class="col col-2-1 ac-init-speed-hp">
                         <div class="ac-init-speed">
                             <div class="simple-score ac">
-                                <!-- todo once equipment is added -->
                                 <div class="simple-score-name">Armor Class</div>
-                                <div class="simple-score-value">0</div>
+                                <div class="simple-score-value">{{ character?.ac!.total }}</div>
+                                <!-- TODO add tooltip showing AC breakdown -->
                             </div>
                             <div class="simple-score initiative">
                                 <div class="simple-score-name">Initiative</div>
                                 <div class="simple-score-value" role="button"
-                                     (click)="rollAbility({modifier: getAbilityDetails('dex').modifier})"
-                                >+{{ getAbilityDetails('dex').modifier }}</div>
+                                     (click)="rollAbility({modifier: getAbilityDetails('dex').modifier, ability: 'initiative'})"
+                                >@if (getAbilityDetails('dex').modifier > 0) {+}{{ getAbilityDetails('dex').modifier }}</div>
                             </div>
                             <div class="simple-score speed">
                                 <div class="simple-score-name">Speed</div>
@@ -252,8 +250,12 @@
                         </div>
                         <div id="tabpanel-equipment" role="tabpanel" aria-labelledby="tab-equipment"
                              [class.is-hidden]="selectedTab !== 'equipment'">
-                            <app-money [money]="character?.inventory?.money"/>
-                            <app-inventory-list [items]="character?.inventory?.items ?? []"/>
+                            <app-money [money]="character?.inventory?.money" (updateMoney)="updateMoney($event)"/>
+                            <app-inventory-list
+                                [items]="character?.inventory?.items ?? []"
+                                (setItemEquippedState)="updateEquippedState($event)"
+                                (openItemDetails)="openItemDetails($event)"
+                            />
                         </div>
                         <div id="tabpanel-traits" role="tabpanel" aria-labelledby="tab-traits"
                              [class.is-hidden]="selectedTab !== 'traits'">
@@ -272,5 +274,17 @@
         </div>
     </div>
 
+    <app-lightbox #selectedItemLightbox>
+        <div class="selected-item-container">
+            @if (selectedItem) {
+                <app-game-item [item]="selectedItem" [openStatus]="true" [itemLocation]="'character-sheet'" (outputEvent)="performItemAction($event)"/>
+            }
+        </div>
+    </app-lightbox>
+
     <app-rolled-dice #d20/>
+
+    <div class="toast-container">
+        <app-toast #d20ResultToast [timeout]="6000">{{ diceRollResult }}</app-toast>
+    </div>
 </div>

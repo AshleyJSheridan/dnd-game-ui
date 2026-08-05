@@ -1,9 +1,14 @@
-import { Component, input, InputSignal } from '@angular/core';
+import {Component, EventEmitter, input, InputSignal, Output} from '@angular/core';
 import { Item } from '../../../entities/Item';
+import {FormsModule} from '@angular/forms';
+import {ItemTypeIconComponent} from '../../icons/item-type-icon/item-type-icon.component';
 
 @Component({
     selector: 'app-inventory-list',
-    imports: [],
+    imports: [
+        FormsModule,
+        ItemTypeIconComponent
+    ],
     templateUrl: './inventory-list.component.html'
 })
 export class InventoryListComponent {
@@ -26,6 +31,9 @@ export class InventoryListComponent {
         'weapon',
     ];
     selectedItemFilter: string = '';
+
+    @Output() setItemEquippedState = new EventEmitter();
+    @Output() openItemDetails = new EventEmitter();
 
     getAllItems(containerItems: Array<Item>): Array<Item> {
         let items: Array<Item> = [];
@@ -56,5 +64,13 @@ export class InventoryListComponent {
 
     setItemFilter(event: Event): void {
         this.selectedItemFilter = (<HTMLInputElement>event.target).value;
+    }
+
+    updateEqippedState(item: Item, event: Event): void {
+        this.setItemEquippedState.emit(item);
+    }
+
+    selectItem(item: Item): void {
+        this.openItemDetails.emit(item);
     }
 }

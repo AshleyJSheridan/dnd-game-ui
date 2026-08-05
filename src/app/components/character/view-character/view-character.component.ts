@@ -15,6 +15,10 @@ import { PortraitComponent } from '../portrait/portrait.component';
 import { FormsModule } from '@angular/forms';
 import { RolledDiceComponent } from '../../dice/rolled-dice/rolled-dice.component';
 import { ToastComponent } from '../../dialogs/toast/toast.component';
+import { Item } from '../../../entities/Item';
+import { Money } from '../../../entities/Money';
+import { LightboxComponent } from '../../dialogs/lightbox/lightbox.component';
+import {GameItemComponent} from '../../game-item/game-item.component';
 
 @Component({
     selector: 'app-view-character',
@@ -29,6 +33,8 @@ import { ToastComponent } from '../../dialogs/toast/toast.component';
         FormsModule,
         RolledDiceComponent,
         ToastComponent,
+        LightboxComponent,
+        GameItemComponent,
     ],
     templateUrl: './view-character.component.html'
 })
@@ -51,9 +57,11 @@ export class ViewCharacterComponent {
         hitPointsModifier: false,
     };
     public diceRollResult: string = '';
+    public selectedItem: Item | null = null;
 
     @ViewChild('d20') d20!: RolledDiceComponent | undefined;
     @ViewChild('d20ResultToast') d20ResultToast!: ToastComponent | undefined;
+    @ViewChild('selectedItemLightbox') selectedItemLightbox!: LightboxComponent | undefined;
 
     constructor(private characterService: CharacterService, private router: Router) {}
 
@@ -148,17 +156,133 @@ export class ViewCharacterComponent {
             .sort((a, b) => a.level - b.level);
     }
 
-    rollAbility(roll: {modifier: number}): void {
+    rollAbility(roll: {modifier: number, ability: string}): void {
         const diceRoll = Math.floor(Math.random() * 20) + 1;
-
-        console.log(`${diceRoll} + ${roll.modifier}`);
 
         if (this.d20) {
             this.d20.roll(diceRoll);
-
-            this.diceRollResult = `${diceRoll} + ${roll.modifier} = ${diceRoll + roll.modifier}`;
-            this.d20ResultToast?.showToast();
         }
+
+        this.diceRollResult = `${roll.ability}: ${diceRoll} + ${roll.modifier} = ${diceRoll + roll.modifier}`;
+        console.log(this.diceRollResult);
+        this.d20ResultToast?.showToast();
+    }
+
+    /*rollAttack(event: {type?: string, subType?: string, finesse?: boolean, proficiencyType?: string}): void {
+        const diceRoll = Math.floor(Math.random() * 20) + 1;
+        const highestDexOrStrBonus = this.getAbilityDetails('dex').modifier > this.getAbilityDetails('str').modifier
+            ? this.getAbilityDetails('dex').modifier
+            : this.getAbilityDetails('str').modifier;
+        const highestDesOrStrShortname = this.getAbilityDetails('dex').modifier > this.getAbilityDetails('str').modifier ? 'dex' : 'str';
+        const modifier = (event.finesse ?? false) ? highestDexOrStrBonus : this.getAbilityDetails('str').modifier;
+        let proficiencyBonus = 0;
+        let isProficient = false;
+
+        if (
+            this.character
+            && this.character.proficiencies!.weapons?.find(prof => prof.name === event.proficiencyType)
+        ) {
+            proficiencyBonus = (this.character?.proficiency_bonus ?? 0)
+            isProficient = true;
+        }
+
+        if (this.d20) {
+            this.d20.roll(diceRoll);
+        }
+
+        if (isProficient) {
+            this.diceRollResult = `Attack Roll: ${diceRoll} + ${modifier} (${highestDesOrStrShortname}) + ${proficiencyBonus} (proficient) = ${diceRoll + modifier + proficiencyBonus}`;
+        } else {
+            this.diceRollResult = `Attack Roll: ${diceRoll} + ${modifier} (${highestDesOrStrShortname}) = ${diceRoll + modifier}`;
+        }
+        console.log(this.diceRollResult);
+
+        this.d20ResultToast?.showToast();
+    }*/
+
+    openItemDetails(item: Item): void {
+        this.selectedItem = item;
+        this.selectedItemLightbox?.showModal(null);
+    }
+
+    isRollable(item: Item): boolean {
+        return item.proficiency !== null
+            && (item.proficiency!.type.includes('Melee') || item.proficiency!.type.includes('Ranged'));
+    }
+
+    performItemAction(action: string): void {
+        if (!this.selectedItem)
+            return;
+
+        if (!this.isRollable(this.selectedItem))
+            return;
+
+        let diceRoll = 0;
+        const finesse = this.selectedItem.weapon_props?.finesse ?? false;
+        let selectedAbilityShortName = 'str';
+        let actualModifier = this.getAbilityDetails('str').modifier;
+
+        if (this.selectedItem.proficiency!.type.includes('Ranged')) {
+            actualModifier = this.getAbilityDetails('dex').modifier;
+            selectedAbilityShortName = 'dex';
+        } else if (finesse) {
+            actualModifier = this.getAbilityDetails('dex').modifier > this.getAbilityDetails('str').modifier
+                ? this.getAbilityDetails('dex').modifier
+                : this.getAbilityDetails('str').modifier;;
+            selectedAbilityShortName = this.getAbilityDetails('dex').modifier > this.getAbilityDetails('str').modifier ? 'dex' : 'str';
+        }
+
+        if (action === 'rollAttack') {
+            diceRoll = Math.floor(Math.random() * 20) + 1;
+            let proficiencyBonus = 0;
+            let isProficient = false;
+
+            if (
+                this.character
+                && this.character.proficiencies!.weapons?.find(prof => prof.name === (this?.selectedItem?.proficiency?.name ?? ''))
+            ) {
+                proficiencyBonus = (this.character?.proficiency_bonus ?? 0)
+                isProficient = true;
+            }
+
+            if (isProficient) {
+                this.diceRollResult = `Attack Roll: ${diceRoll} + ${actualModifier} (${selectedAbilityShortName}) + ${proficiencyBonus} (proficient) = ${diceRoll + actualModifier + proficiencyBonus}`;
+            } else {
+                this.diceRollResult = `Attack Roll: ${diceRoll} + ${actualModifier} (${selectedAbilityShortName}) = ${diceRoll + actualModifier}`;
+            }
+
+            // These rolls are always d20
+            if (this.d20) {
+                this.d20.roll(diceRoll);
+            }
+        }
+
+        if (action === 'rollDamage') {
+            // TODO parse the damange amount string to handle multiple dice and modifiers, for now just display the damage roll with the ability modifier.
+            const parsedDice = this.parseDiceString(this.selectedItem.weapon_props!.damage.amount);
+            
+
+            this.diceRollResult = `Damage Roll: ${this.selectedItem.weapon_props?.damage.amount} + ${actualModifier} (${selectedAbilityShortName}) = ${this.selectedItem.weapon_props?.damage.amount} + ${actualModifier}`;
+        }
+
+        // Show the results
+        console.log(this.diceRollResult);
+        this.d20ResultToast?.showToast();
+    }
+
+    parseDiceString(diceString: string): {numDice: number, dieType: number, modifier: number} {
+        const diceRegex = /(\d*)d(\d+)([+-]\d+)?/;
+        const match = diceString.match(diceRegex);
+
+        if (!match) {
+            throw new Error(`Invalid dice string: ${diceString}`);
+        }
+
+        const numDice = match[1] ? parseInt(match[1], 10) : 1;
+        const dieType = parseInt(match[2], 10);
+        const modifier = match[3] ? parseInt(match[3], 10) : 0;
+
+        return { numDice, dieType, modifier };
     }
 
     // Methods for updating the character stats.
@@ -187,8 +311,34 @@ export class ViewCharacterComponent {
         }
     }
 
+    updateMoney(money: Money): void {
+        this.characterService.updateCharacterProperty('money', money).subscribe(
+            {
+                next: (character) => {
+                    this.character = character;
+                },
+                error: (error => {
+
+                })
+            }
+        );
+    }
+
     applyUpdateAndRefreshCharacter(property: string, value: any): void {
         this.characterService.updateCharacterProperty(property, value).subscribe(
+            {
+                next: (character) => {
+                    this.character = character;
+                },
+                error: (error => {
+
+                })
+            }
+        );
+    }
+
+    updateEquippedState(item: Item): void {
+        this.characterService.updateCharacterEquippedItem(item.guid, item.equipped ?? false).subscribe(
             {
                 next: (character) => {
                     this.character = character;

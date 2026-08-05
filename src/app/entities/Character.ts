@@ -21,6 +21,19 @@ export class Character {
         hit_points_temp: 0,
     }
     proficiency_bonus: number = 2;
+    proficiencies: {
+        weapons: Array<{
+            name: string;
+            type: string;
+        }>
+        armor: Array<{
+            name: string;
+            type: string;
+        }>
+    } = {
+        weapons: [],
+        armor: [],
+    };
     charClass: string = '';
     class_path_available: boolean = false;
     class_path_name: string = '';
@@ -99,5 +112,24 @@ export class Character {
         items: []
     };
     alignment: CreatureAlignment | undefined;
+    ac: {
+        base: number;
+        armor_bonus: number;
+        shield_bonus: number;
+        modifiers: {
+            dex: number;
+            con?: number;
+            wis?: number;
+        };
+        total: number;
+    } = {
+        base: 10,
+        armor_bonus: 0,
+        shield_bonus: 0,
+        modifiers: {
+            dex: 0,
+        },
+        total: 10,
+    };
     created_at: Date = new Date();
 }

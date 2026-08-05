@@ -28,6 +28,7 @@ export class Item {
         ammo_type: string,
         range: Array<number>,
         weapon_versatility?: string;
+        finesse: boolean,
     };
     armor_props?: {
         ac: number,
@@ -75,7 +76,13 @@ export class Item {
         amount?: string,
         duration?: string,
     };
-    proficiency: string = '';
+    proficiency: {
+        name: string,
+        type: string,
+    } = {
+        name: '',
+        type: '',
+    };
     isContainer: boolean = false;
     items: Array<Item> = [];
     tainted: boolean = false;

@@ -13,6 +13,8 @@ import { ItemTypeIconComponent } from '../icons/item-type-icon/item-type-icon.co
 import { DamageType } from '../../entities/DamageType';
 import { GiveIconComponent } from '../icons/give-icon/give-icon.component';
 import { ItemMoveDestination, ItemMoveEvent } from '../../entities/ItemMoveEvent';
+import {DiceIconComponent} from '../icons/dice-icon/dice-icon.component';
+import {ConditionIconComponent} from '../icons/condition-icon/condition-icon.component';
 
 @Component({
     selector: 'app-game-item',
@@ -26,7 +28,9 @@ import { ItemMoveDestination, ItemMoveEvent } from '../../entities/ItemMoveEvent
         ReactiveFormsModule,
         AddToInventoryIconComponent,
         ItemTypeIconComponent,
-        GiveIconComponent
+        GiveIconComponent,
+        DiceIconComponent,
+        ConditionIconComponent
     ],
     templateUrl: './game-item.component.html'
 })
@@ -34,7 +38,10 @@ export class GameItemComponent {
     readonly item: InputSignal<Item|undefined> = input();
     readonly itemLocation: InputSignal<string> = input('inventory');
     readonly openStatus: InputSignal<boolean> = input(false);
+
     @Output() moveUpdatedItem = new EventEmitter();
+    @Output() outputEvent = new EventEmitter();
+
     editingName: boolean = false;
     editingDescription: boolean = false;
     editInPlace: boolean = false;
@@ -225,5 +232,9 @@ export class GameItemComponent {
 
         const moveItemEvent = new ItemMoveEvent(<Item>this.item(), ItemMoveDestination.GENERATED_LIST);
         this.moveUpdatedItem.emit(moveItemEvent);
+    }
+
+    triggerOutputEvent(eventType: string): void {
+        this.outputEvent.emit(eventType);
     }
 }
