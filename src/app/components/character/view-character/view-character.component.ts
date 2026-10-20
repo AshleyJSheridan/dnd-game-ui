@@ -18,7 +18,7 @@ import { ToastComponent } from '../../dialogs/toast/toast.component';
 import { Item } from '../../../entities/Item';
 import { Money } from '../../../entities/Money';
 import { LightboxComponent } from '../../dialogs/lightbox/lightbox.component';
-import {GameItemComponent} from '../../game-item/game-item.component';
+import { GameItemComponent } from '../../game-item/game-item.component';
 
 @Component({
     selector: 'app-view-character',
@@ -58,9 +58,10 @@ export class ViewCharacterComponent {
     };
     public diceRollResult: string = '';
     public selectedItem: Item | null = null;
+    public diceSides: number = 20;
 
-    @ViewChild('d20') d20!: RolledDiceComponent | undefined;
-    @ViewChild('d20ResultToast') d20ResultToast!: ToastComponent | undefined;
+    @ViewChild('dice1') dice1!: RolledDiceComponent | undefined;
+    @ViewChild('dice1ResultToast') dice1ResultToast!: ToastComponent | undefined;
     @ViewChild('selectedItemLightbox') selectedItemLightbox!: LightboxComponent | undefined;
 
     constructor(private characterService: CharacterService, private router: Router) {}
@@ -159,46 +160,9 @@ export class ViewCharacterComponent {
     rollAbility(roll: {modifier: number, ability: string}): void {
         const diceRoll = Math.floor(Math.random() * 20) + 1;
 
-        if (this.d20) {
-            this.d20.roll(diceRoll);
-        }
-
         this.diceRollResult = `${roll.ability}: ${diceRoll} + ${roll.modifier} = ${diceRoll + roll.modifier}`;
-        console.log(this.diceRollResult);
-        this.d20ResultToast?.showToast();
+        this.showDiceRoll(diceRoll, 20);
     }
-
-    /*rollAttack(event: {type?: string, subType?: string, finesse?: boolean, proficiencyType?: string}): void {
-        const diceRoll = Math.floor(Math.random() * 20) + 1;
-        const highestDexOrStrBonus = this.getAbilityDetails('dex').modifier > this.getAbilityDetails('str').modifier
-            ? this.getAbilityDetails('dex').modifier
-            : this.getAbilityDetails('str').modifier;
-        const highestDesOrStrShortname = this.getAbilityDetails('dex').modifier > this.getAbilityDetails('str').modifier ? 'dex' : 'str';
-        const modifier = (event.finesse ?? false) ? highestDexOrStrBonus : this.getAbilityDetails('str').modifier;
-        let proficiencyBonus = 0;
-        let isProficient = false;
-
-        if (
-            this.character
-            && this.character.proficiencies!.weapons?.find(prof => prof.name === event.proficiencyType)
-        ) {
-            proficiencyBonus = (this.character?.proficiency_bonus ?? 0)
-            isProficient = true;
-        }
-
-        if (this.d20) {
-            this.d20.roll(diceRoll);
-        }
-
-        if (isProficient) {
-            this.diceRollResult = `Attack Roll: ${diceRoll} + ${modifier} (${highestDesOrStrShortname}) + ${proficiencyBonus} (proficient) = ${diceRoll + modifier + proficiencyBonus}`;
-        } else {
-            this.diceRollResult = `Attack Roll: ${diceRoll} + ${modifier} (${highestDesOrStrShortname}) = ${diceRoll + modifier}`;
-        }
-        console.log(this.diceRollResult);
-
-        this.d20ResultToast?.showToast();
-    }*/
 
     openItemDetails(item: Item): void {
         this.selectedItem = item;
@@ -252,22 +216,30 @@ export class ViewCharacterComponent {
             }
 
             // These rolls are always d20
-            if (this.d20) {
-                this.d20.roll(diceRoll);
-            }
+            this.showDiceRoll(diceRoll, 20);
         }
 
         if (action === 'rollDamage') {
-            // TODO parse the damange amount string to handle multiple dice and modifiers, for now just display the damage roll with the ability modifier.
+            // TODO parse the damange amount string to handle multiple dice and modifiers.
             const parsedDice = this.parseDiceString(this.selectedItem.weapon_props!.damage.amount);
-            
 
-            this.diceRollResult = `Damage Roll: ${this.selectedItem.weapon_props?.damage.amount} + ${actualModifier} (${selectedAbilityShortName}) = ${this.selectedItem.weapon_props?.damage.amount} + ${actualModifier}`;
+            diceRoll = Math.floor(Math.random() * parsedDice.dieType) + 1;
+
+            this.showDiceRoll(diceRoll, parsedDice.dieType);
+            this.diceRollResult = `Damage Roll: ${diceRoll} + ${actualModifier} (${selectedAbilityShortName}) = ${diceRoll + actualModifier}`;
         }
+    }
 
-        // Show the results
+    showDiceRoll(diceRoll: number, diceSides: number): void {
+        this.diceSides = diceSides;
+        window.setTimeout(() => {
+            if (this.dice1) {
+                this.dice1.roll(diceRoll);
+            }
+        }, 10);
+
         console.log(this.diceRollResult);
-        this.d20ResultToast?.showToast();
+        this.dice1ResultToast?.showToast();
     }
 
     parseDiceString(diceString: string): {numDice: number, dieType: number, modifier: number} {

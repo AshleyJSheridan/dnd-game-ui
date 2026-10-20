@@ -282,7 +282,7 @@
         </div>
     </app-lightbox>
 
-    <app-rolled-dice #d20/>
+    <app-rolled-dice #dice1 [sides]="this.diceSides"/>
 
     <div class="toast-container">
         <app-toast #d20ResultToast [timeout]="6000">{{ diceRollResult }}</app-toast>

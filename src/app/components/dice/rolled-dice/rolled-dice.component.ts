@@ -1,24 +1,55 @@
-import { Component, AfterViewInit, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import {
-    Scene,
-    PerspectiveCamera,
-    WebGLRenderer,
-    Mesh,
-    MeshStandardMaterial,
-    IcosahedronGeometry,
+    AfterViewInit,
+    Component,
+    ElementRef,
+    Input,
+    OnChanges,
+    OnDestroy,
+    SimpleChanges,
+    ViewChild,
+} from '@angular/core';
+
+import {
     AmbientLight,
-    DirectionalLight,
-    MathUtils,
-    Group,
-    Vector3,
+    BoxGeometry,
     BufferGeometry,
     CanvasTexture,
-    SRGBColorSpace,
-    Quaternion,
-    MeshBasicMaterial,
+    DirectionalLight,
+    DodecahedronGeometry,
     DoubleSide,
+    Float32BufferAttribute,
+    Group,
+    IcosahedronGeometry,
+    MathUtils,
+    Matrix4,
+    Mesh,
+    MeshBasicMaterial,
+    MeshStandardMaterial,
+    Object3D,
+    OctahedronGeometry,
+    PerspectiveCamera,
     PlaneGeometry,
+    Quaternion,
+    Scene,
+    SRGBColorSpace,
+    TetrahedronGeometry,
+    Texture,
+    Vector3,
+    WebGLRenderer,
 } from 'three';
+
+interface DiceFace {
+    number: number;
+    normal: Vector3;
+    centre: Vector3;
+    up: Vector3;
+}
+
+interface FaceGroup {
+    normal: Vector3;
+    planeConstant: number;
+    points: Vector3[];
+}
 
 @Component({
     selector: 'app-rolled-dice',
@@ -26,36 +57,78 @@ import {
     imports: [],
     templateUrl: './rolled-dice.component.html',
 })
-export class RolledDiceComponent implements AfterViewInit, OnDestroy {
-    private renderer!: WebGLRenderer;
-    private scene!: Scene;
-    private camera!: PerspectiveCamera;
-    private animationFrame: number | null = null;
-    public result: number | null = null;
-    public rolling = false;
-    private diceGroup!: Group;
-    private diceMesh!: Mesh;
-    public showDice: boolean = false;
-    private timeoutId: number | null = null;
-
-    private readonly faces: {
-        number: number;
-        normal: Vector3;
-        centre: Vector3;
-        up: Vector3;
-    }[] = [];
+export class RolledDiceComponent implements AfterViewInit, OnChanges, OnDestroy {
+    /**
+     * Select the die displayed by the component.
+     *
+     * Examples:
+     * <app-rolled-dice [sides]="20"></app-rolled-dice>
+     * <app-rolled-dice [sides]="12"></app-rolled-dice>
+     */
+    @Input() public sides: number = 20;
 
     @ViewChild('diceCanvas', { static: true })
     private canvasRef!: ElementRef<HTMLCanvasElement>;
 
-    ngAfterViewInit(): void {
+    public result: number | null = null;
+    public rolling = false;
+    public showDice = false;
+
+    private renderer!: WebGLRenderer;
+    private scene!: Scene;
+    private camera!: PerspectiveCamera;
+
+    private diceGroup!: Group;
+    private diceMesh!: Mesh;
+
+    private faces: DiceFace[] = [];
+
+    /**
+     * Actual scaled radius of the current die.
+     *
+     * This is used to keep the die inside the visible camera area.
+     */
+    private diceRadius = 0;
+
+    private animationFrame: number | null = null;
+    private rollAnimationFrame: number | null = null;
+    private timeoutId: number | null = null;
+
+    private viewInitialised = false;
+
+    public ngAfterViewInit(): void {
         this.initScene();
+        this.createDice(this.sides);
         this.render();
+
+        this.viewInitialised = true;
     }
 
-    ngOnDestroy(): void {
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (
+            changes['sides'] &&
+            !changes['sides'].firstChange &&
+            this.viewInitialised
+        ) {
+            this.createDice(this.sides);
+        }
+    }
+
+    public ngOnDestroy(): void {
         if (this.animationFrame !== null) {
             cancelAnimationFrame(this.animationFrame);
+        }
+
+        if (this.rollAnimationFrame !== null) {
+            cancelAnimationFrame(this.rollAnimationFrame);
+        }
+
+        if (this.timeoutId !== null) {
+            window.clearTimeout(this.timeoutId);
+        }
+
+        if (this.diceGroup) {
+            this.disposeObject(this.diceGroup);
         }
 
         this.renderer?.dispose();
@@ -79,10 +152,12 @@ export class RolledDiceComponent implements AfterViewInit, OnDestroy {
         this.renderer = new WebGLRenderer({
             canvas,
             antialias: true,
-            alpha: true
+            alpha: true,
         });
 
-        this.renderer.setPixelRatio(window.devicePixelRatio);
+        this.renderer.setPixelRatio(
+            Math.min(window.devicePixelRatio, 2)
+        );
 
         this.renderer.setSize(
             canvas.clientWidth,
@@ -90,33 +165,59 @@ export class RolledDiceComponent implements AfterViewInit, OnDestroy {
             false
         );
 
-        this.createDice();
+        const ambientLight = new AmbientLight(
+            0xff0000,
+            2
+        );
 
-        const ambientLight = new AmbientLight(0xff0000, 2);
         this.scene.add(ambientLight);
 
-        const directionalLight = new DirectionalLight(0xffffff, 4);
+        const directionalLight = new DirectionalLight(
+            0xffffff,
+            4
+        );
+
         directionalLight.position.set(4, 5, 5);
 
         this.scene.add(directionalLight);
     }
 
-    private createDice(): void {
+    /**
+     * Creates or replaces the currently displayed die.
+     */
+    private createDice(sides: number): void {
+        this.faces = [];
+        this.result = null;
+        this.rolling = false;
+
+        if (this.rollAnimationFrame !== null) {
+            cancelAnimationFrame(this.rollAnimationFrame);
+            this.rollAnimationFrame = null;
+        }
+
+        if (this.diceGroup) {
+            this.scene.remove(this.diceGroup);
+            this.disposeObject(this.diceGroup);
+        }
+
         this.diceGroup = new Group();
 
-        this.diceGroup.scale.setScalar(.25)
+        const originalGeometry =
+            this.createGeometryForDice(sides);
 
         /*
-         * detail must remain 0 so that the geometry has exactly 20 faces.
+         * Converting to non-indexed geometry means that each rendered
+         * triangle has three consecutive vertices. This makes logical
+         * face detection considerably simpler.
          */
-        const geometry = new IcosahedronGeometry(1.5, 0);
+        const geometry = originalGeometry.index
+            ? originalGeometry.toNonIndexed()
+            : originalGeometry.clone();
 
-        /*
-         * Ensure each triangle has its own three vertices.
-         */
-        const faceGeometry = geometry.index
-            ? geometry.toNonIndexed()
-            : geometry;
+        originalGeometry.dispose();
+
+        geometry.computeVertexNormals();
+        geometry.computeBoundingSphere();
 
         const material = new MeshStandardMaterial({
             color: 0x333333,
@@ -125,98 +226,493 @@ export class RolledDiceComponent implements AfterViewInit, OnDestroy {
             flatShading: true,
         });
 
-        this.diceMesh = new Mesh(faceGeometry, material);
+        this.diceMesh = new Mesh(
+            geometry,
+            material
+        );
+
         this.diceGroup.add(this.diceMesh);
 
-        this.createFaceNumbers(faceGeometry);
+        /*
+         * This preserves the scale used by your existing D20.
+         */
+        const diceScale = this.getDiceScale(sides);
+
+        this.diceGroup.scale.setScalar(diceScale);
+
+        /*
+         * Calculate a safe visible radius from the actual geometry.
+         */
+        this.diceRadius =
+            (geometry.boundingSphere?.radius ?? 1.5) *
+            diceScale;
+
+        this.createFacesAndNumbers(
+            geometry,
+            sides
+        );
 
         this.scene.add(this.diceGroup);
     }
 
-    private createFaceNumbers(geometry: BufferGeometry): void {
-        const positions = geometry.getAttribute('position');
+    /**
+     * Returns the correct geometry for each supported die.
+     */
+    private createGeometryForDice(
+        sides: number
+    ): BufferGeometry {
+        const radius = 1.5;
+
+        switch (sides) {
+            case 4:
+                return new TetrahedronGeometry(
+                    radius,
+                    0
+                );
+
+            case 6:
+                return new BoxGeometry(
+                    2.2,
+                    2.2,
+                    2.2
+                );
+
+            case 8:
+                return new OctahedronGeometry(
+                    radius,
+                    0
+                );
+
+            case 10:
+                return this.createD10Geometry(
+                    radius
+                );
+
+            case 12:
+                return new DodecahedronGeometry(
+                    radius,
+                    0
+                );
+
+            case 20:
+                return new IcosahedronGeometry(
+                    radius,
+                    0
+                );
+            default:
+                return new IcosahedronGeometry(
+                    radius,
+                    0
+                );
+        }
+    }
+
+    /**
+     * Builds a ten-faced pentagonal bipyramid.
+     *
+     * It consists of:
+     * - one top point;
+     * - one bottom point;
+     * - five points around the middle;
+     * - five upper triangular faces;
+     * - five lower triangular faces.
+     */
+    private createD10Geometry(
+        radius: number
+    ): BufferGeometry {
+        const vertices: number[] = [];
+        const indices: number[] = [];
 
         /*
-         * A non-indexed triangle uses three consecutive vertices.
+         * Top and bottom vertices.
          */
+        vertices.push(
+            0, radius, 0,
+            0, -radius, 0
+        );
+
+        const topIndex = 0;
+        const bottomIndex = 1;
+        const firstRingIndex = 2;
+
+        /*
+         * Five vertices around the middle.
+         */
+        for (let index = 0; index < 5; index++) {
+            const angle =
+                (index / 5) * Math.PI * 2 -
+                Math.PI / 2;
+
+            vertices.push(
+                Math.cos(angle) * radius,
+                0,
+                Math.sin(angle) * radius
+            );
+        }
+
+        for (let index = 0; index < 5; index++) {
+            const current =
+                firstRingIndex + index;
+
+            const next =
+                firstRingIndex +
+                ((index + 1) % 5);
+
+            /*
+             * Upper triangular face.
+             */
+            indices.push(
+                topIndex,
+                current,
+                next
+            );
+
+            /*
+             * Lower triangular face.
+             *
+             * The winding order is reversed so that its normal points
+             * away from the centre of the die.
+             */
+            indices.push(
+                bottomIndex,
+                next,
+                current
+            );
+        }
+
+        const geometry = new BufferGeometry();
+
+        geometry.setAttribute(
+            'position',
+            new Float32BufferAttribute(
+                vertices,
+                3
+            )
+        );
+
+        geometry.setIndex(indices);
+        geometry.computeVertexNormals();
+
+        return geometry;
+    }
+
+    /**
+     * Converts the rendered triangles into logical die faces.
+     *
+     * Triangular dice faces already contain one triangle each.
+     * Square and pentagonal faces contain several coplanar triangles,
+     * which are grouped together here.
+     */
+    private createFacesAndNumbers(
+        geometry: BufferGeometry,
+        sides: number
+    ): void {
+        const positions =
+            geometry.getAttribute('position');
+
+        const faceGroups: FaceGroup[] = [];
+
         for (
-            let vertexIndex = 0, faceIndex = 0;
+            let vertexIndex = 0;
             vertexIndex < positions.count;
-            vertexIndex += 3, faceIndex++
+            vertexIndex += 3
         ) {
-            const a = new Vector3().fromBufferAttribute(
-                positions,
-                vertexIndex
-            );
+            const a = new Vector3()
+                .fromBufferAttribute(
+                    positions,
+                    vertexIndex
+                );
 
-            const b = new Vector3().fromBufferAttribute(
-                positions,
-                vertexIndex + 1
-            );
+            const b = new Vector3()
+                .fromBufferAttribute(
+                    positions,
+                    vertexIndex + 1
+                );
 
-            const c = new Vector3().fromBufferAttribute(
-                positions,
-                vertexIndex + 2
-            );
+            const c = new Vector3()
+                .fromBufferAttribute(
+                    positions,
+                    vertexIndex + 2
+                );
 
-            const centre = new Vector3()
-                .addVectors(a, b)
+            const triangleCentre = new Vector3()
+                .add(a)
+                .add(b)
                 .add(c)
                 .divideScalar(3);
 
             const normal = new Vector3()
                 .subVectors(b, a)
-                .cross(new Vector3().subVectors(c, a))
-                .normalize();
-
-            const edgeMidpoint = new Vector3()
-                .addVectors(a, b)
-                .multiplyScalar(0.5);
-
-            const faceUp = c.clone()
-                .sub(edgeMidpoint)
+                .cross(
+                    new Vector3()
+                        .subVectors(c, a)
+                )
                 .normalize();
 
             /*
-             * Ensure the normal points away from the centre of the die.
+             * Ensure that the normal points away from the centre
+             * of the die.
              */
-            if (normal.dot(centre) < 0) {
+            if (normal.dot(triangleCentre) < 0) {
                 normal.negate();
             }
 
-            const number = faceIndex + 1;
+            /*
+             * Plane constant from:
+             *
+             * normal · point = planeConstant
+             */
+            const planeConstant =
+                normal.dot(a);
 
-            this.faces.push({
-                number,
+            const existingFace =
+                faceGroups.find(
+                    face =>
+                        face.normal.dot(normal) >
+                        0.9999 &&
+                        Math.abs(
+                            face.planeConstant -
+                            planeConstant
+                        ) < 0.001
+                );
+
+            if (existingFace) {
+                existingFace.points.push(
+                    a,
+                    b,
+                    c
+                );
+
+                continue;
+            }
+
+            faceGroups.push({
                 normal: normal.clone(),
-                centre: centre.clone(),
-                up: faceUp.clone(),
+                planeConstant,
+                points: [
+                    a.clone(),
+                    b.clone(),
+                    c.clone(),
+                ],
             });
-
-            const numberMesh = this.createNumberMesh(number, normal);
-
-            numberMesh.position.copy(centre.clone().addScaledVector(normal, 0.015));
-
-            this.diceGroup.add(numberMesh);
         }
+
+        if (faceGroups.length !== sides) {
+            throw new Error(
+                `Expected D${sides} to have ${sides} faces, ` +
+                `but ${faceGroups.length} logical faces were found.`
+            );
+        }
+
+        faceGroups.forEach(
+            (faceGroup, faceIndex) => {
+                const uniquePoints =
+                    this.getUniquePoints(
+                        faceGroup.points
+                    );
+
+                const centre = new Vector3();
+
+                for (const point of uniquePoints) {
+                    centre.add(point);
+                }
+
+                centre.divideScalar(
+                    uniquePoints.length
+                );
+
+                const faceUp =
+                    this.calculateFaceUp(
+                        centre,
+                        faceGroup.normal,
+                        uniquePoints
+                    );
+
+                const number = faceIndex + 1;
+
+                this.faces.push({
+                    number,
+                    normal:
+                        faceGroup.normal.clone(),
+                    centre: centre.clone(),
+                    up: faceUp.clone(),
+                });
+
+                const numberMesh =
+                    this.createNumberMesh(
+                        number,
+                        sides
+                    );
+
+                numberMesh.position.copy(
+                    centre
+                        .clone()
+                        .addScaledVector(
+                            faceGroup.normal,
+                            0.015
+                        )
+                );
+
+                numberMesh.quaternion.copy(
+                    this.createFaceQuaternion(
+                        faceGroup.normal,
+                        faceUp
+                    )
+                );
+
+                this.diceGroup.add(numberMesh);
+            }
+        );
     }
 
-    private createNumberMesh(number: number, faceNormal: Vector3): Mesh {
-        const canvas = document.createElement('canvas');
+    /**
+     * Removes duplicate triangle vertices from one logical face.
+     */
+    private getUniquePoints(
+        points: Vector3[]
+    ): Vector3[] {
+        const uniquePoints: Vector3[] = [];
 
-        canvas.width = 256;
-        canvas.height = 256;
+        for (const point of points) {
+            const alreadyExists =
+                uniquePoints.some(
+                    existingPoint =>
+                        existingPoint
+                            .distanceToSquared(point) <
+                        0.000001
+                );
 
-        const context = canvas.getContext('2d');
-
-        if (!context) {
-            throw new Error('Could not create number canvas context.');
+            if (!alreadyExists) {
+                uniquePoints.push(
+                    point.clone()
+                );
+            }
         }
 
-        context.clearRect(0, 0, canvas.width, canvas.height);
+        return uniquePoints;
+    }
+
+    /**
+     * Determines which direction should count as "up" on a face.
+     *
+     * This is used both to orient the label and to keep the result
+     * upright when it faces the camera.
+     */
+    private calculateFaceUp(
+        centre: Vector3,
+        normal: Vector3,
+        points: Vector3[]
+    ): Vector3 {
+        let highestPoint = points[0];
+
+        for (const point of points) {
+            if (point.y > highestPoint.y) {
+                highestPoint = point;
+            }
+        }
+
+        const faceUp = highestPoint
+            .clone()
+            .sub(centre)
+            .projectOnPlane(normal)
+            .normalize();
+
+        /*
+         * A horizontal face may not have a useful highest vertex.
+         */
+        if (faceUp.lengthSq() < 0.000001) {
+            faceUp
+                .set(0, 0, 1)
+                .projectOnPlane(normal)
+                .normalize();
+        }
+
+        /*
+         * Additional fallback in case normal is also aligned with Z.
+         */
+        if (faceUp.lengthSq() < 0.000001) {
+            faceUp
+                .set(1, 0, 0)
+                .projectOnPlane(normal)
+                .normalize();
+        }
+
+        return faceUp;
+    }
+
+    /**
+     * Produces the complete face orientation:
+     *
+     * local X = face right
+     * local Y = face up
+     * local Z = face normal
+     */
+    private createFaceQuaternion(
+        normal: Vector3,
+        faceUp: Vector3
+    ): Quaternion {
+        const faceNormal =
+            normal.clone().normalize();
+
+        const right = new Vector3()
+            .crossVectors(
+                faceUp,
+                faceNormal
+            )
+            .normalize();
+
+        const correctedUp = new Vector3()
+            .crossVectors(
+                faceNormal,
+                right
+            )
+            .normalize();
+
+        const rotationMatrix = new Matrix4()
+            .makeBasis(
+                right,
+                correctedUp,
+                faceNormal
+            );
+
+        return new Quaternion()
+            .setFromRotationMatrix(
+                rotationMatrix
+            );
+    }
+
+    /**
+     * Creates one number texture and plane.
+     */
+    private createNumberMesh(
+        number: number,
+        sides: number
+    ): Mesh {
+        const canvas =
+            document.createElement('canvas');
+
+        canvas.width = 512;
+        canvas.height = 512;
+
+        const context =
+            canvas.getContext('2d');
+
+        if (!context) {
+            throw new Error(
+                'Could not create number canvas context.'
+            );
+        }
+
+        context.clearRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
 
         context.fillStyle = '#ffffff';
-        context.font = 'bold 180px Arial, sans-serif';
+        context.font =
+            'bold 300px Arial, sans-serif';
         context.textAlign = 'center';
         context.textBaseline = 'middle';
 
@@ -226,132 +722,337 @@ export class RolledDiceComponent implements AfterViewInit, OnDestroy {
             canvas.height / 2
         );
 
-        const texture = new CanvasTexture(canvas);
+        const texture =
+            new CanvasTexture(canvas);
 
-        texture.colorSpace = SRGBColorSpace;
+        texture.colorSpace =
+            SRGBColorSpace;
+
         texture.needsUpdate = true;
 
-        const material = new MeshBasicMaterial({
-            map: texture,
-            transparent: true,
-            depthTest: true,
-            depthWrite: false,
-            side: DoubleSide,
-        });
+        const material =
+            new MeshBasicMaterial({
+                map: texture,
+                transparent: true,
+                depthTest: true,
+                depthWrite: false,
+                side: DoubleSide,
+            });
 
-        const geometry = new PlaneGeometry(0.6, 0.6);
+        const numberSize =
+            this.getNumberSize(sides);
 
-        const mesh = new Mesh(geometry, material);
+        const geometry =
+            new PlaneGeometry(
+                numberSize,
+                numberSize
+            );
 
-        /*
-         * PlaneGeometry initially faces along its local positive Z axis.
-         * Rotate it so that positive Z points in the same direction as
-         * the dice face normal.
-         */
-        mesh.quaternion.setFromUnitVectors(
-            new Vector3(0, 0, 1),
-            faceNormal.clone().normalize()
+        return new Mesh(
+            geometry,
+            material
         );
-
-        return mesh;
     }
 
+    private getNumberSize(
+        sides: number
+    ): number {
+        switch (sides) {
+            case 4:
+                return 0.85;
+
+            case 6:
+                return 1.1;
+
+            case 8:
+                return 0.75;
+
+            case 10:
+                return 0.7;
+
+            case 12:
+                return 0.85;
+
+            case 20:
+                return 0.6;
+            default:
+                return 0.6;
+        }
+    }
+
+    /**
+     * Keeps the displayed dice at roughly similar visual sizes.
+     */
+    private getDiceScale(
+        sides: number
+    ): number {
+        switch (sides) {
+            case 4:
+                return 0.25;
+
+            case 6:
+                return 0.25;
+
+            case 8:
+                return 0.25;
+
+            case 10:
+                return 0.25;
+
+            case 12:
+                return 0.25;
+
+            case 20:
+                return 0.25;
+            default:
+                return 0.25;
+        }
+    }
+
+    /**
+     * Rolls the current die to a supplied result.
+     *
+     * Examples:
+     *
+     * D20: roll(17)
+     * D12: roll(8)
+     * D6:  roll(4)
+     */
     public roll(rollValue: number): void {
         if (this.rolling) {
             return;
         }
 
-        if (this.timeoutId) {
-            window.clearTimeout(this.timeoutId);
+        if (
+            !Number.isInteger(rollValue) ||
+            rollValue < 1 ||
+            rollValue > this.sides
+        ) {
+            throw new Error(
+                `A D${this.sides} result must be an integer ` +
+                `between 1 and ${this.sides}. Received ${rollValue}.`
+            );
+        }
+
+        if (this.timeoutId !== null) {
+            window.clearTimeout(
+                this.timeoutId
+            );
+
             this.timeoutId = null;
+        }
+
+        if (this.rollAnimationFrame !== null) {
+            cancelAnimationFrame(
+                this.rollAnimationFrame
+            );
+
+            this.rollAnimationFrame = null;
         }
 
         this.rolling = true;
         this.showDice = true;
-        if (this.timeoutId === null) {
-            this.timeoutId = window.setTimeout(() => {
+        this.result = rollValue;
+
+        this.timeoutId =
+            window.setTimeout(() => {
                 this.showDice = false;
                 this.timeoutId = null;
             }, 5000);
-        }
-        this.result = rollValue;
 
-        const face = this.faces.find(currentFace => currentFace.number === this.result);
+        const face = this.faces.find(
+            currentFace =>
+                currentFace.number ===
+                this.result
+        );
 
         if (!face) {
             this.rolling = false;
 
-            throw new Error(`No D20 face found for number ${this.result}.`);
+            throw new Error(
+                `No face was found for D${this.sides} ` +
+                `result ${this.result}.`
+            );
         }
 
-        /*
-         * Reset the die to the beginning of its movement.
-         */
-        const visible = this.getVisibleSizeAtZ(0);
+        const diceZ = 0;
+        const visible =
+            this.getVisibleSizeAtZ(diceZ);
 
-        const diceRadius = 1.5 * 0.7; // geometry radius × diceGroup scale
         const padding = 0.2;
-
-        const maxX = visible.width / 2 - diceRadius - padding;
-        const maxY = visible.height / 2 - diceRadius - padding;
-
-        const startPosition = new Vector3(-maxX, MathUtils.randFloat(-maxY, maxY), 0);
-        const endPosition = new Vector3(maxX, MathUtils.randFloat(-maxY, maxY), 0);
-
-        this.diceGroup.position.copy(startPosition);
+        const bounceHeight = 0.35;
+        const bounceCount = 4;
 
         /*
-         * Work out the direction from the die towards the camera.
+         * Safe horizontal limits for the centre of the die.
          */
-        const cameraPosition = new Vector3();
-        this.camera.getWorldPosition(cameraPosition);
+        const minX =
+            -visible.width / 2 +
+            this.diceRadius +
+            padding;
 
-        const cameraDirection = cameraPosition
-            .sub(endPosition)
-            .normalize();
+        const maxX =
+            visible.width / 2 -
+            this.diceRadius -
+            padding;
 
         /*
-         * Rotate the selected face so it points towards the camera.
+         * Safe vertical limits for the centre of the die.
+         *
+         * bounceHeight is removed from maxY because the bounce
+         * pushes the die upwards.
          */
-        const landingQuaternion = new Quaternion()
-            .setFromUnitVectors(
-                face.normal.clone().normalize(),
-                cameraDirection
+        const minY =
+            -visible.height / 2 +
+            this.diceRadius +
+            padding;
+
+        const maxY =
+            visible.height / 2 -
+            this.diceRadius -
+            padding -
+            bounceHeight;
+
+        /*
+         * Guard against extremely small canvases.
+         */
+        const safeMinX =
+            Math.min(minX, maxX);
+
+        const safeMaxX =
+            Math.max(minX, maxX);
+
+        const safeMinY =
+            Math.min(minY, maxY);
+
+        const safeMaxY =
+            Math.max(minY, maxY);
+
+        const startPosition = new Vector3(
+            safeMinX,
+            MathUtils.randFloat(
+                safeMinY,
+                safeMaxY
+            ),
+            diceZ
+        );
+
+        const endPosition = new Vector3(
+            safeMaxX,
+            MathUtils.randFloat(
+                safeMinY,
+                safeMaxY
+            ),
+            diceZ
+        );
+
+        this.diceGroup.position.copy(
+            startPosition
+        );
+
+        /*
+         * Calculate the final position in world coordinates.
+         */
+        const landingWorldPosition =
+            endPosition.clone();
+
+        if (this.diceGroup.parent) {
+            this.diceGroup.parent.localToWorld(
+                landingWorldPosition
+            );
+        }
+
+        const cameraPosition =
+            new Vector3();
+
+        this.camera.getWorldPosition(
+            cameraPosition
+        );
+
+        /*
+         * Direction from the final die position towards the camera.
+         */
+        const cameraDirection =
+            cameraPosition
+                .sub(landingWorldPosition)
+                .normalize();
+
+        /*
+         * First rotate the result face so its normal points towards
+         * the camera.
+         */
+        const landingQuaternion =
+            new Quaternion()
+                .setFromUnitVectors(
+                    face.normal
+                        .clone()
+                        .normalize(),
+                    cameraDirection
+                );
+
+        /*
+         * Determine where the face's own up direction points after
+         * applying the camera-facing rotation.
+         */
+        const rotatedFaceUp =
+            face.up
+                .clone()
+                .applyQuaternion(
+                    landingQuaternion
+                );
+
+        /*
+         * Calculate the camera's visual up direction.
+         */
+        const desiredUp =
+            this.camera.up
+                .clone()
+                .applyQuaternion(
+                    this.camera.quaternion
+                )
+                .projectOnPlane(
+                    cameraDirection
+                )
+                .normalize();
+
+        const currentUp =
+            rotatedFaceUp
+                .projectOnPlane(
+                    cameraDirection
+                )
+                .normalize();
+
+        /*
+         * Twist the face around its camera-facing normal so that
+         * the number appears upright on the screen.
+         */
+        let twistAngle =
+            currentUp.angleTo(
+                desiredUp
             );
 
-        /*
-         * Keep the number upright relative to the screen.
-         */
-        const rotatedFaceUp = face.up
-            .clone()
-            .applyQuaternion(landingQuaternion);
-
-        const desiredUp = this.camera.up
-            .clone()
-            .applyQuaternion(this.camera.quaternion)
-            .projectOnPlane(cameraDirection)
-            .normalize();
-
-        const currentUp = rotatedFaceUp
-            .projectOnPlane(cameraDirection)
-            .normalize();
-
-        let twistAngle = currentUp.angleTo(desiredUp);
-
         const cross = new Vector3()
-            .crossVectors(currentUp, desiredUp);
+            .crossVectors(
+                currentUp,
+                desiredUp
+            );
 
-        if (cross.dot(cameraDirection) < 0) {
+        if (
+            cross.dot(cameraDirection) < 0
+        ) {
             twistAngle = -twistAngle;
         }
 
-        const twistQuaternion = new Quaternion()
-            .setFromAxisAngle(
-                cameraDirection,
-                twistAngle
-            );
+        const twistQuaternion =
+            new Quaternion()
+                .setFromAxisAngle(
+                    cameraDirection,
+                    twistAngle
+                );
 
-        landingQuaternion.premultiply(twistQuaternion);
+        landingQuaternion.premultiply(
+            twistQuaternion
+        );
 
         /*
          * Random tumbling axis.
@@ -362,24 +1063,34 @@ export class RolledDiceComponent implements AfterViewInit, OnDestroy {
             Math.random() - 0.5
         );
 
-        if (angularAxis.lengthSq() === 0) {
+        if (
+            angularAxis.lengthSq() <
+            0.000001
+        ) {
             angularAxis.set(1, 1, 1);
         }
 
         angularAxis.normalize();
 
-        const startTime = performance.now();
+        const startTime =
+            performance.now();
+
         let previousTime = startTime;
 
         const duration = 1800;
 
-        const animateRoll = (time: number): void => {
-            const elapsed = time - startTime;
+        const animateRoll = (
+            time: number
+        ): void => {
+            const elapsed =
+                time - startTime;
 
-            const deltaSeconds = Math.min(
-                (time - previousTime) / 1000,
-                0.05
-            );
+            const deltaSeconds =
+                Math.min(
+                    (time - previousTime) /
+                    1000,
+                    0.05
+                );
 
             previousTime = time;
 
@@ -389,187 +1100,226 @@ export class RolledDiceComponent implements AfterViewInit, OnDestroy {
             );
 
             /*
-             * Move the die from its start position to its end position.
+             * Move from the random start point to the random end point.
              */
-            const movementProgress = this.easeOutCubic(progress);
+            const movementProgress =
+                this.easeOutCubic(
+                    progress
+                );
 
-            this.diceGroup.position.lerpVectors(
-                startPosition,
-                endPosition,
-                movementProgress
-            );
+            this.diceGroup.position
+                .lerpVectors(
+                    startPosition,
+                    endPosition,
+                    movementProgress
+                );
 
             /*
-             * Add a small vertical bounce while it moves.
+             * Add the bounce after interpolation.
              *
-             * The bounce fades out as the die reaches the end.
+             * Using += preserves the interpolated random Y path.
              */
-            const bounceHeight = 0.35;
-            const bounceCount = 4;
-
-            this.diceGroup.position.y =
+            const bounce =
                 Math.abs(
-                    Math.sin(progress * Math.PI * bounceCount)
+                    Math.sin(
+                        progress *
+                        Math.PI *
+                        bounceCount
+                    )
                 ) *
                 bounceHeight *
                 (1 - progress);
 
-            /*
-             * Spin quickly at first and gradually slow down.
-             */
-            const spinSpeed = MathUtils.lerp(
-                22,
-                0,
-                this.easeOutCubic(progress)
-            );
+            this.diceGroup.position.y +=
+                bounce;
 
-            const incrementalRotation = new Quaternion()
-                .setFromAxisAngle(
-                    angularAxis,
-                    spinSpeed * deltaSeconds
+            /*
+             * Fast initial spin that gradually slows down.
+             */
+            const spinSpeed =
+                MathUtils.lerp(
+                    22,
+                    0,
+                    this.easeOutCubic(
+                        progress
+                    )
                 );
 
-            this.diceGroup.quaternion.multiply(
-                incrementalRotation
-            );
+            const incrementalRotation =
+                new Quaternion()
+                    .setFromAxisAngle(
+                        angularAxis,
+                        spinSpeed *
+                        deltaSeconds
+                    );
+
+            this.diceGroup.quaternion
+                .multiply(
+                    incrementalRotation
+                );
 
             /*
-             * Gradually steer towards the selected face.
+             * Gradually steer towards the selected result.
              */
             const steeringStart = 0.35;
 
-            if (progress > steeringStart) {
+            if (
+                progress >
+                steeringStart
+            ) {
                 const steeringProgress =
-                    (progress - steeringStart) /
-                    (1 - steeringStart);
+                    (progress -
+                        steeringStart) /
+                    (1 -
+                        steeringStart);
 
-                const steeringStrength = MathUtils.lerp(
-                    0.01,
-                    0.35,
-                    this.easeOutCubic(steeringProgress)
-                );
+                const steeringStrength =
+                    MathUtils.lerp(
+                        0.01,
+                        0.35,
+                        this.easeOutCubic(
+                            steeringProgress
+                        )
+                    );
 
-                this.diceGroup.quaternion.slerp(
-                    landingQuaternion,
-                    steeringStrength
-                );
+                this.diceGroup.quaternion
+                    .slerp(
+                        landingQuaternion,
+                        steeringStrength
+                    );
             }
 
             if (progress < 1) {
-                requestAnimationFrame(animateRoll);
+                this.rollAnimationFrame =
+                    requestAnimationFrame(
+                        animateRoll
+                    );
+
                 return;
             }
 
-            this.diceGroup.quaternion.copy(landingQuaternion);
+            /*
+             * Do not copy endPosition here.
+             *
+             * The final interpolation frame already established the
+             * position. Copying it again caused the jump you previously
+             * encountered.
+             */
+            this.diceGroup.quaternion.copy(
+                landingQuaternion
+            );
+
+            this.rollAnimationFrame =
+                null;
+
             this.rolling = false;
         };
 
-        requestAnimationFrame(animateRoll);
+        this.rollAnimationFrame =
+            requestAnimationFrame(
+                animateRoll
+            );
     }
 
-    private easeOutQuad(value: number): number {
-        return 1 - (1 - value) * (1 - value);
-    }
-
-    private easeOutCubic(value: number): number {
-        return 1 - Math.pow(1 - value, 3);
-    }
-
-    private showFace(number: number): void {
-        const face = this.faces.find(
-            currentFace => currentFace.number === number
-        );
-
-        if (!face) {
-            throw new Error(`No D20 face found for number ${number}.`);
-        }
-
-        const upward = new Vector3(0, 1, 0);
-
-        /*
-         * Rotate the selected face's outward normal onto world-space up.
-         */
-        const targetQuaternion = new Quaternion()
-            .setFromUnitVectors(
-                face.normal.clone().normalize(),
-                upward
+    private easeOutCubic(
+        value: number
+    ): number {
+        return 1 -
+            Math.pow(
+                1 - value,
+                3
             );
-
-        /*
-         * Randomise the final rotation around the vertical axis without
-         * changing which face is on top.
-         */
-        const verticalRotation = new Quaternion()
-            .setFromAxisAngle(
-                upward,
-                Math.random() * Math.PI * 2
-            );
-
-        targetQuaternion.premultiply(verticalRotation);
-
-        this.animateToQuaternion(targetQuaternion);
-    }
-
-    private animateToQuaternion(targetQuaternion: Quaternion): void {
-        const startQuaternion = this.diceGroup.quaternion.clone();
-
-        const startTime = performance.now();
-        const duration = 500;
-
-        const animate = (time: number): void => {
-            const progress = Math.min(
-                (time - startTime) / duration,
-                1
-            );
-
-            const easedProgress =
-                1 - Math.pow(1 - progress, 3);
-
-            this.diceGroup.quaternion.slerpQuaternions(
-                startQuaternion,
-                targetQuaternion,
-                easedProgress
-            );
-
-            if (progress < 1) {
-                requestAnimationFrame(animate);
-                return;
-            }
-
-            this.diceGroup.quaternion.copy(targetQuaternion);
-            this.rolling = false;
-        };
-
-        requestAnimationFrame(animate);
     }
 
     private render(): void {
-        this.renderer.render(this.scene, this.camera);
+        this.renderer.render(
+            this.scene,
+            this.camera
+        );
 
-        this.animationFrame = requestAnimationFrame(() => {
-            this.render();
-        });
+        this.animationFrame =
+            requestAnimationFrame(() => {
+                this.render();
+            });
     }
 
-    private getVisibleSizeAtZ(z: number): {
+    /**
+     * Returns the camera-visible world-space width and height at
+     * a particular Z coordinate.
+     */
+    private getVisibleSizeAtZ(
+        z: number
+    ): {
         width: number;
         height: number;
     } {
-        const cameraZ = this.camera.position.z;
-        const distance = Math.abs(cameraZ - z);
+        const cameraZ =
+            this.camera.position.z;
 
-        const verticalFov = MathUtils.degToRad(
-            this.camera.fov
-        );
+        const distance =
+            Math.abs(cameraZ - z);
+
+        const verticalFov =
+            MathUtils.degToRad(
+                this.camera.fov
+            );
 
         const height =
-            2 * Math.tan(verticalFov / 2) * distance;
+            2 *
+            Math.tan(
+                verticalFov / 2
+            ) *
+            distance;
 
-        const width = height * this.camera.aspect;
+        const width =
+            height *
+            this.camera.aspect;
 
         return {
             width,
-            height
+            height,
         };
+    }
+
+    /**
+     * Frees geometries, materials, and textures when changing die.
+     */
+    private disposeObject(
+        object: Object3D
+    ): void {
+        object.traverse(child => {
+            if (!(child instanceof Mesh)) {
+                return;
+            }
+
+            child.geometry.dispose();
+
+            const materials =
+                Array.isArray(
+                    child.material
+                )
+                    ? child.material
+                    : [child.material];
+
+            for (
+                const material of
+                materials
+                ) {
+                const materialWithMap =
+                    material as
+                        | MeshBasicMaterial
+                        | MeshStandardMaterial;
+
+                if (
+                    materialWithMap.map
+                    instanceof Texture
+                ) {
+                    materialWithMap.map
+                        .dispose();
+                }
+
+                material.dispose();
+            }
+        });
     }
 }
