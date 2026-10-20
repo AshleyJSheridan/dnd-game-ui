@@ -1,3 +1,7 @@
-<div class="toast-content" [hidden]="!canShowToast">
-    {{ message }}
-</div>
+@if (messages.length) {
+    <div class="toast-content">
+        @for (toast of messages; track toast.id) {
+            <div>{{ toast.message }}</div>
+        }
+    </div>
+}
