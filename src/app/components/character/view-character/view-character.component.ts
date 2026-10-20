@@ -225,8 +225,8 @@ export class ViewCharacterComponent {
 
             diceRoll = Math.floor(Math.random() * parsedDice.dieType) + 1;
 
-            this.showDiceRoll(diceRoll, parsedDice.dieType);
             this.diceRollResult = `Damage Roll: ${diceRoll} + ${actualModifier} (${selectedAbilityShortName}) = ${diceRoll + actualModifier}`;
+            this.showDiceRoll(diceRoll, parsedDice.dieType);
         }
     }
 
