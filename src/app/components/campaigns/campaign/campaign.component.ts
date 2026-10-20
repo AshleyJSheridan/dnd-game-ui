@@ -188,7 +188,7 @@ export class CampaignComponent {
 
     copyCampaignLink(event: MouseEvent): void {
         this.clipboardService.copyTextToClipboard(location.href, <HTMLElement>event.currentTarget);
-        this.toast?.showToast();
+        this.toast?.showToast('Campaign link copied.');
     }
 
     addCharacterToCampaign(character: Character): void {
@@ -376,13 +376,13 @@ export class CampaignComponent {
 
         this.campaignService.invitePlayerByEmail(this.inviteEmail.nativeElement.value).subscribe({
             next: (response) => {
-                this.inviteToastMessage = 'Invitation sent to ' + this.inviteEmail.nativeElement.value;
-                this.inviteToast?.showToast();
+                let inviteToastMessage = 'Invitation sent to ' + this.inviteEmail.nativeElement.value;
+                this.inviteToast?.showToast(inviteToastMessage);
                 this.inviteEmail = '';
             },
             error: (error) => {
-                this.inviteToastMessage = error.error.message;
-                this.inviteToast?.showToast();
+                let inviteToastMessage = error.error.message;
+                this.inviteToast?.showToast(inviteToastMessage);
             }
         });
     }

@@ -45,7 +45,7 @@
                             }
                             <button type="button" class="copy-campaign-link" (click)="copyCampaignLink($event)" title="Copy campaign link">
                                 <app-copy-icon/>
-                                <app-toast #toastComponent>Campaign link copied.</app-toast>
+                                <app-toast #toastComponent/>
                             </button>
                         </div>
                     </h3>
@@ -296,7 +296,7 @@
                                         <input type="email" name="inviteEmail" #inviteEmail placeholder="player@example.co.uk"/>
                                     </label>
                                     <button type="button" class="fantasy-btn fantasy-brown" (click)="invitePlayerByEmail()">Send Invite</button>
-                                    <app-toast #inviteToast>{{ inviteToastMessage }}</app-toast>
+                                    <app-toast #inviteToast/>
                                 </form>
                             }
                         </div>

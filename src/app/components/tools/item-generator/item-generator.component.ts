@@ -115,8 +115,8 @@ export class ItemGeneratorComponent {
             this.itemService.addGeneratedItem(<Item>itemMoveEvent.item).subscribe({
                 next: (generatedItems) => {
                     this.giveLightbox?.cancelModal();
-                    this.giveItemSuccessMessage = `${itemMoveEvent.item.name} has been added to the generated items list!`;
-                    this.giveItemSuccessToast?.showToast();
+                    const giveItemSuccessMessage = `${itemMoveEvent.item.name} has been added to the generated items list!`;
+                    this.giveItemSuccessToast?.showToast(giveItemSuccessMessage);
                     this.item = undefined;
                 },
                 error: (error) => {
@@ -133,8 +133,8 @@ export class ItemGeneratorComponent {
         this.itemService.addItemToCharInventory(character.guid, <Item>this.selectedItem).subscribe({
             next: (response) => {
                 this.giveLightbox?.cancelModal();
-                this.giveItemSuccessMessage = `${this.selectedItem?.name} has been given to ${character.name}!`;
-                this.giveItemSuccessToast?.showToast();
+                const giveItemSuccessMessage = `${this.selectedItem?.name} has been given to ${character.name}!`;
+                this.giveItemSuccessToast?.showToast(giveItemSuccessMessage);
                 this.selectedItem = undefined;
             },
             error: (error) => {

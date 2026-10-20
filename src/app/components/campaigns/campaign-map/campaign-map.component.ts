@@ -612,11 +612,11 @@ export class CampaignMapComponent implements AfterViewInit {
     }
 
     showDiceRoll(event: any): void {
-        this.diceRollResult = event.roll === 1 ? '1 (nat 1)' :
+        const diceRollResult = event.roll === 1 ? '1 (nat 1)' :
             event.roll === 20 ? '20 (nat 20)' :
                 `Rolled a ${event.roll + event.modifier} (${event.roll} + ${event.modifier})`;
 
-        this.toast?.showToast();
+        this.toast?.showToast(diceRollResult);
     }
 
     canUpdateEntity(entity: CampaignMapCreature | CampaignMapPlayer | CampaignMapDrawing): boolean {

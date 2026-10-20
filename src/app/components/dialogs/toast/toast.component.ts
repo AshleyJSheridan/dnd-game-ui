@@ -8,10 +8,12 @@ import {Item} from '../../../entities/Item';
 })
 export class ToastComponent {
     canShowToast: boolean = false;
+    message: string = '';
 
     readonly timeout: InputSignal<number> = input(3000);
 
-    showToast(): void {
+    showToast(message: string): void {
+        this.message = message;
         this.canShowToast = true;
 
         window.setTimeout(() => {this.canShowToast = false}, this.timeout());

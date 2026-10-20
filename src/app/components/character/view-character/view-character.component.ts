@@ -160,8 +160,8 @@ export class ViewCharacterComponent {
     rollAbility(roll: {modifier: number, ability: string}): void {
         const diceRoll = Math.floor(Math.random() * 20) + 1;
 
-        this.diceRollResult = `${roll.ability}: ${diceRoll} + ${roll.modifier} = ${diceRoll + roll.modifier}`;
-        this.showDiceRoll(diceRoll, 20);
+        const diceRollResult = `${roll.ability}: ${diceRoll} + ${roll.modifier} = ${diceRoll + roll.modifier}`;
+        this.showDiceRoll(diceRoll, 20, diceRollResult);
     }
 
     openItemDetails(item: Item): void {
@@ -195,6 +195,7 @@ export class ViewCharacterComponent {
                 : this.getAbilityDetails('str').modifier;;
             selectedAbilityShortName = this.getAbilityDetails('dex').modifier > this.getAbilityDetails('str').modifier ? 'dex' : 'str';
         }
+        let diceRollResult = '';
 
         if (action === 'rollAttack') {
             diceRoll = Math.floor(Math.random() * 20) + 1;
@@ -210,13 +211,13 @@ export class ViewCharacterComponent {
             }
 
             if (isProficient) {
-                this.diceRollResult = `Attack Roll: ${diceRoll} + ${actualModifier} (${selectedAbilityShortName}) + ${proficiencyBonus} (proficient) = ${diceRoll + actualModifier + proficiencyBonus}`;
+                diceRollResult = `Attack Roll: ${diceRoll} + ${actualModifier} (${selectedAbilityShortName}) + ${proficiencyBonus} (proficient) = ${diceRoll + actualModifier + proficiencyBonus}`;
             } else {
-                this.diceRollResult = `Attack Roll: ${diceRoll} + ${actualModifier} (${selectedAbilityShortName}) = ${diceRoll + actualModifier}`;
+                diceRollResult = `Attack Roll: ${diceRoll} + ${actualModifier} (${selectedAbilityShortName}) = ${diceRoll + actualModifier}`;
             }
 
             // These rolls are always d20
-            this.showDiceRoll(diceRoll, 20);
+            this.showDiceRoll(diceRoll, 20, diceRollResult);
         }
 
         if (action === 'rollDamage') {
@@ -225,12 +226,12 @@ export class ViewCharacterComponent {
 
             diceRoll = Math.floor(Math.random() * parsedDice.dieType) + 1;
 
-            this.diceRollResult = `Damage Roll: ${diceRoll} + ${actualModifier} (${selectedAbilityShortName}) = ${diceRoll + actualModifier}`;
-            this.showDiceRoll(diceRoll, parsedDice.dieType);
+            diceRollResult = `Damage Roll: ${diceRoll} + ${actualModifier} (${selectedAbilityShortName}) = ${diceRoll + actualModifier}`;
+            this.showDiceRoll(diceRoll, parsedDice.dieType, diceRollResult);
         }
     }
 
-    showDiceRoll(diceRoll: number, diceSides: number): void {
+    showDiceRoll(diceRoll: number, diceSides: number, diceRollResult: string): void {
         this.diceSides = diceSides;
         window.setTimeout(() => {
             if (this.dice1) {
@@ -238,8 +239,8 @@ export class ViewCharacterComponent {
             }
         }, 10);
 
-        console.log(this.diceRollResult);
-        this.dice1ResultToast?.showToast();
+        console.log(diceRollResult);
+        this.dice1ResultToast?.showToast(diceRollResult);
     }
 
     parseDiceString(diceString: string): {numDice: number, dieType: number, modifier: number} {
