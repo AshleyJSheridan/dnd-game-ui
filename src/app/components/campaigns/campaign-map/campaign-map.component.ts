@@ -187,22 +187,32 @@ export class CampaignMapComponent implements AfterViewInit {
         return Math.ceil((this.campaignMap?.height ?? 1) / this.campaignMap.grid_size) * this.campaignMap.grid_size;
     }
 
-    updateMapSize(dimension: string, event: Event): void {
-        const value = Number((<HTMLInputElement>event.target).value);
+    updateMapSize(dimension: 'width' | 'height', event: Event): void {
+        const input = event.target as HTMLInputElement;
+        const value = Number(input.value);
+        const { width, height } = this.campaignMap;
 
-        if (dimension === 'width') {
-            this.campaignMap.width = value;
-
-            this.updateMap({width: value});
+        if (!Number.isFinite(value) || value <= 0 || width <= 0 || height <= 0) {
+            input.value = String(this.campaignMap[dimension]);
+            return;
         }
 
-        if (dimension === 'height') {
-            this.campaignMap.height = value;
-
-            this.updateMap({height: value});
+        const newValue = Math.max(1, Math.round(value));
+        if (newValue === this.campaignMap[dimension]) {
+            input.value = String(newValue);
+            return;
         }
+
+        const scale = newValue / this.campaignMap[dimension];
+        const newWidth = dimension === 'width' ? newValue : Math.max(1, Math.round(width * scale));
+        const newHeight = dimension === 'height' ? newValue : Math.max(1, Math.round(height * scale));
+
+        this.campaignMap.width = newWidth;
+        this.campaignMap.height = newHeight;
+        input.value = String(newValue);
+
+        this.updateMap({width: newWidth, height: newHeight});
     }
-
     selectTab(event: MouseEvent): void {
         const tabButton = <HTMLElement>event.currentTarget;
 
