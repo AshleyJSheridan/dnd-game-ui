@@ -14,6 +14,7 @@ import { StartingEquipment } from '../entities/StartingEquipment';
 import { AuthService } from './auth.service';
 import { CreatureAlignment } from '../entities/CreatureAlignment';
 import { environment } from '../../environments/environment';
+import {Item} from '../entities/Item';
 
 @Injectable({providedIn: 'root'})
 export class CharacterService {
@@ -224,5 +225,12 @@ export class CharacterService {
             {equipped: equipped},
             {headers: this.authService.getAuthHeader()}
         );
+    }
+
+    public deleteInventoryItem(itemGuid: string): Observable<Array<Item>> {
+        return this.http.delete<Array<Item>>(
+            `${this.apiUrl}/characters/${this.charGuid}/inventory/${itemGuid}`,
+            {headers: this.authService.getAuthHeader()}
+        )
     }
 }

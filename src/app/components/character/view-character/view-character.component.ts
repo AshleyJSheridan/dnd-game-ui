@@ -178,56 +178,81 @@ export class ViewCharacterComponent {
         if (!this.selectedItem)
             return;
 
-        if (!this.isRollable(this.selectedItem))
-            return;
+        if (action === 'rollAttack' || action === 'rollDamage')
+        {
+            if (!this.isRollable(this.selectedItem))
+                return;
 
-        let diceRoll = 0;
-        const finesse = this.selectedItem.weapon_props?.finesse ?? false;
-        let selectedAbilityShortName = 'str';
-        let actualModifier = this.getAbilityDetails('str').modifier;
+            let diceRoll = 0;
+            const finesse = this.selectedItem.weapon_props?.finesse ?? false;
+            let selectedAbilityShortName = 'str';
+            let actualModifier = this.getAbilityDetails('str').modifier;
 
-        if (this.selectedItem.proficiency!.type.includes('Ranged')) {
-            actualModifier = this.getAbilityDetails('dex').modifier;
-            selectedAbilityShortName = 'dex';
-        } else if (finesse) {
-            actualModifier = this.getAbilityDetails('dex').modifier > this.getAbilityDetails('str').modifier
-                ? this.getAbilityDetails('dex').modifier
-                : this.getAbilityDetails('str').modifier;;
-            selectedAbilityShortName = this.getAbilityDetails('dex').modifier > this.getAbilityDetails('str').modifier ? 'dex' : 'str';
-        }
-        let diceRollResult = '';
+            if (this.selectedItem.proficiency!.type.includes('Ranged')) {
+                actualModifier = this.getAbilityDetails('dex').modifier;
+                selectedAbilityShortName = 'dex';
+            } else if (finesse) {
+                actualModifier = this.getAbilityDetails('dex').modifier > this.getAbilityDetails('str').modifier
+                    ? this.getAbilityDetails('dex').modifier
+                    : this.getAbilityDetails('str').modifier;;
+                selectedAbilityShortName = this.getAbilityDetails('dex').modifier > this.getAbilityDetails('str').modifier ? 'dex' : 'str';
+            }
+            let diceRollResult = '';
 
-        if (action === 'rollAttack') {
-            diceRoll = Math.floor(Math.random() * 20) + 1;
-            let proficiencyBonus = 0;
-            let isProficient = false;
+            if (action === 'rollAttack') {
+                diceRoll = Math.floor(Math.random() * 20) + 1;
+                let proficiencyBonus = 0;
+                let isProficient = false;
 
-            if (
-                this.character
-                && this.character.proficiencies!.weapons?.find(prof => prof.name === (this?.selectedItem?.proficiency?.name ?? ''))
-            ) {
-                proficiencyBonus = (this.character?.proficiency_bonus ?? 0)
-                isProficient = true;
+                if (
+                    this.character
+                    && this.character.proficiencies!.weapons?.find(prof => prof.name === (this?.selectedItem?.proficiency?.name ?? ''))
+                ) {
+                    proficiencyBonus = (this.character?.proficiency_bonus ?? 0)
+                    isProficient = true;
+                }
+
+                if (isProficient) {
+                    diceRollResult = `Attack Roll: ${diceRoll} + ${actualModifier} (${selectedAbilityShortName}) + ${proficiencyBonus} (proficient) = ${diceRoll + actualModifier + proficiencyBonus}`;
+                } else {
+                    diceRollResult = `Attack Roll: ${diceRoll} + ${actualModifier} (${selectedAbilityShortName}) = ${diceRoll + actualModifier}`;
+                }
+
+                // These rolls are always d20
+                this.showDiceRoll(diceRoll, 20, diceRollResult);
             }
 
-            if (isProficient) {
-                diceRollResult = `Attack Roll: ${diceRoll} + ${actualModifier} (${selectedAbilityShortName}) + ${proficiencyBonus} (proficient) = ${diceRoll + actualModifier + proficiencyBonus}`;
-            } else {
-                diceRollResult = `Attack Roll: ${diceRoll} + ${actualModifier} (${selectedAbilityShortName}) = ${diceRoll + actualModifier}`;
-            }
+            if (action === 'rollDamage') {
+                // TODO parse the damange amount string to handle multiple dice and modifiers.
+                const parsedDice = this.parseDiceString(this.selectedItem.weapon_props!.damage.amount);
 
-            // These rolls are always d20
-            this.showDiceRoll(diceRoll, 20, diceRollResult);
+                diceRoll = Math.floor(Math.random() * parsedDice.dieType) + 1;
+
+                diceRollResult = `Damage Roll: ${diceRoll} + ${actualModifier} (${selectedAbilityShortName}) = ${diceRoll + actualModifier}`;
+                this.showDiceRoll(diceRoll, parsedDice.dieType, diceRollResult);
+            }
         }
 
-        if (action === 'rollDamage') {
-            // TODO parse the damange amount string to handle multiple dice and modifiers.
-            const parsedDice = this.parseDiceString(this.selectedItem.weapon_props!.damage.amount);
+        if (action === 'toggleEquipped')
+        {
+            this.selectedItem.equipped = !this.selectedItem.equipped;
+            this.updateEquippedState(this.selectedItem);
+        }
 
-            diceRoll = Math.floor(Math.random() * parsedDice.dieType) + 1;
-
-            diceRollResult = `Damage Roll: ${diceRoll} + ${actualModifier} (${selectedAbilityShortName}) = ${diceRoll + actualModifier}`;
-            this.showDiceRoll(diceRoll, parsedDice.dieType, diceRollResult);
+        if(action === 'remove')
+        {
+            this.characterService.deleteInventoryItem(this.selectedItem.guid).subscribe(
+                {
+                    next: (items) => {
+                        this.character!.inventory.items = items;
+                        this.selectedItem = null;
+                        this.selectedItemLightbox?.cancelModal();
+                    },
+                    error: (error) => {
+                        console.error('Error deleting inventory item:', error);
+                    }
+                }
+            );
         }
     }
 

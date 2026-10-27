@@ -60,6 +60,18 @@
                     <app-condition-icon [condition]="'grappled'"/>
                     Damage
                 </button>
+                <button type="button" (click)="triggerOutputEvent('toggleEquipped')">
+                    <app-add-to-inventory-icon/>
+                    @if (item()?.equipped) {
+                        Unequip
+                    } @else {
+                        Equip
+                    }
+                </button>
+                <button type="button" (click)="triggerOutputEvent('remove')">
+                    <app-delete-icon/>
+                    Remove
+                </button>
             }
         </form>
 

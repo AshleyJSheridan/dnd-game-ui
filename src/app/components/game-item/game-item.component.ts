@@ -13,8 +13,7 @@ import { ItemTypeIconComponent } from '../icons/item-type-icon/item-type-icon.co
 import { DamageType } from '../../entities/DamageType';
 import { GiveIconComponent } from '../icons/give-icon/give-icon.component';
 import { ItemMoveDestination, ItemMoveEvent } from '../../entities/ItemMoveEvent';
-import {DiceIconComponent} from '../icons/dice-icon/dice-icon.component';
-import {ConditionIconComponent} from '../icons/condition-icon/condition-icon.component';
+import { ConditionIconComponent } from '../icons/condition-icon/condition-icon.component';
 
 @Component({
     selector: 'app-game-item',
@@ -29,7 +28,6 @@ import {ConditionIconComponent} from '../icons/condition-icon/condition-icon.com
         AddToInventoryIconComponent,
         ItemTypeIconComponent,
         GiveIconComponent,
-        DiceIconComponent,
         ConditionIconComponent
     ],
     templateUrl: './game-item.component.html'
