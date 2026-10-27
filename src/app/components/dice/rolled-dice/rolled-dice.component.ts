@@ -95,6 +95,34 @@ export class RolledDiceComponent implements AfterViewInit, OnChanges, OnDestroy 
     private timeoutId: number | null = null;
 
     private viewInitialised = false;
+    private canvasWidth = 0;
+    private canvasHeight = 0;
+    private pixelRatio = 0;
+
+    private resizeRenderer(): void {
+        const canvas = this.canvasRef.nativeElement;
+        const width = canvas.clientWidth;
+        const height = canvas.clientHeight;
+        const pixelRatio = Math.min(window.devicePixelRatio, 2);
+
+        // A hidden or detached canvas must not produce an invalid projection.
+        if (width === 0 || height === 0) {
+            return;
+        }
+
+        if (width === this.canvasWidth && height === this.canvasHeight &&
+            pixelRatio === this.pixelRatio) {
+            return;
+        }
+
+        this.canvasWidth = width;
+        this.canvasHeight = height;
+        this.pixelRatio = pixelRatio;
+        this.renderer.setPixelRatio(pixelRatio);
+        this.renderer.setSize(width, height, false);
+        this.camera.aspect = width / height;
+        this.camera.updateProjectionMatrix();
+    }
 
     public ngAfterViewInit(): void {
         this.initScene();
@@ -141,7 +169,7 @@ export class RolledDiceComponent implements AfterViewInit, OnChanges, OnDestroy 
 
         this.camera = new PerspectiveCamera(
             45,
-            canvas.clientWidth / canvas.clientHeight,
+            1,
             0.1,
             100
         );
@@ -155,15 +183,7 @@ export class RolledDiceComponent implements AfterViewInit, OnChanges, OnDestroy 
             alpha: true,
         });
 
-        this.renderer.setPixelRatio(
-            Math.min(window.devicePixelRatio, 2)
-        );
-
-        this.renderer.setSize(
-            canvas.clientWidth,
-            canvas.clientHeight,
-            false
-        );
+        this.resizeRenderer();
 
         const ambientLight = new AmbientLight(
             0xff0000,
@@ -875,6 +895,8 @@ export class RolledDiceComponent implements AfterViewInit, OnChanges, OnDestroy 
             );
         }
 
+        this.resizeRenderer();
+
         const diceZ = 0;
         const visible =
             this.getVisibleSizeAtZ(diceZ);
@@ -1232,6 +1254,18 @@ export class RolledDiceComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
 
     private render(): void {
+        this.resizeRenderer();
+
+        // A resize can happen during a roll or while the result is displayed.
+        if (this.diceGroup) {
+            const visible = this.getVisibleSizeAtZ(this.diceGroup.position.z);
+            const margin = this.diceRadius + 0.2;
+            const maxX = Math.max(0, visible.width / 2 - margin);
+            const maxY = Math.max(0, visible.height / 2 - margin);
+            this.diceGroup.position.x = MathUtils.clamp(this.diceGroup.position.x, -maxX, maxX);
+            this.diceGroup.position.y = MathUtils.clamp(this.diceGroup.position.y, -maxY, maxY);
+        }
+
         this.renderer.render(
             this.scene,
             this.camera
