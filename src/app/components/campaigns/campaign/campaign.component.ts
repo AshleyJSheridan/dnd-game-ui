@@ -134,7 +134,7 @@ export class CampaignComponent {
                 this.showAddMapForm = false;
             },
             error: (error) => {
-                this.mapFileError = 'There was an error uploading the file. Please try again.';
+                this.mapFileError = 'There was an error uploading the map. Please try again. ' + error.error.message;
             }
         });
 
