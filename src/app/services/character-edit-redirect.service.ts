@@ -16,6 +16,8 @@ export class CharacterEditRedirectService {
                     // redirect based on first instance of missing character information
                     if (character.charClass === '') {
                         this.router.navigate([`/characters/${character.guid}/edit/class`]);
+                    } else if (!character.alignment?.id) {
+                        this.router.navigate([`/characters/${character.guid}/edit/alignment`]);
                     } else if (character.charBackground.name === '') {
                         this.router.navigate([`/characters/${character.guid}/edit/background`]);
                     } else if (character.charRace === '') {
@@ -26,8 +28,10 @@ export class CharacterEditRedirectService {
                         this.router.navigate([`/characters/${character.guid}/edit/abilities`]);
                     } else if (character.languages.known.length < character.languages.available) {
                         this.router.navigate([`/characters/${character.guid}/edit/languages`]);
-                    } else if (character.magic.hasMagic) {
+                    } else if (character.magic.hasMagic && character.magic.learned_spells.length === 0) {
                         this.router.navigate([`/characters/${character.guid}/edit/spells`]);
+                    } else if (this.router.url.endsWith('/edit')) {
+                        this.router.navigate([`/characters/${character.guid}/edit/equipment`]);
                     }
                 }
             },
