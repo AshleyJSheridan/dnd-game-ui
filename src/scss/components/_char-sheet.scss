@@ -758,6 +758,13 @@
                 align-items: center;
                 display: flex;
                 justify-content: center;
+
+                flex-direction: column;
+                font-size: initial;
+                font-weight: normal;
+                width: 5rem;
+                height: initial;
+
             }
 
             button + button {

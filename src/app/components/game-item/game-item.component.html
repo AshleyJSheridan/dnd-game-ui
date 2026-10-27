@@ -54,9 +54,11 @@
             @if (itemLocation() === 'character-sheet') {
                 <button type="button" title="Roll attack" (click)="triggerOutputEvent('rollAttack')">
                     <app-item-type-icon [itemType]="'weapon'" [itemBaseName]="'Greatsword'"/>
+                    Attack
                 </button>
                 <button type="button" title="Roll damage" (click)="triggerOutputEvent('rollDamage')">
                     <app-condition-icon [condition]="'grappled'"/>
+                    Damage
                 </button>
             }
         </form>
