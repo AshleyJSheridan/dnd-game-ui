@@ -213,6 +213,7 @@ export class CampaignMapComponent implements AfterViewInit {
 
         this.updateMap({width: newWidth, height: newHeight});
     }
+
     selectTab(event: MouseEvent): void {
         const tabButton = <HTMLElement>event.currentTarget;
 
@@ -307,7 +308,7 @@ export class CampaignMapComponent implements AfterViewInit {
         if (this.mapMode === 'Pointer') {
             // Don't update if the delta is very small (to avoid PATCH updates when selecting an entity).
             const deltaThreshold = 2;
-            if (event.delta.dx < deltaThreshold && event.delta.dy < deltaThreshold)
+            if (Math.abs(event.delta.dx) < deltaThreshold && Math.abs(event.delta.dy) < deltaThreshold)
                 return;
 
             const newX = event.start.x + event.delta.dx;
