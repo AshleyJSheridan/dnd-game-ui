@@ -73,7 +73,13 @@ export class EditCharacterAbilitiesComponent {
     }
 
     confirmAbilities(): void {
-        if(this.assignedDiceTotals.length !== 6)
+        // get any values from this.characterService.character?.abilities where the base is 0
+        const characterZeroBaseValues = this.characterService.character?.abilities
+            .filter(ability => ability.base === 0).length ?? 6;
+
+        // TODO fix this to allow abilitiy values to be changed after initial setting of values from dice rolls.
+
+        if(this.assignedDiceTotals.length !== 6 && characterZeroBaseValues > 0)
             return;
 
         this.characterService.setAbilityRolls(this.assignedDiceTotals).subscribe(character => {

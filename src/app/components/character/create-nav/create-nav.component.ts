@@ -26,4 +26,10 @@ export class CreateNavComponent {
     isLinkActive(path: string): boolean {
         return this.location.path().includes(`edit/${path}`);
     }
+
+    charHasMagic(): boolean {
+        console.log(this.characterService.character)
+
+        return this.characterService.character?.magic?.hasMagic ?? false;
+    }
 }
