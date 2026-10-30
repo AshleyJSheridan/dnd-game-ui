@@ -8,6 +8,7 @@ import { AuthService } from './auth.service';
 import { CampaignLore } from '../entities/CampaignLore';
 import { CampaignInvite } from '../entities/CampaignInvite';
 import { environment } from '../../environments/environment';
+import {MapObject} from '../entities/MapObject';
 
 @Injectable({providedIn: 'root'})
 export class CampaignService {
@@ -165,6 +166,10 @@ export class CampaignService {
 
     public getCreatures(): Observable<Array<Creature>> {
         return this.http.get<Array<Creature>>(`${this.apiUrl}/creatures`, {headers: this.authService.getAuthHeader()});
+    }
+
+    public getMapObjects(): Observable<Array<MapObject>> {
+        return this.http.get<Array<MapObject>>(`${this.apiUrl}/campaigns/resource/mapObjects`, {headers: this.authService.getAuthHeader()})
     }
 
     public updateCampaign(data: any, guid: string = ''): Observable<Campaign> {

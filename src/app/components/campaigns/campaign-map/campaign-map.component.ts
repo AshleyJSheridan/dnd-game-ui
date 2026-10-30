@@ -22,6 +22,7 @@ import { MapCreatureDetailsComponent } from '../map-creature-details/map-creatur
 import { ToastComponent } from '../../dialogs/toast/toast.component';
 import { EyeOnIconComponent } from '../../icons/eye-on-icon/eye-on-icon.component';
 import { EyeOffIconComponent } from '../../icons/eye-off-icon/eye-off-icon.component';
+import {MapObject} from '../../../entities/MapObject';
 
 @Component({
     selector: 'app-campaign-map',
@@ -53,8 +54,10 @@ export class CampaignMapComponent implements AfterViewInit {
     creatures: Array<Creature> = [];
     creatureType: string = '-';
     creatureSearch: string = '';
+    mapObjects: Array<MapObject> = [];
+    mapObjectType: string = '';
+    mapObjectSearch: string = '';
     selectedEntity: CampaignMapCreature | CampaignMapPlayer | CampaignMapDrawing | null = null;
-    diceRollResult: string = '';
 
     drawing: DrawingObject = new DrawingObject();
     damageTypeIcons: Array<string> = ['Bludgeoning', 'Piercing', 'Slashing', 'Acid', 'Cold', 'Fire', 'Force', 'Lightning',
@@ -106,6 +109,15 @@ export class CampaignMapComponent implements AfterViewInit {
                 // TODO handle error loading creatures
             }
         });
+
+        this.campaignService.getMapObjects().subscribe({
+            next: (mapObjects) => {
+                this.mapObjects = mapObjects;
+            },
+            error: (error) => {
+                // TODO handle error loading map objects
+            }
+        })
     }
 
     ngAfterViewInit(): void {
