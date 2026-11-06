@@ -6,6 +6,8 @@
     </div>
 
     <h3>Class Equipment Choices</h3>
+    <p>Select one of these equipment choices:</p>
+
     <div class="char-edit-equipment-panel">
         @for (set of startingEquipment; track $index) {
             @if (set.type === 'class') {
@@ -63,6 +65,8 @@
 
         <div class="background-equipment-panel">
             <h3>Background Equipment</h3>
+            <p>This is equipment you will automatically get based on your background choice:</p>
+            
             @for (set of startingEquipment; track $index) {
                 @if (set.type === 'background') {
                     <div>

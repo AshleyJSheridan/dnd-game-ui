@@ -27,4 +27,8 @@ export class EditCharacterComponent {
 
         this.characterEditRedirectService.redirectToCorrectEditLocation();
     }
+
+    getCharName(): string {
+        return this.characterService.character?.name ?? '';
+    }
 }
