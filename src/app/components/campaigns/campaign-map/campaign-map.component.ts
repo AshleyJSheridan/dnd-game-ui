@@ -1,4 +1,4 @@
-import { Component, inject, signal, ViewChild, WritableSignal, AfterViewInit, ChangeDetectorRef, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import { Component, DestroyRef, inject, signal, ViewChild, WritableSignal, AfterViewInit, ChangeDetectorRef, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { HeaderSlimComponent } from '../../header/header-slim/header-slim.component';
 import { CampaignService } from '../../../services/campaign-service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,7 +22,12 @@ import { MapCreatureDetailsComponent } from '../map-creature-details/map-creatur
 import { ToastComponent } from '../../dialogs/toast/toast.component';
 import { EyeOnIconComponent } from '../../icons/eye-on-icon/eye-on-icon.component';
 import { EyeOffIconComponent } from '../../icons/eye-off-icon/eye-off-icon.component';
-import {MapObject} from '../../../entities/MapObject';
+import { MapObject } from '../../../entities/MapObject';
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
+import { AuthService } from '../../../services/auth.service';
+import { environment } from '../../../../environments/environment';
+import { MapEvent } from '../../../entities/MapEvent';
 
 @Component({
     selector: 'app-campaign-map',
@@ -44,6 +49,8 @@ import {MapObject} from '../../../entities/MapObject';
 })
 export class CampaignMapComponent implements AfterViewInit {
     private readonly route = inject(ActivatedRoute);
+    private readonly destroyRef = inject(DestroyRef);
+    private readonly authService = inject(AuthService);
     campaignMap: CampaignMap = new CampaignMap();
     campaign: Campaign | undefined = undefined;
     error: string = '';
@@ -76,6 +83,7 @@ export class CampaignMapComponent implements AfterViewInit {
         const campaignGuid = this.route.snapshot.paramMap.get('guid') ?? '';
         const mapGuid = this.route.snapshot.paramMap.get('mapGuid') ?? '';
         this.campaignService.setCampaignGuid(campaignGuid);
+        this.subscribeToMapEvents(mapGuid);
 
         this.campaignService.getMap(mapGuid).subscribe(
             {
@@ -128,31 +136,6 @@ export class CampaignMapComponent implements AfterViewInit {
         this.measureEntityLabels();
     }
 
-    private measureEntityLabels(): void {
-        // Wait until the DOM is updated for this change-detection tick
-        queueMicrotask(() => {
-            const next = new Map<string, number>();
-
-            for (const ref of this.entityLabels.toArray()) {
-                const el = ref.nativeElement;
-                const guid = el.getAttribute('data-guid');
-                if (!guid) continue;
-
-                let width = this.entityLabelPadding;
-                try {
-                    width = el.getBBox().width + this.entityLabelPadding;
-                } catch {
-                    // If not in render tree yet, keep fallback
-                }
-
-                next.set(guid, width);
-            }
-
-            this.labelWidths = next;
-            this.cdr.detectChanges(); // avoids ExpressionChangedAfter... and updates rects immediately
-        });
-    }
-
     setMapMode(mode: string): void {
         this.showSettings = true;
         this.mapMode = mode;
@@ -178,17 +161,6 @@ export class CampaignMapComponent implements AfterViewInit {
 
     saveGridColour(): void {
         this.updateMap({grid_colour: this.gridColour()});
-    }
-
-    private updateMap(data: object): void {
-        this.campaignService.updateMap(this.campaignMap?.guid, data).subscribe({
-            next: (map) => {
-                this.campaignMap = map;
-            },
-            error: (error) => {
-                this.error = 'There was an error updating the map';
-            }
-        });
     }
 
     getViewBoxWidth(): number {
@@ -468,14 +440,6 @@ export class CampaignMapComponent implements AfterViewInit {
         this.drawing.colour = (event.currentTarget as HTMLInputElement).value;
     }
 
-    private getAngleInDegrees(x1: number, y1: number, x2: number, y2: number): number
-    {
-        const deltaY = y2 - y1;
-        const deltaX = x2 - x1;
-        const radians = Math.atan2(deltaY, deltaX);
-        return radians * (180 / Math.PI);
-    }
-
     // recursively get the entity SVG element from the target, as event target might be nested element
     getMapSVGEntity(target: SVGElement): SVGElement | undefined {
         if ((target).tagName === 'svg')
@@ -644,5 +608,130 @@ export class CampaignMapComponent implements AfterViewInit {
 
     canUpdateEntity(entity: CampaignMapCreature | CampaignMapPlayer | CampaignMapDrawing): boolean {
         return this.campaign?.owner || entity.editable;
+    }
+
+    private getAngleInDegrees(x1: number, y1: number, x2: number, y2: number): number {
+        const deltaY = y2 - y1;
+        const deltaX = x2 - x1;
+        const radians = Math.atan2(deltaY, deltaX);
+        return radians * (180 / Math.PI);
+    }
+
+    private updateMap(data: object): void {
+        this.campaignService.updateMap(this.campaignMap?.guid, data).subscribe({
+            next: (map) => {
+                this.campaignMap = map;
+            },
+            error: (error) => {
+                this.error = 'There was an error updating the map';
+            }
+        });
+    }
+
+    private measureEntityLabels(): void {
+        // Wait until the DOM is updated for this change-detection tick
+        queueMicrotask(() => {
+            const next = new Map<string, number>();
+
+            for (const ref of this.entityLabels.toArray()) {
+                const el = ref.nativeElement;
+                const guid = el.getAttribute('data-guid');
+                if (!guid) continue;
+
+                let width = this.entityLabelPadding;
+                try {
+                    width = el.getBBox().width + this.entityLabelPadding;
+                } catch {
+                    // If not in render tree yet, keep fallback
+                }
+
+                next.set(guid, width);
+            }
+
+            this.labelWidths = next;
+            this.cdr.detectChanges(); // avoids ExpressionChangedAfter... and updates rects immediately
+        });
+    }
+
+    private subscribeToMapEvents(mapGuid: string): void {
+        const reverb = environment.reverb;
+        if (!mapGuid || !reverb) return;
+
+        const echo = new Echo({
+            broadcaster: 'reverb',
+            Pusher,
+            key: reverb.key,
+            wsHost: reverb.host,
+            wsPort: reverb.port,
+            wssPort: reverb.port,
+            forceTLS: reverb.scheme === 'https',
+            enabledTransports: ['ws', 'wss'],
+            authEndpoint: `${environment.apiUrl}/broadcasting/auth`,
+            auth: {
+                headers: {
+                    Authorization: this.authService.getAuthHeader().get('Authorization') ?? '',
+                    Accept: 'application/json',
+                },
+            },
+        });
+
+        const channelName = `campaign-map.${mapGuid}`;
+        echo.private(channelName)
+            .listenToAll((event: string, payload: MapEvent) => {
+                switch (event) {
+                    case '.map.updated':
+                        this.updateMapFromEvent(payload);
+                        break;
+                }
+
+                //console.log(event, payload);
+            })
+            .error((error: unknown) => {
+                console.error('[Campaign map subscription error]', error);
+            });
+
+        this.destroyRef.onDestroy(() => {
+            echo.leave(channelName);
+            echo.disconnect();
+        });
+    }
+
+    private updateMapFromEvent(mapEvent: MapEvent): void {
+        console.log(mapEvent);
+        switch(mapEvent?.entity?.type) {
+            case 'creature':
+                const creature = this.campaignMap.creatures.find(c => c.guid === mapEvent?.entityGuid);
+                if (creature) {
+                    creature.entity_name = mapEvent?.entity?.entity_name;
+                    creature.highlight_colour = mapEvent?.entity?.highlight_colour;
+                    creature.x = mapEvent!.entity!.x;
+                    creature.y = mapEvent!.entity!.y;
+                    creature.entity!.hit_points!.hp = mapEvent?.entity?.stats?.hp;
+                }
+                break;
+            case 'drawing':
+                const drawing = this.campaignMap.drawings.find(d => d.guid === mapEvent?.entityGuid);
+                if (drawing) {
+                    drawing.highlight_colour = mapEvent?.entity?.highlight_colour;
+                    drawing.x = mapEvent!.entity!.x;
+                    drawing.y = mapEvent!.entity!.y;
+                    drawing.stats.pattern = mapEvent?.entity?.stats?.pattern;
+                    drawing.stats.angle = mapEvent?.entity?.stats?.angle;
+                    drawing.stats.width = mapEvent?.entity?.stats?.width;
+                    drawing.stats.height = mapEvent?.entity?.stats?.height;
+                    drawing.stats.length = mapEvent?.entity?.stats?.length;
+                    drawing.stats.type = mapEvent?.entity?.stats?.type;
+                }
+                break;
+            case 'character':
+                const character = this.campaignMap.players.find(c => c.guid === mapEvent?.entityGuid);
+                if (character) {
+                    character.entity_name = mapEvent?.entity?.entity_name;
+                    character.highlight_colour = mapEvent?.entity?.highlight_colour;
+                    character.x = mapEvent!.entity!.x;
+                    character.y = mapEvent!.entity!.y;
+                }
+                break;
+        }
     }
 }
