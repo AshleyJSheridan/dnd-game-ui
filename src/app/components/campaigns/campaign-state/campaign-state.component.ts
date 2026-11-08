@@ -39,7 +39,16 @@ export class CampaignStateComponent {
     }
 
     getCurrentMap(): CampaignMap | undefined {
-        return this.campaign() && this.campaign()!.maps.length > 0 ? this.campaign()!.maps[0] : undefined;
+        if (this.campaign() && this.campaign()!.maps.length > 0) {
+            // if a map is marked as active, return that, otherwise return the first map
+            const activeMap = this.campaign()!.maps.find(map => map.active);
+            if (activeMap)
+                return activeMap;
+
+            return this.campaign()!.maps[0];
+        }
+
+        return undefined;
     }
 
     setCampaignState(state: string): void {

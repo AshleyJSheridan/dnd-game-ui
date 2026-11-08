@@ -83,25 +83,31 @@ export class CampaignMapComponent implements AfterViewInit {
         const campaignGuid = this.route.snapshot.paramMap.get('guid') ?? '';
         const mapGuid = this.route.snapshot.paramMap.get('mapGuid') ?? '';
         this.campaignService.setCampaignGuid(campaignGuid);
-        this.subscribeToMapEvents(mapGuid);
-
-        this.campaignService.getMap(mapGuid).subscribe(
-            {
-                next: (map) => {
-                    this.campaignMap = map;
-
-                    this.gridColour.set(map.grid_colour);
-                },
-                error: (error => {
-                    //this.router.navigate(['/']);
-                })
-            }
-        );
 
         this.campaignService.getCampaign(campaignGuid).subscribe(
             {
                 next: (campaign) => {
                     this.campaign = campaign;
+
+                    // only load the map if the campaign can be loaded
+                    this.campaignService.getMap(mapGuid).subscribe(
+                        {
+                            next: (map) => {
+                                if (!map.active && !this.campaign?.owner) {
+                                    this.router.navigate(['/campaigns', campaignGuid], { replaceUrl: true });
+                                    return;
+                                }
+
+                                this.campaignMap = map;
+                                this.subscribeToMapEvents(mapGuid);
+
+                                this.gridColour.set(map.grid_colour);
+                            },
+                            error: (error => {
+                                //this.router.navigate(['/']);
+                            })
+                        }
+                    );
                 },
                 error: (error => {
                     //this.router.navigate(['/']);
