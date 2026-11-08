@@ -2,6 +2,7 @@ export class MapEvent {
     action: string = '';
     byUserId: string = '';
     entityGuid: string = '';
+    mapGuid: string = '';
     updateAt: Date = new Date();
     entity: {
         entity_name: string;

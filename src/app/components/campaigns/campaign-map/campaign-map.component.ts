@@ -678,13 +678,17 @@ export class CampaignMapComponent implements AfterViewInit {
         const channelName = `campaign-map.${mapGuid}`;
         echo.private(channelName)
             .listenToAll((event: string, payload: MapEvent) => {
-                switch (event) {
-                    case '.map.updated':
+                switch (payload.action) {
+                    case 'entity.updated':
                         this.updateMapFromEvent(payload);
                         break;
+                    case 'entity.deleted':
+                        this.removeEntityFromMapFromEvent(payload);
+                        break;
+                    case 'entity.added':
+                        this.addEntityToMapFromEvent(payload);
+                        break;
                 }
-
-                //console.log(event, payload);
             })
             .error((error: unknown) => {
                 console.error('[Campaign map subscription error]', error);
@@ -697,7 +701,6 @@ export class CampaignMapComponent implements AfterViewInit {
     }
 
     private updateMapFromEvent(mapEvent: MapEvent): void {
-        console.log(mapEvent);
         switch(mapEvent?.entity?.type) {
             case 'creature':
                 const creature = this.campaignMap.creatures.find(c => c.guid === mapEvent?.entityGuid);
@@ -733,5 +736,44 @@ export class CampaignMapComponent implements AfterViewInit {
                 }
                 break;
         }
+    }
+
+    private removeEntityFromMapFromEvent(mapEvent: MapEvent): void {
+        switch(mapEvent?.entity?.type) {
+            case 'character':
+                const character = this.campaignMap.players.find(c => c.guid === mapEvent?.entityGuid);
+                if (character) {
+                    this.campaignMap.players.splice(this.campaignMap.players.indexOf(character), 1);
+                }
+                break;
+            case 'drawing':
+                const drawing = this.campaignMap.drawings.find(d => d.guid === mapEvent?.entityGuid);
+                if (drawing) {
+                    this.campaignMap.drawings.splice(this.campaignMap.drawings.indexOf(drawing), 1);
+                }
+                break;
+            case 'creature':
+                const creature = this.campaignMap.creatures.find(c => c.guid === mapEvent?.entityGuid);
+                if (creature) {
+                    this.campaignMap.creatures.splice(this.campaignMap.creatures.indexOf(creature), 1);
+                }
+                break;
+        }
+    }
+
+    private addEntityToMapFromEvent(mapEvent: MapEvent): void {
+        // For now, just reload the map
+        this.campaignService.getMap(mapEvent.mapGuid).subscribe(
+            {
+                next: (map) => {
+                    this.campaignMap = map;
+
+                    this.gridColour.set(map.grid_colour);
+                },
+                error: (error => {
+                    //this.router.navigate(['/']);
+                })
+            }
+        );
     }
 }
