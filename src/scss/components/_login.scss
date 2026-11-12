@@ -23,12 +23,14 @@
     background-size: cover;
     display: flex;
     height: 100vh;
-    justify-content: center;
+    padding-top: 1rem;
     width: 100vw;
 
-    form {
+    form,
+    .features {
         align-items: center;
         background-color: rgba(colours.$white, 85%);
+        color: colours.$black;
         display: flex;
         flex-direction: column;
         margin: 0 auto;
@@ -70,5 +72,19 @@
         button {
             margin-top: 1rem;
         }
+    }
+}
+
+.login-block {
+    flex-direction: column;
+    gap: 1rem;
+    overflow: scroll;
+
+    .features {
+        border: 1px solid #666;
+        border-radius: 0.5rem;
+        box-shadow: 2px 2px 7px #999;
+        padding: 1rem;
+        margin-bottom: 1rem;
     }
 }

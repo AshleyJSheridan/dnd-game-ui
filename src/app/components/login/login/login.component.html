@@ -1,28 +1,55 @@
 <main class="login-block">
-        <form name="login" aria-labelledby="login-heading">
-            <h1>
-                <app-logo-full/>
-            </h1>
+    <form name="login" aria-labelledby="login-heading">
+        <h1>
+            <app-logo-full/>
+        </h1>
 
-            <h2 id="login-heading">Login</h2>
+        <h2 id="login-heading">Login</h2>
 
-            @if (error.length > 0) {
-                <div class="error">{{ error }}</div>
-            }
+        @if (error.length > 0) {
+            <div class="error">{{ error }}</div>
+        }
 
-            <label>Email:
-                <input type="email" name="email" [(ngModel)]="email"/>
-            </label>
+        <label>Email:
+            <input type="email" name="email" [(ngModel)]="email"/>
+        </label>
 
-            <label>Password:
-                <input type="password" name="password" [(ngModel)]="password"/>
-            </label>
+        <label>Password:
+            <input type="password" name="password" [(ngModel)]="password"/>
+        </label>
 
-            <div class="actions">
-                <button type="button" class="fantasy-btn fantasy-blue" (click)="submitHandler()">Log In</button>
-            </div>
+        <div class="actions">
+            <button type="button" class="fantasy-btn fantasy-blue" (click)="submitHandler()">Log In</button>
+        </div>
 
-            <p>Don't have an account? It's
-                <a routerLink="/register" routerLinkActive="active">easy to make one!</a></p>
-        </form>
+        <p>Don't have an account? It's <a routerLink="/register" routerLinkActive="active">easy to make one!</a></p>
+    </form>
+
+    <div class="features">
+        <h2>Features</h2>
+
+        <ul>
+            <li>Character creation with name generator</li>
+            <li>Custom item creation</li>
+            <li>Random dice roller integrated into character sheet</li>
+            <li>Encounter creation by party or custom character levels</li>
+            <li>Campaign management
+                <ul>
+                    <li>Upload as many maps as needed for a campaign</li>
+                    <li>Upload docs, links, and add text snippets in Markdown to support a campaign</li>
+                    <li>Manage players in a campaign, and send invites to prospective players</li>
+                </ul>
+            </li>
+            <li>Multiplayer maps
+                <ul>
+                    <li>Multiple maps per campaign</li>
+                    <li>Interactive for all players in a campaign</li>
+                    <li>Creature and character tokens</li>
+                    <li>Drawings to illustrate area of effect spells or marked regions</li>
+                    <li>Set the active map to prevent players accessing hidden areas</li>
+                    <li>Hide creature tokens to create realistic scenarios for your players</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
 </main>

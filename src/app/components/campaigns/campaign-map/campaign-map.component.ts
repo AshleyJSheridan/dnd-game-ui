@@ -104,7 +104,8 @@ export class CampaignMapComponent implements AfterViewInit {
                                 this.gridColour.set(map.grid_colour);
                             },
                             error: (error => {
-                                //this.router.navigate(['/']);
+                                this.router.navigate(['/campaigns', campaignGuid], { replaceUrl: true });
+                                return;
                             })
                         }
                     );
